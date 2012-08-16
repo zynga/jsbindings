@@ -22,8 +22,7 @@ Highlights of JSB:
 - Automatically generates the JS bindings ("glue" code)
 - No need to modify the source code of your libraries
 - Powerful set of rules to customize the generated JS API
-- Automatically converts JS types into Objective-C objects and vice-versa:
-- Automatically converts native classes and structs into JS objects
+- Automatically converts JS objects/types into Objective-C objects/structs/ types and vice-versa
 - Supports "subclassing" native objects in JS
 - Supports callbacks
 
@@ -100,49 +99,74 @@ And `sprite.setPosition(cc.p(200,200))` will call the "glue" function `JSB_CCNod
 
 ![instance method flow](https://raw.github.com/ricardoquesada/jsbindings/master/docs/jsb_instance_call.png)
 
-
 ### Calling JS code from native
 
-In order to call JS code from native, the only thing that you need to do is:
+#### Callbacks
+
+There are 2 types of calls that can be generated:
+
+- Calls that are originated in JS and executes native code (the ones presented earlier )
+- Calls that are originated in native and executes JS code. This ones are the "callbacks".
+
+As an example, cocos2d-iphone's  `onEnter`, `onExit`, `udpate` are callback functions. `onEnter` is originated on native, and it should also call possible "overrides" in JS. On the following example, `onEnter` will be called from native, but only if we declare `onEnter` as "callback":
+
+
+	var MyLayer = cc.Layer.extend({
+	    ctor:function () {
+	        cc.associateWithNative( this, cc.Layer );
+	        this.init();
+	    },
+	    onEnter:function() {
+	    	cc.log("onEnter called");
+	   	},
+	});
+
+JSB supports callbacks without the need to modify the source code of the parsed library. What JSB does, is to  swap (AKA "swizzle") the original callback method with one provided by JSB. This is the full flow:
+
+- At registration time, JSB swizzles all methods registered as callbacks
+- When a swizzle method is called:
+	- It calls the native callback function
+	- Then it calls the JS callback function (if available)
+
+
+#### Executing scripts
+
+In order to run a JS script from native, you should do the following
 
 	// JSBCore is responsible registering the native objects in JS, among other things
-	[[JSBCore sharedInstance] runScript:@"my_js_script.js"];
-
+	if( ! [[JSBCore sharedInstance] runScript:@"my_js_script.js"] )
+		NSLog(@"Error running script");
 
 ## Configuration file
+
+### Renaming rule
 
 The configuration has a set of powerful rules that could transform the native API into a customized JS API.
 As an example, the default JS API for:
 
-
 	// CCAnimation (from cocos2d-iphone v2.0)
 	+(id) animationWithAnimationFrames:(NSArray*)arrayOfAnimationFrames delayPerUnit:(float)delayPerUnit loops:(NSUInteger)loops;
 
-
 will be:
-
 
 	// ugly
 	cc.CCAnimation.animationWithAnimationFrames_delayPerUnit_loops_( frames, delay, loops );
-
 
 So, with a simple set of rules, we can transform that JS API into this:
 
 	// more JS friendly
 	cc.Animation.create( frames, delay, loops );
 
+First, we need to remove the `CC` prefix from the class name, since it is already using the `cc` JS namespace:
 
-First, we need to remove the `CC` prefix from the class name, since it belongs to the `cc` namespace.
+`obj_class_prefix_to_remove = CC`
 
-	# Part of cocos2d_jsb.ini configuration file
-	obj_class_prefix_to_remove = CC
+And finally we add a rename rule for that method:
+
+`method_properties =  CCAnimation # animationWithAnimationFrames:delayPerUnit:loops: =  name:"create",`
 
 
-And finally we add a rename rule for that method. 
-
-	# Part of cocos2d_jsb.ini configuration file
-	method_properties =  CCAnimation # animationWithAnimationFrames:delayPerUnit:loops: =  name:"create",
-
+### Merge rule
 
 But what happens with the other constructors of animation ?
 
@@ -155,8 +179,7 @@ But what happens with the other constructors of animation ?
 
 What we should do, is to create a rule that merges the 4 constructors into one. JSB will call the correct one depending on the number of arguments. This how the rule should look:
 
-	# Part of cocos2d_jsb.ini configuration file
-	method_properties =  CCAnimation # animationWithAnimationFrames:delayPerUnit:loops: =  name:"create"; merge: "animation" | "animationWithSpriteFrames:" | "animationWithSpriteFrames:delay:",
+`method_properties =  CCAnimation # animationWithAnimationFrames:delayPerUnit:loops: =  name:"create"; merge: "animation" | "animationWithSpriteFrames:" | "animationWithSpriteFrames:delay:",`
 
 
 And the code in JS will look like:
@@ -172,6 +195,46 @@ And the code in JS will look like:
 
 	// calls [CCAnimation animationWithAnimationFrames:delayPerUnit:loops:]
 	var anim = cc.Animation.create(array, delay, loops);
+
+### Callback rule
+
+There 2 types of calls that can be generated:
+
+- Calls that are originated in JS and executes native code 
+- Calls that are originated in native and executes JS code. This ones are the "callbacks".
+
+As an example, cocos2d-iphone's  `onEnter`, `onExit`, `udpate` are callback functions. `onEnter` is originated on native, and it should also call possible JS "overrides" in JS. On the following example, `onEnter` will be called from native, but only if we declare `onEnter` as "callback":
+
+
+	var MyLayer = cc.Layer.extend({
+	    ctor:function () {
+	        cc.associateWithNative( this, cc.Layer );
+	        this.init();
+	    },
+	    onEnter:function() {
+	    	cc.log("onEnter called");
+	   	},
+	});
+
+
+And this is the callback rule that we should add:
+
+`method_properties = CCNode#onEnter = callback,`
+
+For the touch callbacks, it should be:
+
+`method_properties = CCLayer # ccTouchesBegan:withEvent: = callback; no_swizzle; name:"onTouchesBegan",`
+
+
+
+### Configuration examples
+
+In order or learn more about the configuration file, use the following working examples as a guideline:
+
+- [cocos2d_jsb.ini](https://github.com/ricardoquesada/jsbindings/blob/master/configs/cocos2d/cocos2d_jsb.ini)
+- [CocosDenshion_jsb.ini](https://github.com/ricardoquesada/jsbindings/blob/master/configs/CocosDenshion/CocosDenshion_jsb.ini)
+- [chipmunk_jsb.ini](https://github.com/ricardoquesada/jsbindings/blob/master/configs/chipmunk/chipmunk_jsb.ini)
+- [CocosBuilderReader_jsb.ini](https://github.com/ricardoquesada/jsbindings/blob/master/configs/CocosBuilderReader/CocosBuilderReader_jsb.ini)
 
 
 ## Who is using this ? Show me real examples
