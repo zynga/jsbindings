@@ -128,7 +128,7 @@ JSB supports callbacks without the need to modify the source code of the parsed 
 	- It calls the native callback function
 	- Then it calls the JS callback function (if available)
 
-![Callbacks flow](docs/jsb_callbacks.png)
+![Callbacks flow](https://raw.github.com/ricardoquesada/jsbindings/master/docs/jsb_callbacks.png)
 
 #### Executing scripts
 
@@ -269,8 +269,9 @@ As of this writing, these are the current bugs and/or limitations. For an update
 
 - No JS debugger. Remote debugging capabilities will be added once SpiderMonkey 15 is released.
 - No JS profiler.
-- Native object controls the life of JS object
+- Native objects control the life of JS objects
 	- It means that native objects might get released while their JS counterpart is still live
 	- This logic is flawed since a JS object might point to an already released native object under certain situations.
 	- The solution is that the JS objects should control the life of the native object. Fix in progress
+- Callbacks don't support return values. Limited support for arguments
 	
