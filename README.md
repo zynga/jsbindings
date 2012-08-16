@@ -7,7 +7,7 @@ JSB allows calling native code from JS and vice-versa.
 
 That means that you can interact with your favorite native library from JS. As an example, you could create a [cocos2d](http://www.cocos2d-iphone.org) particle system in JS, while its logic and rendering will be executed natively. Or you could create a [Chipmunk Physics](http://www.chipmunk-physics.net) world in JS, while the whole physics simulation, including the collisions detections, would run natively.
 
-![JSB layer ](docs/jsb_intro.png)
+![JSB layer ](https://raw.github.com/ricardoquesada/jsbindings/master/docs/jsb_intro.png)
 
 The JS code is interpreted by [SpiderMonkey](https://developer.mozilla.org/en-US/docs/SpiderMonkey), Mozilla's JS virtual machine (VM).
 It uses the latest stable version of SpiderMonkey (as of this writing it is v14.0.1). The JS VM is extended by JSB to support custom types, custom structures and Objective-C objects.
@@ -44,7 +44,7 @@ To summarize, the structure of a JSB configuration file is:
 - BridgeSupport files (required): Class, methods, functions, structs information
 - Complement files (required for Objective-C projects): Hierarchy, protocol and properties information
 
-!["glue" code generation ](docs/jsb_files.png)
+!["glue" code generation ](https://raw.github.com/ricardoquesada/jsbindings/master/docs/jsb_files.png)
 
 ## Internals of the JS bindings ("glue" code)
 
@@ -71,7 +71,7 @@ So when `cc.pAdd` is executed, it will call the "glue" function code `JSB_ccpAdd
 - converts the return value from native to JS
 - it fails if there are errors converting either the arguments or the return value.
 
-![function call flow ](docs/jsb_calls.png)
+![function call flow ](https://raw.github.com/ricardoquesada/jsbindings/master/docs/jsb_calls.png)
 
 ### Calling native instance / class methods from JS
 
@@ -96,9 +96,9 @@ And `sprite.setPosition(cc.p(200,200))` will call the "glue" function `JSB_CCNod
 - calls `[instance setPosition:p]`
 - Since `setPosition:` has no return value, it returns a "void" object to JS
 
-![class instantiation flow](docs/jsb_new_class.png)
+![class instantiation flow](https://raw.github.com/ricardoquesada/jsbindings/master/docs/jsb_new_class.png)
 
-![instance method flow](docs/jsb_instance_call.png)
+![instance method flow](https://raw.github.com/ricardoquesada/jsbindings/master/docs/jsb_instance_call.png)
 
 
 ### Calling JS code from native
