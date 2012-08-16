@@ -128,6 +128,7 @@ JSB supports callbacks without the need to modify the source code of the parsed 
 	- It calls the native callback function
 	- Then it calls the JS callback function (if available)
 
+![Callbacks flow](docs/jsb_callbacks.png)
 
 #### Executing scripts
 
@@ -198,26 +199,7 @@ And the code in JS will look like:
 
 ### Callback rule
 
-There 2 types of calls that can be generated:
-
-- Calls that are originated in JS and executes native code 
-- Calls that are originated in native and executes JS code. This ones are the "callbacks".
-
-As an example, cocos2d-iphone's  `onEnter`, `onExit`, `udpate` are callback functions. `onEnter` is originated on native, and it should also call possible JS "overrides" in JS. On the following example, `onEnter` will be called from native, but only if we declare `onEnter` as "callback":
-
-
-	var MyLayer = cc.Layer.extend({
-	    ctor:function () {
-	        cc.associateWithNative( this, cc.Layer );
-	        this.init();
-	    },
-	    onEnter:function() {
-	    	cc.log("onEnter called");
-	   	},
-	});
-
-
-And this is the callback rule that we should add:
+As mentioned before, JSB supports callback methods. In order to register a method as callback you should add a callback rule in the configuration file. eg:
 
 `method_properties = CCNode#onEnter = callback,`
 
@@ -225,6 +207,7 @@ For the touch callbacks, it should be:
 
 `method_properties = CCLayer # ccTouchesBegan:withEvent: = callback; no_swizzle; name:"onTouchesBegan",`
 
+`no_swizzle` should be used when the native callback is an optional protocol.
 
 
 ### Configuration examples
