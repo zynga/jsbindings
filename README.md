@@ -58,7 +58,7 @@ Highlights of JSB:
 7. Include [SpiderMonkey](https://github.com/ricardoquesada/Spidermonkey/) and [JRSwizzle](https://github.com/rentzsch/jrswizzle/) in your Xcode project
 
 
-All the files can be found here: [https://github.com/ricardoquesada/jsbindings/tree/master/configs/CocosDenshion](https://github.com/ricardoquesada/jsbindings/tree/master/configs/CocosDenshion)
+_The CocosDenshion config files could be found here: [configs/CocosDenshion](https://github.com/ricardoquesada/jsbindings/tree/master/configs/CocosDenshion)_
 
 
 ### Steps in detail
