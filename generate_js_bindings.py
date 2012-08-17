@@ -1878,37 +1878,37 @@ void %s_createClass(JSContext *cx, JSObject* globalObj, const char* name )
                                                  args
                                                  ) )
 
-            self.mm_file.write( template_suffix )
+            self.mm_file.write(template_suffix)
 
-    def generate_class_mm( self, klass, class_name, parent_name ):
+    def generate_class_mm(self, klass, class_name, parent_name):
 
-        self.generate_pragma_mark( class_name, self.mm_file )
-        self.generate_constructor( class_name )
-        self.generate_destructor( class_name )
+        self.generate_pragma_mark(class_name, self.mm_file)
+        self.generate_constructor(class_name)
+        self.generate_destructor(class_name)
 
-        ok_methods = self.generate_methods( class_name, klass )
+        ok_methods = self.generate_methods(class_name, klass)
 
-        self.generate_createClass_function( class_name, parent_name, ok_methods )
-        self.generate_implementation( class_name )
+        self.generate_createClass_function(class_name, parent_name, ok_methods)
+        self.generate_implementation(class_name)
 
-        self.generate_callback_code( class_name )
+        self.generate_callback_code(class_name)
 
-    def generate_class_binding( self, class_name ):
+    def generate_class_binding(self, class_name):
 
         # Ignore NSObject. Already registerd
         if not class_name or class_name in self.classes_to_ignore or class_name in self.parsed_classes or class_name in self.class_manual:
             return
 
         parent = self.complement[class_name]['subclass']
-        self.generate_class_binding( parent )
+        self.generate_class_binding(parent)
 
-        self.parsed_classes.append( class_name )
+        self.parsed_classes.append(class_name)
 
         signatures = self.bs['signatures']
         classes = signatures['class']
         klass = None
 
-        parent_name = self.complement[ class_name ]['subclass']
+        parent_name = self.complement[class_name]['subclass']
 
         # XXX: Super slow. Add them into a dictionary
         for c in classes:
@@ -1917,28 +1917,24 @@ void %s_createClass(JSContext *cx, JSObject* globalObj, const char* name )
                 break
 
         if not klass:
-            raise Exception("Class not found: '%s'. Check file: '%s'" % (class_name, self.bridgesupport_files ) )
+            raise Exception("Class not found: '%s'. Check file: '%s'" % (class_name, self.bridgesupport_files))
 
-        methods = klass['method']
+        self.generate_class_mm(klass, class_name, parent_name)
+        self.generate_class_header(class_name, parent_name)
 
-        proxy_class_name = '%s%s' % (PROXY_PREFIX, class_name )
-
-        self.generate_class_mm( klass, class_name, parent_name )
-        self.generate_class_header( class_name, parent_name )
-
-    def generate_class_registration( self, klass ):
+    def generate_class_registration(self, klass):
         # only supported classes
         if not klass or klass in self.classes_to_ignore or klass in self.class_manual:
             return
 
         if not klass in self.classes_registered:
             parent = self.complement[klass]['subclass']
-            self.generate_class_registration( parent )
+            self.generate_class_registration(parent)
 
-            class_name = self.convert_class_name_to_js( klass )
+            class_name = self.convert_class_name_to_js(klass)
 
-            self.class_registration_file.write('%s%s_createClass(_cx, %s, "%s");\n' % ( PROXY_PREFIX, klass, self.namespace, class_name ) )
-            self.classes_registered.append( klass )
+            self.class_registration_file.write('%s%s_createClass(_cx, %s, "%s");\n' % (PROXY_PREFIX, klass, self.namespace, class_name))
+            self.classes_registered.append(klass)
 
     def generate_classes_registration(self):
 
@@ -1984,9 +1980,9 @@ extern "C" {
     def generate_function_declaration(self, func_name):
         # JSB_ccDrawPoint
         template_funcname = 'JSBool %s%s(JSContext *cx, uint32_t argc, jsval *vp);\n'
-        self.h_file.write( template_funcname % ( PROXY_PREFIX, func_name ) )
+        self.h_file.write(template_funcname % (PROXY_PREFIX, func_name))
 
-    def generate_function_call_to_real_object( self, func_name, num_of_args, ret_js_type, args_declared_type ):
+    def generate_function_call_to_real_object(self, func_name, num_of_args, ret_js_type, args_declared_type):
 
         if ret_js_type:
             prefix = '\tret_val = %s(' % func_name
@@ -1995,34 +1991,34 @@ extern "C" {
 
         call = ''
 
-        for i,dt in enumerate(args_declared_type):
+        for i, dt in enumerate(args_declared_type):
             # cast needed to prevent compiler errors
-            if i >0:
+            if i > 0:
                 call += ', '
             call += '(%s)arg%d ' % (dt, i)
 
-        call += ' );';
+        call += ' );'
 
-        return '%s%s' % (prefix, call )
+        return '%s%s' % (prefix, call)
 
-    def generate_function_prefix( self, func_name, num_of_args ):
+    def generate_function_prefix(self, func_name, num_of_args):
         # JSB_ccDrawPoint
         template_funcname = '''
 JSBool %s%s(JSContext *cx, uint32_t argc, jsval *vp) {
 '''
-        self.mm_file.write( template_funcname % ( PROXY_PREFIX, func_name ) )
+        self.mm_file.write(template_funcname % (PROXY_PREFIX, func_name))
 
         # Number of arguments
-        self.mm_file.write( '\tJSB_PRECONDITION( argc == %d, "Invalid number of arguments" );\n' % num_of_args )
+        self.mm_file.write('\tJSB_PRECONDITION( argc == %d, "Invalid number of arguments" );\n' % num_of_args)
 
-    def generate_function_suffix( self ):
+    def generate_function_suffix(self):
         end_template = '''
 	return JS_TRUE;
 }
 '''
-        self.mm_file.write( end_template )
+        self.mm_file.write(end_template)
 
-    def generate_function_binding( self, function ):
+    def generate_function_binding(self, function):
 
         func_name = function['name']
 
@@ -2030,36 +2026,36 @@ JSBool %s%s(JSContext *cx, uint32_t argc, jsval *vp) {
         if func_name in self.callback_functions:
             raise ParseException('Function defined as callback. Ignoring %s' % func_name)
 
-        args_js_type, args_declared_type = self.validate_arguments( function )
-        ret_js_type, ret_declared_type = self.validate_retval( function )
+        args_js_type, args_declared_type = self.validate_arguments(function)
+        ret_js_type, ret_declared_type = self.validate_retval(function)
 
-        num_of_args = len( args_declared_type )
+        num_of_args = len(args_declared_type)
 
         # writes method description
-        self.mm_file.write( '\n// Arguments: %s\n// Ret value: %s' % ( ', '.join(args_declared_type), ret_declared_type ) )
+        self.mm_file.write('\n// Arguments: %s\n// Ret value: %s' % (', '.join(args_declared_type), ret_declared_type))
 
-        self.generate_function_prefix( func_name, num_of_args )
+        self.generate_function_prefix(func_name, num_of_args)
 
         if len(args_js_type) > 0:
-            self.generate_arguments( args_declared_type, args_js_type );
+            self.generate_arguments(args_declared_type, args_js_type)
 
         if ret_js_type:
-            self.mm_file.write( '\t%s ret_val;\n' % ret_declared_type )
+            self.mm_file.write('\t%s ret_val;\n' % ret_declared_type)
 
-        call_real = self.generate_function_call_to_real_object( func_name, num_of_args, ret_js_type, args_declared_type )
-        self.mm_file.write( '\n%s\n' % call_real )
+        call_real = self.generate_function_call_to_real_object(func_name, num_of_args, ret_js_type, args_declared_type)
+        self.mm_file.write('\n%s\n' % call_real)
 
-        ret_string = self.generate_retval( ret_declared_type, ret_js_type )
+        ret_string = self.generate_retval(ret_declared_type, ret_js_type)
         if not ret_string:
             raise ParseException('invalid return string')
 
-        self.mm_file.write( ret_string )
+        self.mm_file.write(ret_string)
 
         self.generate_function_suffix()
 
         return True
 
-    def generate_function_registration( self, func_name ):
+    def generate_function_registration(self, func_name):
 
         function = None
         for func in self.bs['signatures']['function']:
@@ -2067,12 +2063,12 @@ JSBool %s%s(JSContext *cx, uint32_t argc, jsval *vp) {
                 function = func
                 break
 
-        num_args = self.get_number_of_arguments( function )
+        num_args = self.get_number_of_arguments(function)
         template = 'JS_DefineFunction(_cx, %s, "%s", %s, %d, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );\n' % \
-                 ( self.namespace,
+                  (self.namespace,
                    self.convert_function_name_to_js(func_name),
                    PROXY_PREFIX + func_name,
-                   num_args )
+                   num_args)
 
         self.function_registration_file.write(template)
 
@@ -2111,7 +2107,6 @@ JSBool %s%s(JSContext *cx, uint32_t argc, jsval *vp) {
 
             self.generate_classes_registration()
 
-
         #
         # Free Functions
         #
@@ -2119,34 +2114,34 @@ JSBool %s%s(JSContext *cx, uint32_t argc, jsval *vp) {
         # Is there any function to register:
         if 'function' in self.bs['signatures']:
 
-            self.h_file = open( '%s%s_functions.h' % ( BINDINGS_PREFIX, self.namespace), 'w' )
+            self.h_file = open('%s%s_functions.h' % (BINDINGS_PREFIX, self.namespace), 'w')
             self.generate_function_header_prefix()
-            self.mm_file = open( '%s%s_functions.mm' % (BINDINGS_PREFIX, self.namespace), 'w' )
+            self.mm_file = open('%s%s_functions.mm' % (BINDINGS_PREFIX, self.namespace), 'w')
             self.generate_function_mm_prefix()
 
             for f in self.bs['signatures']['function']:
                 if f['name'] in self.functions_to_bind:
                     try:
-                        self.generate_function_binding( f )
-                        self.generate_function_declaration( f['name'] )
-                        self.functions_bound.append( f['name'] )
+                        self.generate_function_binding(f)
+                        self.generate_function_declaration(f['name'])
+                        self.functions_bound.append(f['name'])
                     except ParseException, e:
-                        sys.stderr.write( 'NOT OK: "%s" Error: %s\n' % (  f['name'], str(e) ) )
+                        sys.stderr.write('NOT OK: "%s" Error: %s\n' % (f['name'], str(e)))
 
             self.generate_function_header_suffix()
             self.h_file.close()
 
-            self.generate_autogenerate_suffix( self.mm_file )
+            self.generate_autogenerate_suffix(self.mm_file)
             self.mm_file.close()
 
             self.generate_functions_registration()
 
-    def parse( self ):
+    def parse(self):
         self.generate_bindings()
 
 
 def help():
-    print "%s v0.2 - Script that generates glue code between Objective-C and Javascript" % sys.argv[0]
+    print "%s v0.2 - Script that generates glue code between Objective-C and JavaScript" % sys.argv[0]
     print "Usage:"
     print "\t-c --config-file\tConfiguration file needed to generate the glue code."
     print "\nExample:"

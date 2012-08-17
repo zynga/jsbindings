@@ -1,4 +1,5 @@
 #!/usr/bin/python
+#
 # ----------------------------------------------------------------------------
 # Simple regular expression that obtains super class, protocols
 # and properties from Obj-C header files
@@ -19,36 +20,35 @@ __docformat__ = 'restructuredtext'
 
 # python
 import sys
-import os
 import re
 import getopt
-import glob
 import ast
 
 
 class ObjC(object):
-    def __init__(self, filenames, exception_file, output_file, verbose ):
+    def __init__(self, filenames, exception_file, output_file, verbose):
         self.filenames = filenames
         self.entries = {}
         self.output = output_file
         self.exception = exception_file
         self.verbose = verbose
 
-    def log( self, what ):
+    def log(self, what):
         if self.verbose:
             print what
-    def parse_exception_file( self ):
+
+    def parse_exception_file(self):
         if self.exception:
-            f = open( self.exception )
-            self.entries = ast.literal_eval( f.read() )
+            f = open(self.exception)
+            self.entries = ast.literal_eval(f.read())
             f.close()
 
-    def parse( self ):
+    def parse(self):
 
         self.parse_exception_file()
 
         for filename in self.filenames:
-            f = open( filename, 'r' )
+            f = open(filename, 'r')
             l = f.readlines()
 
             # regexp based on Objective Pascal parser ( http://www.objectivepascal.com/ )
@@ -59,10 +59,10 @@ class ObjC(object):
 
             current_class = None
             for line in l:
-                interface = re.match( regex_objc_class, line )
-                interface_ext = re.match( regex_objc_class_extension, line )
-                property_attribs = re.match( regex_objc_property_attributes, line )
-                end = re.match( regex_obj_end, line )
+                interface = re.match(regex_objc_class, line)
+                interface_ext = re.match(regex_objc_class_extension, line)
+                property_attribs = re.match(regex_objc_property_attributes, line)
+                end = re.match(regex_obj_end, line)
 
                 if interface:
                     classname = interface.group(1)
@@ -70,7 +70,7 @@ class ObjC(object):
                     protocols = interface.group(3)
 
                     if classname in self.entries:
-                        self.log( 'Key already on dictionary %s\n' % classname )
+                        self.log('Key already on dictionary %s\n' % classname)
                     else:
                         if protocols:
                             # strip '<>'
@@ -84,19 +84,19 @@ class ObjC(object):
                         else:
                             protocols = []
 
-                        self.entries[ classname ] = { 'subclass' : subclass, 'protocols' : protocols }
+                        self.entries[classname] = {'subclass': subclass, 'protocols': protocols}
 
                     current_class = classname
-                    self.log( '--> %s' % current_class )
+                    self.log('--> %s' % current_class)
                 elif interface_ext:
                     classname = interface_ext.group(1)
                     current_class = classname
-                    self.log( '--> %s' % current_class )
+                    self.log('--> %s' % current_class)
                 elif property_attribs:
                     if not current_class:
-                        raise Exception("Fatal: Unparented attrib: %s (%s)" % (str(property_attribs.groups()), filename ) )
-                    if not 'properties' in self.entries[ current_class ]:
-                        self.entries[ current_class ]['properties'] = {}
+                        raise Exception("Fatal: Unparented attrib: %s (%s)" % (str(property_attribs.groups()), filename))
+                    if not 'properties' in self.entries[current_class]:
+                        self.entries[current_class]['properties'] = {}
                     l = []
                     # 1: attributes
                     # 2: type
@@ -104,21 +104,21 @@ class ObjC(object):
                     # 4: type 2nd word like int, long, char (optinal)
                     # 5: type pointer '*' (optional)
                     # 6: property name
-                    l.append( property_attribs.group(1) )
+                    l.append(property_attribs.group(1))
 
                     if property_attribs.group(4):
-                        l.append( "%s %s%s%s" % ( property_attribs.group(2), property_attribs.group(3), property_attribs.group(4), property_attribs.group(5) ) )
+                        l.append("%s %s%s%s" % (property_attribs.group(2), property_attribs.group(3), property_attribs.group(4), property_attribs.group(5)))
                     else:
-                        l.append( "%s%s%s%s" % ( property_attribs.group(2), property_attribs.group(3), property_attribs.group(4), property_attribs.group(5) ) )
+                        l.append("%s%s%s%s" % (property_attribs.group(2), property_attribs.group(3), property_attribs.group(4), property_attribs.group(5)))
 
                     if ' ' in property_attribs.group(6) or property_attribs.group(6) == None:
-                        sys.stderr.write('Error. Could not add property. File:%s line:%s\n' % (filename, line ) )
+                        sys.stderr.write('Error. Could not add property. File:%s line:%s\n' % (filename, line))
                         print property_attribs.groups()
                     else:
-                        self.entries[ current_class ]['properties'][ property_attribs.group(6) ] = l
+                        self.entries[current_class]['properties'][property_attribs.group(6)] = l
 
                 elif end:
-                    self.log( '<-- %s (%s)' % (current_class, filename ) )
+                    self.log('<-- %s (%s)' % (current_class, filename))
                     current_class = None
                 else:
                     # ignore
@@ -127,13 +127,14 @@ class ObjC(object):
 
         self.write_output()
 
-    def write_output( self ):
+    def write_output(self):
         if not self.output:
             fd = sys.stdout
         else:
-            fd = open( self.output, 'w' )
+            fd = open(self.output, 'w')
 
-        fd.write( str(self.entries) )
+        fd.write(str(self.entries))
+
 
 def help():
     print "%s v1.0 - An utility to obtain superclass and protocols from an Objective-C interface" % sys.argv[0]
@@ -147,7 +148,7 @@ def help():
     sys.exit(-1)
 
 if __name__ == "__main__":
-    if len( sys.argv ) == 1:
+    if len(sys.argv) == 1:
         help()
 
     input_file = None
@@ -156,23 +157,23 @@ if __name__ == "__main__":
 
     argv = sys.argv[1:]
     try:
-        opts, args = getopt.getopt(argv, "e:o:v", ["exception=","output=", "verbose"])
+        opts, args = getopt.getopt(argv, "e:o:v", ["exception=", "output=", "verbose"])
 
         for opt, arg in opts:
-            if opt in ("-e","--exception"):
+            if opt in ("-e", "--exception"):
                 input_file = arg
             if opt in  ("-o", "--output"):
                 output_file = arg
             if opt in  ("-v", "--verbose"):
                 verbose = True
 
-    except getopt.GetoptError,e:
+    except getopt.GetoptError, e:
         print e
         opts, args = getopt.getopt(argv, "", [])
 
     if args == None:
         help()
 
-    instance = ObjC( args, input_file, output_file, verbose )
+    instance = ObjC(args, input_file, output_file, verbose)
     instance.parse()
     print 'Ok'
