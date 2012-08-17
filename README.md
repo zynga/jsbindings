@@ -255,7 +255,7 @@ In order to run a JS script from native, you should do the following
 		NSLog(@"Error running script");
 
 
-## Who is using this ? Show me real examples
+## Who is using JSB?
 
 JSB has been used to generate bindings for the following projects:
 
