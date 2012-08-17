@@ -26,8 +26,35 @@ Highlights of JSB:
 - Supports "subclassing" native objects in JS
 - Supports callbacks
 
+## Creating your own bindings
 
-## How the code is generated
+### Quick steps
+
+1. Download [JSB](http://github.com/ricardoquesada/jsbindings)
+2. Generate the BridgeSupport files for your project. Let's assume that your project is CocosDenshion
+
+		$ cd ~/src/CocosDenshion/CocosDenshion
+		$ gen_bridge_metadata -F complete --no-64-bit -c '-DNDEBUG -I.' *.h -o ~/some/path/CocosDenshion.bridgesupport
+
+3. Generate complement files for your project
+
+		$ cd ~/src/CocosDenshion/CocosDenshion
+		$ ~/jsb/generate_complement.py -o ~/some/path/CocosDenshion-complement.txt *.h
+
+
+4. Create a JSB config file for your project
+
+		$ vim ~/some/path/CocosDenshion_jsb.ini
+
+5. Run the JSB generator script
+
+		$ ~/jsb/generate_js_bindings.py -c ~/som/path/CocosDenshion_jsb.ini
+
+
+All the files can be found here: [https://github.com/ricardoquesada/jsbindings/tree/master/configs/CocosDenshion](https://github.com/ricardoquesada/jsbindings/tree/master/configs/CocosDenshion)
+
+
+### Steps in detail
 
 JSB comes with a python script called `generate_js_bindings.py` that generates the glue code. It needs a configuration file that contains the parsing rules and the [BridgeSupport](http://developer.apple.com/library/mac/#documentation/Darwin/Reference/ManPages/man5/BridgeSupport.5.html) files.
 
@@ -44,6 +71,88 @@ To summarize, the structure of a JSB configuration file is:
 - Complement files (required for Objective-C projects): Hierarchy, protocol and properties information
 
 !["glue" code generation ](https://raw.github.com/ricardoquesada/jsbindings/master/docs/jsb_files.png)
+
+
+### The configuration file
+
+The configuration has a set of powerful rules that could transform the native API into a customized JS API.
+Let's take a look at some of them.
+
+#### Renaming rule
+
+The renaming rule allows us to rename a method names or class names or function names or struct names.
+As an example, the default JS API for:
+
+	// CCAnimation (from cocos2d-iphone v2.0)
+	+(id) animationWithAnimationFrames:(NSArray*)arrayOfAnimationFrames delayPerUnit:(float)delayPerUnit loops:(NSUInteger)loops;
+
+would be:
+
+	// ugly
+	cc.CCAnimation.animationWithAnimationFrames_delayPerUnit_loops_( frames, delay, loops );
+
+So, with a simple set of rules, we can transform that JS API into this one:
+
+	// more JS friendly
+	cc.Animation.create( frames, delay, loops );
+
+In order to do that, we need to remove the `CC` prefix from the class name, since it is already using the `cc` JS namespace:
+
+`obj_class_prefix_to_remove = CC`
+
+And finally we add a rename rule for that method:
+
+`method_properties =  CCAnimation # animationWithAnimationFrames:delayPerUnit:loops: =  name:"create",`
+
+
+#### Merge rule
+
+But what happens with the other constructors of animation ?
+
+	// CCAnimation supports 4 different constructors
+	+(id) animation; //
+	+(id) animationWithSpriteFrames:(NSArray*)arrayOfSpriteFrameNames;
+	+(id) animationWithSpriteFrames:(NSArray*)arrayOfSpriteFrameNames delay:(float)delay;
+	+(id) animationWithAnimationFrames:(NSArray*)arrayOfAnimationFrames delayPerUnit:(float)delayPerUnit loops:(NSUInteger)loops;
+
+
+What we should do, is to create a rule that merges the 4 constructors into one. JSB will call the correct one depending on the number of arguments. This how the rule should look:
+
+`method_properties =  CCAnimation # animationWithAnimationFrames:delayPerUnit:loops: =  name:"create"; merge: "animation" | "animationWithSpriteFrames:" | "animationWithSpriteFrames:delay:",`
+
+And the code in JS will look like:
+
+	// calls [CCAnimation animation]
+	var anim = cc.Animation.create(); 
+
+	// calls [CCAnimation animnationWithSpriteFrames:]
+	var anim = cc.Animation.create(array);
+
+	// calls [CCAnimation animnationWithSpriteFrames:delay:]
+	var anim = cc.Animation.create(array, delay);
+
+	// calls [CCAnimation animationWithAnimationFrames:delayPerUnit:loops:]
+	var anim = cc.Animation.create(array, delay, loops);
+
+#### Callback rule
+
+JSB supports callback methods. In order to register a method as callback you should add a callback rule in the configuration file. eg:
+
+`method_properties = CCNode#onEnter = callback,`
+
+You could also rename a callback by doing:
+
+`method_properties = CCLayer # ccTouchesBegan:withEvent: = callback; name:"onTouchesBegan",`
+
+
+#### Configuration examples
+
+In order or learn more about the configuration file, use the following working examples as a guideline:
+
+- [cocos2d_jsb.ini](https://github.com/ricardoquesada/jsbindings/blob/master/configs/cocos2d/cocos2d_jsb.ini)
+- [CocosDenshion_jsb.ini](https://github.com/ricardoquesada/jsbindings/blob/master/configs/CocosDenshion/CocosDenshion_jsb.ini)
+- [chipmunk_jsb.ini](https://github.com/ricardoquesada/jsbindings/blob/master/configs/chipmunk/chipmunk_jsb.ini)
+- [CocosBuilderReader_jsb.ini](https://github.com/ricardoquesada/jsbindings/blob/master/configs/CocosBuilderReader/CocosBuilderReader_jsb.ini)
 
 ## Internals of the JS bindings ("glue" code)
 
@@ -138,87 +247,6 @@ In order to run a JS script from native, you should do the following
 	if( ! [[JSBCore sharedInstance] runScript:@"my_js_script.js"] )
 		NSLog(@"Error running script");
 
-## Configuration file
-
-### Renaming rule
-
-The configuration has a set of powerful rules that could transform the native API into a customized JS API.
-As an example, the default JS API for:
-
-	// CCAnimation (from cocos2d-iphone v2.0)
-	+(id) animationWithAnimationFrames:(NSArray*)arrayOfAnimationFrames delayPerUnit:(float)delayPerUnit loops:(NSUInteger)loops;
-
-will be:
-
-	// ugly
-	cc.CCAnimation.animationWithAnimationFrames_delayPerUnit_loops_( frames, delay, loops );
-
-So, with a simple set of rules, we can transform that JS API into this:
-
-	// more JS friendly
-	cc.Animation.create( frames, delay, loops );
-
-First, we need to remove the `CC` prefix from the class name, since it is already using the `cc` JS namespace:
-
-`obj_class_prefix_to_remove = CC`
-
-And finally we add a rename rule for that method:
-
-`method_properties =  CCAnimation # animationWithAnimationFrames:delayPerUnit:loops: =  name:"create",`
-
-
-### Merge rule
-
-But what happens with the other constructors of animation ?
-
-	// CCAnimation supports 4 different constructors
-	+(id) animation; //
-	+(id) animationWithSpriteFrames:(NSArray*)arrayOfSpriteFrameNames;
-	+(id) animationWithSpriteFrames:(NSArray*)arrayOfSpriteFrameNames delay:(float)delay;
-	+(id) animationWithAnimationFrames:(NSArray*)arrayOfAnimationFrames delayPerUnit:(float)delayPerUnit loops:(NSUInteger)loops;
-
-
-What we should do, is to create a rule that merges the 4 constructors into one. JSB will call the correct one depending on the number of arguments. This how the rule should look:
-
-`method_properties =  CCAnimation # animationWithAnimationFrames:delayPerUnit:loops: =  name:"create"; merge: "animation" | "animationWithSpriteFrames:" | "animationWithSpriteFrames:delay:",`
-
-
-And the code in JS will look like:
-
-	// calls [CCAnimation animation]
-	var anim = cc.Animation.create(); 
-
-	// calls [CCAnimation animnationWithSpriteFrames:]
-	var anim = cc.Animation.create(array);
-
-	// calls [CCAnimation animnationWithSpriteFrames:delay:]
-	var anim = cc.Animation.create(array, delay);
-
-	// calls [CCAnimation animationWithAnimationFrames:delayPerUnit:loops:]
-	var anim = cc.Animation.create(array, delay, loops);
-
-### Callback rule
-
-As mentioned before, JSB supports callback methods. In order to register a method as callback you should add a callback rule in the configuration file. eg:
-
-`method_properties = CCNode#onEnter = callback,`
-
-For the touch callbacks, it should be:
-
-`method_properties = CCLayer # ccTouchesBegan:withEvent: = callback; no_swizzle; name:"onTouchesBegan",`
-
-`no_swizzle` should be used when the native callback is an optional protocol.
-
-
-### Configuration examples
-
-In order or learn more about the configuration file, use the following working examples as a guideline:
-
-- [cocos2d_jsb.ini](https://github.com/ricardoquesada/jsbindings/blob/master/configs/cocos2d/cocos2d_jsb.ini)
-- [CocosDenshion_jsb.ini](https://github.com/ricardoquesada/jsbindings/blob/master/configs/CocosDenshion/CocosDenshion_jsb.ini)
-- [chipmunk_jsb.ini](https://github.com/ricardoquesada/jsbindings/blob/master/configs/chipmunk/chipmunk_jsb.ini)
-- [CocosBuilderReader_jsb.ini](https://github.com/ricardoquesada/jsbindings/blob/master/configs/CocosBuilderReader/CocosBuilderReader_jsb.ini)
-
 
 ## Who is using this ? Show me real examples
 
@@ -235,7 +263,7 @@ cocos2d-iphone v2.1 comes with 3 demo projects that uses it:
 - JS Watermelon With Me: a simple physics game that uses JS bindings for cocos2d, Chipmunk, CocosDenshion and CocosBuilder Reader.
 - JS MoonWarriors: A top-down shooter that uses JS bindings for cocos2d
 
-It is noteworthy that thanks to the powerful set of rules, the JS API generated for cocos2d-iphone is the same one as cocos2d-html5 API. In fact, the JavaScript game (MoonWarriors) [https://github.com/ricardoquesada/MoonWarriors] runs on top of cocos2d-iphone + JSB and cocos2d-html5 without changing a single line of code. Try the Web version: [MoonWarriors] (http://www.cocos2d-iphone.org/downloads/MoonWarriors/)
+It is noteworthy that thanks to the powerful set of rules, the JS API generated for cocos2d-iphone is the same one as cocos2d-html5 API. In fact, the JavaScript game [MoonWarriors](https://github.com/ricardoquesada/MoonWarriors) runs on top of cocos2d-iphone + JSB and cocos2d-html5 without changing a single line of code. Try the Web version: [MoonWarriors] (http://www.cocos2d-iphone.org/downloads/MoonWarriors/)
 
 
 ## Download
