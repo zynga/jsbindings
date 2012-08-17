@@ -6,12 +6,12 @@
 mv ccDeprecated.h ccDeprecated.xxx
 
 # Common
-../tools/js/generate_complement.py -e ../tools/js/cocos2d-ios-complement-exceptions.txt -o ../tools/js/cocos2d-complement.txt *.h Support/*.h Platforms/*.h
+../external/jsbindings/generate_complement.py -e ../external/jsbindings/configs/cocos2d/cocos2d-ios-complement-exceptions.txt -o ../external/jsbindings/configs/cocos2d/cocos2d-complement.txt *.h Support/*.h Platforms/*.h
 
 # iOS
-../tools/js/generate_complement.py -e ../tools/js/cocos2d-ios-complement-exceptions.txt -o ../tools/js/cocos2d-ios-complement.txt *.h Support/*.h Platforms/*.h Platforms/iOS/*.h
+../external/jsbindings/generate_complement.py -e ../external/jsbindings/configs/cocos2d/cocos2d-ios-complement-exceptions.txt -o ../external/jsbindings/configs/cocos2d/cocos2d-ios-complement.txt *.h Support/*.h Platforms/*.h Platforms/iOS/*.h
 
 # Mac
-../tools/js/generate_complement.py -e ../tools/js/cocos2d-mac-complement-exceptions.txt -o ../tools/js/cocos2d-mac-complement.txt *.h Support/*.h Platforms/*.h Platforms/Mac/*.h
+../external/jsbindings/generate_complement.py -e ../external/jsbindings/configs/cocos2d/cocos2d-mac-complement-exceptions.txt -o ../external/jsbindings/configs/cocos2d/cocos2d-mac-complement.txt *.h Support/*.h Platforms/*.h Platforms/Mac/*.h
 
 mv ccDeprecated.xxx ccDeprecated.h
