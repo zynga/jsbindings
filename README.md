@@ -283,8 +283,9 @@ As of this writing, these are the current bugs and/or limitations. For an update
 - No JS profiler.
 - Native objects control the life of JS objects
 	- It means that native objects might get released while their JS counterpart is still live
-	- This logic is flawed since a JS object might point to an already released native object under certain situations.
-	- The solution is that the JS objects should control the life of the native object. Fix in progress
+	- This logic is flawed since a JS object might point to an already released native object under certain not-so-common situations
+	- The proper solution is to control the life of native objects from JS objects. Fix in progress
+	- The workaround is to send the `retain` message to the object. eg: `sprite.retain();`
 - Callbacks don't support return values. Limited support for arguments
 - The `gen_bridge_metada` file that is bundled with OS X 10.6 (or older) should be avoided. It is recommended to generate the BridgeSupport files in OS X 10.8 (Mountain Lion).
 - It is not easy to start a new project from scratch. Xcode templates coming soon. In the meantime, the easier way to do it is by duplicating any of the JS "targets" bundled with cocos2d-iphone v2.1
