@@ -287,6 +287,7 @@ As of this writing, these are the current bugs and/or limitations. For an update
 	- The proper solution is to control the life of native objects from JS objects. Fix in progress
 	- The workaround is to send the `retain` message to the object. eg: `sprite.retain();`
 - Callbacks don't support return values. Limited support for arguments
+- BridgeSupport constants are not being parsed by the script.
 - The `gen_bridge_metada` file that is bundled with OS X 10.6 (or older) should be avoided. It is recommended to generate the BridgeSupport files in OS X 10.8 (Mountain Lion).
 - It is not easy to start a new project from scratch. Xcode templates coming soon. In the meantime, the easier way to do it is by duplicating any of the JS "targets" bundled with cocos2d-iphone v2.1
 
