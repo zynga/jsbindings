@@ -1,5 +1,5 @@
 /*
- * cocos2d for iPhone: http://www.cocos2d-iphone.org
+ * JS Bindings: https://github.com/zynga/jsbindings
  *
  * Copyright (c) 2012 Zynga Inc.
  *
@@ -21,6 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+
 
 #import "jsapi.h"
 #import "jsfriendapi.h"
