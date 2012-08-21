@@ -62,14 +62,12 @@ JSBool JSB_NSObject_constructor(JSContext *cx, uint32_t argc, jsval *vp)
 // Destructor
 void JSB_NSObject_finalize(JSFreeOp *fop, JSObject *obj)
 {
-	CCLOGINFO(@"spidermonkey: finalizing JS object %p (NSObject)", obj);
+	CCLOGINFO(@"jsbindings: finalizing JS object %p (NSObject)", obj);
 
 	JSB_NSObject *proxy = get_proxy_for_jsobject(obj);
-	
 	if (proxy) {
+		[proxy setRealObj:nil];
 		del_proxy_for_jsobject( obj );
-		
-		[proxy release];		
 	}
 }
 
@@ -245,7 +243,7 @@ void JSB_NSObject_createClass(JSContext* cx, JSObject* globalObj, const char *na
 -(void) dealloc
 {
 	// If the compiler gives you an error, you can safely remove the following line
-	CCLOGINFO(@"spidermonkey: deallocing %@", self);
+	CCLOGINFO(@"jsbindings: deallocing %@", self);
 
 	del_proxy_for_jsobject(_jsObj);
 	
@@ -330,6 +328,12 @@ JSBool JSB_NSEvent_getDelta(JSContext *cx, uint32_t argc, jsval *vp) {
 void JSB_NSEvent_finalize(JSFreeOp *fop, JSObject *obj)
 {
 	CCLOGINFO(@"spidermonkey: finalizing JS object %p (NSEvent)", obj);
+	
+	JSB_NSObject *proxy = get_proxy_for_jsobject(obj);
+	if (proxy) {
+		[proxy setRealObj:nil];
+		del_proxy_for_jsobject( obj );
+	}
 }
 
 void JSB_NSEvent_createClass(JSContext* cx, JSObject* globalObj, const char *name )
@@ -455,7 +459,13 @@ JSBool JSB_UITouch_delta(JSContext *cx, uint32_t argc, jsval *vp) {
 // Destructor
 void JSB_UITouch_finalize(JSFreeOp *fop, JSObject *obj)
 {
-	CCLOGINFO(@"spidermonkey: finalizing JS object %p (UITouch)", obj);
+	CCLOGINFO(@"jsbindings: finalizing JS object %p (UITouch)", obj);
+
+	JSB_NSObject *proxy = get_proxy_for_jsobject(obj);
+	if (proxy) {
+		[proxy setRealObj:nil];
+		del_proxy_for_jsobject( obj );
+	}
 }
 
 void JSB_UITouch_createClass(JSContext* cx, JSObject* globalObj, const char *name )
@@ -580,7 +590,13 @@ JSBool JSB_UIAccelerometer_constructor(JSContext *cx, uint32_t argc, jsval *vp)
 // Destructor
 void JSB_UIAccelerometer_finalize(JSFreeOp *fop, JSObject *obj)
 {
-	CCLOGINFO(@"spidermonkey: finalizing JS object %p (CCDirector)", obj);
+	CCLOGINFO(@"jsbindings: finalizing JS object %p (UIAccelerometer)", obj);
+
+	JSB_NSObject *proxy = get_proxy_for_jsobject(obj);
+	if (proxy) {
+		[proxy setRealObj:nil];
+		del_proxy_for_jsobject( obj );
+	}
 }
 
 // Arguments: 
