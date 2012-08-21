@@ -154,7 +154,7 @@ You could also rename a callback by doing:
 
 #### Configuration examples
 
-In order or learn more about the configuration file, use the following working examples as a guideline:
+In order to learn more about the configuration file, use the following working examples as a guideline:
 
 - [cocos2d_jsb.ini](https://github.com/zynga/jsbindings/blob/master/configs/cocos2d/cocos2d_jsb.ini)
 - [CocosDenshion_jsb.ini](https://github.com/zynga/jsbindings/blob/master/configs/CocosDenshion/CocosDenshion_jsb.ini)
@@ -268,7 +268,7 @@ cocos2d-iphone v2.1 comes with 3 demo projects that uses it:
 
 - [JS Tests](https://github.com/cocos2d/cocos2d-iphone/tree/develop-v2/tests/JSTests): cocos2d JS bindings tests
 - [JS Watermelon With Me](https://github.com/cocos2d/cocos2d-iphone/tree/develop-v2/tests/WatermelonWithMe): a simple physics game that uses JS bindings for cocos2d, Chipmunk, CocosDenshion and CocosBuilder Reader.
-- [JS MoonWarriors](https://github.com/zynga/MoonWarriors): A top-down shooter that uses JS bindings for cocos2d
+- [JS MoonWarriors](https://github.com/ricardoquesada/MoonWarriors): A top-down shooter that uses JS bindings for cocos2d
 
 It is noteworthy that thanks to the powerful set of rules, the JS API generated for cocos2d-iphone and the cocos2d-html5 API **ARE THE SAME**.
 
@@ -280,7 +280,7 @@ _Moon Warriors can run on top of cocos2d-iphone + JSB or on top of cocos2d-html5
 As of this writing, these are the current bugs and/or limitations. For an updated list of bugs/limitations, please visit [JSB homepage](https://github.com/zynga/jsbindings)
 
 - No JS debugger. Remote debugging capabilities will be added once SpiderMonkey 15 is released.
-- No JS profiler.
+- No JS profiler for performance analysis.
 - Native objects control the life of JS objects
 	- It means that native objects might get released while their JS counterpart is still live
 	- This logic is flawed since a JS object might point to an already released native object under certain not-so-common situations
