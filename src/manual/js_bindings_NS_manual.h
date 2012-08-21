@@ -32,7 +32,7 @@
 @interface JSB_NSObject : NSObject
 {
 	JSObject	*_jsObj;
-	id			_realObj;  // weak ref
+	id			_realObj;
 	Class		_klass;
 	char		*_description;
 }
