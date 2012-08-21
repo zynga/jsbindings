@@ -1383,7 +1383,7 @@ JSBool %s_%s%s(JSContext *cx, uint32_t argc, jsval *vp) {
         s = method['selector']
 
         if self.get_method_property( class_name, s, 'manual' ):
-            sys.stderr.write('Ignoring method %s # %s. It should be manually generated' % (class_name, s ) )
+            sys.stderr.write('Ignoring method %s # %s. It should be manually generated\n' % (class_name, s ) )
             return True
 
         # Variadic methods are not supported
