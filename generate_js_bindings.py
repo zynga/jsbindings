@@ -5,7 +5,7 @@
 # Author: Ricardo Quesada
 # Copyright 2012 (C) Zynga, Inc
 #
-# Dual License: MIT or GPL v2.
+# License: MIT
 # ----------------------------------------------------------------------------
 '''
 Generates Javasscript Bindings glue code after C / Objective-C code

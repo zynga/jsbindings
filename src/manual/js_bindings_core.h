@@ -1,5 +1,5 @@
 /*
- * cocos2d for iPhone: http://www.cocos2d-iphone.org
+ * JS Bindings: https://github.com/zynga/jsbindings
  *
  * Copyright (c) 2012 Zynga Inc.
  *
@@ -28,8 +28,6 @@
 
 #import "cocos2d.h"
 #import "chipmunk.h"
-//#import "ChipmunkSprite.h"
-//#import "ChipmunkDebugNode.h"
 #import "SimpleAudioEngine.h"
 
 // Globals
