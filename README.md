@@ -280,7 +280,7 @@ _Moon Warriors can run on top of cocos2d-iphone + JSB or on top of cocos2d-html5
 As of this writing, these are the current bugs and/or limitations. For an updated list of bugs/limitations, please visit [JSB homepage](https://github.com/zynga/jsbindings)
 
 - No JS debugger. Remote debugging capabilities will be added once SpiderMonkey 15 is released.
-- No JS profiler.
+- No JS profiler for performance analysis.
 - Native objects control the life of JS objects
 	- It means that native objects might get released while their JS counterpart is still live
 	- This logic is flawed since a JS object might point to an already released native object under certain not-so-common situations

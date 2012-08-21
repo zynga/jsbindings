@@ -849,11 +849,11 @@ JSBool %s_constructor(JSContext *cx, uint32_t argc, jsval *vp)
 void %s_finalize(JSFreeOp *fop, JSObject *obj)
 {
 	CCLOGINFO(@"jsbindings: finalizing JS object %%p (%s)", obj);
-	JSB_NSObject *proxy = get_proxy_for_jsobject(obj);
-	if (proxy) {
-		[proxy setRealObj:nil];
-		del_proxy_for_jsobject( obj );
-	}
+//	JSB_NSObject *proxy = get_proxy_for_jsobject(obj);
+//	if (proxy) {
+//		[[proxy realObj] release];
+//	}
+	del_proxy_for_jsobject( obj );
 }
 '''
         proxy_class_name = '%s%s' % (PROXY_PREFIX, class_name)
