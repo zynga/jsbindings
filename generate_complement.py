@@ -8,7 +8,7 @@
 # Author: Ricardo Quesada
 # Copyright 2012 (C) Zynga, Inc
 #
-# Dual License: MIT or GPL v2.
+# License: MIT
 #
 '''
 Parses objective-c header files and obtains protocol information, class hierarchy information and properties information since
