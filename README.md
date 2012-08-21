@@ -123,7 +123,7 @@ But what happens with the other constructors of `CCAnimation` ?
 	+(id) animationWithAnimationFrames:(NSArray*)arrayOfAnimationFrames delayPerUnit:(float)delayPerUnit loops:(NSUInteger)loops;
 
 
-What we should do, is to create a rule that merges the 4 constructors into one. JSB will call the correct one depending on the number of arguments. This how the rule should look:
+What we should do, is to create a rule that merges the 4 constructors into one. JSB will call the correct one depending on the number of arguments. This is how the rule should look:
 
 `method_properties =  CCAnimation # animationWithAnimationFrames:delayPerUnit:loops: =  name:"create"; merge: "animation" | "animationWithSpriteFrames:" | "animationWithSpriteFrames:delay:",`
 
