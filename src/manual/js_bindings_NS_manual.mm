@@ -51,7 +51,6 @@ JSBool JSB_NSObject_constructor(JSContext *cx, uint32_t argc, jsval *vp)
     JSB_NSObject *proxy = [[JSB_NSObject alloc] initWithJSObject:jsobj class:[NSObject class]];
 	
 	set_proxy_for_jsobject(proxy, jsobj);
-//    JS_SetPrivate(jsobj, proxy);
     JS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(jsobj));
 	
     /* no callbacks */
@@ -64,11 +63,11 @@ void JSB_NSObject_finalize(JSFreeOp *fop, JSObject *obj)
 {
 	CCLOGINFO(@"jsbindings: finalizing JS object %p (NSObject)", obj);
 
-	JSB_NSObject *proxy = get_proxy_for_jsobject(obj);
-	if (proxy) {
-		[proxy setRealObj:nil];
-		del_proxy_for_jsobject( obj );
-	}
+//	JSB_NSObject *proxy = get_proxy_for_jsobject(obj);
+//	if (proxy)
+//		[proxy setRealObj:nil];
+
+	del_proxy_for_jsobject( obj );
 }
 
 // Methods
@@ -222,7 +221,6 @@ void JSB_NSObject_createClass(JSContext* cx, JSObject* globalObj, const char *na
 		_jsObj = object;
 		_klass = klass;
 		
-//		JS_SetPrivate(jsobj, self);
 		set_proxy_for_jsobject(self, _jsObj);
 
 		// Can't use "[self description] since it returns an autorelease version. The string needs to be copied to an static location
@@ -327,13 +325,13 @@ JSBool JSB_NSEvent_getDelta(JSContext *cx, uint32_t argc, jsval *vp) {
 // Destructor
 void JSB_NSEvent_finalize(JSFreeOp *fop, JSObject *obj)
 {
-	CCLOGINFO(@"spidermonkey: finalizing JS object %p (NSEvent)", obj);
+	CCLOGINFO(@"jsbindings: finalizing JS object %p (NSEvent)", obj);
 	
-	JSB_NSObject *proxy = get_proxy_for_jsobject(obj);
-	if (proxy) {
-		[proxy setRealObj:nil];
-		del_proxy_for_jsobject( obj );
-	}
+//	JSB_NSObject *proxy = get_proxy_for_jsobject(obj);
+//	if (proxy)
+//		[proxy setRealObj:nil];
+
+	del_proxy_for_jsobject( obj );
 }
 
 void JSB_NSEvent_createClass(JSContext* cx, JSObject* globalObj, const char *name )
@@ -461,11 +459,11 @@ void JSB_UITouch_finalize(JSFreeOp *fop, JSObject *obj)
 {
 	CCLOGINFO(@"jsbindings: finalizing JS object %p (UITouch)", obj);
 
-	JSB_NSObject *proxy = get_proxy_for_jsobject(obj);
-	if (proxy) {
-		[proxy setRealObj:nil];
-		del_proxy_for_jsobject( obj );
-	}
+//	JSB_NSObject *proxy = get_proxy_for_jsobject(obj);
+//	if (proxy)
+//		[proxy setRealObj:nil];
+
+	del_proxy_for_jsobject( obj );
 }
 
 void JSB_UITouch_createClass(JSContext* cx, JSObject* globalObj, const char *name )
@@ -592,11 +590,11 @@ void JSB_UIAccelerometer_finalize(JSFreeOp *fop, JSObject *obj)
 {
 	CCLOGINFO(@"jsbindings: finalizing JS object %p (UIAccelerometer)", obj);
 
-	JSB_NSObject *proxy = get_proxy_for_jsobject(obj);
-	if (proxy) {
-		[proxy setRealObj:nil];
-		del_proxy_for_jsobject( obj );
-	}
+//	JSB_NSObject *proxy = get_proxy_for_jsobject(obj);
+//	if (proxy)
+//		[proxy setRealObj:nil];
+	
+	del_proxy_for_jsobject( obj );
 }
 
 // Arguments: 

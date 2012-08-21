@@ -38,7 +38,7 @@
 }
 
 @property (nonatomic, readwrite, assign) JSObject *jsObj;
-@property (nonatomic, readwrite, retain) id	realObj;
+@property (nonatomic, readwrite, assign) id	realObj;
 @property (nonatomic, readonly) Class klass;
 
 -(id) initWithJSObject:(JSObject*)object class:(Class)klass;
