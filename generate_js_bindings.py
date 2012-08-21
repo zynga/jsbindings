@@ -836,7 +836,6 @@ JSBool %s_constructor(JSContext *cx, uint32_t argc, jsval *vp)
 {
 	JSObject *jsobj = [%s createJSObjectWithRealObject:nil context:cx];
 	JS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(jsobj));
-
 	return JS_TRUE;
 }
 '''
@@ -850,7 +849,11 @@ JSBool %s_constructor(JSContext *cx, uint32_t argc, jsval *vp)
 void %s_finalize(JSFreeOp *fop, JSObject *obj)
 {
 	CCLOGINFO(@"jsbindings: finalizing JS object %%p (%s)", obj);
-	del_proxy_for_jsobject( obj );
+	JSB_NSObject *proxy = get_proxy_for_jsobject(obj);
+	if (proxy) {
+		[proxy setRealObj:nil];
+		del_proxy_for_jsobject( obj );
+	}
 }
 '''
         proxy_class_name = '%s%s' % (PROXY_PREFIX, class_name)
@@ -2141,7 +2144,7 @@ JSBool %s%s(JSContext *cx, uint32_t argc, jsval *vp) {
 
 
 def help():
-    print "%s v0.2 - Script that generates glue code between Objective-C and JavaScript" % sys.argv[0]
+    print "%s v0.1 - Script that generates glue code between Objective-C and JavaScript" % sys.argv[0]
     print "Usage:"
     print "\t-c --config-file\tConfiguration file needed to generate the glue code."
     print "\nExample:"
