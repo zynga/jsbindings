@@ -125,7 +125,7 @@ But what happens with the other constructors of `CCAnimation` ?
 
 What we should do, is to create a rule that merges the 4 constructors into one. JSB will call the correct one depending on the number of arguments. This is how the rule should look:
 
-`method_properties =  CCAnimation # animationWithAnimationFrames:delayPerUnit:loops: =  name:"create"; merge: "animation" | "animationWithSpriteFrames:" | "animationWithSpriteFrames:delay:",`
+	method_properties =  CCAnimation # animationWithAnimationFrames:delayPerUnit:loops: =  name:"create"; merge: "animation" | "animationWithSpriteFrames:" | "animationWithSpriteFrames:delay:",
 
 And the code in JS will look like:
 
@@ -145,11 +145,11 @@ And the code in JS will look like:
 
 JSB supports callback methods. In order to register a method as callback you should add a callback rule in the configuration file. eg:
 
-`method_properties = CCNode#onEnter = callback,`
+	method_properties = CCNode#onEnter = callback,
 
 You could also rename a callback by doing:
 
-`method_properties = CCLayer # ccTouchesBegan:withEvent: = callback; name:"onTouchesBegan",`
+	method_properties = CCLayer # ccTouchesBegan:withEvent: = callback; name:"onTouchesBegan",
 
 
 #### Configuration examples
