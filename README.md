@@ -257,12 +257,12 @@ In order to run a JS script from native, you should do the following
 
 ## Who is using JSB?
 
-JSB has been used to generate bindings for the following projects:
+JSB has been used successfully in the following open source projects:
 
-- [cocos2d-iphone v2.1] (https://github.com/cocos2d/cocos2d-iphone/tree/develop-v2) (develop-v2 branch)
-- CocosDenshion
-- CocosBuilder Reader
-- [Chipmunk 6.1.1] (https://github.com/slembcke/Chipmunk-Physics)
+- [cocos2d-iphone v2.1] (https://github.com/cocos2d/cocos2d-iphone/tree/develop-v2): 2d game engine
+- CocosDenshion: Sound engine bundled with cocos2d
+- [CocosBuilder Reader](http://cocosbuilder.com/): World editor for cocos2d
+- [Chipmunk Physics v6.1.1] (http://www.chipmunk-physics.net): 2D rigid body physics engine
 
 cocos2d-iphone v2.1 comes with 3 demo projects that uses it: 
 
