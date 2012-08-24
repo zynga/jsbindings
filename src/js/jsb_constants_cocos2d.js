@@ -57,14 +57,14 @@ cc._reuse_grid = cc.g(0,0);
 cc.c3b = function( r, g, b )
 {
     return {r:r, g:g, b:b };
-}
+};
 cc._c3b = function( r, g, b )
 {
     cc._reuse_color3b.r = r;
     cc._reuse_color3b.g = g;
     cc._reuse_color3b.b = b;
     return cc._reuse_color3b;
-}
+};
 // compatibility
 cc.c3 = cc.c3b;
 cc._c3 = cc._c3b;
@@ -75,7 +75,7 @@ cc._c3 = cc._c3b;
 cc.c4b = function( r, g, b, a )
 {
     return {r:r, g:g, b:b, a:a };
-}
+};
 cc._c4b = function( r, g, b, a )
 {
     cc._reuse_color4b.r = r;
@@ -83,7 +83,7 @@ cc._c4b = function( r, g, b, a )
     cc._reuse_color4b.b = b;
     cc._reuse_color4b.a = a;
     return cc._reuse_color4b;
-}
+};
 // compatibility
 cc.c4 = cc.c4b;
 cc._c4 = cc._c4b;
@@ -96,7 +96,7 @@ cc._c4 = cc._c4b;
 cc.c4f = function( r, g, b, a )
 {
     return {r:r, g:g, b:b, a:a };
-}
+};
 
 //
 // Point
@@ -104,10 +104,10 @@ cc.c4f = function( r, g, b, a )
 cc.p = function( x, y )
 {
     return {x:x, y:y};
-}
+};
 cc._p = function( x, y )
 {
-    if( cc._reuse_p_index == 0 ) {
+    if( cc._reuse_p_index === 0 ) {
         cc._reuse_p0.x = x;
         cc._reuse_p0.y = y;
         cc._reuse_p_index = 1;
@@ -118,27 +118,27 @@ cc._p = function( x, y )
         cc._reuse_p_index = 0;
         return cc._reuse_p1;
     }
-}
+};
 
 cc._to_p = function( point )
 {
     return point;
-}
+};
 
 cc._from_p = function( size )
 {
     return size;
-}
+};
 
 //
-// Grid 
+// Grid
 //
 cc._g = function( x, y )
 {
     cc._reuse_grid.x = x;
     cc._reuse_grid.y = y;
     return cc._reuse_grid;
-}
+};
 
 //
 // Size
@@ -146,17 +146,17 @@ cc._g = function( x, y )
 cc.size = function(w,h)
 {
     return {width:w, height:h};
-}
+};
 
 cc._to_size = function( size )
 {
     return size;
-}
+};
 
 cc._from_size = function( size )
 {
     return size;
-}
+};
 
 //
 // Rect
@@ -164,27 +164,27 @@ cc._from_size = function( size )
 cc.rect = function(x,y,w,h)
 {
     return {x:x, y:y, width:w, height:h};
-}
+};
 
 cc._to_rect = function( rect )
 {
     return rect;
-}
+};
 
 cc._from_rect = function( rect )
 {
     return rect;
-}
+};
 
 
 // dump config info, but only in debug mode
 cc.dumpConfig = function()
 {
     if( cc.config.debug ) {
-        for( i in cc.config )
+        for( var i in cc.config )
             cc.log( i + " = " + cc.config[i] );
     }
-}
+};
 
 /**
  * Associates a base class with a native superclass
@@ -207,10 +207,10 @@ cc.rectIntersectsRect = function( rectA, rectB )
                     rectA.y + rectA.height < rectB.y );
 
     return bool;
-}
+};
 
 //
-// Array: for cocos2d-hmtl5 compatibility
+// Array: for cocos2d-html5 compatibility
 //
 cc.ArrayRemoveObject = function (arr, delObj) {
     for (var i = 0; i < arr.length; i++) {
@@ -253,7 +253,7 @@ goog.base = function(me, opt_methodName, var_args) {
 	var args = Array.prototype.slice.call(arguments, 2);
 	var foundCaller = false;
 	for (var ctor = me.constructor;
-		 ctor; ctor = ctor.superClass_ && ctor.superClass_.constructor) {
+        ctor; ctor = ctor.superClass_ && ctor.superClass_.constructor) {
 		if (ctor.prototype[opt_methodName] === caller) {
 			foundCaller = true;
 		} else if (foundCaller) {
