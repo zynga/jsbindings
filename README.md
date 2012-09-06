@@ -10,7 +10,7 @@ That means that you can interact with your favorite native library from JS. As a
 ![JSB layer ](https://raw.github.com/zynga/jsbindings/master/docs/jsb_intro.png)
 
 The JS code is interpreted by [SpiderMonkey](https://developer.mozilla.org/en-US/docs/SpiderMonkey), Mozilla's JS virtual machine (VM).
-It uses the latest stable version of SpiderMonkey (as of this writing it is v14.0.1). The JS VM is extended by JSB to support custom types, custom structures and Objective-C objects.
+It uses the latest stable version of SpiderMonkey (as of this writing it is v15.0). The JS VM is extended by JSB to support custom types, custom structures and Objective-C objects.
 
 JSB has a flexible set of rules that could be used to select the classes, methods, functions and structs to parse or ignore; which methods are callbacks; and renaming rules among some of its features. To ease the creation of these rules, it supports regular expressions.
 
@@ -279,7 +279,7 @@ _Moon Warriors can run on top of cocos2d-iphone + JSB or on top of cocos2d-html5
 
 As of this writing, these are the current bugs and/or limitations. For an updated list of bugs/limitations, please visit [JSB homepage](https://github.com/zynga/jsbindings)
 
-- No JS debugger. Remote debugging capabilities will be added once SpiderMonkey 15 is released.
+- No JS debugger. Remote debugging capabilities will be added soon.
 - No JS profiler for performance analysis.
 - Native objects control the life of JS objects
 	- It means that native objects might get released while their JS counterpart is still live
