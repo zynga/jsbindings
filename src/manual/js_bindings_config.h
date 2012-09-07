@@ -63,11 +63,17 @@
 
 /** @def JSB_INCLUDE_COCOS2D
  Whether or not it should include JS bindings for cocos2d.
-*/
+ */
 #ifndef JSB_INCLUDE_COCOS2D
 #define JSB_INCLUDE_COCOS2D 1
+
+#import "cocos2d.h"
+#if defined(__CC_PLATFORM_IOS)
 #define JSB_INCLUDE_COCOS2D_IOS 1
+#elif defined(__CC_PLATFORM_MAC)
 #define JSB_INCLUDE_COCOS2D_MAC 1
+#endif
+
 #endif // JSB_INCLUDE_COCOS2D
 
 
