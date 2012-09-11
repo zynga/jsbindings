@@ -48,6 +48,7 @@ PROXY_PREFIX = 'JSB_'
 METHOD_CONSTRUCTOR, METHOD_CLASS, METHOD_INIT, METHOD_REGULAR = xrange(4)
 JSB_VERSION = 'v0.2'
 
+
 # xml2d recipe copied from here:
 # http://code.activestate.com/recipes/577722-xml-to-python-dictionary-and-back/
 def xml2d(e):
@@ -1145,57 +1146,57 @@ void %s_finalize(JSFreeOp *fop, JSObject *obj)
                 # IMPORTANT: 1st search on declared types.
                 # NSString should be treated as a special case, not as a generic object
                 if dt in supported_declared_types:
-                    args_js_type.append( supported_declared_types[dt] )
-                    args_declared_type.append( dt )
+                    args_js_type.append(supported_declared_types[dt])
+                    args_declared_type.append(dt)
                 elif t in supported_types:
-                    args_js_type.append( supported_types[t] )
-                    args_declared_type.append( dt )
+                    args_js_type.append(supported_types[t])
+                    args_declared_type.append(dt)
                 # special case for Objects
                 elif t == '@' and dt_class_name in self.supported_classes:
-                    args_js_type.append( 'o' )
-                    args_declared_type.append( dt )
+                    args_js_type.append('o')
+                    args_declared_type.append(dt)
 
                 # valid 'opaque' struct ?
                 elif dt in self.struct_opaque:
                     args_js_type.append('N/A')
-                    args_declared_type.append( dt )
+                    args_declared_type.append(dt)
 
                 # valid manual struct ?
                 elif dt in self.struct_manual:
                     args_js_type.append('N/A')
-                    args_declared_type.append( dt )
+                    args_declared_type.append(dt)
 
                 # valid automatic struct ?
-                elif self.is_valid_structure( t ):
-                    args_js_type.append( t )
-                    args_declared_type.append( dt )
+                elif self.is_valid_structure(t):
+                    args_js_type.append(t)
+                    args_declared_type.append(dt)
 
                 else:
                     raise ParseException("Unsupported argument: %s" % dt)
 
         return (args_js_type, args_declared_type)
 
-    def generate_argument_variadic_2_nsarray( self ):
+    def generate_argument_variadic_2_nsarray(self):
         template = '\tok &= jsvals_variadic_to_nsarray( cx, argvp, argc, &arg0 );\n'
-        self.mm_file.write( template )
+        self.mm_file.write(template)
 
     # Special case for string to NSString generator
-    def generate_argument_string( self, i, arg_js_type, arg_declared_type ):
+    def generate_argument_string(self, i, arg_js_type, arg_declared_type):
         template = '\tok &= jsval_to_nsstring( cx, *argvp++, &arg%d );\n'
-        self.mm_file.write( template % i )
+        self.mm_file.write(template % i)
 
     # Special case for objects
-    def generate_argument_object( self, i, arg_js_type, arg_declared_type ):
+    def generate_argument_object(self, i, arg_js_type, arg_declared_type):
         object_template = '\tok &= jsval_to_nsobject( cx, *argvp++, &arg%d);\n'
-        self.mm_file.write( object_template % (i ) )
+        self.mm_file.write(object_template % (i))
 
     # Manual conversion for struct
-    def generate_argument_struct_manual( self, i, arg_js_type, arg_declared_type ):
-        new_name = self.get_name_for_manual_struct( arg_declared_type )
-        template = '\tok &= jsval_to_%s( cx, *argvp++, (%s*) &arg%d );\n' % (new_name, new_name, i )
-        self.mm_file.write( template )
+    def generate_argument_struct_manual(self, i, arg_js_type, arg_declared_type):
+        new_name = self.get_name_for_manual_struct(arg_declared_type)
+        template = '\tok &= jsval_to_%s( cx, *argvp++, (%s*) &arg%d );\n' % (new_name, new_name, i)
+        self.mm_file.write(template)
 
-    def generate_argument_struct_automatic( self, i, arg_js_type, arg_declared_type ):
+    def generate_argument_struct_automatic(self, i, arg_js_type, arg_declared_type):
         # This template assumes that the types will be the same on all platforms (eg: 64 and 32-bit platforms)
         template = '''
 	JSObject *tmp_arg%d;
@@ -1204,36 +1205,35 @@ void %s_finalize(JSFreeOp *fop, JSObject *obj)
 '''
         proxy_class_name = PROXY_PREFIX + arg_declared_type
 
-        self.mm_file.write( template % (i,
+        self.mm_file.write(template % (i,
                                         i,
-                                        i, arg_declared_type, i ) )
+                                        i, arg_declared_type, i))
 
-
-    def generate_argument_array( self, i, arg_js_type, arg_declared_type ):
+    def generate_argument_array(self, i, arg_js_type, arg_declared_type):
         template = '\tok &= jsval_to_nsarray( cx, *argvp++, &arg%d );\n'
-        self.mm_file.write( template % (i) )
+        self.mm_file.write(template % (i))
 
-    def generate_argument_set( self, i, arg_js_type, arg_declared_type ):
+    def generate_argument_set(self, i, arg_js_type, arg_declared_type):
         template = '\tok &= jsval_to_nsset( cx, *argvp++, &arg%d );\n'
-        self.mm_file.write( template % (i) )
+        self.mm_file.write(template % (i))
 
-    def generate_argument_function( self, i, arg_js_type, arg_declared_type ):
+    def generate_argument_function(self, i, arg_js_type, arg_declared_type):
         template = '\tok &= jsval_to_block_1( cx, *argvp++, JS_THIS_OBJECT(cx, vp), &arg%d );\n'
-        self.mm_file.write( template % (i) )
+        self.mm_file.write(template % (i))
 
-    def generate_argument_opaque( self, i, arg_js_type, arg_declared_type ):
+    def generate_argument_opaque(self, i, arg_js_type, arg_declared_type):
         template = '\tok &= jsval_to_opaque( cx, *argvp++, (void**)&arg%d );\n'
-        self.mm_file.write( template % (i) )
+        self.mm_file.write(template % (i))
 
-    def generate_argument_long( self, i, arg_js_type, arg_declared_type ):
+    def generate_argument_long(self, i, arg_js_type, arg_declared_type):
         template = '\tok &= jsval_to_long( cx, *argvp++, &arg%d );\n'
-        self.mm_file.write( template % (i) )
+        self.mm_file.write(template % (i))
 
-    def generate_argument_longlong( self, i, arg_js_type, arg_declared_type ):
+    def generate_argument_longlong(self, i, arg_js_type, arg_declared_type):
         template = '\tok &= jsval_to_longlong( cx, *argvp++, &arg%d );\n'
-        self.mm_file.write( template % (i) )
+        self.mm_file.write(template % (i))
 
-    def generate_arguments( self, args_declared_type, args_js_type, properties = {} ):
+    def generate_arguments(self, args_declared_type, args_js_type, properties={}):
         # b      JSBool          Boolean
         # c      uint16_t/jschar ECMA uint16_t, Unicode char
         # i      int32_t         ECMA int32_t
@@ -1272,24 +1272,23 @@ void %s_finalize(JSFreeOp *fop, JSObject *obj)
 
         # First  time
         self.mm_file.write('\tjsval *argvp = JS_ARGV(cx,vp);\n')
-        self.mm_file.write('\tJSBool ok = JS_TRUE;\n');
+        self.mm_file.write('\tJSBool ok = JS_TRUE;\n')
 
         # Declare variables
         declared_vars = '\t'
-        for i,arg in enumerate(args_js_type):
+        for i, arg in enumerate(args_js_type):
             if args_declared_type[i] in self.struct_opaque:
-                declared_vars += '%s arg%d;' % ( args_declared_type[i], i )
+                declared_vars += '%s arg%d;' % (args_declared_type[i], i)
             elif args_declared_type[i] in self.struct_manual:
-                declared_vars += '%s arg%d;' % ( args_declared_type[i], i )
-            elif self.is_valid_structure( arg ):
-                declared_vars += '%s arg%d;' % ( args_declared_type[i], i )
+                declared_vars += '%s arg%d;' % (args_declared_type[i], i)
+            elif self.is_valid_structure(arg):
+                declared_vars += '%s arg%d;' % (args_declared_type[i], i)
             elif arg in js_types_conversions:
                 declared_vars += '%s arg%d;' % (js_types_conversions[arg][0], i)
             elif arg in js_special_type_conversions:
-                declared_vars += '%s arg%d;' % ( js_special_type_conversions[arg][1], i )
+                declared_vars += '%s arg%d;' % (js_special_type_conversions[arg][1], i)
             declared_vars += ' '
-        self.mm_file.write( '%s\n\n' % declared_vars )
-
+        self.mm_file.write('%s\n\n' % declared_vars)
 
         # Optional Arguments ?
         min_args = properties.get('min_args', None)
@@ -1306,31 +1305,31 @@ void %s_finalize(JSFreeOp *fop, JSObject *obj)
             self.generate_argument_variadic_2_nsarray()
 
         else:
-            for i,arg in enumerate(args_js_type):
+            for i, arg in enumerate(args_js_type):
 
-                if optional_args!=None and i >= optional_args:
-                    self.mm_file.write('\tif (argc >= %d) {\n\t' % (i+1) )
+                if optional_args != None and i >= optional_args:
+                    self.mm_file.write('\tif (argc >= %d) {\n\t' % (i + 1))
 
                 if args_declared_type[i] in self.struct_opaque:
-                    self.generate_argument_opaque( i, arg, args_declared_type[i] )
+                    self.generate_argument_opaque(i, arg, args_declared_type[i])
                 elif args_declared_type[i] in self.struct_manual:
-                    self.generate_argument_struct_manual( i, arg, args_declared_type[i] )
-                elif self.is_valid_structure( arg ):
-                    self.generate_argument_struct_automatic( i, arg, args_declared_type[i] )
+                    self.generate_argument_struct_manual(i, arg, args_declared_type[i])
+                elif self.is_valid_structure(arg):
+                    self.generate_argument_struct_automatic(i, arg, args_declared_type[i])
                 elif arg in js_types_conversions:
                     t = js_types_conversions[arg]
-                    self.mm_file.write( '\tok &= %s( cx, *argvp++, &arg%d );\n' % ( t[1], i ) )
+                    self.mm_file.write('\tok &= %s( cx, *argvp++, &arg%d );\n' % (t[1], i))
                 elif arg in js_special_type_conversions:
-                    js_special_type_conversions[arg][0]( i, arg, args_declared_type[i] )
+                    js_special_type_conversions[arg][0](i, arg, args_declared_type[i])
                 else:
-                    raise ParseException('Unsupported argument type: %s' % arg )
+                    raise ParseException('Unsupported argument type: %s' % arg)
 
-                if optional_args!=None and i >= optional_args:
-                    self.mm_file.write('\t}\n' )
+                if optional_args != None and i >= optional_args:
+                    self.mm_file.write('\t}\n')
 
-        self.mm_file.write( '\tJSB_PRECONDITION(ok, "Error processing arguments");\n' )
+        self.mm_file.write('\tJSB_PRECONDITION(ok, "Error processing arguments");\n')
 
-    def generate_method_prefix( self, class_name, method, num_of_args, method_type ):
+    def generate_method_prefix(self, class_name, method, num_of_args, method_type):
         # JSB_CCNode, setPosition
         # "!" or ""
         # proxy.initialized = YES (or nothing)
@@ -1345,16 +1344,16 @@ JSBool %s_%s%s(JSContext *cx, uint32_t argc, jsval *vp) {
 '''
 
         selector = method['selector']
-        converted_name = self.convert_selector_name_to_native( selector )
+        converted_name = self.convert_selector_name_to_native(selector)
 
         # method name
         class_method = '_static' if self.is_class_method(self.current_method) else ''
-        self.mm_file.write( template_methodname % ( PROXY_PREFIX+class_name, converted_name, class_method ) )
+        self.mm_file.write(template_methodname % (PROXY_PREFIX + class_name, converted_name, class_method))
 
         # method asserts for instance methods
         if method_type == METHOD_INIT or method_type == METHOD_REGULAR:
             assert_init = '!' if method_type == METHOD_INIT else ''
-            self.mm_file.write( template_init % assert_init )
+            self.mm_file.write(template_init % assert_init)
 
         try:
             # Does it have optional arguments ?
@@ -1372,7 +1371,6 @@ JSBool %s_%s%s(JSContext *cx, uint32_t argc, jsval *vp) {
             # No, it only has required arguments
             method_assert_on_arguments = '\tJSB_PRECONDITION( argc == %d, "Invalid number of arguments" );\n' % num_of_args
         self.mm_file.write(method_assert_on_arguments)
-
 
     def generate_method_suffix(self):
         end_template = '''
@@ -1533,17 +1531,17 @@ JSBool %s_%s%s(JSContext *cx, uint32_t argc, jsval *vp) {
 #import "%s%s_classes.h"
 
 '''
-        self.generate_autogenerate_prefix( self.mm_file )
-        self.mm_file.write( import_template % (BINDINGS_PREFIX, self.namespace) )
+        self.generate_autogenerate_prefix(self.mm_file)
+        self.mm_file.write(import_template % (BINDINGS_PREFIX, self.namespace))
 
-    def generate_pragma_mark( self, class_name, fd ):
+    def generate_pragma_mark(self, class_name, fd):
         pragm_mark = '''
 /*
  * %s
  */
 #pragma mark - %s
 '''
-        fd.write( pragm_mark % (class_name, class_name) )
+        fd.write(pragm_mark % (class_name, class_name))
 
     def generate_class_header_prefix(self):
         self.generate_autogenerate_prefix(self.h_file)
@@ -1579,9 +1577,9 @@ extern JSClass *%s_class;
         header_template_end = '''
 @end
 '''
-        proxy_class_name = '%s%s' % (PROXY_PREFIX, class_name )
+        proxy_class_name = '%s%s' % (PROXY_PREFIX, class_name)
 
-        self.generate_pragma_mark( class_name, self.h_file )
+        self.generate_pragma_mark(class_name, self.h_file)
 
         manual = ''
         if class_name in self.manual_methods:
@@ -1590,12 +1588,12 @@ extern JSClass *%s_class;
 
             for method_name in self.manual_methods[class_name]:
                 try:
-                    method = self.get_method( class_name, method_name )
+                    method = self.get_method(class_name, method_name)
                     class_method = '_static' if self.is_class_method(method) else ''
-                    n = self.convert_selector_name_to_native( method_name )
-                    manual += tmp % (proxy_class_name, n, class_method )
+                    n = self.convert_selector_name_to_native(method_name)
+                    manual += tmp % (proxy_class_name, n, class_method)
                 except MethodNotFoundException, e:
-                    sys.stderr.write('WARN: Ignoring regular expression rule. Method not found: %s\n' % str(e) )
+                    sys.stderr.write('WARN: Ignoring regular expression rule. Method not found: %s\n' % str(e))
 
 
         self.h_file.write( header_template % (  proxy_class_name,
@@ -1604,10 +1602,10 @@ extern JSClass *%s_class;
                                                 proxy_class_name,
                                                 proxy_class_name, PROXY_PREFIX + parent_name  ) )
         # callback code should be added here
-        self.h_file.write( header_template_end )
+        self.h_file.write(header_template_end)
 
-    def generate_callback_args( self, method ):
-        no_args ='jsval *argv = NULL; unsigned argc=0;\n'
+    def generate_callback_args(self, method):
+        no_args = 'jsval *argv = NULL; unsigned argc=0;\n'
         with_args = '''unsigned argc=%d;
 			jsval argv[%d];
 '''
@@ -1625,8 +1623,8 @@ extern JSClass *%s_class;
         # XXX generate_retval should be reused
         #
         if 'arg' in method:
-            args_len = self.get_number_of_arguments( method )
-            for i,arg in enumerate( method['arg'] ):
+            args_len = self.get_number_of_arguments(method)
+            for i, arg in enumerate(method['arg']):
                 t = arg['type'].lower()
                 dt = arg['declared_type']
 
@@ -1635,19 +1633,18 @@ extern JSClass *%s_class;
 
                 if t in convert:
                     tmp = convert[t] % arg['name']
-                    with_args += "			argv[%d] = %s\n" % (i,tmp)
+                    with_args += "			argv[%d] = %s\n" % (i, tmp)
                 elif dt == 'NSSet':
-                    with_args += "			argv[%d] = NSSet_to_jsval( cx, %s );\n" % (i, arg['name'] )
+                    with_args += "			argv[%d] = NSSet_to_jsval( cx, %s );\n" % (i, arg['name'])
                 elif t == '@' and (dt in self.supported_classes or dt in self.class_manual):
-                    with_args += "			argv[%d] = OBJECT_TO_JSVAL( get_or_create_jsobject_from_realobj( cx, %s ) );\n" % (i, arg['name'] )
+                    with_args += "			argv[%d] = OBJECT_TO_JSVAL( get_or_create_jsobject_from_realobj( cx, %s ) );\n" % (i, arg['name'])
                 else:
                     with_args += '			argv[%d] = JSVAL_VOID; // XXX TODO Value not supported (%s) \n' % (i, dt)
 
             return with_args % (args_len, args_len)
         return no_args
 
-
-    def generate_implementation_callback( self, class_name ):
+    def generate_implementation_callback(self, class_name):
         # BOOL ccMouseUp NSEvent*
         # ccMouseUp
         # ccMouseUp
@@ -1668,21 +1665,21 @@ extern JSClass *%s_class;
 }
 '''
         if class_name in self.callback_methods:
-            for m in self.callback_methods[ class_name ]:
+            for m in self.callback_methods[class_name]:
 
-                method = self.get_method( class_name, m )
-                full_args, args = self.get_callback_args_for_method( method )
-                js_retval, dt_retval = self.validate_retval( method, class_name )
+                method = self.get_method(class_name, m)
+                full_args, args = self.get_callback_args_for_method(method)
+                js_retval, dt_retval = self.validate_retval(method, class_name)
 
-                converted_args = self.generate_callback_args( method )
+                converted_args = self.generate_callback_args(method)
 
-                js_name = self.convert_selector_name_to_js( class_name, m )
-                self.mm_file.write( template % ( dt_retval, full_args,
-                                                 js_name,
-                                                 converted_args,
-                                                 js_name ) )
+                js_name = self.convert_selector_name_to_js(class_name, m)
+                self.mm_file.write(template % (dt_retval, full_args,
+                                                js_name,
+                                                converted_args,
+                                                js_name))
 
-    def generate_implementation_swizzle( self, class_name ):
+    def generate_implementation_swizzle(self, class_name):
         # CCNode
         # CCNode
         template_prefix = '''
@@ -1706,15 +1703,15 @@ extern JSClass *%s_class;
 }
 '''
         if class_name in self.callback_methods:
-            self.mm_file.write(  template_prefix % ( class_name, class_name ) )
-            for m in self.callback_methods[ class_name ]:
+            self.mm_file.write(template_prefix % (class_name, class_name))
+            for m in self.callback_methods[class_name]:
 
-                if not self.get_method_property( class_name, m, 'no_swizzle' ):
-                    self.mm_file.write( template_middle % ( class_name, m, m ) )
+                if not self.get_method_property(class_name, m, 'no_swizzle'):
+                    self.mm_file.write(template_middle % (class_name, m, m))
 
-            self.mm_file.write(  template_suffix % ( class_name ) )
+            self.mm_file.write(template_suffix % (class_name))
 
-    def generate_implementation( self, class_name ):
+    def generate_implementation(self, class_name):
 
         create_object_template_prefix = '''
 +(JSObject*) createJSObjectWithRealObject:(id)realObj context:(JSContext*)cx
@@ -1735,25 +1732,25 @@ extern JSClass *%s_class;
 	return jsobj;
 }
 '''
-        proxy_class_name = '%s%s' % (PROXY_PREFIX, class_name )
+        proxy_class_name = '%s%s' % (PROXY_PREFIX, class_name)
 
-        self.mm_file.write( '\n@implementation %s\n' % proxy_class_name )
+        self.mm_file.write('\n@implementation %s\n' % proxy_class_name)
 
-        self.mm_file.write( create_object_template_prefix % (proxy_class_name, proxy_class_name,
+        self.mm_file.write(create_object_template_prefix % (proxy_class_name, proxy_class_name,
                                                              proxy_class_name, proxy_class_name,
                                                              class_name
-                                                             ) )
+                                                             ))
 
-        self.mm_file.write( create_object_template_suffix )
+        self.mm_file.write(create_object_template_suffix)
 
-        if self.requires_swizzle( class_name ):
-            self.generate_implementation_swizzle( class_name )
+        if self.requires_swizzle(class_name):
+            self.generate_implementation_swizzle(class_name)
 
-        self.generate_implementation_callback( class_name )
+        self.generate_implementation_callback(class_name)
 
-        self.mm_file.write( '\n@end\n' )
+        self.mm_file.write('\n@end\n')
 
-    def generate_createClass_function( self, class_name, parent_name, ok_methods ):
+    def generate_createClass_function(self, class_name, parent_name, ok_methods):
         # 1-12: JSB_CCNode
         implementation_template = '''
 void %s_createClass(JSContext *cx, JSObject* globalObj, const char* name )
@@ -1790,21 +1787,21 @@ void %s_createClass(JSContext *cx, JSObject* globalObj, const char* name )
 	%s_object = JS_InitClass(cx, globalObj, %s_object, %s_class, %s_constructor,0,properties,funcs,NULL,st_funcs);
 }
 '''
-        proxy_class_name = '%s%s' % (PROXY_PREFIX, class_name )
-        proxy_parent_name = '%s%s' % (PROXY_PREFIX, parent_name )
+        proxy_class_name = '%s%s' % (PROXY_PREFIX, class_name)
+        proxy_parent_name = '%s%s' % (PROXY_PREFIX, parent_name)
 
         reserved_slots = self.get_class_property('reserved_slots', class_name)
-        flags =  "JSCLASS_HAS_RESERVED_SLOTS(%s)"%reserved_slots if reserved_slots!=None else "0"
+        flags = "JSCLASS_HAS_RESERVED_SLOTS(%s)" % reserved_slots if reserved_slots != None else "0"
 
-        self.mm_file.write( implementation_template % ( proxy_class_name,
+        self.mm_file.write(implementation_template % (proxy_class_name,
                                                         proxy_class_name, proxy_class_name, proxy_class_name,
                                                         proxy_class_name, proxy_class_name, proxy_class_name,
                                                         proxy_class_name, proxy_class_name, proxy_class_name,
                                                         proxy_class_name, proxy_class_name, proxy_class_name,
                                                         flags,
-                                                        ) )
+                                                        ))
 
-        self.mm_file.write( properties_template )
+        self.mm_file.write(properties_template)
 
         js_fn = '\t\tJS_FN("%s", %s, %d, JSPROP_PERMANENT | JSPROP_SHARED %s),\n'
 
@@ -1812,36 +1809,36 @@ void %s_createClass(JSContext *cx, JSObject* globalObj, const char* name )
         class_method_buffer = ''
         for method in ok_methods:
 
-            num_args = self.get_number_of_arguments( method )
+            num_args = self.get_number_of_arguments(method)
 
             class_method = '_static' if self.is_class_method(method) else ''
 
-            js_name = self.convert_selector_name_to_js( class_name, method['selector'] )
-            cb_name = self.convert_selector_name_to_native( method['selector'] )
+            js_name = self.convert_selector_name_to_js(class_name, method['selector'])
+            cb_name = self.convert_selector_name_to_native(method['selector'])
 
-            if self.is_class_constructor( method ):
-                entry = js_fn % (js_name, proxy_class_name + '_' + cb_name + class_method, num_args, '| JSPROP_ENUMERATE' ) # | JSFUN_CONSTRUCTOR
+            if self.is_class_constructor(method):
+                entry = js_fn % (js_name, proxy_class_name + '_' + cb_name + class_method, num_args, '| JSPROP_ENUMERATE')  # | JSFUN_CONSTRUCTOR
             else:
-                entry = js_fn % (js_name, proxy_class_name + '_' + cb_name + class_method, num_args, '| JSPROP_ENUMERATE' )
+                entry = js_fn % (js_name, proxy_class_name + '_' + cb_name + class_method, num_args, '| JSPROP_ENUMERATE')
 
-            if self.is_class_method( method ):
+            if self.is_class_method(method):
                 class_method_buffer += entry
             else:
                 instance_method_buffer += entry
 
         # instance methods entry point
-        self.mm_file.write( functions_template_start )
-        self.mm_file.write( instance_method_buffer )
-        self.mm_file.write( functions_template_end )
+        self.mm_file.write(functions_template_start)
+        self.mm_file.write(instance_method_buffer)
+        self.mm_file.write(functions_template_end)
 
         # class methods entry point
-        self.mm_file.write( static_functions_template_start )
-        self.mm_file.write( class_method_buffer )
-        self.mm_file.write( static_functions_template_end )
+        self.mm_file.write(static_functions_template_start)
+        self.mm_file.write(class_method_buffer)
+        self.mm_file.write(static_functions_template_end)
 
-        self.mm_file.write( init_class_template % ( proxy_class_name, proxy_parent_name, proxy_class_name, proxy_class_name ) )
+        self.mm_file.write(init_class_template % (proxy_class_name, proxy_parent_name, proxy_class_name, proxy_class_name))
 
-    def generate_callback_code( self, class_name ):
+    def generate_callback_code(self, class_name):
         # CCNode
         template_prefix = '@implementation %s (JSBindings)\n'
 
@@ -1862,24 +1859,24 @@ void %s_createClass(JSContext *cx, JSObject* globalObj, const char* name )
 
         if class_name in self.callback_methods:
 
-            self.mm_file.write( template_prefix % class_name )
-            for m in self.callback_methods[ class_name ]:
+            self.mm_file.write(template_prefix % class_name)
+            for m in self.callback_methods[class_name]:
 
-                real_method = self.get_method( class_name,m )
-                fullargs, args = self.get_callback_args_for_method( real_method )
-                js_ret_val, dt_ret_val = self.validate_retval(  real_method, class_name )
+                real_method = self.get_method(class_name, m)
+                fullargs, args = self.get_callback_args_for_method(real_method)
+                js_ret_val, dt_ret_val = self.validate_retval(real_method, class_name)
 
-                if not self.get_method_property( class_name, m, 'no_swizzle' ):
+                if not self.get_method_property(class_name, m, 'no_swizzle'):
                     swizzle_prefix = 'JSHook_'
-                    call_native ='\t//1st call native, then JS. Order is important\n\t[self JSHook_%s];'% (args)
+                    call_native = '\t//1st call native, then JS. Order is important\n\t[self JSHook_%s];' % (args)
                 else:
                     swizzle_prefix = ''
                     call_native = ''
-                self.mm_file.write( template % ( dt_ret_val, swizzle_prefix, fullargs,
+                self.mm_file.write(template % (dt_ret_val, swizzle_prefix, fullargs,
                                                  call_native,
                                                  proxy_class_name,
                                                  args
-                                                 ) )
+                                                 ))
 
             self.mm_file.write(template_suffix)
 
