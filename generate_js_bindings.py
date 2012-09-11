@@ -387,7 +387,7 @@ class JSBindings(object):
         copy_set = copy.copy(self.functions_to_bind)
         for i in self.functions_to_bind:
             if i in self.functions_to_ignore:
-                print 'Explicity removing %s from bindings...' % i
+                print 'Explicitly removing %s from bindings...' % i
                 copy_set.remove(i)
 
         self.functions_to_bind = copy_set
@@ -460,7 +460,7 @@ class JSBindings(object):
         copy_set = copy.copy(self.classes_to_bind)
         for i in self.classes_to_bind:
             if i in self.classes_to_ignore:
-                print 'Explicity removing %s from bindings...' % i
+                print 'Explicitly removing %s from bindings...' % i
                 copy_set.remove(i)
 
         self.classes_to_bind = copy_set
@@ -667,7 +667,7 @@ class JSBindings(object):
                 if self.is_class_constructor(m):
                     return False
         else:
-            raise Exception("Unknonw value for inherit_class_methods: %s", self._inherit_class_methods)
+            raise Exception("Unknown value for inherit_class_methods: %s", self._inherit_class_methods)
 
         return True
 
@@ -1389,14 +1389,14 @@ JSBool %s_%s%s(JSContext *cx, uint32_t argc, jsval *vp) {
 
         # Variadic methods are not supported
         if 'variadic' in method and method['variadic'] == 'true':
-            raise ParseException('variadic arguemnts not supported.')
+            raise ParseException('variadic arguments not supported.')
 
         # Skip 'callback' and 'ignore' methods
         try:
             if 'callback' in self.method_properties[class_name][s]:
                 raise ParseException('Method defined as callback. Ignoring.')
             if 'ignore' in self.method_properties[class_name][s]:
-                raise ParseException('Explicity ignoring method')
+                raise ParseException('Explicitly ignoring method')
         except KeyError, e:
             pass
 
@@ -1595,12 +1595,12 @@ extern JSClass *%s_class;
                 except MethodNotFoundException, e:
                     sys.stderr.write('WARN: Ignoring regular expression rule. Method not found: %s\n' % str(e))
 
-
-        self.h_file.write( header_template % (  proxy_class_name,
+        self.h_file.write(header_template % (proxy_class_name,
                                                 manual,
                                                 proxy_class_name,
                                                 proxy_class_name,
-                                                proxy_class_name, PROXY_PREFIX + parent_name  ) )
+                                                proxy_class_name, PROXY_PREFIX + parent_name
+                                                ))
         # callback code should be added here
         self.h_file.write(header_template_end)
 
@@ -1895,7 +1895,7 @@ void %s_createClass(JSContext *cx, JSObject* globalObj, const char* name )
 
     def generate_class_binding(self, class_name):
 
-        # Ignore NSObject. Already registerd
+        # Ignore NSObject. Already registered
         if not class_name or class_name in self.classes_to_ignore or class_name in self.parsed_classes or class_name in self.class_manual:
             return
 
