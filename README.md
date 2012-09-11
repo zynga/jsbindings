@@ -90,18 +90,24 @@ Let's take a look at some of them.
 The renaming rule allows us to rename a method names or class names or function names or struct names.
 As an example, the default JS API for:
 
-	// CCAnimation (from cocos2d-iphone v2.0)
-	+(id) animationWithAnimationFrames:(NSArray*)arrayOfAnimationFrames delayPerUnit:(float)delayPerUnit loops:(NSUInteger)loops;
+```objc
+// CCAnimation (from cocos2d-iphone v2.0)
++(id) animationWithAnimationFrames:(NSArray*)arrayOfAnimationFrames delayPerUnit:(float)delayPerUnit loops:(NSUInteger)loops;
+```
 
 would be:
 
-	// ugly
-	cc.CCAnimation.animationWithAnimationFrames_delayPerUnit_loops_( frames, delay, loops );
+```js
+// ugly
+cc.CCAnimation.animationWithAnimationFrames_delayPerUnit_loops_( frames, delay, loops );
+```
 
 So, with a simple set of rules, we can rename that JS API into this one:
 
-	// more JS friendly
-	cc.Animation.create( frames, delay, loops );
+```js
+// more JS friendly
+cc.Animation.create( frames, delay, loops );
+```
 
 In order to do that, we need to remove the `CC` prefix from the class name, since it is already using the `cc` JS namespace:
 
@@ -116,12 +122,13 @@ And finally we add a rename rule for that method:
 
 But what happens with the other constructors of `CCAnimation` ?
 
-	// CCAnimation supports 4 different constructors
-	+(id) animation; //
-	+(id) animationWithSpriteFrames:(NSArray*)arrayOfSpriteFrameNames;
-	+(id) animationWithSpriteFrames:(NSArray*)arrayOfSpriteFrameNames delay:(float)delay;
-	+(id) animationWithAnimationFrames:(NSArray*)arrayOfAnimationFrames delayPerUnit:(float)delayPerUnit loops:(NSUInteger)loops;
-
+```objc
+// CCAnimation supports 4 different constructors
++(id) animation; //
++(id) animationWithSpriteFrames:(NSArray*)arrayOfSpriteFrameNames;
++(id) animationWithSpriteFrames:(NSArray*)arrayOfSpriteFrameNames delay:(float)delay;
++(id) animationWithAnimationFrames:(NSArray*)arrayOfAnimationFrames delayPerUnit:(float)delayPerUnit loops:(NSUInteger)loops;
+```
 
 What we should do, is to create a rule that merges the 4 constructors into one. JSB will call the correct one depending on the number of arguments. This is how the rule should look:
 
@@ -129,17 +136,19 @@ What we should do, is to create a rule that merges the 4 constructors into one. 
 
 And the code in JS will look like:
 
-	// calls [CCAnimation animation]
-	var anim = cc.Animation.create(); 
+```js
+// calls [CCAnimation animation]
+var anim = cc.Animation.create(); 
 
-	// calls [CCAnimation animnationWithSpriteFrames:]
-	var anim = cc.Animation.create(array);
+// calls [CCAnimation animnationWithSpriteFrames:]
+var anim = cc.Animation.create(array);
 
-	// calls [CCAnimation animnationWithSpriteFrames:delay:]
-	var anim = cc.Animation.create(array, delay);
+// calls [CCAnimation animnationWithSpriteFrames:delay:]
+var anim = cc.Animation.create(array, delay);
 
-	// calls [CCAnimation animationWithAnimationFrames:delayPerUnit:loops:]
-	var anim = cc.Animation.create(array, delay, loops);
+// calls [CCAnimation animationWithAnimationFrames:delayPerUnit:loops:]
+var anim = cc.Animation.create(array, delay, loops);
+```
 
 #### Callback rule
 
@@ -169,15 +178,18 @@ The JS bindings code allows to call JS code from native and vice-versa. It forwa
 
 The following code will call the the native C function `ccpAdd()`:
 
-	var p1 = cc.p(0,0);
-	var p2 = cc.p(1,1);
-	// cc.pAdd is a "wrapped" function, and it will call the cocos2d ccpAdd() C function
-	var ret = cc.pAdd(p1, p2); 
-
+```js
+var p1 = cc.p(0,0);
+var p2 = cc.p(1,1);
+// cc.pAdd is a "wrapped" function, and it will call the cocos2d ccpAdd() C function
+var ret = cc.pAdd(p1, p2); 
+```
 
 Let's take a look at the native declaration of `ccpAdd`:
 
-	CGPoint ccpAdd(const CGPoint v1, const CGPoint v2);
+```c
+CGPoint ccpAdd(const CGPoint v1, const CGPoint v2);
+```
 
 So when `cc.pAdd` is executed, it will call the "glue" function code `JSB_ccpAdd`. And `JSB_ccpAdd` does:
 
@@ -192,9 +204,11 @@ So when `cc.pAdd` is executed, it will call the "glue" function code `JSB_ccpAdd
 
 It is also possible to call instance or class methods from JS. The internal logic is similar to calling native functions. Let's have look:
 
-	// Creates a sprite and sets its position to 200,200
-	var sprite = cc.Sprite.create('image.png');
-	sprite.setPosition( cc.p(200,200) );
+```js
+// Creates a sprite and sets its position to 200,200
+var sprite = cc.Sprite.create('image.png');
+sprite.setPosition( cc.p(200,200) );
+```
 
 `cc.Sprite.create("image.png")` will call the "glue" function `JSB_CCSprite_spriteWithFile_rect__static`, which does:
 
@@ -226,16 +240,17 @@ There are 2 types of calls that can be generated:
 
 As an example, cocos2d-iphone's  `onEnter`, `onExit`, `udpate` are callback functions. `onEnter` is originated on native, and it should also call possible "overrides" in JS. On the following example, `onEnter` will be called from native, but only if we declare `onEnter` as "callback":
 
-
-	var MyLayer = cc.Layer.extend({
-	    ctor:function () {
-	        cc.associateWithNative( this, cc.Layer );
-	        this.init();
-	    },
-	    onEnter:function() {
-	    	cc.log("onEnter called");
-	   	},
-	});
+```js
+var MyLayer = cc.Layer.extend({
+    ctor:function () {
+        cc.associateWithNative( this, cc.Layer );
+        this.init();
+    },
+    onEnter:function() {
+    	cc.log("onEnter called");
+   	},
+});
+```
 
 JSB supports callbacks without the need to modify the source code of the parsed library. What JSB does, is to  swap (AKA "swizzle") the original callback method with one provided by JSB. This is the full flow:
 
@@ -250,10 +265,11 @@ JSB supports callbacks without the need to modify the source code of the parsed 
 
 In order to run a JS script from native, you should do the following
 
-	// JSBCore is responsible registering the native objects in JS, among other things
-	if( ! [[JSBCore sharedInstance] runScript:@"my_js_script.js"] )
-		NSLog(@"Error running script");
-
+```objc
+// JSBCore is responsible registering the native objects in JS, among other things
+if( ! [[JSBCore sharedInstance] runScript:@"my_js_script.js"] )
+	NSLog(@"Error running script");
+```
 
 ## Who is using JSB?
 
@@ -290,7 +306,3 @@ As of this writing, these are the current bugs and/or limitations. For an update
 - BridgeSupport constants are not being parsed by the script.
 - The `gen_bridge_metadata` file that is bundled with OS X 10.6 (or older) should be avoided. It is recommended to generate the BridgeSupport files in OS X 10.8 (Mountain Lion).
 - It is not easy to start a new project from scratch. Xcode templates coming soon. In the meantime, the easier way to do it is by duplicating any of the JS "targets" bundled with cocos2d-iphone v2.1
-
-
-
-	
