@@ -87,7 +87,8 @@ class JSBindings(object):
                              'function_prefix_to_remove': '',
                              'method_properties': [],
                              'struct_properties': [],
-                             'import_files': [],
+                             'objects_from_c_functions': [],
+                             'import_files': []
                              }
 
         for s in cp.sections():
@@ -165,6 +166,7 @@ class JSBindings(object):
         self.init_functions_to_bind(config['functions_to_parse'])
         self.init_functions_to_ignore(config['functions_to_ignore'])
         self.init_function_properties(config['function_properties'])
+        self.init_objects_from_c_functions(config['objects_from_c_functions'])
         self.current_function = None
         self.callback_functions = []
 
@@ -391,6 +393,28 @@ class JSBindings(object):
                 copy_set.remove(i)
 
         self.functions_to_bind = copy_set
+
+    def init_objects_from_c_functions(self, properties):
+        self.c_object_properties = {}
+        for prop in properties:
+            # key value
+            if not prop or len(prop) == 0:
+                continue
+            key, value = prop.split('=')
+
+            opts = {}
+            # From value get options
+            options = value.split(';')
+            for o in options:
+                # Options can have their own Key Value
+                if ':' in o:
+                    o_key, o_val = o.split(':')
+                    o_val = o_val.replace('"', '')    # remove possible "
+                else:
+                    o_key = o
+                    o_val = None
+                opts[o_key] = o_val
+            self.c_object_properties[key] = opts
 
     def get_function_property(self, func_name, property):
         try:
@@ -1937,7 +1961,6 @@ void %s_createClass(JSContext *cx, JSObject* globalObj, const char* name )
             self.classes_registered.append(klass)
 
     def generate_classes_registration(self):
-
         self.classes_registered = []
 
         self.class_registration_file = open('%s%s_classes_registration.h' % (BINDINGS_PREFIX, self.namespace), 'w')
@@ -1983,7 +2006,6 @@ extern "C" {
         self.h_file.write(template_funcname % (PROXY_PREFIX, func_name))
 
     def generate_function_call_to_real_object(self, func_name, num_of_args, ret_js_type, args_declared_type):
-
         if ret_js_type:
             prefix = '\tret_val = %s(' % func_name
         else:
@@ -2019,7 +2041,6 @@ JSBool %s%s(JSContext *cx, uint32_t argc, jsval *vp) {
         self.mm_file.write(end_template)
 
     def generate_function_binding(self, function):
-
         func_name = function['name']
 
         # Don't generate functions that are defined as callbacks
@@ -2056,7 +2077,6 @@ JSBool %s%s(JSContext *cx, uint32_t argc, jsval *vp) {
         return True
 
     def generate_function_registration(self, func_name):
-
         function = None
         for func in self.bs['signatures']['function']:
             if func['name'] == func_name:
@@ -2073,7 +2093,6 @@ JSBool %s%s(JSContext *cx, uint32_t argc, jsval *vp) {
         self.function_registration_file.write(template)
 
     def generate_functions_registration(self):
-
         self.function_registration_file = open('%s%s_functions_registration.h' % (BINDINGS_PREFIX, self.namespace), 'w')
         self.generate_autogenerate_prefix(self.function_registration_file)
 
