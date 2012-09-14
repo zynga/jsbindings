@@ -49,6 +49,9 @@ METHOD_CONSTRUCTOR, METHOD_CLASS, METHOD_INIT, METHOD_REGULAR = xrange(4)
 JSB_VERSION = 'v0.2'
 
 
+# uncapitalize from: http://stackoverflow.com/a/3847369
+uncapitalize = lambda s: s[:1].lower() + s[1:] if s else ''
+
 # xml2d recipe copied from here:
 # http://code.activestate.com/recipes/577722-xml-to-python-dictionary-and-back/
 def xml2d(e):
@@ -1736,7 +1739,6 @@ extern JSClass *%s_class;
             self.mm_file.write(template_suffix % (class_name))
 
     def generate_implementation(self, class_name):
-
         create_object_template_prefix = '''
 +(JSObject*) createJSObjectWithRealObject:(id)realObj context:(JSContext*)cx
 {
@@ -1905,7 +1907,6 @@ void %s_createClass(JSContext *cx, JSObject* globalObj, const char* name )
             self.mm_file.write(template_suffix)
 
     def generate_class_mm(self, klass, class_name, parent_name):
-
         self.generate_pragma_mark(class_name, self.mm_file)
         self.generate_constructor(class_name)
         self.generate_destructor(class_name)
@@ -1918,7 +1919,6 @@ void %s_createClass(JSContext *cx, JSObject* globalObj, const char* name )
         self.generate_callback_code(class_name)
 
     def generate_class_binding(self, class_name):
-
         # Ignore NSObject. Already registered
         if not class_name or class_name in self.classes_to_ignore or class_name in self.parsed_classes or class_name in self.class_manual:
             return
@@ -2092,6 +2092,67 @@ JSBool %s%s(JSContext *cx, uint32_t argc, jsval *vp) {
 
         self.function_registration_file.write(template)
 
+    def generate_function_js(self, function):
+        # cp.Space.prototype.getStaticBody = function() {
+        #   return cp.spaceGetStaticBody( this.handle );
+        # };
+        func_template = '''
+/* %s( %s ) */
+%s.%s.prototype.%s = function( %s ) {
+    return %s.%s( %s );
+};
+'''
+
+        # cp.Space = function() {
+        #   this.object = new cp._Space();
+        #   this.handle = this.object.getHandle();
+        # };
+        constructor_template = '''
+/* %s( %s ) */
+%s.%s = function( %s ) {
+    this.object = new %s._%s( %s );
+    this.handle = this.object.getHandle();
+};
+'''
+        if len(self.c_object_properties) == 0:
+            return
+
+        name = function['name']
+        for func_prefix in self.c_object_properties['function_prefix']:
+            if name.startswith(func_prefix):
+
+                args = []
+                if 'arg' in function:
+                    for a in function['arg']:
+                        args.append(a['name'])
+
+                # arguments needed for functions (instance methods)
+                args_func = args[1:]
+                args_func.insert(0, 'this.handle')
+
+                # arguments needed for constructors
+                args_cons = args[:]
+
+                js_namespace = self.c_object_properties['js_namespace'].keys()[0]
+                obj_name = func_prefix.split(self.function_prefix)[1]
+
+                # Constructor or Function ?
+                constructor_suffix = self.c_object_properties['constructor_suffix'].keys()[0]
+                if name.find(constructor_suffix) > 0:
+                    # constructor
+                    self.auto_object_js_file.write(constructor_template % (name, ','.join(args),
+                        js_namespace, obj_name, ','.join(args_cons),
+                        js_namespace, obj_name, ','.join(args_cons)))
+                else:
+                    js_funcname = name[len(func_prefix):]
+                    js_funcname = uncapitalize(js_funcname)
+                    native_funcname = name[len(js_namespace):]
+                    native_funcname = uncapitalize(native_funcname)
+                    self.auto_object_js_file.write(func_template % (name, ','.join(args),
+                        js_namespace, obj_name, js_funcname, ','.join(args_func[1:]),
+                        js_namespace, native_funcname, ','.join(args_func)))
+                break
+
     def generate_functions_registration(self):
         self.function_registration_file = open('%s%s_functions_registration.h' % (BINDINGS_PREFIX, self.namespace), 'w')
         self.generate_autogenerate_prefix(self.function_registration_file)
@@ -2137,6 +2198,11 @@ JSBool %s%s(JSContext *cx, uint32_t argc, jsval *vp) {
             self.generate_function_header_prefix()
             self.mm_file = open('%s%s_functions.mm' % (BINDINGS_PREFIX, self.namespace), 'w')
             self.generate_function_mm_prefix()
+            if len(self.c_object_properties) > 0:
+                self.auto_object_h_file = open('%s%s_auto_classes.h' % (BINDINGS_PREFIX, self.namespace), 'w')
+                self.auto_object_mm_file = open('%s%s_auto_classes.cpp' % (BINDINGS_PREFIX, self.namespace), 'w')
+                self.auto_object_registration_h_file = open('%s%s_auto_classes_registration.h' % (BINDINGS_PREFIX, self.namespace), 'w')
+                self.auto_object_js_file = open('%s%s_js.js' % (BINDINGS_PREFIX, self.namespace), 'w')
 
             for f in self.bs['signatures']['function']:
                 if f['name'] in self.functions_to_bind:
@@ -2144,6 +2210,7 @@ JSBool %s%s(JSContext *cx, uint32_t argc, jsval *vp) {
                         self.generate_function_binding(f)
                         self.generate_function_declaration(f['name'])
                         self.functions_bound.append(f['name'])
+                        self.generate_function_js(f)
                     except ParseException, e:
                         sys.stderr.write('NOT OK: "%s" Error: %s\n' % (f['name'], str(e)))
 
