@@ -541,6 +541,45 @@ class JSBindings(object):
     #
     # Helpers
     #
+    def enabled_oo_in_functions(self):
+        """whether or not OO JS file should be generated for C API"""
+        l = len(self.c_object_properties)
+        if l == 0:
+            return False
+
+        if 'generate_js_file' in self.c_object_properties:
+            k = self.c_object_properties['generate_js_file'].keys()[0]
+            if k.lower() == 'false':
+                return False
+        xxx
+        return True
+
+    def sort_functions(self):
+        """returns a list of the functions to parse. the "constructors" are returned first"""
+
+        funcs = self.bs['signatures']['function']
+
+        # No reorder needed if OO is not needed
+        if len(self.c_object_properties) == 0:
+            return funcs
+
+        pref = []
+        for func_prefix in self.c_object_properties['function_prefix']:
+            pref.append(func_prefix)
+
+        constructors = []
+        functions = []
+        funcs = self.bs['signatures']['function']
+        for f in funcs:
+            name = f['name']
+            for p in pref:
+                if name.startswith(p):
+                    if name.find('New') > 0:
+                        constructors.append(f)
+                    else:
+                        functions.append(f)
+        return constructors + functions
+
     def get_callback_args_for_method(self, method):
         method_name = method['selector']
         method_args = method_name.split(':')
@@ -2140,17 +2179,17 @@ JSBool %s%s(JSContext *cx, uint32_t argc, jsval *vp) {
                 constructor_suffix = self.c_object_properties['constructor_suffix'].keys()[0]
                 if name.find(constructor_suffix) > 0:
                     # constructor
-                    self.auto_object_js_file.write(constructor_template % (name, ','.join(args),
-                        js_namespace, obj_name, ','.join(args_cons),
-                        js_namespace, obj_name, ','.join(args_cons)))
+                    self.auto_object_js_file.write(constructor_template % (name, ', '.join(args),
+                        js_namespace, obj_name, ', '.join(args_cons),
+                        js_namespace, obj_name, ', '.join(args_cons)))
                 else:
                     js_funcname = name[len(func_prefix):]
                     js_funcname = uncapitalize(js_funcname)
                     native_funcname = name[len(js_namespace):]
                     native_funcname = uncapitalize(native_funcname)
-                    self.auto_object_js_file.write(func_template % (name, ','.join(args),
-                        js_namespace, obj_name, js_funcname, ','.join(args_func[1:]),
-                        js_namespace, native_funcname, ','.join(args_func)))
+                    self.auto_object_js_file.write(func_template % (name, ', '.join(args),
+                        js_namespace, obj_name, js_funcname, ', '.join(args_func[1:]),
+                        js_namespace, native_funcname, ', '.join(args_func)))
                 break
 
     def generate_functions_registration(self):
@@ -2194,23 +2233,26 @@ JSBool %s%s(JSContext *cx, uint32_t argc, jsval *vp) {
         # Is there any function to register:
         if 'function' in self.bs['signatures']:
 
+            functions = self.sort_functions()
+
             self.h_file = open('%s%s_functions.h' % (BINDINGS_PREFIX, self.namespace), 'w')
             self.generate_function_header_prefix()
             self.mm_file = open('%s%s_functions.mm' % (BINDINGS_PREFIX, self.namespace), 'w')
             self.generate_function_mm_prefix()
-            if len(self.c_object_properties) > 0:
-                self.auto_object_h_file = open('%s%s_auto_classes.h' % (BINDINGS_PREFIX, self.namespace), 'w')
-                self.auto_object_mm_file = open('%s%s_auto_classes.cpp' % (BINDINGS_PREFIX, self.namespace), 'w')
-                self.auto_object_registration_h_file = open('%s%s_auto_classes_registration.h' % (BINDINGS_PREFIX, self.namespace), 'w')
+            if self.enabled_oo_in_functions():
+#                self.auto_object_h_file = open('%s%s_auto_classes.h' % (BINDINGS_PREFIX, self.namespace), 'w')
+#                self.auto_object_mm_file = open('%s%s_auto_classes.cpp' % (BINDINGS_PREFIX, self.namespace), 'w')
+#                self.auto_object_registration_h_file = open('%s%s_auto_classes_registration.h' % (BINDINGS_PREFIX, self.namespace), 'w')
                 self.auto_object_js_file = open('%s%s_js.js' % (BINDINGS_PREFIX, self.namespace), 'w')
 
-            for f in self.bs['signatures']['function']:
+            for f in functions:
                 if f['name'] in self.functions_to_bind:
                     try:
                         self.generate_function_binding(f)
                         self.generate_function_declaration(f['name'])
                         self.functions_bound.append(f['name'])
-                        self.generate_function_js(f)
+                        if self.enabled_oo_in_functions():
+                            self.generate_function_js(f)
                     except ParseException, e:
                         sys.stderr.write('NOT OK: "%s" Error: %s\n' % (f['name'], str(e)))
 

@@ -1,4 +1,8 @@
-version 0.2 -
+version 0.3 -
+- [NEW] jsb generator: generates Object Oriented JS code for C-like API
+- [NEW] Chipmunk bindings: Added Object Oriented JS API
+
+version 0.2 - XX-Sept-2012 
 - [FIX] config file: only include cocos2d ios on iOS and cocos2d osx on OS X
 
 version 0.1 - 21-Ago-2012 
