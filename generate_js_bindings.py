@@ -551,7 +551,6 @@ class JSBindings(object):
             k = self.c_object_properties['generate_js_file'].keys()[0]
             if k.lower() == 'false':
                 return False
-        xxx
         return True
 
     def sort_functions(self):
@@ -570,14 +569,21 @@ class JSBindings(object):
         constructors = []
         functions = []
         funcs = self.bs['signatures']['function']
+        constructor_suffix = self.c_object_properties['constructor_suffix'].keys()[0]
+
         for f in funcs:
             name = f['name']
+
+            added = False
             for p in pref:
                 if name.startswith(p):
-                    if name.find('New') > 0:
+                    added = True
+                    if name.find(constructor_suffix) > 0:
                         constructors.append(f)
                     else:
                         functions.append(f)
+            if not added:
+                functions.append(f)
         return constructors + functions
 
     def get_callback_args_for_method(self, method):

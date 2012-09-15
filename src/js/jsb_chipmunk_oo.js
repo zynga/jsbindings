@@ -683,6 +683,12 @@ cp.BoxShape = function( body, box ) {
     this.handle = this.object.getHandle();
 };
 
+/* cpCircleShapeNew( body, radius, offset ) */
+cp.CircleShape = function( body, radius, offset ) {
+    this.object = new cp._CircleShape( body, radius, offset );
+    this.handle = this.object.getHandle();
+};
+
 /* cpPolyShapeGetNumVerts( shape ) */
 cp.PolyShape.prototype.getNumVerts = function(  ) {
     return cp.polyShapeGetNumVerts( this.handle );
@@ -691,6 +697,16 @@ cp.PolyShape.prototype.getNumVerts = function(  ) {
 /* cpPolyShapeGetVert( shape, idx ) */
 cp.PolyShape.prototype.getVert = function( idx ) {
     return cp.polyShapeGetVert( this.handle, idx );
+};
+
+/* cpCircleShapeGetOffset( shape ) */
+cp.CircleShape.prototype.getOffset = function(  ) {
+    return cp.circleShapeGetOffset( this.handle );
+};
+
+/* cpCircleShapeGetRadius( shape ) */
+cp.CircleShape.prototype.getRadius = function(  ) {
+    return cp.circleShapeGetRadius( this.handle );
 };
 
 /*----------------------
