@@ -43,6 +43,7 @@
 // chipmunk
 #import "js_bindings_chipmunk_functions.h"
 #import "js_bindings_chipmunk_manual.h"
+#import "js_bindings_chipmunk_oo_classes.h"
 
 // cocosdenshion
 #import "js_bindings_CocosDenshion_classes.h"
@@ -404,7 +405,9 @@ JSBool JSBCore_forceGC(JSContext *cx, uint32_t argc, jsval *vp)
 		JSObject *chipmunk = JS_NewObject( _cx, NULL, NULL, NULL);
 		jsval chipmunkVal = OBJECT_TO_JSVAL(chipmunk);
 		JS_SetProperty(_cx, _object, "cp", &chipmunkVal);
+#import "js_bindings_chipmunk_oo_classes_registration.h"
 #import "js_bindings_chipmunk_functions_registration.h"
+
 		
 		// manual
 		JS_DefineFunction(_cx, chipmunk, "spaceAddCollisionHandler", JSB_cpSpaceAddCollisionHandler, 8, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
