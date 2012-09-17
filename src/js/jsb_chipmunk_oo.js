@@ -7,13 +7,21 @@
  *
  *----------------------*/
  /* cpBodyNew( m, i ) */
-cp.Body = function( m, i ) {
-    this.object = new cp._Body( m, i );
-    this.handle = this.object.getHandle();
+cp.Body = function( /* m,i | handle */ ) {
+    if (arguments.length === 2) {
+        this.object = new cp._Body( arguments[0], arguments[1] );
+        this.handle = this.object.getHandle();
+    } else if( arguments.length === 1) {
+        this.handle = arguments[0];
+    } else if( arguments.length === 0) {
+        // Static Object ??
+        this.object = new cp._Body( Infinity, Infinity );
+        this.handle = this.object.getHandle();
+    }
 };
 
 /* cpBodyNewStatic(  ) */
-cp.Body = function(  ) {
+cp.BodyXXXFIXMEXXX = function(  ) {
     this.object = new cp._Body(  );
     this.handle = this.object.getHandle();
 };
@@ -665,29 +673,123 @@ cp.SlideJoint.prototype.setMin = function( value ) {
  *       Shape
  *
  *----------------------*/
+
+cp.Shape = function() {
+    this.handle = null;
+};
+
+// Shape Properties
+/* cpShapeGetBB( shape ) */
+cp.Shape.prototype.getBB = function(  ) {
+    return cp.shapeGetBB( this.handle );
+};
+
+/* cpShapeGetBody( shape ) */
+cp.Shape.prototype.getBody = function(  ) {
+    return cp.shapeGetBody( this.handle );
+};
+
+/* cpShapeGetCollisionType( shape ) */
+cp.Shape.prototype.getCollisionType = function(  ) {
+    return cp.shapeGetCollisionType( this.handle );
+};
+
+/* cpShapeGetElasticity( shape ) */
+cp.Shape.prototype.getElasticity = function(  ) {
+    return cp.shapeGetElasticity( this.handle );
+};
+
+/* cpShapeGetFriction( shape ) */
+cp.Shape.prototype.getFriction = function(  ) {
+    return cp.shapeGetFriction( this.handle );
+};
+
+/* cpShapeGetGroup( shape ) */
+cp.Shape.prototype.getGroup = function(  ) {
+    return cp.shapeGetGroup( this.handle );
+};
+
+/* cpShapeGetLayers( shape ) */
+cp.Shape.prototype.getLayers = function(  ) {
+    return cp.shapeGetLayers( this.handle );
+};
+
+/* cpShapeGetSensor( shape ) */
+cp.Shape.prototype.getSensor = function(  ) {
+    return cp.shapeGetSensor( this.handle );
+};
+
+/* cpShapeGetSpace( shape ) */
+cp.Shape.prototype.getSpace = function(  ) {
+    return cp.shapeGetSpace( this.handle );
+};
+
+/* cpShapeGetSurfaceVelocity( shape ) */
+cp.Shape.prototype.getSurfaceVelocity = function(  ) {
+    return cp.shapeGetSurfaceVelocity( this.handle );
+};
+
+/* cpShapePointQuery( shape, p ) */
+cp.Shape.prototype.pointQuery = function( p ) {
+    return cp.shapePointQuery( this.handle, p );
+};
+
+/* cpShapeSetBody( shape, body ) */
+cp.Shape.prototype.setBody = function( body ) {
+    return cp.shapeSetBody( this.handle, body );
+};
+
+/* cpShapeSetCollisionType( shape, value ) */
+cp.Shape.prototype.setCollisionType = function( value ) {
+    return cp.shapeSetCollisionType( this.handle, value );
+};
+
+/* cpShapeSetElasticity( shape, value ) */
+cp.Shape.prototype.setElasticity = function( value ) {
+    return cp.shapeSetElasticity( this.handle, value );
+};
+
+/* cpShapeSetFriction( shape, value ) */
+cp.Shape.prototype.setFriction = function( value ) {
+    return cp.shapeSetFriction( this.handle, value );
+};
+
+/* cpShapeSetGroup( shape, value ) */
+cp.Shape.prototype.setGroup = function( value ) {
+    return cp.shapeSetGroup( this.handle, value );
+};
+
+/* cpShapeSetLayers( shape, value ) */
+cp.Shape.prototype.setLayers = function( value ) {
+    return cp.shapeSetLayers( this.handle, value );
+};
+
+/* cpShapeSetSensor( shape, value ) */
+cp.Shape.prototype.setSensor = function( value ) {
+    return cp.shapeSetSensor( this.handle, value );
+};
+
+/* cpShapeSetSurfaceVelocity( shape, value ) */
+cp.Shape.prototype.setSurfaceVelocity = function( value ) {
+    return cp.shapeSetSurfaceVelocity( this.handle, value );
+};
+
+/* cpShapeUpdate( shape, pos, rot ) */
+cp.Shape.prototype.update = function( pos, rot ) {
+    return cp.shapeUpdate( this.handle, pos, rot );
+};
+
+//
+// Poly Shape
+//
+
 /* manually added: cpShape* cpPolyShapeNew(cpBody *body, int numVerts, cpVect *verts, cpVect offset); */
 cp.PolyShape = function( body, verts, offset ) {
-    this.object = new cp._PolyShape( body, verts, offset );
+    this.object = new cp._PolyShape( body.handle, verts, offset );
     this.handle = this.object.getHandle();
 };
 
- /* cpBoxShapeNew( body, width, height ) */
-cp.BoxShape = function( body, width, height ) {
-    this.object = new cp._BoxShape( body, width, height );
-    this.handle = this.object.getHandle();
-};
-
-/* cpBoxShapeNew2( body, box ) */
-cp.BoxShape = function( body, box ) {
-    this.object = new cp._BoxShape( body, box );
-    this.handle = this.object.getHandle();
-};
-
-/* cpCircleShapeNew( body, radius, offset ) */
-cp.CircleShape = function( body, radius, offset ) {
-    this.object = new cp._CircleShape( body, radius, offset );
-    this.handle = this.object.getHandle();
-};
+cp.PolyShape.prototype = Object.create(cp.Shape.prototype);
 
 /* cpPolyShapeGetNumVerts( shape ) */
 cp.PolyShape.prototype.getNumVerts = function(  ) {
@@ -698,6 +800,74 @@ cp.PolyShape.prototype.getNumVerts = function(  ) {
 cp.PolyShape.prototype.getVert = function( idx ) {
     return cp.polyShapeGetVert( this.handle, idx );
 };
+
+//
+// Segment Shape
+//
+
+/* cpSegmentShapeNew( body, a, b, radius ) */
+cp.SegmentShape = function( body, a, b, radius ) {
+    cc.log( arguments.length );
+    cc.log( "mama mia!!!");
+    cc.log( arguments[0] );
+    this.object = new cp._SegmentShape( body.handle, a, b, radius );
+    this.handle = this.object.getHandle();
+};
+cp.SegmentShape.prototype = Object.create(cp.Shape.prototype);
+
+/* cpSegmentShapeGetA( shape ) */
+cp.SegmentShape.prototype.getA = function(  ) {
+    return cp.segmentShapeGetA( this.handle );
+};
+
+/* cpSegmentShapeGetB( shape ) */
+cp.SegmentShape.prototype.getB = function(  ) {
+    return cp.segmentShapeGetB( this.handle );
+};
+
+/* cpSegmentShapeGetNormal( shape ) */
+cp.SegmentShape.prototype.getNormal = function(  ) {
+    return cp.segmentShapeGetNormal( this.handle );
+};
+
+/* cpSegmentShapeGetRadius( shape ) */
+cp.SegmentShape.prototype.getRadius = function(  ) {
+    return cp.segmentShapeGetRadius( this.handle );
+};
+
+/* cpSegmentShapeSetNeighbors( shape, prev, next ) */
+cp.SegmentShape.prototype.setNeighbors = function( prev, next ) {
+    return cp.segmentShapeSetNeighbors( this.handle, prev, next );
+};
+
+//
+// Box Shape
+//
+
+ /* cpBoxShapeNew( body, width, height ) */
+cp.BoxShape = function( body, width, height ) {
+    this.object = new cp._BoxShape( body.handle, width, height );
+    this.handle = this.object.getHandle();
+};
+cp.BoxShape.prototype = Object.create(cp.Shape.prototype);
+
+/* cpBoxShapeNew2( body, box ) */
+cp.BoxShapeXXXFIXMEXXX = function( body, box ) {
+    this.object = new cp._BoxShape( body, box );
+    this.handle = this.object.getHandle();
+};
+
+//
+// Circle Shape
+//
+
+/* cpCircleShapeNew( body, radius, offset ) */
+cp.CircleShape = function( body, radius, offset ) {
+    this.object = new cp._CircleShape( body.handle, radius, offset );
+    this.handle = this.object.getHandle();
+};
+cp.CircleShape.prototype = Object.create(cp.Shape.prototype);
+
 
 /* cpCircleShapeGetOffset( shape ) */
 cp.CircleShape.prototype.getOffset = function(  ) {
@@ -715,10 +885,13 @@ cp.CircleShape.prototype.getRadius = function(  ) {
  *
  *----------------------*/
 
- /* cpSpaceNew(  ) */
+ /* cpSpaceNew() */
 cp.Space = function(  ) {
-    this.object = new cp._Space(  );
+    this.object = new cp._Space();
     this.handle = this.object.getHandle();
+
+    // internals
+    this.static_body = null;
 };
 
 // For compatibility with Chipmunk-JS
@@ -744,27 +917,27 @@ cp.Space.prototype.removeCollisionHandler = function( typeA, typeB ) {
 
 /* cpSpaceActivateShapesTouchingShape( space, shape ) */
 cp.Space.prototype.activateShapesTouchingShape = function( shape ) {
-    return cp.spaceActivateShapesTouchingShape( this.handle, shape );
+    return cp.spaceActivateShapesTouchingShape( this.handle, shape.handle );
 };
 
 /* cpSpaceAddBody( space, body ) */
 cp.Space.prototype.addBody = function( body ) {
-    return cp.spaceAddBody( this.handle, body );
+    return cp.spaceAddBody( this.handle, body.handle );
 };
 
 /* cpSpaceAddConstraint( space, constraint ) */
 cp.Space.prototype.addConstraint = function( constraint ) {
-    return cp.spaceAddConstraint( this.handle, constraint );
+    return cp.spaceAddConstraint( this.handle, constraint.handle );
 };
 
 /* cpSpaceAddShape( space, shape ) */
 cp.Space.prototype.addShape = function( shape ) {
-    return cp.spaceAddShape( this.handle, shape );
+    return cp.spaceAddShape( this.handle, shape.handle );
 };
 
 /* cpSpaceAddStaticShape( space, shape ) */
 cp.Space.prototype.addStaticShape = function( shape ) {
-    return cp.spaceAddStaticShape( this.handle, shape );
+    return cp.spaceAddStaticShape( this.handle, shape.handle );
 };
 
 /* cpSpaceAlloc(  ) */
@@ -774,17 +947,17 @@ cp.Space.prototype.alloc = function(  ) {
 
 /* cpSpaceContainsBody( space, body ) */
 cp.Space.prototype.containsBody = function( body ) {
-    return cp.spaceContainsBody( this.handle, body );
+    return cp.spaceContainsBody( this.handle, body.handle );
 };
 
 /* cpSpaceContainsConstraint( space, constraint ) */
 cp.Space.prototype.containsConstraint = function( constraint ) {
-    return cp.spaceContainsConstraint( this.handle, constraint );
+    return cp.spaceContainsConstraint( this.handle, constraint.handle );
 };
 
 /* cpSpaceContainsShape( space, shape ) */
 cp.Space.prototype.containsShape = function( shape ) {
-    return cp.spaceContainsShape( this.handle, shape );
+    return cp.spaceContainsShape( this.handle, shape.handle );
 };
 
 /* cpSpaceDestroy( space ) */
@@ -849,7 +1022,14 @@ cp.Space.prototype.getSleepTimeThreshold = function(  ) {
 
 /* cpSpaceGetStaticBody( space ) */
 cp.Space.prototype.getStaticBody = function(  ) {
-    return cp.spaceGetStaticBody( this.handle );
+    if( this.static_body === null ) {
+
+        var handle = cp.spaceGetStaticBody( this.handle );
+        this.static_body = new cp.Body(handle);
+    }
+    cc.log(" carlooos ");
+    cc.log( this.static_body );
+    return this.static_body;
 };
 
 /* cpSpaceInit( space ) */
