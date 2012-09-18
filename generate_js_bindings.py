@@ -70,6 +70,203 @@ def xml2d(e):
     return {e.tag: _xml2d(e)}
 
 
+# Generates Object Oriented Code from a C function
+class JSBGenerateCOO(object):
+    def __init__(self, functions, c_object_properties, namespace):
+        self.namespace = namespace
+        self.bs_funcs = functions
+        self.c_object_properties = c_object_properties
+        # self.fd_h = open('%s%s_auto_classes.h' % (BINDINGS_PREFIX, self.namespace), 'w')
+        self.fd_mm = open('%s%s_auto_classes.mm' % (BINDINGS_PREFIX, self.namespace), 'w')
+        # self.fd_registration = open('%s%s_auto_classes_registration.h' % (BINDINGS_PREFIX, self.namespace), 'w')
+
+    #
+    # BEGIN of Helper functions
+    #
+    def get_base_class(self, klass_name):
+        '''returns the base class of a given class name'''
+        base_class = self.c_object_properties.get('base_class', {None: None})
+        base_class = base_class.keys()[0]
+
+        classes = self.c_object_properties['function_prefix']
+        for k in classes:
+            if k == klass_name:
+                if classes[k] == None:
+                    return base_class
+                return classes[k]
+
+    def sort_oo_functions(self):
+        """returns a list of the OO function-classes to parse. Inheritance is taken into account. Base classes are returned first. Only supports 1 level of inheritance"""
+
+        tree = {}
+        l = []
+        for k in self.c_object_properties['function_prefix']:
+            v = self.c_object_properties['function_prefix'][k]
+
+            if not v in tree:
+                tree[v] = []
+            tree[v].append(k)
+
+        # Start for orphan
+        # XXX Only supports one level of inheritance. Good enough for Chipmunk
+        orphans = tree[None]
+        for k in orphans:
+            l.append(k)
+            if k in tree:
+                for kk in tree[k]:
+                    l.append(kk)
+        return l
+
+    #
+    # END of Helper functions
+    #
+    def generate_implementation_prefix(self):
+        pass
+
+    def generate_implementation_suffix(self):
+        pass
+
+    def generate_implementation_class_variables(self, klass_name):
+        template = '''
+/*
+ * %s
+ */
+#pragma mark - %s
+
+JSClass* %s_class = NULL;
+JSObject* %s_object = NULL;
+'''
+        name = '%s%s' % (PROXY_PREFIX, klass_name)
+        self.fd_mm.write(template % (klass_name,
+                                    klass_name,
+                                    name,
+                                    name))
+
+    def generate_implementation_class_constructor(self, klass_name):
+        template = '''
+// Constructor
+JSBool %s_constructor(JSContext *cx, uint32_t argc, jsval *vp)
+{
+    JSObject *jsobj = JS_NewObject(cx, JSB_%s_class, JSB_%s_object, NULL);
+    cpSpace *handle = %s%s();
+    JS_SetPrivate(jsobj, handle);
+
+    JS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(jsobj));
+    return JS_TRUE;
+}
+'''
+        name = '%s%s' % (PROXY_PREFIX, klass_name)
+        self.fd_mm.write(template % (name,
+                                    klass_name, klass_name,
+                                    klass_name, 'New',
+                                    ))
+
+    def generate_implementation_class_destructor(self, klass_name):
+        template = '''
+// Destructor
+void %s_finalize(JSFreeOp *fop, JSObject *obj)
+{
+    CCLOGINFO(@"jsbindings: finalizing JS object %%p (%s)", obj);
+    void *handle = JS_GetPrivate(obj);
+    NSCAssert( handle, @"Invalid handle for %s");
+
+    %s%s( (%s*)handle);
+}
+'''
+        name = '%s%s' % (PROXY_PREFIX, klass_name)
+        self.fd_mm.write(template % (name,
+                                    klass_name,
+                                    klass_name,
+                                    klass_name, 'Free', klass_name
+                                    ))
+
+    def generate_implementation_class_methods(self, klass_name):
+        pass
+
+    def generate_implementation_class_jsb(self, klass_name):
+        template_0 = '''
+void %s_createClass(JSContext *cx, JSObject* globalObj, const char* name )
+{
+    %s_class = (JSClass *)calloc(1, sizeof(JSClass));
+    %s_class->name = name;
+    %s_class->addProperty = JS_PropertyStub;
+    %s_class->delProperty = JS_PropertyStub;
+    %s_class->getProperty = JS_PropertyStub;
+    %s_class->setProperty = JS_StrictPropertyStub;
+    %s_class->enumerate = JS_EnumerateStub;
+    %s_class->resolve = JS_ResolveStub;
+    %s_class->convert = JS_ConvertStub;
+    %s_class->finalize = %s_finalize;
+    %s_class->flags = JSCLASS_HAS_PRIVATE;
+'''
+        name = '%s%s' % (PROXY_PREFIX, klass_name)
+        self.fd_mm.write(template_0 % (name,
+                                        name,
+                                        name,
+                                        name,
+                                        name,
+                                        name,
+                                        name,
+                                        name,
+                                        name,
+                                        name,
+                                        name, name,
+                                        name))
+
+        template_propertes = '''
+    static JSPropertySpec properties[] = {
+        {0, 0, 0, 0, 0}
+    };
+'''
+        self.fd_mm.write(template_propertes)
+
+        template_funcs = '''
+    static JSFunctionSpec funcs[] = {
+        JS_FS_END
+    };
+'''
+        self.fd_mm.write(template_funcs)
+
+        template_st_funcs = '''
+    static JSFunctionSpec st_funcs[] = {
+        JS_FS_END
+    };
+'''
+        self.fd_mm.write(template_st_funcs)
+
+        template_end = '''
+    JSB_cpSpace_object = JS_InitClass(cx, globalObj, %s, %s_class, %s_constructor,0,properties,funcs,NULL,st_funcs);
+}
+'''
+        parent = self.get_base_class(klass_name)
+        if parent == None:
+            parent = 'NULL'
+        else:
+            parent = '%s%s_object' % (PROXY_PREFIX, parent)
+        self.fd_mm.write(template_end % (parent, name, name))
+
+    def generate_implementation_class(self, klass_name):
+        self.generate_implementation_class_variables(klass_name)
+        self.generate_implementation_class_constructor(klass_name)
+        self.generate_implementation_class_destructor(klass_name)
+        self.generate_implementation_class_methods(klass_name)
+        self.generate_implementation_class_jsb(klass_name)
+
+    def generate_implementation(self):
+        self.generate_implementation_prefix()
+
+        klasses = self.sort_oo_functions()
+        for klass_name in klasses:
+            self.generate_implementation_class(klass_name)
+
+        self.generate_implementation_suffix()
+
+    def generate_bindings(self):
+        self.generate_implementation()
+
+
+# Main class for the Bindings
+# A bit bloated though
 class JSBindings(object):
 
     @classmethod
@@ -552,39 +749,6 @@ class JSBindings(object):
             if k.lower() == 'false':
                 return False
         return True
-
-    def sort_functions(self):
-        """returns a list of the functions to parse. the "constructors" are returned first"""
-
-        funcs = self.bs['signatures']['function']
-
-        # No reorder needed if OO is not needed
-        if len(self.c_object_properties) == 0:
-            return funcs
-
-        pref = []
-        for func_prefix in self.c_object_properties['function_prefix']:
-            pref.append(func_prefix)
-
-        constructors = []
-        functions = []
-        funcs = self.bs['signatures']['function']
-        constructor_suffix = self.c_object_properties['constructor_suffix'].keys()[0]
-
-        for f in funcs:
-            name = f['name']
-
-            added = False
-            for p in pref:
-                if name.startswith(p):
-                    added = True
-                    if name.find(constructor_suffix) > 0:
-                        constructors.append(f)
-                    else:
-                        functions.append(f)
-            if not added:
-                functions.append(f)
-        return constructors + functions
 
     def get_callback_args_for_method(self, method):
         method_name = method['selector']
@@ -2242,17 +2406,12 @@ JSBool %s%s(JSContext *cx, uint32_t argc, jsval *vp) {
         # Is there any function to register:
         if 'function' in self.bs['signatures']:
 
-            functions = self.sort_functions()
+            functions = self.bs['signatures']['function']
 
             self.h_file = open('%s%s_functions.h' % (BINDINGS_PREFIX, self.namespace), 'w')
             self.generate_function_header_prefix()
             self.mm_file = open('%s%s_functions.mm' % (BINDINGS_PREFIX, self.namespace), 'w')
             self.generate_function_mm_prefix()
-            if self.enabled_oo_in_functions():
-#                self.auto_object_h_file = open('%s%s_auto_classes.h' % (BINDINGS_PREFIX, self.namespace), 'w')
-                self.auto_object_mm_file = open('%s%s_auto_classes.mm' % (BINDINGS_PREFIX, self.namespace), 'w')
-#                self.auto_object_registration_h_file = open('%s%s_auto_classes_registration.h' % (BINDINGS_PREFIX, self.namespace), 'w')
-#                self.auto_object_js_file = open('%s%s_js.js' % (BINDINGS_PREFIX, self.namespace), 'w')
 
             for f in functions:
                 if f['name'] in self.functions_to_bind:
@@ -2273,6 +2432,13 @@ JSBool %s%s(JSContext *cx, uint32_t argc, jsval *vp) {
             self.mm_file.close()
 
             self.generate_functions_registration()
+
+        #
+        # Object Oriented C code
+        #
+        if self.enabled_oo_in_functions():
+            coo = JSBGenerateCOO(self.bs['signatures']['function'], self.c_object_properties, self.namespace)
+            coo.generate_bindings()
 
     def parse(self):
         self.generate_bindings()
