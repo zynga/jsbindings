@@ -20,13 +20,31 @@ JSObject* JSB_cpBase_object = NULL;
 // Constructor
 JSBool JSB_cpBase_constructor(JSContext *cx, uint32_t argc, jsval *vp)
 {
-	return JS_FALSE;
+	JSB_PRECONDITION( argc==1, "Invalid arguments. Expecting 1");
+	
+	JSObject *jsobj = JS_NewObject(cx, JSB_cpBase_class, JSB_cpBase_object, NULL);
+	
+	jsval *argvp = JS_ARGV(cx,vp);
+	JSBool ok = JS_TRUE;
+	
+	void *handle = NULL;
+	
+	ok = jsval_to_opaque(cx, *argvp++, &handle);
+
+	JSB_PRECONDITION(ok, "Error converting arguments for JSB_cpBase_constructor");
+	
+	JS_SetPrivate(jsobj, handle);
+	
+	JS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(jsobj));
+	return JS_TRUE;
 }
 
 // Destructor
 void JSB_cpBase_finalize(JSFreeOp *fop, JSObject *obj)
 {
 	CCLOGINFO(@"jsbindings: finalizing JS object %p (cpBase)", obj);
+	
+	// should not delete the handle since it was manually added
 }
 
 JSBool JSB_cpBase_getHandle(JSContext *cx, uint32_t argc, jsval *vp)

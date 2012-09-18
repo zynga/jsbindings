@@ -674,8 +674,9 @@ cp.SlideJoint.prototype.setMin = function( value ) {
  *
  *----------------------*/
 
-cp.Shape = function() {
-    this.handle = null;
+// "handle" constructor
+cp.Shape = function(handle) {
+    this.handle = handle;
 };
 
 // Shape Properties
@@ -807,9 +808,6 @@ cp.PolyShape.prototype.getVert = function( idx ) {
 
 /* cpSegmentShapeNew( body, a, b, radius ) */
 cp.SegmentShape = function( body, a, b, radius ) {
-    cc.log( arguments.length );
-    cc.log( "mama mia!!!");
-    cc.log( arguments[0] );
     this.object = new cp._SegmentShape( body.handle, a, b, radius );
     this.handle = this.object.getHandle();
 };
@@ -905,9 +903,42 @@ Object.defineProperty(cp.Space.prototype, "gravity", {
                     enumerable : true,
                     configurable : true});
 
-/* manually wrapped in C */
-cp.Space.prototype.addCollisionHandler = function( typeA, typeB, object, cbBegin, cbPre, cbPost, cbSep ) {
-	return cp.spaceAddCollisionHandler( this.handle, typeA, typeB, object, cbBegin, cbPre, cbPost, cbSep );
+cp.Space.prototype.addCollisionHandler = function( typeA, typeB, self, cbBegin, cbPre, cbPost, cbSep ) {
+    
+    function CBBegin(cbBegin, self) {
+        return function(na, ns) {
+            var a = new cp.Arbiter( na );
+            cbBegin.apply(self, [a, self]);
+        };
+    }
+
+    function CBPre(cbPre, self) {
+        return function(na, ns) {
+            var a = new cp.Arbiter( na );
+            cbPre.apply(self, [a, self]);
+        };
+    }
+
+    function CBPost(cbPost, self) {
+        return function(na, ns) {
+            var a = new cp.Arbiter( na );
+            cbPost.apply(self, [a, self]);
+        };
+    }
+
+    function CBSep(cbSep, self) {
+        return function(na, ns) {
+            var a = new cp.Arbiter( na );
+            cbSep.apply(self, [a, self]);
+        };
+    }
+
+    var cb_begin = CBBegin(cbBegin, self);
+    var cb_pre = CBPre(cbPre, self);
+    var cb_post = CBPost(cbPost, self);
+    var cb_sep = CBSep(cbSep, self);
+
+    return cp.spaceAddCollisionHandler( this.handle, typeA, typeB, this, cb_begin, cb_pre, cb_post, cb_sep);
 };
 
 /* manually wrapped in C */
@@ -1027,8 +1058,6 @@ cp.Space.prototype.getStaticBody = function(  ) {
         var handle = cp.spaceGetStaticBody( this.handle );
         this.static_body = new cp.Body(handle);
     }
-    cc.log(" carlooos ");
-    cc.log( this.static_body );
     return this.static_body;
 };
 
@@ -1135,4 +1164,103 @@ cp.Space.prototype.step = function( dt ) {
 /* cpSpaceUseSpatialHash( space, dim, count ) */
 cp.Space.prototype.useSpatialHash = function( dim, count ) {
     return cp.spaceUseSpatialHash( this.handle, dim, count );
+};
+
+
+/*----------------------
+ *
+ *       Arbiter
+ *
+ *----------------------*/
+
+cp.Arbiter = function( handle ) {
+    this.object = new cp._Base( handle );
+    this.handle = handle;
+};
+
+cp.Arbiter.prototype.getBodies = function(  ) {
+    var bodies = cp.arbiterGetBodies( this.handle );
+    // convert "handles" to objects
+    return [ new cp.Body(bodies[0]), new cp.Body(bodies[1]) ];
+};
+
+cp.Arbiter.prototype.getShapes = function(  ) {
+    var shapes = cp.arbiterGetShapes( this.handle );
+    // convert "handles" to objects
+    return [ new cp.Shape(shapes[0]), new cp.Shape(shapes[1]) ];
+};
+
+/* cpArbiterGetCount( arb ) */
+cp.Arbiter.prototype.getCount = function(  ) {
+    return cp.arbiterGetCount( this.handle );
+};
+
+/* cpArbiterGetDepth( arb, i ) */
+cp.Arbiter.prototype.getDepth = function( i ) {
+    return cp.arbiterGetDepth( this.handle, i );
+};
+
+/* cpArbiterGetElasticity( arb ) */
+cp.Arbiter.prototype.getElasticity = function(  ) {
+    return cp.arbiterGetElasticity( this.handle );
+};
+
+/* cpArbiterGetFriction( arb ) */
+cp.Arbiter.prototype.getFriction = function(  ) {
+    return cp.arbiterGetFriction( this.handle );
+};
+
+/* cpArbiterGetNormal( arb, i ) */
+cp.Arbiter.prototype.getNormal = function( i ) {
+    return cp.arbiterGetNormal( this.handle, i );
+};
+
+/* cpArbiterGetPoint( arb, i ) */
+cp.Arbiter.prototype.getPoint = function( i ) {
+    return cp.arbiterGetPoint( this.handle, i );
+};
+
+/* cpArbiterGetSurfaceVelocity( arb ) */
+cp.Arbiter.prototype.getSurfaceVelocity = function(  ) {
+    return cp.arbiterGetSurfaceVelocity( this.handle );
+};
+
+/* cpArbiterIgnore( arb ) */
+cp.Arbiter.prototype.ignore = function(  ) {
+    return cp.arbiterIgnore( this.handle );
+};
+
+/* cpArbiterIsFirstContact( arb ) */
+cp.Arbiter.prototype.isFirstContact = function(  ) {
+    return cp.arbiterIsFirstContact( this.handle );
+};
+
+/* cpArbiterSetElasticity( arb, value ) */
+cp.Arbiter.prototype.setElasticity = function( value ) {
+    return cp.arbiterSetElasticity( this.handle, value );
+};
+
+/* cpArbiterSetFriction( arb, value ) */
+cp.Arbiter.prototype.setFriction = function( value ) {
+    return cp.arbiterSetFriction( this.handle, value );
+};
+
+/* cpArbiterSetSurfaceVelocity( arb, value ) */
+cp.Arbiter.prototype.setSurfaceVelocity = function( value ) {
+    return cp.arbiterSetSurfaceVelocity( this.handle, value );
+};
+
+/* cpArbiterTotalImpulse( arb ) */
+cp.Arbiter.prototype.totalImpulse = function(  ) {
+    return cp.arbiterTotalImpulse( this.handle );
+};
+
+/* cpArbiterTotalImpulseWithFriction( arb ) */
+cp.Arbiter.prototype.totalImpulseWithFriction = function(  ) {
+    return cp.arbiterTotalImpulseWithFriction( this.handle );
+};
+
+/* cpArbiterTotalKE( arb ) */
+cp.Arbiter.prototype.totalKE = function(  ) {
+    return cp.arbiterTotalKE( this.handle );
 };

@@ -181,10 +181,19 @@ JSBool JSB_cpSpaceAddCollisionHandler(JSContext *cx, uint32_t argc, jsval *vp)
 	handler->pre = *argvp++;
 	handler->post = *argvp++;
 	handler->separate = *argvp++;
-
+	
 	if( ! ok )
 		return JS_FALSE;
-		
+
+	if( ! JSVAL_IS_NULL(handler->begin) )
+	   JS_AddNamedValueRoot(cx, &handler->begin, "begin collision_handler");
+	if( ! JSVAL_IS_NULL(handler->pre) )
+	   JS_AddNamedValueRoot(cx, &handler->pre, "pre collision_handler");
+	if( ! JSVAL_IS_NULL(handler->post) )
+		JS_AddNamedValueRoot(cx, &handler->post, "post collision_handler");
+	if( ! JSVAL_IS_NULL(handler->separate) )
+		JS_AddNamedValueRoot(cx, &handler->separate, "separate collision_handler");
+	
 	handler->cx = cx;
 	
 	cpSpaceAddCollisionHandler(space, handler->typeA, handler->typeB,
@@ -239,6 +248,17 @@ JSBool JSB_cpSpaceRemoveCollisionHandler(JSContext *cx, uint32_t argc, jsval *vp
 	unsigned long key = pair_ints(typeA, typeB );
 	HASH_FIND_INT(collision_handler_hash, &key, hashElement);
     if( hashElement ) {
+		
+		// unroot it
+		if( ! JSVAL_IS_NULL(hashElement->begin) )
+			JS_RemoveValueRoot(cx, &hashElement->begin);
+		if( ! JSVAL_IS_NULL(hashElement->pre) )
+			JS_RemoveValueRoot(cx, &hashElement->pre);
+		if( ! JSVAL_IS_NULL(hashElement->post) )
+			JS_RemoveValueRoot(cx, &hashElement->post);
+		if( ! JSVAL_IS_NULL(hashElement->separate) )
+			JS_RemoveValueRoot(cx, &hashElement->separate);
+
 		HASH_DEL( collision_handler_hash, hashElement );
 		free( hashElement );
 	}
