@@ -2198,6 +2198,9 @@ JSBool %s%s(JSContext *cx, uint32_t argc, jsval *vp) {
                         js_namespace, native_funcname, ', '.join(args_func)))
                 break
 
+    def generate_function_oo(self, function):
+        '''Generates Object Oriented code for a particle function'''
+
     def generate_functions_registration(self):
         self.function_registration_file = open('%s%s_functions_registration.h' % (BINDINGS_PREFIX, self.namespace), 'w')
         self.generate_autogenerate_prefix(self.function_registration_file)
@@ -2247,9 +2250,9 @@ JSBool %s%s(JSContext *cx, uint32_t argc, jsval *vp) {
             self.generate_function_mm_prefix()
             if self.enabled_oo_in_functions():
 #                self.auto_object_h_file = open('%s%s_auto_classes.h' % (BINDINGS_PREFIX, self.namespace), 'w')
-#                self.auto_object_mm_file = open('%s%s_auto_classes.cpp' % (BINDINGS_PREFIX, self.namespace), 'w')
+                self.auto_object_mm_file = open('%s%s_auto_classes.mm' % (BINDINGS_PREFIX, self.namespace), 'w')
 #                self.auto_object_registration_h_file = open('%s%s_auto_classes_registration.h' % (BINDINGS_PREFIX, self.namespace), 'w')
-                self.auto_object_js_file = open('%s%s_js.js' % (BINDINGS_PREFIX, self.namespace), 'w')
+#                self.auto_object_js_file = open('%s%s_js.js' % (BINDINGS_PREFIX, self.namespace), 'w')
 
             for f in functions:
                 if f['name'] in self.functions_to_bind:
@@ -2258,7 +2261,8 @@ JSBool %s%s(JSContext *cx, uint32_t argc, jsval *vp) {
                         self.generate_function_declaration(f['name'])
                         self.functions_bound.append(f['name'])
                         if self.enabled_oo_in_functions():
-                            self.generate_function_js(f)
+                            # self.generate_function_js(f)
+                            self.generate_function_oo(f)
                     except ParseException, e:
                         sys.stderr.write('NOT OK: "%s" Error: %s\n' % (f['name'], str(e)))
 

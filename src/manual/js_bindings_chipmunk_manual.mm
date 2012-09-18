@@ -360,5 +360,105 @@ JSBool JSB_cpBodySetUserData(JSContext *cx, uint32_t argc, jsval *vp)
 	return JS_TRUE;
 }
 
+#pragma mark - Object Oriented Chipmunk
+
+/*
+ * Chipmunk Base Object
+ */
+
+JSClass* JSB_cpBase_class = NULL;
+JSObject* JSB_cpBase_object = NULL;
+// Constructor
+JSBool JSB_cpBase_constructor(JSContext *cx, uint32_t argc, jsval *vp)
+{
+	JSB_PRECONDITION( argc==1, "Invalid arguments. Expecting 1");
+	
+	JSObject *jsobj = JS_NewObject(cx, JSB_cpBase_class, JSB_cpBase_object, NULL);
+	
+	jsval *argvp = JS_ARGV(cx,vp);
+	JSBool ok = JS_TRUE;
+	
+	void *handle = NULL;
+	
+	ok = jsval_to_opaque(cx, *argvp++, &handle);
+	
+	JSB_PRECONDITION(ok, "Error converting arguments for JSB_cpBase_constructor");
+	
+	JS_SetPrivate(jsobj, handle);
+	
+	JS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(jsobj));
+	return JS_TRUE;
+}
+
+// Destructor
+void JSB_cpBase_finalize(JSFreeOp *fop, JSObject *obj)
+{
+	CCLOGINFO(@"jsbindings: finalizing JS object %p (cpBase)", obj);
+	
+	// should not delete the handle since it was manually added
+}
+
+JSBool JSB_cpBase_getHandle(JSContext *cx, uint32_t argc, jsval *vp)
+{
+	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
+	JSB_PRECONDITION( jsthis, "Invalid jsthis object");
+	
+	void *handle = JS_GetPrivate(jsthis);
+	JSB_PRECONDITION( handle, "Invalid private object");
+	
+	jsval ret_val = opaque_to_jsval(cx, handle);
+	JS_SET_RVAL(cx, vp, ret_val);
+	return JS_TRUE;
+}
+
+JSBool JSB_cpBase_setHandle(JSContext *cx, uint32_t argc, jsval *vp)
+{
+	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
+	JSB_PRECONDITION( jsthis, "Invalid jsthis object");
+	
+	JSB_PRECONDITION( argc==1, "Invalid arguments. Expecting 1");
+	
+	jsval *argvp = JS_ARGV(cx,vp);
+	
+	void *handle;
+	JSBool ok = jsval_to_opaque(cx, *argvp++, &handle);
+	JSB_PRECONDITION( ok, "Invalid parsing arguments");
+	
+	JS_SetPrivate(jsthis, handle);
+	
+	JS_SET_RVAL(cx, vp, JSVAL_VOID);
+	return JS_TRUE;
+}
+
+
+void JSB_cpBase_createClass(JSContext *cx, JSObject* globalObj, const char* name )
+{
+	JSB_cpBase_class = (JSClass *)calloc(1, sizeof(JSClass));
+	JSB_cpBase_class->name = name;
+	JSB_cpBase_class->addProperty = JS_PropertyStub;
+	JSB_cpBase_class->delProperty = JS_PropertyStub;
+	JSB_cpBase_class->getProperty = JS_PropertyStub;
+	JSB_cpBase_class->setProperty = JS_StrictPropertyStub;
+	JSB_cpBase_class->enumerate = JS_EnumerateStub;
+	JSB_cpBase_class->resolve = JS_ResolveStub;
+	JSB_cpBase_class->convert = JS_ConvertStub;
+	JSB_cpBase_class->finalize = JSB_cpBase_finalize;
+	JSB_cpBase_class->flags = JSCLASS_HAS_PRIVATE;
+	
+	static JSPropertySpec properties[] = {
+		{0, 0, 0, 0, 0}
+	};
+	static JSFunctionSpec funcs[] = {
+		JS_FN("getHandle", JSB_cpBase_getHandle, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("setHandle", JSB_cpBase_setHandle, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FS_END
+	};
+	static JSFunctionSpec st_funcs[] = {
+		JS_FS_END
+	};
+	
+	JSB_cpBase_object = JS_InitClass(cx, globalObj, NULL, JSB_cpBase_class, JSB_cpBase_constructor,0,properties,funcs,NULL,st_funcs);
+}
+
 
 #endif // JSB_INCLUDE_CHIPMUNK

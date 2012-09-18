@@ -51,6 +51,13 @@ jsval cpBB_to_jsval(JSContext *cx, cpBB bb );
 #define cpVect_to_jsval CGPoint_to_jsval
 #define jsval_to_cpVect jsval_to_CGPoint
 
+
+// Object Oriented Chipmunk
+void JSB_cpBase_createClass(JSContext* cx, JSObject* globalObj, const char * name );
+extern JSObject* JSB_cpBase_object;
+extern JSClass* JSB_cpBase_class;
+
+
 #endif // JSB_INCLUDE_CHIPMUNK
 
 #endif // __js_bindings_chipmunk_manual

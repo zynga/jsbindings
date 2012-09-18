@@ -260,69 +260,83 @@ cp.Constraint = function() {
 
 /* cpDampedRotarySpringNew( a, b, restAngle, stiffness, damping ) */
 cp.DampedRotarySpring = function( a, b, restAngle, stiffness, damping ) {
-    this.object = new cp._DampedRotarySpring( a, b, restAngle, stiffness, damping );
+    this.object = new cp._DampedRotarySpring( a.handle, b.handle, restAngle, stiffness, damping );
     this.handle = this.object.getHandle();
 };
+cp.DampedRotarySpring.prototype = Object.create(cp.Constraint.prototype);
+
 
 /* cpDampedSpringNew( a, b, anchr1, anchr2, restLength, stiffness, damping ) */
 cp.DampedSpring = function( a, b, anchr1, anchr2, restLength, stiffness, damping ) {
-    this.object = new cp._DampedSpring( a, b, anchr1, anchr2, restLength, stiffness, damping );
+    this.object = new cp._DampedSpring( a.handle, b.handle, anchr1, anchr2, restLength, stiffness, damping );
     this.handle = this.object.getHandle();
 };
+cp.DampedSpring.prototype = Object.create(cp.Constraint.prototype);
 
 /* cpGearJointNew( a, b, phase, ratio ) */
 cp.GearJoint = function( a, b, phase, ratio ) {
-    this.object = new cp._GearJoint( a, b, phase, ratio );
+    this.object = new cp._GearJoint( a.handle, b.handle, phase, ratio );
     this.handle = this.object.getHandle();
 };
+cp.GearJoint.prototype = Object.create(cp.Constraint.prototype);
 
 /* cpGrooveJointNew( a, b, groove_a, groove_b, anchr2 ) */
 cp.GrooveJoint = function( a, b, groove_a, groove_b, anchr2 ) {
-    this.object = new cp._GrooveJoint( a, b, groove_a, groove_b, anchr2 );
+    this.object = new cp._GrooveJoint( a.handle, b.handle, groove_a, groove_b, anchr2 );
     this.handle = this.object.getHandle();
 };
+cp.GrooveJoint.prototype = Object.create(cp.Constraint.prototype);
 
 /* cpPinJointNew( a, b, anchr1, anchr2 ) */
 cp.PinJoint = function( a, b, anchr1, anchr2 ) {
-    this.object = new cp._PinJoint( a, b, anchr1, anchr2 );
+    this.object = new cp._PinJoint( a.handle, b.handle, anchr1, anchr2 );
     this.handle = this.object.getHandle();
 };
+cp.PinJoint.prototype = Object.create(cp.Constraint.prototype);
+
 
 /* cpPivotJointNew( a, b, pivot ) */
 cp.PivotJoint = function( a, b, pivot ) {
-    this.object = new cp._PivotJoint( a, b, pivot );
+    this.object = new cp._PivotJoint( a.handle, b.handle, pivot );
     this.handle = this.object.getHandle();
 };
+cp.PivotJoint.prototype = Object.create(cp.Constraint.prototype);
 
 /* cpPivotJointNew2( a, b, anchr1, anchr2 ) */
-cp.PivotJoint = function( a, b, anchr1, anchr2 ) {
-    this.object = new cp._PivotJoint( a, b, anchr1, anchr2 );
+cp.PivotJointXXXFIXMEXXXX = function( a, b, anchr1, anchr2 ) {
+    this.object = new cp._PivotJoint( a.handle, b.handle, anchr1, anchr2 );
     this.handle = this.object.getHandle();
 };
+// cp.PivotJoint2.prototype = Object.create(cp.Constraint.prototype);
+
 
 /* cpRatchetJointNew( a, b, phase, ratchet ) */
 cp.RatchetJoint = function( a, b, phase, ratchet ) {
-    this.object = new cp._RatchetJoint( a, b, phase, ratchet );
+    this.object = new cp._RatchetJoint( a.handle, b.handle, phase, ratchet );
     this.handle = this.object.getHandle();
 };
+cp.RatchetJoint.prototype = Object.create(cp.Constraint.prototype);
 
 /* cpRotaryLimitJointNew( a, b, min, max ) */
 cp.RotaryLimitJoint = function( a, b, min, max ) {
-    this.object = new cp._RotaryLimitJoint( a, b, min, max );
+    this.object = new cp._RotaryLimitJoint( a.handle, b.handle, min, max );
     this.handle = this.object.getHandle();
 };
+cp.RotaryLimitJoint.prototype = Object.create(cp.Constraint.prototype);
 
 /* cpSimpleMotorNew( a, b, rate ) */
 cp.SimpleMotor = function( a, b, rate ) {
-    this.object = new cp._SimpleMotor( a, b, rate );
+    this.object = new cp._SimpleMotor( a.handle, b.handle, rate );
     this.handle = this.object.getHandle();
 };
+cp.SimpleMotor.prototype = Object.create(cp.Constraint.prototype);
 
 /* cpSlideJointNew( a, b, anchr1, anchr2, min, max ) */
 cp.SlideJoint = function( a, b, anchr1, anchr2, min, max ) {
-    this.object = new cp._SlideJoint( a, b, anchr1, anchr2, min, max );
+    this.object = new cp._SlideJoint( a.handle, b.handle, anchr1, anchr2, min, max );
     this.handle = this.object.getHandle();
 };
+cp.SlideJoint.prototype = Object.create(cp.Constraint.prototype);
 
 /* cpConstraintActivateBodies( constraint ) */
 cp.Constraint.prototype.activateBodies = function(  ) {
@@ -850,9 +864,15 @@ cp.BoxShape = function( body, width, height ) {
 cp.BoxShape.prototype = Object.create(cp.Shape.prototype);
 
 /* cpBoxShapeNew2( body, box ) */
-cp.BoxShapeXXXFIXMEXXX = function( body, box ) {
-    this.object = new cp._BoxShape( body, box );
-    this.handle = this.object.getHandle();
+cp.BoxShape2 = function( body, box ) {
+
+    var verts = [
+        box.l, box.b,
+        box.l, box.t,
+        box.r, box.t,
+        box.r, box.b
+    ];
+    return new cp.PolyShape(body, verts, cp.vzero);
 };
 
 //
@@ -1078,12 +1098,12 @@ cp.Space.prototype.pointQueryFirst = function( point, layers, group ) {
 
 /* cpSpaceReindexShape( space, shape ) */
 cp.Space.prototype.reindexShape = function( shape ) {
-    return cp.spaceReindexShape( this.handle, shape );
+    return cp.spaceReindexShape( this.handle, shape.handle );
 };
 
 /* cpSpaceReindexShapesForBody( space, body ) */
 cp.Space.prototype.reindexShapesForBody = function( body ) {
-    return cp.spaceReindexShapesForBody( this.handle, body );
+    return cp.spaceReindexShapesForBody( this.handle, body.handle );
 };
 
 /* cpSpaceReindexStatic( space ) */
@@ -1093,22 +1113,22 @@ cp.Space.prototype.reindexStatic = function(  ) {
 
 /* cpSpaceRemoveBody( space, body ) */
 cp.Space.prototype.removeBody = function( body ) {
-    return cp.spaceRemoveBody( this.handle, body );
+    return cp.spaceRemoveBody( this.handle, body.handle );
 };
 
 /* cpSpaceRemoveConstraint( space, constraint ) */
 cp.Space.prototype.removeConstraint = function( constraint ) {
-    return cp.spaceRemoveConstraint( this.handle, constraint );
+    return cp.spaceRemoveConstraint( this.handle, constraint.handle );
 };
 
 /* cpSpaceRemoveShape( space, shape ) */
 cp.Space.prototype.removeShape = function( shape ) {
-    return cp.spaceRemoveShape( this.handle, shape );
+    return cp.spaceRemoveShape( this.handle, shape.handle );
 };
 
 /* cpSpaceRemoveStaticShape( space, shape ) */
 cp.Space.prototype.removeStaticShape = function( shape ) {
-    return cp.spaceRemoveStaticShape( this.handle, shape );
+    return cp.spaceRemoveStaticShape( this.handle, shape.handle );
 };
 
 /* cpSpaceSetCollisionBias( space, value ) */
