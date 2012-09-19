@@ -52,6 +52,7 @@ JSB_VERSION = 'v0.3'
 # uncapitalize from: http://stackoverflow.com/a/3847369
 uncapitalize = lambda s: s[:1].lower() + s[1:] if s else ''
 
+
 # xml2d recipe copied from here:
 # http://code.activestate.com/recipes/577722-xml-to-python-dictionary-and-back/
 def xml2d(e):
@@ -74,10 +75,12 @@ class JSBGenerate(object):
 
     def __init__(self, config):
 
-        #
-        # UGLY CODE
-        # XXX
         self.config = config
+
+        #
+        # UGLY CODE XXX
+        # This should be accessed using self.config, not the following ugly code
+        #
         self.namespace = config.namespace
         self.bs = config.bs
 
@@ -93,10 +96,21 @@ class JSBGenerate(object):
         self.function_prefix = config.function_prefix
         self.function_classes = config.function_classes
 
+        # classes
+        self.supported_classes = config.supported_classes
+
     #
     # BEGIN Helper functions
     #
     # whether or not the method is a constructor
+    def get_function(self, function_name):
+        '''returns a function from function name'''
+        funcs = self.bs['signatures']['function']
+        for f in funcs:
+            if f['name'] == function_name:
+                return f
+        raise ParseException("Function %s not found" % function_name)
+
     def is_class_constructor(self, method):
         if self.is_class_method(method) and 'retval' in method:
             retval = method['retval']
@@ -242,30 +256,30 @@ class JSBGenerate(object):
     # special case: returning Object
     def generate_retval_object(self, declared_type, js_type):
         object_template = '''
-	JSObject *jsobj = get_or_create_jsobject_from_realobj( cx, ret_val );
-	JS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(jsobj));
+\tJSObject *jsobj = get_or_create_jsobject_from_realobj( cx, ret_val );
+\tJS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(jsobj));
 '''
         return object_template
 
     # special case: returning String
     def generate_retval_string(self, declared_type, js_type):
         template = '''
-	JSString *ret_obj = JS_NewStringCopyZ(cx, [ret_val UTF8String]);
-	JS_SET_RVAL(cx, vp, STRING_TO_JSVAL(ret_obj) );
+\tJSString *ret_obj = JS_NewStringCopyZ(cx, [ret_val UTF8String]);
+\tJS_SET_RVAL(cx, vp, STRING_TO_JSVAL(ret_obj) );
 '''
         return template
 
     def generate_retval_array(self, declared_type, js_type):
         template = '''
-	jsval ret_jsval = NSArray_to_jsval( cx, (NSArray*) ret_val );
-	JS_SET_RVAL(cx, vp, ret_jsval );
+\tjsval ret_jsval = NSArray_to_jsval( cx, (NSArray*) ret_val );
+\tJS_SET_RVAL(cx, vp, ret_jsval );
 '''
         return template
 
     def generate_retval_set(self, declared_type, js_type):
         template = '''
-	jsval ret_jsval = NSSet_to_jsval( cx, (NSSet*) ret_val );
-	JS_SET_RVAL(cx, vp, ret_jsval );
+\tjsval ret_jsval = NSSet_to_jsval( cx, (NSSet*) ret_val );
+\tJS_SET_RVAL(cx, vp, ret_jsval );
 '''
         return template
 
@@ -276,8 +290,8 @@ class JSBGenerate(object):
     def generate_retval_struct_manual(self, declared_type, js_type):
         new_name = self.get_name_for_manual_struct(declared_type)
         template = '''
-	jsval ret_jsval = %s_to_jsval( cx, (%s)ret_val );
-	JS_SET_RVAL(cx, vp, ret_jsval);
+\tjsval ret_jsval = %s_to_jsval( cx, (%s)ret_val );
+\tJS_SET_RVAL(cx, vp, ret_jsval);
 ''' % (new_name, declared_type)
         return template
 
@@ -286,10 +300,10 @@ class JSBGenerate(object):
     #
     def generate_retval_struct_automatic(self, declared_type, js_type):
         template = '''
-	JSObject *typedArray = %s(cx, %d );
-	%s* buffer = (%s*)JS_GetArrayBufferViewData(typedArray, cx);
-	*buffer = ret_val;
-	JS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(typedArray));
+\tJSObject *typedArray = %s(cx, %d );
+\t%s* buffer = (%s*)JS_GetArrayBufferViewData(typedArray, cx);
+\t*buffer = ret_val;
+\tJS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(typedArray));
 '''
         t, l = self.get_struct_type_and_num_of_elements(js_type)
         return template % (t, l,
@@ -300,8 +314,8 @@ class JSBGenerate(object):
     #
     def generate_retval_opaque(self, declared_type, js_type):
         template = '''
-	jsval ret_jsval = opaque_to_jsval( cx, ret_val );
-	JS_SET_RVAL(cx, vp, ret_jsval);
+\tjsval ret_jsval = opaque_to_jsval( cx, ret_val );
+\tJS_SET_RVAL(cx, vp, ret_jsval);
     '''
         return template
 
@@ -528,12 +542,10 @@ class JSBGenerate(object):
     def generate_argument_struct_automatic(self, i, arg_js_type, arg_declared_type):
         # This template assumes that the types will be the same on all platforms (eg: 64 and 32-bit platforms)
         template = '''
-	JSObject *tmp_arg%d;
-	ok &= JS_ValueToObject( cx, *argvp++, &tmp_arg%d );
-	arg%d = *(%s*)JS_GetArrayBufferViewData( tmp_arg%d, cx );
+\tJSObject *tmp_arg%d;
+\tok &= JS_ValueToObject( cx, *argvp++, &tmp_arg%d );
+\targ%d = *(%s*)JS_GetArrayBufferViewData( tmp_arg%d, cx );
 '''
-        proxy_class_name = PROXY_PREFIX + arg_declared_type
-
         self.fd_mm.write(template % (i,
                                         i,
                                         i, arg_declared_type, i))
@@ -691,7 +703,6 @@ class JSBGenerateClasses(JSBGenerate):
         self.complement = config.complement
         self.class_manual = config.class_manual
         self.parsed_classes = config.parsed_classes
-        self.supported_classes = config.supported_classes
         self._inherit_class_methods = config._inherit_class_methods
         self.callback_methods = config.callback_methods
         self.manual_methods = config.manual_methods
@@ -876,9 +887,9 @@ JSObject* %s_object = NULL;
         constructor_template = '''// Constructor
 JSBool %s_constructor(JSContext *cx, uint32_t argc, jsval *vp)
 {
-	JSObject *jsobj = [%s createJSObjectWithRealObject:nil context:cx];
-	JS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(jsobj));
-	return JS_TRUE;
+\tJSObject *jsobj = [%s createJSObjectWithRealObject:nil context:cx];
+\tJS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(jsobj));
+\treturn JS_TRUE;
 }
 '''
         proxy_class_name = '%s%s' % (PROXY_PREFIX, class_name)
@@ -890,12 +901,12 @@ JSBool %s_constructor(JSContext *cx, uint32_t argc, jsval *vp)
 // Destructor
 void %s_finalize(JSFreeOp *fop, JSObject *obj)
 {
-	CCLOGINFO(@"jsbindings: finalizing JS object %%p (%s)", obj);
-//	JSB_NSObject *proxy = get_proxy_for_jsobject(obj);
-//	if (proxy) {
-//		[[proxy realObj] release];
-//	}
-	del_proxy_for_jsobject( obj );
+\tCCLOGINFO(@"jsbindings: finalizing JS object %%p (%s)", obj);
+//\tJSB_NSObject *proxy = get_proxy_for_jsobject(obj);
+//\tif (proxy) {
+//\t\t[[proxy realObj] release];
+//\t}
+\tdel_proxy_for_jsobject( obj );
 }
 '''
         proxy_class_name = '%s%s' % (PROXY_PREFIX, class_name)
@@ -958,10 +969,10 @@ void %s_finalize(JSFreeOp *fop, JSObject *obj)
 JSBool %s_%s%s(JSContext *cx, uint32_t argc, jsval *vp) {
 '''
         template_init = '''
-	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
-	JSB_NSObject *proxy = get_proxy_for_jsobject(jsthis);
+\tJSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
+\tJSB_NSObject *proxy = get_proxy_for_jsobject(jsthis);
 
-	JSB_PRECONDITION( proxy && %s[proxy realObj], "Invalid Proxy object");
+\tJSB_PRECONDITION( proxy && %s[proxy realObj], "Invalid Proxy object");
 '''
 
         selector = method['selector']
@@ -988,14 +999,14 @@ JSBool %s_%s%s(JSContext *cx, uint32_t argc, jsval *vp) {
             else:
                 # default
                 method_assert_on_arguments = '\tJSB_PRECONDITION( argc == %d, "Invalid number of arguments" );\n' % num_of_args
-        except KeyError, e:
+        except KeyError:
             # No, it only has required arguments
             method_assert_on_arguments = '\tJSB_PRECONDITION( argc == %d, "Invalid number of arguments" );\n' % num_of_args
         self.fd_mm.write(method_assert_on_arguments)
 
     def generate_method_suffix(self):
         end_template = '''
-	return JS_TRUE;
+\treturn JS_TRUE;
 }
 '''
         self.fd_mm.write(end_template)
@@ -1018,7 +1029,7 @@ JSBool %s_%s%s(JSContext *cx, uint32_t argc, jsval *vp) {
                 raise ParseException('Method defined as callback. Ignoring.')
             if 'ignore' in self.method_properties[class_name][s]:
                 raise ParseException('Explicitly ignoring method')
-        except KeyError, e:
+        except KeyError:
             pass
 
         args_js_type, args_declared_type = self.validate_arguments(method)
@@ -1035,7 +1046,7 @@ JSBool %s_%s%s(JSContext *cx, uint32_t argc, jsval *vp) {
 
         try:
             properties = self.method_properties[class_name][method['selector']]
-        except KeyError, e:
+        except KeyError:
             properties = {}
 
         # Optional Args ?
@@ -1113,7 +1124,7 @@ JSBool %s_%s%s(JSContext *cx, uint32_t argc, jsval *vp) {
                             if not method_name in ok_method_name:
                                 self.current_method = m
                                 try:
-                                    ok = self.generate_method(class_name, m)
+                                    self.generate_method(class_name, m)
                                     ok_methods.append(m)
                                     ok_method_name.append(m['selector'])
                                 except ParseException, e:
@@ -1127,7 +1138,7 @@ JSBool %s_%s%s(JSContext *cx, uint32_t argc, jsval *vp) {
                 if not cm['selector'] in ok_method_name:
                     self.current_method = cm
                     try:
-                        ok = self.generate_method(class_name, cm)
+                        self.generate_method(class_name, cm)
                         ok_methods.append(cm)
                         ok_method_name.append(cm['selector'])
                     except ParseException, e:
@@ -1149,9 +1160,9 @@ JSBool %s_%s%s(JSContext *cx, uint32_t argc, jsval *vp) {
 -(%s) %s%s
 {
 %s
-	%s *proxy = objc_getAssociatedObject(self, &JSB_association_proxy_key);
-	if( proxy )
-		[proxy %s];
+\t%s *proxy = objc_getAssociatedObject(self, &JSB_association_proxy_key);
+\tif( proxy )
+\t\t[proxy %s];
 }
 '''
         template_suffix = '@end\n'
@@ -1245,15 +1256,15 @@ extern JSClass *%s_class;
     def generate_callback_args(self, method):
         no_args = 'jsval *argv = NULL; unsigned argc=0;\n'
         with_args = '''unsigned argc=%d;
-			jsval argv[%d];
+\t\t\tjsval argv[%d];
 '''
 
         convert = {
-            'i' : 'INT_TO_JSVAL(%s);',
-            'c' : 'INT_TO_JSVAL(%s);',
-            'b' : 'BOOLEAN_TO_JSVAL(%s);',
-            'f' : 'DOUBLE_TO_JSVAL(%s);',
-            'd' : 'DOUBLE_TO_JSVAL(%s);',
+            'i': 'INT_TO_JSVAL(%s);',
+            'c': 'INT_TO_JSVAL(%s);',
+            'b': 'BOOLEAN_TO_JSVAL(%s);',
+            'f': 'DOUBLE_TO_JSVAL(%s);',
+            'd': 'DOUBLE_TO_JSVAL(%s);',
         }
 
         #
@@ -1271,13 +1282,13 @@ extern JSClass *%s_class;
 
                 if t in convert:
                     tmp = convert[t] % arg['name']
-                    with_args += "			argv[%d] = %s\n" % (i, tmp)
+                    with_args += "\t\t\targv[%d] = %s\n" % (i, tmp)
                 elif dt == 'NSSet':
-                    with_args += "			argv[%d] = NSSet_to_jsval( cx, %s );\n" % (i, arg['name'])
+                    with_args += "\t\t\targv[%d] = NSSet_to_jsval( cx, %s );\n" % (i, arg['name'])
                 elif t == '@' and (dt in self.supported_classes or dt in self.class_manual):
-                    with_args += "			argv[%d] = OBJECT_TO_JSVAL( get_or_create_jsobject_from_realobj( cx, %s ) );\n" % (i, arg['name'])
+                    with_args += "\t\t\targv[%d] = OBJECT_TO_JSVAL( get_or_create_jsobject_from_realobj( cx, %s ) );\n" % (i, arg['name'])
                 else:
-                    with_args += '			argv[%d] = JSVAL_VOID; // XXX TODO Value not supported (%s) \n' % (i, dt)
+                    with_args += '\t\t\targv[%d] = JSVAL_VOID; // XXX TODO Value not supported (%s) \n' % (i, dt)
 
             return with_args % (args_len, args_len)
         return no_args
@@ -1289,17 +1300,17 @@ extern JSClass *%s_class;
         template = '''
 -(%s) %s
 {
-	if (_jsObj) {
-		JSContext* cx = [[JSBCore sharedInstance] globalContext];
-		JSBool found;
-		JS_HasProperty(cx, _jsObj, "%s", &found);
-		if (found == JS_TRUE) {
-			jsval rval, fval;
-			%s
-			JS_GetProperty(cx, _jsObj, "%s", &fval);
-			JS_CallFunctionValue(cx, _jsObj, fval, argc, argv, &rval);
-		}
-	}
+\tif (_jsObj) {
+\t\tJSContext* cx = [[JSBCore sharedInstance] globalContext];
+\t\tJSBool found;
+\t\tJS_HasProperty(cx, _jsObj, "%s", &found);
+\t\tif (found == JS_TRUE) {
+\t\t\tjsval rval, fval;
+\t\t\t%s
+\t\t\tJS_GetProperty(cx, _jsObj, "%s", &fval);
+\t\t\tJS_CallFunctionValue(cx, _jsObj, fval, argc, argv, &rval);
+\t\t}
+\t}
 }
 '''
         if class_name in self.callback_methods:
@@ -1323,21 +1334,21 @@ extern JSClass *%s_class;
         template_prefix = '''
 +(void) swizzleMethods
 {
-	[super swizzleMethods];
+\t[super swizzleMethods];
 
-	static BOOL %s_already_swizzled = NO;
-	if( ! %s_already_swizzled ) {
-		NSError *error;
+\tstatic BOOL %s_already_swizzled = NO;
+\tif( ! %s_already_swizzled ) {
+\t\tNSError *error;
 '''
         # CCNode, onEnter, onEnter
         template_middle = '''
-		if( ! [%s jr_swizzleMethod:@selector(%s) withMethod:@selector(JSHook_%s) error:&error] )
-			NSLog(@"Error swizzling %%@", error);
+\t\tif( ! [%s jr_swizzleMethod:@selector(%s) withMethod:@selector(JSHook_%s) error:&error] )
+\t\t\tNSLog(@"Error swizzling %%@", error);
 '''
         # CCNode
         template_suffix = '''
-		%s_already_swizzled = YES;
-	}
+\t\t%s_already_swizzled = YES;
+\t}
 }
 '''
         if class_name in self.callback_methods:
@@ -1353,20 +1364,20 @@ extern JSClass *%s_class;
         create_object_template_prefix = '''
 +(JSObject*) createJSObjectWithRealObject:(id)realObj context:(JSContext*)cx
 {
-	JSObject *jsobj = JS_NewObject(cx, %s_class, %s_object, NULL);
-	%s *proxy = [[%s alloc] initWithJSObject:jsobj class:[%s class]];
-	[proxy setRealObj:realObj];
+\tJSObject *jsobj = JS_NewObject(cx, %s_class, %s_object, NULL);
+\t%s *proxy = [[%s alloc] initWithJSObject:jsobj class:[%s class]];
+\t[proxy setRealObj:realObj];
 
-	if( realObj ) {
-		objc_setAssociatedObject(realObj, &JSB_association_proxy_key, proxy, OBJC_ASSOCIATION_RETAIN);
-		[proxy release];
-	}
+\tif( realObj ) {
+\t\tobjc_setAssociatedObject(realObj, &JSB_association_proxy_key, proxy, OBJC_ASSOCIATION_RETAIN);
+\t\t[proxy release];
+\t}
 
-	[self swizzleMethods];
+\t[self swizzleMethods];
 '''
 
         create_object_template_suffix = '''
-	return jsobj;
+\treturn jsobj;
 }
 '''
         proxy_class_name = '%s%s' % (PROXY_PREFIX, class_name)
@@ -1392,24 +1403,24 @@ extern JSClass *%s_class;
         implementation_template = '''
 void %s_createClass(JSContext *cx, JSObject* globalObj, const char* name )
 {
-	%s_class = (JSClass *)calloc(1, sizeof(JSClass));
-	%s_class->name = name;
-	%s_class->addProperty = JS_PropertyStub;
-	%s_class->delProperty = JS_PropertyStub;
-	%s_class->getProperty = JS_PropertyStub;
-	%s_class->setProperty = JS_StrictPropertyStub;
-	%s_class->enumerate = JS_EnumerateStub;
-	%s_class->resolve = JS_ResolveStub;
-	%s_class->convert = JS_ConvertStub;
-	%s_class->finalize = %s_finalize;
-	%s_class->flags = %s;
+\t%s_class = (JSClass *)calloc(1, sizeof(JSClass));
+\t%s_class->name = name;
+\t%s_class->addProperty = JS_PropertyStub;
+\t%s_class->delProperty = JS_PropertyStub;
+\t%s_class->getProperty = JS_PropertyStub;
+\t%s_class->setProperty = JS_StrictPropertyStub;
+\t%s_class->enumerate = JS_EnumerateStub;
+\t%s_class->resolve = JS_ResolveStub;
+\t%s_class->convert = JS_ConvertStub;
+\t%s_class->finalize = %s_finalize;
+\t%s_class->flags = %s;
 '''
 
         # Properties
         properties_template = '''
-	static JSPropertySpec properties[] = {
-		{0, 0, 0, 0, 0}
-	};
+\tstatic JSPropertySpec properties[] = {
+\t\t{0, 0, 0, 0, 0}
+\t};
 '''
         functions_template_start = '\tstatic JSFunctionSpec funcs[] = {\n'
         functions_template_end = '\t\tJS_FS_END\n\t};\n'
@@ -1421,7 +1432,7 @@ void %s_createClass(JSContext *cx, JSObject* globalObj, const char* name )
         # 2: JSB_NSObject
         # 3-4: JSB_CCNode
         init_class_template = '''
-	%s_object = JS_InitClass(cx, globalObj, %s_object, %s_class, %s_constructor,0,properties,funcs,NULL,st_funcs);
+\t%s_object = JS_InitClass(cx, globalObj, %s_object, %s_class, %s_constructor,0,properties,funcs,NULL,st_funcs);
 }
 '''
         proxy_class_name = '%s%s' % (PROXY_PREFIX, class_name)
@@ -1676,7 +1687,7 @@ JSBool %s%s(JSContext *cx, uint32_t argc, jsval *vp) {
 
     def generate_function_suffix(self):
         end_template = '''
-	return JS_TRUE;
+\treturn JS_TRUE;
 }
 '''
         self.fd_mm.write(end_template)
@@ -1788,6 +1799,32 @@ class JSBGenerateOOFunctions(JSBGenerateFunctions):
     #
     # BEGIN of Helper functions
     #
+    def is_valid_oo_function(self, klass_name, name):
+        '''returns whether or not the function is a valid OO function of a class. Constructor/Destructors are not valid'''
+
+        # Member of the class ?
+        if not name.startswith(klass_name):
+            return False
+
+        # Is in the list of supported functions ?
+        if not name in self.functions_to_bind:
+            return False
+
+        # constructor ?
+        constructor_suffix = self.c_object_properties['constructor_suffix'].keys()[0]
+        const_name = '%s%s' % (klass_name, constructor_suffix)
+        # Hack for Chipmunk. Supports: "cpShapeBoxNew2"
+        if name.startswith(const_name):
+            return False
+
+        # destructor ?
+        destructor_suffix = self.c_object_properties['destructor_suffix'].keys()[0]
+        if name == '%s%s' % (klass_name, destructor_suffix):
+            return False
+
+        # Only methods
+        return True
+
     def create_files(self):
         # self.fd_h = open('%s%s_auto_classes.h' % (BINDINGS_PREFIX, self.namespace), 'w')
         self.fd_mm = open('%s%s_auto_classes.mm' % (BINDINGS_PREFIX, self.namespace), 'w')
@@ -1839,9 +1876,9 @@ class JSBGenerateOOFunctions(JSBGenerateFunctions):
     def generate_function_prefix(self, func_name, num_of_args):
         super(JSBGenerateOOFunctions, self).generate_function_prefix(func_name, num_of_args)
         template = '''
-    JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
-    %s* arg0 = (%s*) JS_GetPrivate(jsthis);
-    JSB_PRECONDITION(arg0, "Invalid handle");
+\tJSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
+\t%s* arg0 = (%s*) JS_GetPrivate(jsthis);
+\tJSB_PRECONDITION(arg0, "Invalid handle");
 '''
         self.fd_mm.write(template % (self.current_class_name, self.current_class_name))
 
@@ -1850,7 +1887,7 @@ class JSBGenerateOOFunctions(JSBGenerateFunctions):
         self.generate_function_mm_prefix()
 
     def generate_implementation_suffix(self):
-        pass
+        self.generate_autogenerate_suffix(self.fd_mm)
 
     def generate_implementation_class_variables(self, klass_name):
         template = '''
@@ -1869,17 +1906,19 @@ JSObject* %s_object = NULL;
                                     name))
 
     def generate_implementation_class_constructor(self, klass_name):
-        template = '''
+        tempalte_0_pre = '''
 // Constructor
 JSBool %s_constructor(JSContext *cx, uint32_t argc, jsval *vp)
 {
-	JSObject *jsobj = JS_NewObject(cx, JSB_%s_class, JSB_%s_object, NULL);
-	cpSpace *handle = %s
-	JS_SetPrivate(jsobj, handle);
-
-	JS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(jsobj));
-	return JS_TRUE;
+'''
+        template_0_post = '''
+\treturn JS_TRUE;
 }
+'''
+        template_1_a = '\tJSObject *jsobj = JS_NewObject(cx, JSB_%s_class, JSB_%s_object, NULL);\n'
+        template_1_b = '''
+\tJS_SetPrivate(jsobj, ret_val);
+\tJS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(jsobj));
 '''
         constructor_suffix = self.c_object_properties['constructor_suffix'].keys()[0]
         name = '%s%s' % (PROXY_PREFIX, klass_name)
@@ -1887,32 +1926,53 @@ JSBool %s_constructor(JSContext *cx, uint32_t argc, jsval *vp)
 
         klass = klass_name
         while not func_name in self.functions_to_bind:
-            print 'Not found: %s' % func_name
             klass = self.get_base_class(klass)
+            sys.stderr.write('"Constructor" not found: %s. Using parent class: %s\n' % (func_name, klass))
             func_name = '%s%s' % (klass, constructor_suffix)
             if klass is None:
                 break
 
-        if klass == None:
-            func_name = 'NULL; // No constructor found'
-        else:
-            func_name += '();'
+        try:
+            if klass is not None:
 
-        self.fd_mm.write(template % (name,
-                                    klass_name, klass_name,
-                                    func_name,
-                                    ))
+                function = self.get_function(func_name)
+
+                args_js_type, args_declared_type = self.validate_arguments(function)
+
+                num_of_args = len(args_declared_type)
+
+                # writes method description
+                self.fd_mm.write('// Arguments: %s' % ', '.join(args_declared_type))
+                self.fd_mm.write(tempalte_0_pre % name)
+                self.fd_mm.write(template_1_a % (klass_name, klass_name))
+
+                if num_of_args > 0:
+                    self.generate_arguments(args_declared_type, args_js_type)
+
+                call = self.generate_function_call_to_real_object(func_name, num_of_args, True, args_declared_type)
+                self.fd_mm.write('\tvoid* %s' % call)
+
+                self.fd_mm.write(template_1_b)
+        except ParseException, e:
+            self.fd_mm.write(tempalte_0_pre % name)
+            self.fd_mm.write('\tNSCAssert(NO, @"Not possible to generate constructor: %s");\n' % str(e))
+
+        if klass is None:
+            self.fd_mm.write(tempalte_0_pre % name)
+            self.fd_mm.write('\tNSCAssert(NO, @"No constructor");\n')
+
+        self.fd_mm.write(template_0_post)
 
     def generate_implementation_class_destructor(self, klass_name):
         template = '''
 // Destructor
 void %s_finalize(JSFreeOp *fop, JSObject *obj)
 {
-	CCLOGINFO(@"jsbindings: finalizing JS object %%p (%s)", obj);
-	void *handle = JS_GetPrivate(obj);
-	NSCAssert( handle, @"Invalid handle for %s");
+\tCCLOGINFO(@"jsbindings: finalizing JS object %%p (%s)", obj);
+\tvoid *handle = JS_GetPrivate(obj);
+\tNSCAssert( handle, @"Invalid handle for %s");
 
-	%s( (%s*)handle);
+\t%s( (%s*)handle);
 }
 '''
         destructor_suffix = self.c_object_properties['destructor_suffix'].keys()[0]
@@ -1921,8 +1981,8 @@ void %s_finalize(JSFreeOp *fop, JSObject *obj)
 
         klass = klass_name
         while not func_name in self.functions_to_bind:
-            print 'Not found: %s' % func_name
             klass = self.get_base_class(klass)
+            sys.stderr.write('"Destructor" not found: %s. Using parent class: %s\n' % (func_name, klass))
             func_name = '%s%s' % (klass, destructor_suffix)
             if klass is None:
                 break
@@ -1978,7 +2038,7 @@ void %s_finalize(JSFreeOp *fop, JSObject *obj)
         generated_methods = []
         for func in self.bs_funcs:
             name = func['name']
-            if name.startswith(klass_name) and name in self.functions_to_bind:
+            if self.is_valid_oo_function(klass_name, name):
                 # XXX: this works in chipmunk because the "classes" has the 'baseclass' at the end:
                 #   cpCircleShape (OK)
                 # But it won't work in this case:
@@ -1996,17 +2056,17 @@ void %s_finalize(JSFreeOp *fop, JSObject *obj)
         template_0 = '''
 void %s_createClass(JSContext *cx, JSObject* globalObj, const char* name )
 {
-	%s_class = (JSClass *)calloc(1, sizeof(JSClass));
-	%s_class->name = name;
-	%s_class->addProperty = JS_PropertyStub;
-	%s_class->delProperty = JS_PropertyStub;
-	%s_class->getProperty = JS_PropertyStub;
-	%s_class->setProperty = JS_StrictPropertyStub;
-	%s_class->enumerate = JS_EnumerateStub;
-	%s_class->resolve = JS_ResolveStub;
-	%s_class->convert = JS_ConvertStub;
-	%s_class->finalize = %s_finalize;
-	%s_class->flags = JSCLASS_HAS_PRIVATE;
+\t%s_class = (JSClass *)calloc(1, sizeof(JSClass));
+\t%s_class->name = name;
+\t%s_class->addProperty = JS_PropertyStub;
+\t%s_class->delProperty = JS_PropertyStub;
+\t%s_class->getProperty = JS_PropertyStub;
+\t%s_class->setProperty = JS_StrictPropertyStub;
+\t%s_class->enumerate = JS_EnumerateStub;
+\t%s_class->resolve = JS_ResolveStub;
+\t%s_class->convert = JS_ConvertStub;
+\t%s_class->finalize = %s_finalize;
+\t%s_class->flags = JSCLASS_HAS_PRIVATE;
 '''
         name = '%s%s' % (PROXY_PREFIX, klass_name)
         self.fd_mm.write(template_0 % (name,
@@ -2023,28 +2083,28 @@ void %s_createClass(JSContext *cx, JSObject* globalObj, const char* name )
                                         name))
 
         template_propertes = '''
-	static JSPropertySpec properties[] = {
-		{0, 0, 0, 0, 0}
-	};
+\tstatic JSPropertySpec properties[] = {
+\t\t{0, 0, 0, 0, 0}
+\t};
 '''
         self.fd_mm.write(template_propertes)
 
         template_funcs = '''
-	static JSFunctionSpec funcs[] = {
-		JS_FS_END
-	};
+\tstatic JSFunctionSpec funcs[] = {
+\t\tJS_FS_END
+\t};
 '''
         self.fd_mm.write(template_funcs)
 
         template_st_funcs = '''
-	static JSFunctionSpec st_funcs[] = {
-		JS_FS_END
-	};
+\tstatic JSFunctionSpec st_funcs[] = {
+\t\tJS_FS_END
+\t};
 '''
         self.fd_mm.write(template_st_funcs)
 
         template_end = '''
-	%s_object = JS_InitClass(cx, globalObj, %s, %s_class, %s_constructor,0,properties,funcs,NULL,st_funcs);
+\t%s_object = JS_InitClass(cx, globalObj, %s, %s_class, %s_constructor,0,properties,funcs,NULL,st_funcs);
 }
 '''
         parent = self.get_base_class(klass_name)
@@ -2435,7 +2495,8 @@ class JSBindings(object):
             self.c_object_properties[key] = opts
 
         self.function_classes = []
-        for k in self.c_object_properties['function_prefix']:
+        d = self.c_object_properties.get('function_prefix', [])
+        for k in d:
             self.function_classes.append(k + '*')
 
     def init_class_properties(self, properties):
