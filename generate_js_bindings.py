@@ -92,20 +92,6 @@ class JSBGenerate(object):
         self.function_properties = config.function_properties
         self.function_prefix = config.function_prefix
 
-        # Class specific (should)
-        self.class_properties = config.class_properties
-        self.classes_to_bind = config.classes_to_bind
-        self.classes_to_ignore = config.classes_to_ignore
-        self.method_properties = config.method_properties
-        self.class_properties = config.class_properties
-        self.complement = config.complement
-        self.class_manual = config.class_manual
-        self.parsed_classes = config.parsed_classes
-        self.supported_classes = config.supported_classes
-        self._inherit_class_methods = config._inherit_class_methods
-        self.callback_methods = config.callback_methods
-        self.manual_methods = config.manual_methods
-        self.class_prefix = config.class_prefix
     #
     # BEGIN Helper functions
     #
@@ -520,23 +506,23 @@ class JSBGenerate(object):
 
     def generate_argument_variadic_2_nsarray(self):
         template = '\tok &= jsvals_variadic_to_nsarray( cx, argvp, argc, &arg0 );\n'
-        self.mm_file.write(template)
+        self.fd_mm.write(template)
 
     # Special case for string to NSString generator
     def generate_argument_string(self, i, arg_js_type, arg_declared_type):
         template = '\tok &= jsval_to_nsstring( cx, *argvp++, &arg%d );\n'
-        self.mm_file.write(template % i)
+        self.fd_mm.write(template % i)
 
     # Special case for objects
     def generate_argument_object(self, i, arg_js_type, arg_declared_type):
         object_template = '\tok &= jsval_to_nsobject( cx, *argvp++, &arg%d);\n'
-        self.mm_file.write(object_template % (i))
+        self.fd_mm.write(object_template % (i))
 
     # Manual conversion for struct
     def generate_argument_struct_manual(self, i, arg_js_type, arg_declared_type):
         new_name = self.get_name_for_manual_struct(arg_declared_type)
         template = '\tok &= jsval_to_%s( cx, *argvp++, (%s*) &arg%d );\n' % (new_name, new_name, i)
-        self.mm_file.write(template)
+        self.fd_mm.write(template)
 
     def generate_argument_struct_automatic(self, i, arg_js_type, arg_declared_type):
         # This template assumes that the types will be the same on all platforms (eg: 64 and 32-bit platforms)
@@ -547,33 +533,33 @@ class JSBGenerate(object):
 '''
         proxy_class_name = PROXY_PREFIX + arg_declared_type
 
-        self.mm_file.write(template % (i,
+        self.fd_mm.write(template % (i,
                                         i,
                                         i, arg_declared_type, i))
 
     def generate_argument_array(self, i, arg_js_type, arg_declared_type):
         template = '\tok &= jsval_to_nsarray( cx, *argvp++, &arg%d );\n'
-        self.mm_file.write(template % (i))
+        self.fd_mm.write(template % (i))
 
     def generate_argument_set(self, i, arg_js_type, arg_declared_type):
         template = '\tok &= jsval_to_nsset( cx, *argvp++, &arg%d );\n'
-        self.mm_file.write(template % (i))
+        self.fd_mm.write(template % (i))
 
     def generate_argument_function(self, i, arg_js_type, arg_declared_type):
         template = '\tok &= jsval_to_block_1( cx, *argvp++, JS_THIS_OBJECT(cx, vp), &arg%d );\n'
-        self.mm_file.write(template % (i))
+        self.fd_mm.write(template % (i))
 
     def generate_argument_opaque(self, i, arg_js_type, arg_declared_type):
         template = '\tok &= jsval_to_opaque( cx, *argvp++, (void**)&arg%d );\n'
-        self.mm_file.write(template % (i))
+        self.fd_mm.write(template % (i))
 
     def generate_argument_long(self, i, arg_js_type, arg_declared_type):
         template = '\tok &= jsval_to_long( cx, *argvp++, &arg%d );\n'
-        self.mm_file.write(template % (i))
+        self.fd_mm.write(template % (i))
 
     def generate_argument_longlong(self, i, arg_js_type, arg_declared_type):
         template = '\tok &= jsval_to_longlong( cx, *argvp++, &arg%d );\n'
-        self.mm_file.write(template % (i))
+        self.fd_mm.write(template % (i))
 
     def generate_arguments(self, args_declared_type, args_js_type, properties={}):
         # b      JSBool          Boolean
@@ -613,8 +599,8 @@ class JSBGenerate(object):
         }
 
         # First  time
-        self.mm_file.write('\tjsval *argvp = JS_ARGV(cx,vp);\n')
-        self.mm_file.write('\tJSBool ok = JS_TRUE;\n')
+        self.fd_mm.write('\tjsval *argvp = JS_ARGV(cx,vp);\n')
+        self.fd_mm.write('\tJSBool ok = JS_TRUE;\n')
 
         # Declare variables
         declared_vars = '\t'
@@ -630,7 +616,7 @@ class JSBGenerate(object):
             elif arg in js_special_type_conversions:
                 declared_vars += '%s arg%d;' % (js_special_type_conversions[arg][1], i)
             declared_vars += ' '
-        self.mm_file.write('%s\n\n' % declared_vars)
+        self.fd_mm.write('%s\n\n' % declared_vars)
 
         # Optional Arguments ?
         min_args = properties.get('min_args', None)
@@ -650,7 +636,7 @@ class JSBGenerate(object):
             for i, arg in enumerate(args_js_type):
 
                 if optional_args != None and i >= optional_args:
-                    self.mm_file.write('\tif (argc >= %d) {\n\t' % (i + 1))
+                    self.fd_mm.write('\tif (argc >= %d) {\n\t' % (i + 1))
 
                 if args_declared_type[i] in self.struct_opaque:
                     self.generate_argument_opaque(i, arg, args_declared_type[i])
@@ -660,16 +646,16 @@ class JSBGenerate(object):
                     self.generate_argument_struct_automatic(i, arg, args_declared_type[i])
                 elif arg in js_types_conversions:
                     t = js_types_conversions[arg]
-                    self.mm_file.write('\tok &= %s( cx, *argvp++, &arg%d );\n' % (t[1], i))
+                    self.fd_mm.write('\tok &= %s( cx, *argvp++, &arg%d );\n' % (t[1], i))
                 elif arg in js_special_type_conversions:
                     js_special_type_conversions[arg][0](i, arg, args_declared_type[i])
                 else:
                     raise ParseException('Unsupported argument type: %s' % arg)
 
                 if optional_args != None and i >= optional_args:
-                    self.mm_file.write('\t}\n')
+                    self.fd_mm.write('\t}\n')
 
-        self.mm_file.write('\tJSB_PRECONDITION(ok, "Error processing arguments");\n')
+        self.fd_mm.write('\tJSB_PRECONDITION(ok, "Error processing arguments");\n')
 
 
 #
@@ -681,13 +667,29 @@ class JSBGenerateClasses(JSBGenerate):
     def __init__(self, config):
         super(JSBGenerateClasses, self).__init__(config)
 
-        self.h_file = open('%s%s_classes.h' % (BINDINGS_PREFIX, self.namespace), 'w')
-        self.generate_class_header_prefix()
-        self.mm_file = open('%s%s_classes.mm' % (BINDINGS_PREFIX, self.namespace), 'w')
+        # Class specific
+        self.class_properties = config.class_properties
+        self.classes_to_bind = config.classes_to_bind
+        self.classes_to_ignore = config.classes_to_ignore
+        self.method_properties = config.method_properties
+        self.class_properties = config.class_properties
+        self.complement = config.complement
+        self.class_manual = config.class_manual
+        self.parsed_classes = config.parsed_classes
+        self.supported_classes = config.supported_classes
+        self._inherit_class_methods = config._inherit_class_methods
+        self.callback_methods = config.callback_methods
+        self.manual_methods = config.manual_methods
+        self.class_prefix = config.class_prefix
 
     #
     # BEGIN helper functions
     #
+    def create_files(self):
+        self.fd_h = open('%s%s_classes.h' % (BINDINGS_PREFIX, self.namespace), 'w')
+        self.generate_class_header_prefix()
+        self.fd_mm = open('%s%s_classes.mm' % (BINDINGS_PREFIX, self.namespace), 'w')
+
     def convert_class_name_to_js(self, class_name):
         # rename rule ?
         if class_name in self.class_properties and 'name' in self.class_properties[class_name]:
@@ -865,8 +867,8 @@ JSBool %s_constructor(JSContext *cx, uint32_t argc, jsval *vp)
 }
 '''
         proxy_class_name = '%s%s' % (PROXY_PREFIX, class_name)
-        self.mm_file.write(constructor_globals % (proxy_class_name, proxy_class_name))
-        self.mm_file.write(constructor_template % (proxy_class_name, proxy_class_name))
+        self.fd_mm.write(constructor_globals % (proxy_class_name, proxy_class_name))
+        self.fd_mm.write(constructor_template % (proxy_class_name, proxy_class_name))
 
     def generate_destructor(self, class_name):
         destructor_template = '''
@@ -882,7 +884,7 @@ void %s_finalize(JSFreeOp *fop, JSObject *obj)
 }
 '''
         proxy_class_name = '%s%s' % (PROXY_PREFIX, class_name)
-        self.mm_file.write(destructor_template % (proxy_class_name,
+        self.fd_mm.write(destructor_template % (proxy_class_name,
                                                     class_name))
 
     #
@@ -952,12 +954,12 @@ JSBool %s_%s%s(JSContext *cx, uint32_t argc, jsval *vp) {
 
         # method name
         class_method = '_static' if self.is_class_method(self.current_method) else ''
-        self.mm_file.write(template_methodname % (PROXY_PREFIX + class_name, converted_name, class_method))
+        self.fd_mm.write(template_methodname % (PROXY_PREFIX + class_name, converted_name, class_method))
 
         # method asserts for instance methods
         if method_type == METHOD_INIT or method_type == METHOD_REGULAR:
             assert_init = '!' if method_type == METHOD_INIT else ''
-            self.mm_file.write(template_init % assert_init)
+            self.fd_mm.write(template_init % assert_init)
 
         try:
             # Does it have optional arguments ?
@@ -974,14 +976,14 @@ JSBool %s_%s%s(JSContext *cx, uint32_t argc, jsval *vp) {
         except KeyError, e:
             # No, it only has required arguments
             method_assert_on_arguments = '\tJSB_PRECONDITION( argc == %d, "Invalid number of arguments" );\n' % num_of_args
-        self.mm_file.write(method_assert_on_arguments)
+        self.fd_mm.write(method_assert_on_arguments)
 
     def generate_method_suffix(self):
         end_template = '''
 	return JS_TRUE;
 }
 '''
-        self.mm_file.write(end_template)
+        self.fd_mm.write(end_template)
 
     def generate_method(self, class_name, method):
 
@@ -1012,7 +1014,7 @@ JSBool %s_%s%s(JSContext *cx, uint32_t argc, jsval *vp) {
         num_of_args = len(args_declared_type)
 
         # writes method description
-        self.mm_file.write('\n// Arguments: %s\n// Ret value: %s (%s)' % (', '.join(args_declared_type), ret_declared_type, ret_js_type))
+        self.fd_mm.write('\n// Arguments: %s\n// Ret value: %s (%s)' % (', '.join(args_declared_type), ret_declared_type, ret_js_type))
 
         self.generate_method_prefix(class_name, method, num_of_args, method_type)
 
@@ -1034,26 +1036,26 @@ JSBool %s_%s%s(JSContext *cx, uint32_t argc, jsval *vp) {
             self.generate_arguments(args_declared_type, args_js_type, properties)
 
         if ret_js_type:
-            self.mm_file.write('\t%s ret_val;\n' % (ret_declared_type))
+            self.fd_mm.write('\t%s ret_val;\n' % (ret_declared_type))
 
         if optional_args != None:
             else_str = ''
             for i in xrange(max_args + 1):
                 if i in properties['calls']:
                     call_real = self.generate_method_call_to_real_object(properties['calls'][i], i, ret_js_type, args_declared_type, args_js_type, class_name, method_type)
-                    self.mm_file.write('\n\t%sif( argc == %d ) {\n\t%s\n\t}' % (else_str, i, call_real))
+                    self.fd_mm.write('\n\t%sif( argc == %d ) {\n\t%s\n\t}' % (else_str, i, call_real))
                     else_str = 'else '
-            self.mm_file.write('\n\telse\n\t\tJSB_PRECONDITION(NO, "Error in number of arguments");\n\n')
+            self.fd_mm.write('\n\telse\n\t\tJSB_PRECONDITION(NO, "Error in number of arguments");\n\n')
 
         else:
             call_real = self.generate_method_call_to_real_object(s, num_of_args, ret_js_type, args_declared_type, args_js_type, class_name, method_type)
-            self.mm_file.write('\n%s\n' % call_real)
+            self.fd_mm.write('\n%s\n' % call_real)
 
         ret_string = self.generate_retval(ret_declared_type, ret_js_type, method)
         if not ret_string:
             raise ParseException('invalid return string')
 
-        self.mm_file.write(ret_string)
+        self.fd_mm.write(ret_string)
 
         self.generate_method_suffix()
 
@@ -1143,7 +1145,7 @@ JSBool %s_%s%s(JSContext *cx, uint32_t argc, jsval *vp) {
 
         if class_name in self.callback_methods:
 
-            self.mm_file.write(template_prefix % class_name)
+            self.fd_mm.write(template_prefix % class_name)
             for m in self.callback_methods[class_name]:
 
                 real_method = self.get_method(class_name, m)
@@ -1156,16 +1158,16 @@ JSBool %s_%s%s(JSContext *cx, uint32_t argc, jsval *vp) {
                 else:
                     swizzle_prefix = ''
                     call_native = ''
-                self.mm_file.write(template % (dt_ret_val, swizzle_prefix, fullargs,
+                self.fd_mm.write(template % (dt_ret_val, swizzle_prefix, fullargs,
                                                  call_native,
                                                  proxy_class_name,
                                                  args
                                                  ))
 
-            self.mm_file.write(template_suffix)
+            self.fd_mm.write(template_suffix)
 
     def generate_class_header_prefix(self):
-        self.generate_autogenerate_prefix(self.h_file)
+        self.generate_autogenerate_prefix(self.fd_h)
 
     def generate_class_header(self, class_name, parent_name):
         # JSPROXXY_CCNode
@@ -1200,7 +1202,7 @@ extern JSClass *%s_class;
 '''
         proxy_class_name = '%s%s' % (PROXY_PREFIX, class_name)
 
-        self.generate_pragma_mark(class_name, self.h_file)
+        self.generate_pragma_mark(class_name, self.fd_h)
 
         manual = ''
         if class_name in self.manual_methods:
@@ -1216,14 +1218,14 @@ extern JSClass *%s_class;
                 except MethodNotFoundException, e:
                     sys.stderr.write('WARN: Ignoring regular expression rule. Method not found: %s\n' % str(e))
 
-        self.h_file.write(header_template % (proxy_class_name,
+        self.fd_h.write(header_template % (proxy_class_name,
                                                 manual,
                                                 proxy_class_name,
                                                 proxy_class_name,
                                                 proxy_class_name, PROXY_PREFIX + parent_name
                                                 ))
         # callback code should be added here
-        self.h_file.write(header_template_end)
+        self.fd_h.write(header_template_end)
 
     def generate_callback_args(self, method):
         no_args = 'jsval *argv = NULL; unsigned argc=0;\n'
@@ -1295,7 +1297,7 @@ extern JSClass *%s_class;
                 converted_args = self.generate_callback_args(method)
 
                 js_name = self.convert_selector_name_to_js(class_name, m)
-                self.mm_file.write(template % (dt_retval, full_args,
+                self.fd_mm.write(template % (dt_retval, full_args,
                                                 js_name,
                                                 converted_args,
                                                 js_name))
@@ -1324,13 +1326,13 @@ extern JSClass *%s_class;
 }
 '''
         if class_name in self.callback_methods:
-            self.mm_file.write(template_prefix % (class_name, class_name))
+            self.fd_mm.write(template_prefix % (class_name, class_name))
             for m in self.callback_methods[class_name]:
 
                 if not self.get_method_property(class_name, m, 'no_swizzle'):
-                    self.mm_file.write(template_middle % (class_name, m, m))
+                    self.fd_mm.write(template_middle % (class_name, m, m))
 
-            self.mm_file.write(template_suffix % (class_name))
+            self.fd_mm.write(template_suffix % (class_name))
 
     def generate_implementation(self, class_name):
         create_object_template_prefix = '''
@@ -1354,21 +1356,21 @@ extern JSClass *%s_class;
 '''
         proxy_class_name = '%s%s' % (PROXY_PREFIX, class_name)
 
-        self.mm_file.write('\n@implementation %s\n' % proxy_class_name)
+        self.fd_mm.write('\n@implementation %s\n' % proxy_class_name)
 
-        self.mm_file.write(create_object_template_prefix % (proxy_class_name, proxy_class_name,
+        self.fd_mm.write(create_object_template_prefix % (proxy_class_name, proxy_class_name,
                                                              proxy_class_name, proxy_class_name,
                                                              class_name
                                                              ))
 
-        self.mm_file.write(create_object_template_suffix)
+        self.fd_mm.write(create_object_template_suffix)
 
         if self.requires_swizzle(class_name):
             self.generate_implementation_swizzle(class_name)
 
         self.generate_implementation_callback(class_name)
 
-        self.mm_file.write('\n@end\n')
+        self.fd_mm.write('\n@end\n')
 
     def generate_createClass_function(self, class_name, parent_name, ok_methods):
         # 1-12: JSB_CCNode
@@ -1413,7 +1415,7 @@ void %s_createClass(JSContext *cx, JSObject* globalObj, const char* name )
         reserved_slots = self.get_class_property('reserved_slots', class_name)
         flags = "JSCLASS_HAS_RESERVED_SLOTS(%s)" % reserved_slots if reserved_slots != None else "0"
 
-        self.mm_file.write(implementation_template % (proxy_class_name,
+        self.fd_mm.write(implementation_template % (proxy_class_name,
                                                         proxy_class_name, proxy_class_name, proxy_class_name,
                                                         proxy_class_name, proxy_class_name, proxy_class_name,
                                                         proxy_class_name, proxy_class_name, proxy_class_name,
@@ -1421,7 +1423,7 @@ void %s_createClass(JSContext *cx, JSObject* globalObj, const char* name )
                                                         flags,
                                                         ))
 
-        self.mm_file.write(properties_template)
+        self.fd_mm.write(properties_template)
 
         js_fn = '\t\tJS_FN("%s", %s, %d, JSPROP_PERMANENT | JSPROP_SHARED %s),\n'
 
@@ -1447,16 +1449,16 @@ void %s_createClass(JSContext *cx, JSObject* globalObj, const char* name )
                 instance_method_buffer += entry
 
         # instance methods entry point
-        self.mm_file.write(functions_template_start)
-        self.mm_file.write(instance_method_buffer)
-        self.mm_file.write(functions_template_end)
+        self.fd_mm.write(functions_template_start)
+        self.fd_mm.write(instance_method_buffer)
+        self.fd_mm.write(functions_template_end)
 
         # class methods entry point
-        self.mm_file.write(static_functions_template_start)
-        self.mm_file.write(class_method_buffer)
-        self.mm_file.write(static_functions_template_end)
+        self.fd_mm.write(static_functions_template_start)
+        self.fd_mm.write(class_method_buffer)
+        self.fd_mm.write(static_functions_template_end)
 
-        self.mm_file.write(init_class_template % (proxy_class_name, proxy_parent_name, proxy_class_name, proxy_class_name))
+        self.fd_mm.write(init_class_template % (proxy_class_name, proxy_parent_name, proxy_class_name, proxy_class_name))
 
     def generate_class_mm_prefix(self):
         import_template = '''
@@ -1471,11 +1473,11 @@ void %s_createClass(JSContext *cx, JSObject* globalObj, const char* name )
 #import "%s%s_classes.h"
 
 '''
-        self.generate_autogenerate_prefix(self.mm_file)
-        self.mm_file.write(import_template % (BINDINGS_PREFIX, self.namespace))
+        self.generate_autogenerate_prefix(self.fd_mm)
+        self.fd_mm.write(import_template % (BINDINGS_PREFIX, self.namespace))
 
     def generate_class_mm(self, klass, class_name, parent_name):
-        self.generate_pragma_mark(class_name, self.mm_file)
+        self.generate_pragma_mark(class_name, self.fd_mm)
         self.generate_constructor(class_name)
         self.generate_destructor(class_name)
 
@@ -1542,19 +1544,22 @@ void %s_createClass(JSContext *cx, JSObject* globalObj, const char* name )
         self.class_registration_file.close()
 
     def generate_bindings(self):
+        '''Main entry point. Generates the JS bindigns'''
+        self.create_files()
         self.generate_class_mm_prefix()
 
         for klass in self.classes_to_bind:
             if not klass in self.class_manual:
                 self.generate_class_binding(klass)
 
-        self.generate_autogenerate_suffix(self.h_file)
-        self.generate_autogenerate_suffix(self.mm_file)
+        self.generate_autogenerate_suffix(self.fd_h)
+        self.generate_autogenerate_suffix(self.fd_mm)
 
-        self.h_file.close()
-        self.mm_file.close()
+        self.fd_h.close()
+        self.fd_mm.close()
 
         self.generate_classes_registration()
+
 
 #
 #
@@ -1564,14 +1569,16 @@ void %s_createClass(JSContext *cx, JSObject* globalObj, const char* name )
 class JSBGenerateFunctions(JSBGenerate):
     def __init__(self, config):
         super(JSBGenerateFunctions, self).__init__(config)
-        self.h_file = open('%s%s_functions.h' % (BINDINGS_PREFIX, self.namespace), 'w')
-        self.generate_function_header_prefix()
-        self.mm_file = open('%s%s_functions.mm' % (BINDINGS_PREFIX, self.namespace), 'w')
-        self.generate_function_mm_prefix()
 
     #
     # BEGIN helper functions
     #
+    def create_files(self):
+        self.fd_h = open('%s%s_functions.h' % (BINDINGS_PREFIX, self.namespace), 'w')
+        self.generate_function_header_prefix()
+        self.fd_mm = open('%s%s_functions.mm' % (BINDINGS_PREFIX, self.namespace), 'w')
+        self.generate_function_mm_prefix()
+
     def get_function_property(self, func_name, property):
         try:
             return self.function_properties[func_name][property]
@@ -1601,29 +1608,29 @@ class JSBGenerateFunctions(JSBGenerate):
 #import "js_bindings_basic_conversions.h"
 #import "%s%s_functions.h"
 '''
-        self.generate_autogenerate_prefix(self.mm_file)
-        self.mm_file.write(import_template % (BINDINGS_PREFIX, self.namespace))
+        self.generate_autogenerate_prefix(self.fd_mm)
+        self.fd_mm.write(import_template % (BINDINGS_PREFIX, self.namespace))
 
     def generate_function_header_prefix(self):
-        self.generate_autogenerate_prefix(self.h_file)
-        self.h_file.write('''
+        self.generate_autogenerate_prefix(self.fd_h)
+        self.fd_h.write('''
 #ifdef __cplusplus
 extern "C" {
 #endif
 ''')
 
     def generate_function_header_suffix(self):
-        self.h_file.write('''
+        self.fd_h.write('''
 #ifdef __cplusplus
 }
 #endif
 ''')
-        self.generate_autogenerate_suffix(self.h_file)
+        self.generate_autogenerate_suffix(self.fd_h)
 
     def generate_function_declaration(self, func_name):
         # JSB_ccDrawPoint
         template_funcname = 'JSBool %s%s(JSContext *cx, uint32_t argc, jsval *vp);\n'
-        self.h_file.write(template_funcname % (PROXY_PREFIX, func_name))
+        self.fd_h.write(template_funcname % (PROXY_PREFIX, func_name))
 
     def generate_function_call_to_real_object(self, func_name, num_of_args, ret_js_type, args_declared_type):
         if ret_js_type:
@@ -1648,17 +1655,17 @@ extern "C" {
         template_funcname = '''
 JSBool %s%s(JSContext *cx, uint32_t argc, jsval *vp) {
 '''
-        self.mm_file.write(template_funcname % (PROXY_PREFIX, func_name))
+        self.fd_mm.write(template_funcname % (PROXY_PREFIX, func_name))
 
         # Number of arguments
-        self.mm_file.write('\tJSB_PRECONDITION( argc == %d, "Invalid number of arguments" );\n' % num_of_args)
+        self.fd_mm.write('\tJSB_PRECONDITION( argc == %d, "Invalid number of arguments" );\n' % num_of_args)
 
     def generate_function_suffix(self):
         end_template = '''
 	return JS_TRUE;
 }
 '''
-        self.mm_file.write(end_template)
+        self.fd_mm.write(end_template)
 
     def generate_function_binding(self, function):
         func_name = function['name']
@@ -1673,7 +1680,7 @@ JSBool %s%s(JSContext *cx, uint32_t argc, jsval *vp) {
         num_of_args = len(args_declared_type)
 
         # writes method description
-        self.mm_file.write('\n// Arguments: %s\n// Ret value: %s' % (', '.join(args_declared_type), ret_declared_type))
+        self.fd_mm.write('\n// Arguments: %s\n// Ret value: %s' % (', '.join(args_declared_type), ret_declared_type))
 
         self.generate_function_prefix(func_name, num_of_args)
 
@@ -1681,16 +1688,16 @@ JSBool %s%s(JSContext *cx, uint32_t argc, jsval *vp) {
             self.generate_arguments(args_declared_type, args_js_type)
 
         if ret_js_type:
-            self.mm_file.write('\t%s ret_val;\n' % ret_declared_type)
+            self.fd_mm.write('\t%s ret_val;\n' % ret_declared_type)
 
         call_real = self.generate_function_call_to_real_object(func_name, num_of_args, ret_js_type, args_declared_type)
-        self.mm_file.write('\n%s\n' % call_real)
+        self.fd_mm.write('\n%s\n' % call_real)
 
         ret_string = self.generate_retval(ret_declared_type, ret_js_type)
         if not ret_string:
             raise ParseException('invalid return string')
 
-        self.mm_file.write(ret_string)
+        self.fd_mm.write(ret_string)
 
         self.generate_function_suffix()
 
@@ -1727,6 +1734,9 @@ JSBool %s%s(JSContext *cx, uint32_t argc, jsval *vp) {
     #
     def generate_bindings(self):
         '''Main entry point to generate the JS Bindings for the C functions'''
+
+        self.create_files()
+
         functions = self.bs['signatures']['function']
 
         for f in functions:
@@ -1739,10 +1749,10 @@ JSBool %s%s(JSContext *cx, uint32_t argc, jsval *vp) {
                     sys.stderr.write('NOT OK: "%s" Error: %s\n' % (f['name'], str(e)))
 
         self.generate_function_header_suffix()
-        self.h_file.close()
+        self.fd_h.close()
 
-        self.generate_autogenerate_suffix(self.mm_file)
-        self.mm_file.close()
+        self.generate_autogenerate_suffix(self.fd_mm)
+        self.fd_mm.close()
 
         self.generate_functions_registration()
 
@@ -1752,19 +1762,21 @@ JSBool %s%s(JSContext *cx, uint32_t argc, jsval *vp) {
 # Generates Object Oriented Code from C functions
 #
 #
-class JSBGenerateCOO(JSBGenerate):
+class JSBGenerateOOFunctions(JSBGenerateFunctions):
     '''Class that generate Object Oriented JS Bindings after C API'''
     def __init__(self, config):
-        super(JSBGenerateCOO, self).__init__(config)
+        super(JSBGenerateOOFunctions, self).__init__(config)
         self.bs_funcs = config.bs['signatures']['function']
         self.c_object_properties = config.c_object_properties
-        # self.fd_h = open('%s%s_auto_classes.h' % (BINDINGS_PREFIX, self.namespace), 'w')
-        self.fd_mm = open('%s%s_auto_classes.mm' % (BINDINGS_PREFIX, self.namespace), 'w')
-        # self.fd_registration = open('%s%s_auto_classes_registration.h' % (BINDINGS_PREFIX, self.namespace), 'w')
 
     #
     # BEGIN of Helper functions
     #
+    def create_files(self):
+        # self.fd_h = open('%s%s_auto_classes.h' % (BINDINGS_PREFIX, self.namespace), 'w')
+        self.fd_mm = open('%s%s_auto_classes.mm' % (BINDINGS_PREFIX, self.namespace), 'w')
+        # self.fd_registration = open('%s%s_auto_classes_registration.h' % (BINDINGS_PREFIX, self.namespace), 'w')
+
     def get_base_class(self, klass_name):
         '''returns the base class of a given class name'''
         base_class = self.c_object_properties.get('base_class', {None: None})
@@ -1777,7 +1789,7 @@ class JSBGenerateCOO(JSBGenerate):
                     return base_class
                 return classes[k]
 
-    def sort_oo_functions(self):
+    def sort_oo_classes(self):
         """returns a list of the OO function-classes to parse. Inheritance is taken into account. Base classes are returned first. Only supports 1 level of inheritance"""
 
         tree = {}
@@ -1799,9 +1811,24 @@ class JSBGenerateCOO(JSBGenerate):
                     l.append(kk)
         return l
 
+    def get_oof_name(self, klass_name, func_name):
+        '''returns an Object Oriented Function name after a function name'''
+        func_name = func_name[len(klass_name):]
+        func_name = uncapitalize(func_name)
+        return '%s_%s' % (klass_name, func_name)
     #
     # END of Helper functions
     #
+
+    def generate_function_prefix(self, func_name, num_of_args):
+        super(JSBGenerateOOFunctions, self).generate_function_prefix(func_name, num_of_args)
+        template = '''
+    JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
+    %s* arg0 = (%s*) JS_GetPrivate(jsthis);
+    JSB_PRECONDITION(arg0, "Invalid handle");
+'''
+        self.fd_mm.write(template % (self.current_class_name, self.current_class_name))
+
     def generate_implementation_prefix(self):
         pass
 
@@ -1862,8 +1889,60 @@ void %s_finalize(JSFreeOp *fop, JSObject *obj)
                                     klass_name, 'Free', klass_name
                                     ))
 
+    def generate_implementation_class_method(self, klass_name, function):
+        func_name = function['name']
+        jsb_func_name = self.get_oof_name(klass_name, func_name)
+
+        # Don't generate functions that are defined as callbacks
+        if func_name in self.callback_functions:
+            raise ParseException('Function defined as callback. Ignoring %s' % func_name)
+
+        args_js_type, args_declared_type = self.validate_arguments(function)
+        ret_js_type, ret_declared_type = self.validate_retval(function)
+
+        num_of_args = len(args_declared_type)
+
+        # writes method description
+        self.fd_mm.write('\n// Arguments: %s\n// Ret value: %s' % (', '.join(args_declared_type), ret_declared_type))
+
+        self.generate_function_prefix(jsb_func_name, max(0, num_of_args - 1))
+
+        if len(args_js_type) > 1:
+            self.generate_arguments(args_declared_type, args_js_type)
+
+        if ret_js_type:
+            self.fd_mm.write('\t%s ret_val;\n' % ret_declared_type)
+
+        call_real = self.generate_function_call_to_real_object(func_name, num_of_args, ret_js_type, args_declared_type)
+        self.fd_mm.write('\n%s\n' % call_real)
+
+        ret_string = self.generate_retval(ret_declared_type, ret_js_type)
+        if not ret_string:
+            raise ParseException('invalid return string')
+
+        self.fd_mm.write(ret_string)
+
+        self.generate_function_suffix()
+
+        return True
+
     def generate_implementation_class_methods(self, klass_name):
-        pass
+        generated_methods = []
+        for func in self.bs_funcs:
+            name = func['name']
+            if name.startswith(klass_name):
+                # XXX: this works in chipmunk because the "classes" has the 'baseclass' at the end:
+                #   cpCircleShape (OK)
+                # But it won't work in this case:
+                #   cpShapeCircle  (Won't work).
+                # XXX: Script needs to be improved
+                try:
+                    self.generate_implementation_class_method(klass_name, func)
+                    generated_methods = func
+                except ParseException, e:
+                    sys.stderr.write('NOT OK: "%s" Error: %s\n' % (name, str(e)))
+
+        return generated_methods
 
     def generate_implementation_class_jsb(self, klass_name):
         template_0 = '''
@@ -1937,13 +2016,15 @@ void %s_createClass(JSContext *cx, JSObject* globalObj, const char* name )
     def generate_implementation(self):
         self.generate_implementation_prefix()
 
-        klasses = self.sort_oo_functions()
+        klasses = self.sort_oo_classes()
         for klass_name in klasses:
+            self.current_class_name = klass_name
             self.generate_implementation_class(klass_name)
 
         self.generate_implementation_suffix()
 
     def generate_bindings(self):
+        self.create_files()
         self.generate_implementation()
 
 
@@ -2450,7 +2531,7 @@ class JSBindings(object):
         # Object Oriented C code
         #
         if len(self.c_object_properties) > 0:
-            coo = JSBGenerateCOO(self)
+            coo = JSBGenerateOOFunctions(self)
             coo.generate_bindings()
 
 
