@@ -1592,7 +1592,6 @@ class JSBGenerateFunctions(JSBGenerate):
         self.fd_h = open('%s%s_functions.h' % (BINDINGS_PREFIX, self.namespace), 'w')
         self.generate_function_header_prefix()
         self.fd_mm = open('%s%s_functions.mm' % (BINDINGS_PREFIX, self.namespace), 'w')
-        self.generate_function_mm_prefix()
 
     def get_function_property(self, func_name, property):
         try:
@@ -1752,6 +1751,8 @@ JSBool %s%s(JSContext *cx, uint32_t argc, jsval *vp) {
 
         self.create_files()
 
+        self.generate_function_mm_prefix()
+
         functions = self.bs['signatures']['function']
 
         for f in functions:
@@ -1845,7 +1846,8 @@ class JSBGenerateOOFunctions(JSBGenerateFunctions):
         self.fd_mm.write(template % (self.current_class_name, self.current_class_name))
 
     def generate_implementation_prefix(self):
-        pass
+        '''Generates include files'''
+        self.generate_function_mm_prefix()
 
     def generate_implementation_suffix(self):
         pass
@@ -1872,18 +1874,24 @@ JSObject* %s_object = NULL;
 JSBool %s_constructor(JSContext *cx, uint32_t argc, jsval *vp)
 {
 	JSObject *jsobj = JS_NewObject(cx, JSB_%s_class, JSB_%s_object, NULL);
-	cpSpace *handle = %s%s();
+	cpSpace *handle = %s();
 	JS_SetPrivate(jsobj, handle);
 
 	JS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(jsobj));
 	return JS_TRUE;
 }
 '''
+        constructor_suffix = self.c_object_properties['constructor_suffix'].keys()[0]
         name = '%s%s' % (PROXY_PREFIX, klass_name)
-        self.fd_mm.write(template % (name,
-                                    klass_name, klass_name,
-                                    klass_name, 'New',
-                                    ))
+        func_name = '%s%s' % (klass_name, constructor_suffix)
+
+        if not func_name in self.functions_to_bind:
+            self.fd_mm.write('// Constructor not available ( %s )' % func_name)
+        else:
+            self.fd_mm.write(template % (name,
+                                        klass_name, klass_name,
+                                        func_name,
+                                        ))
 
     def generate_implementation_class_destructor(self, klass_name):
         template = '''
@@ -1894,15 +1902,20 @@ void %s_finalize(JSFreeOp *fop, JSObject *obj)
 	void *handle = JS_GetPrivate(obj);
 	NSCAssert( handle, @"Invalid handle for %s");
 
-	%s%s( (%s*)handle);
+	%s( (%s*)handle);
 }
 '''
+        destructor_suffix = self.c_object_properties['destructor_suffix'].keys()[0]
         name = '%s%s' % (PROXY_PREFIX, klass_name)
-        self.fd_mm.write(template % (name,
-                                    klass_name,
-                                    klass_name,
-                                    klass_name, 'Free', klass_name
-                                    ))
+        func_name = '%s%s' % (klass_name, destructor_suffix)
+        if not func_name in self.functions_to_bind:
+            self.fd_mm.write('// Destructor not available ( %s )' % func_name)
+        else:
+            self.fd_mm.write(template % (name,
+                                        klass_name,
+                                        klass_name,
+                                        func_name, klass_name
+                                        ))
 
     def generate_implementation_class_method(self, klass_name, function):
         func_name = function['name']
@@ -1946,7 +1959,7 @@ void %s_finalize(JSFreeOp *fop, JSObject *obj)
         generated_methods = []
         for func in self.bs_funcs:
             name = func['name']
-            if name.startswith(klass_name):
+            if name.startswith(klass_name) and name in self.functions_to_bind:
                 # XXX: this works in chipmunk because the "classes" has the 'baseclass' at the end:
                 #   cpCircleShape (OK)
                 # But it won't work in this case:
