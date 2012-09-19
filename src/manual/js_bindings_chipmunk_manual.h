@@ -32,6 +32,7 @@
 #include "chipmunk.h"
 #include "jsapi.h"
 
+// Free Functions
 JSBool JSB_cpSpaceAddCollisionHandler(JSContext *cx, uint32_t argc, jsval *vp);
 JSBool JSB_cpSpaceRemoveCollisionHandler(JSContext *cx, uint32_t argc, jsval *vp);
 
@@ -40,6 +41,16 @@ JSBool JSB_cpArbiterGetShapes(JSContext *cx, uint32_t argc, jsval *vp);
 
 JSBool JSB_cpBodyGetUserData(JSContext *cx, uint32_t argc, jsval *vp);
 JSBool JSB_cpBodySetUserData(JSContext *cx, uint32_t argc, jsval *vp);
+
+// "Methods" from the OO API
+JSBool JSB_cpSpace_addCollisionHandler(JSContext *cx, uint32_t argc, jsval *vp);
+JSBool JSB_cpSpace_removeCollisionHandler(JSContext *cx, uint32_t argc, jsval *vp);
+
+JSBool JSB_cpArbiter_getBodies(JSContext *cx, uint32_t argc, jsval *vp);
+JSBool JSB_cpArbiter_getShapes(JSContext *cx, uint32_t argc, jsval *vp);
+
+JSBool JSB_cpBody_getUserData(JSContext *cx, uint32_t argc, jsval *vp);
+JSBool JSB_cpBody_setUserData(JSContext *cx, uint32_t argc, jsval *vp);
 
 
 // convertions

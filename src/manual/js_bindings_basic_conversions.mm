@@ -338,6 +338,19 @@ JSBool jsval_to_opaque( JSContext *cx, jsval vp, void **r)
 	return JS_TRUE;
 }
 
+JSBool jsval_to_functionclass( JSContext *cx, jsval vp, void **r)
+{
+	JSObject *jsobj;
+	JSBool ok = JS_ValueToObject(cx, vp, &jsobj);
+	JSB_PRECONDITION(ok, "Error converting jsval to object");
+	
+	void *handle = JS_GetPrivate(jsobj);
+	JSB_PRECONDITION(handle, "Error obtaining private from object");
+	
+	*r = (void*)handle;
+	return JS_TRUE;
+}
+
 JSBool jsval_to_int( JSContext *cx, jsval vp, int *ret )
 {
 	// Since this is called to cast uint64 to uint32,
@@ -477,6 +490,12 @@ jsval opaque_to_jsval( JSContext *cx, void *opaque )
 	int32_t number = (int32_t) opaque;
 	return INT_TO_JSVAL(number);
 #endif
+}
+
+jsval functionclass_to_jsval( JSContext *cx, void* handle)
+{
+	NSCAssert(NO, @"Not implemented");
+	return JSVAL_VOID;
 }
 
 jsval int_to_jsval( JSContext *cx, int number )

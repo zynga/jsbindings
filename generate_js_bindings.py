@@ -91,13 +91,29 @@ class JSBGenerate(object):
         self.callback_functions = config.callback_functions
         self.struct_opaque = config.struct_opaque
         self.struct_manual = config.struct_manual
-        self.functions_bound = config.functions_bound
         self.function_properties = config.function_properties
         self.function_prefix = config.function_prefix
         self.function_classes = config.function_classes
 
+        # OO Functions
+        self.bs_funcs = config.bs['signatures']['function']
+        self.c_object_properties = config.c_object_properties
+        self.manual_bound_methods = config.manual_bound_methods
+
         # classes
         self.supported_classes = config.supported_classes
+        self.class_properties = config.class_properties
+        self.classes_to_bind = config.classes_to_bind
+        self.classes_to_ignore = config.classes_to_ignore
+        self.method_properties = config.method_properties
+        self.class_properties = config.class_properties
+        self.complement = config.complement
+        self.class_manual = config.class_manual
+        self.parsed_classes = config.parsed_classes
+        self._inherit_class_methods = config._inherit_class_methods
+        self.callback_methods = config.callback_methods
+        self.manual_methods = config.manual_methods
+        self.class_prefix = config.class_prefix
 
     #
     # BEGIN Helper functions
@@ -693,20 +709,6 @@ class JSBGenerate(object):
 class JSBGenerateClasses(JSBGenerate):
     def __init__(self, config):
         super(JSBGenerateClasses, self).__init__(config)
-
-        # Class specific
-        self.class_properties = config.class_properties
-        self.classes_to_bind = config.classes_to_bind
-        self.classes_to_ignore = config.classes_to_ignore
-        self.method_properties = config.method_properties
-        self.class_properties = config.class_properties
-        self.complement = config.complement
-        self.class_manual = config.class_manual
-        self.parsed_classes = config.parsed_classes
-        self._inherit_class_methods = config._inherit_class_methods
-        self.callback_methods = config.callback_methods
-        self.manual_methods = config.manual_methods
-        self.class_prefix = config.class_prefix
 
     #
     # BEGIN helper functions
@@ -1595,6 +1597,7 @@ void %s_createClass(JSContext *cx, JSObject* globalObj, const char* name )
 class JSBGenerateFunctions(JSBGenerate):
     def __init__(self, config):
         super(JSBGenerateFunctions, self).__init__(config)
+        self.functions_bound = []
 
     #
     # BEGIN helper functions
@@ -1793,8 +1796,9 @@ class JSBGenerateOOFunctions(JSBGenerateFunctions):
     '''Class that generate Object Oriented JS Bindings after C API'''
     def __init__(self, config):
         super(JSBGenerateOOFunctions, self).__init__(config)
-        self.bs_funcs = config.bs['signatures']['function']
-        self.c_object_properties = config.c_object_properties
+
+        # "methods" that were successfully bound to the "classes"
+        self.bound_methods = {}
 
     #
     # BEGIN of Helper functions
@@ -1825,6 +1829,10 @@ class JSBGenerateOOFunctions(JSBGenerateFunctions):
         # Only methods
         return True
 
+    def is_manually_bound_oo_function(self, klass_name, func_name):
+        '''returns whether or not the method is manually bound'''
+        return (klass_name in self.manual_bound_methods) and (func_name in self.manual_bound_methods[klass_name])
+
     def create_files(self):
         # self.fd_h = open('%s%s_auto_classes.h' % (BINDINGS_PREFIX, self.namespace), 'w')
         self.fd_mm = open('%s%s_auto_classes.mm' % (BINDINGS_PREFIX, self.namespace), 'w')
@@ -1835,20 +1843,33 @@ class JSBGenerateOOFunctions(JSBGenerateFunctions):
         base_class = self.c_object_properties.get('base_class', {None: None})
         base_class = base_class.keys()[0]
 
-        classes = self.c_object_properties['function_prefix']
+        classes = self.c_object_properties['classes']
         for k in classes:
             if k == klass_name:
                 if classes[k] == None:
                     return base_class
                 return classes[k]
 
+    def get_name_for_oof(self, klass_name, func):
+        '''returns the JS function name, the native function name and the number of args'''
+        name = func['name']
+        js_name = name[len(klass_name):]
+        js_name = uncapitalize(js_name)
+
+        native_name = '%s%s_%s' % (PROXY_PREFIX, klass_name, js_name)
+
+        args = self.get_number_of_arguments(func)
+        args = max(0, args - 1)
+
+        return js_name, native_name, args
+
     def sort_oo_classes(self):
         """returns a list of the OO function-classes to parse. Inheritance is taken into account. Base classes are returned first. Only supports 1 level of inheritance"""
 
         tree = {}
         l = []
-        for k in self.c_object_properties['function_prefix']:
-            v = self.c_object_properties['function_prefix'][k]
+        for k in self.c_object_properties['classes']:
+            v = self.c_object_properties['classes'][k]
 
             if not v in tree:
                 tree[v] = []
@@ -2035,10 +2056,12 @@ void %s_finalize(JSFreeOp *fop, JSObject *obj)
         return True
 
     def generate_implementation_class_methods(self, klass_name):
-        generated_methods = []
+        '''Generates the bindings for all the "methods"'''
+
+        self.bound_methods[klass_name] = []
         for func in self.bs_funcs:
             name = func['name']
-            if self.is_valid_oo_function(klass_name, name):
+            if self.is_valid_oo_function(klass_name, name) and not self.is_manually_bound_oo_function(klass_name, name):
                 # XXX: this works in chipmunk because the "classes" has the 'baseclass' at the end:
                 #   cpCircleShape (OK)
                 # But it won't work in this case:
@@ -2046,11 +2069,9 @@ void %s_finalize(JSFreeOp *fop, JSObject *obj)
                 # XXX: Script needs to be improved
                 try:
                     self.generate_implementation_class_method(klass_name, func)
-                    generated_methods = func
+                    self.bound_methods[klass_name].append(func)
                 except ParseException, e:
                     sys.stderr.write('NOT OK: "%s" Error: %s\n' % (name, str(e)))
-
-        return generated_methods
 
     def generate_implementation_class_jsb(self, klass_name):
         template_0 = '''
@@ -2089,12 +2110,23 @@ void %s_createClass(JSContext *cx, JSObject* globalObj, const char* name )
 '''
         self.fd_mm.write(template_propertes)
 
-        template_funcs = '''
-\tstatic JSFunctionSpec funcs[] = {
-\t\tJS_FS_END
-\t};
-'''
-        self.fd_mm.write(template_funcs)
+        template_funcs_pre = '\tstatic JSFunctionSpec funcs[] = {\n'
+        template_funcs_body = '\t\tJS_FN("%s", %s, %d, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),\n'
+        template_funcs_post = '\t\tJS_FS_END\n\t};'
+
+        self.fd_mm.write(template_funcs_pre)
+        for f in self.bound_methods[klass_name]:
+            js_fn_name, native_fn_name, args = self.get_name_for_oof(klass_name, f)
+            self.fd_mm.write(template_funcs_body % (js_fn_name, native_fn_name, args))
+
+        # Manually bound methods too
+        if klass_name in self.manual_bound_methods:
+            for func_name in self.manual_bound_methods[klass_name]:
+                f = self.get_function(func_name)
+                js_fn_name, native_fn_name, args = self.get_name_for_oof(klass_name, f)
+                self.fd_mm.write(template_funcs_body % (js_fn_name, native_fn_name, args))
+
+        self.fd_mm.write(template_funcs_post)
 
         template_st_funcs = '''
 \tstatic JSFunctionSpec st_funcs[] = {
@@ -2458,7 +2490,6 @@ class JSBindings(object):
             self.functions_to_bind = self.expand_regexp_names(self._functions_to_bind, ref_list)
         else:
             self.functions_to_bind = []
-        self.functions_bound = []
 
     def init_functions_to_ignore(self, klasses):
         self._functions_to_ignore = klasses
@@ -2494,10 +2525,30 @@ class JSBindings(object):
                 opts[o_key] = o_val
             self.c_object_properties[key] = opts
 
+        # "Classes"
         self.function_classes = []
-        d = self.c_object_properties.get('function_prefix', [])
+        d = self.c_object_properties.get('classes', [])
         for k in d:
             self.function_classes.append(k + '*')
+
+        # Manual bound "methods"
+        self.manual_bound_methods = {}
+        d = self.c_object_properties.get('manual_bound_methods', [])
+        for k in d:
+            class_name = ''
+            found = False
+            for klass in self.function_classes:
+                # remove the '*' from the class
+                class_name = klass[:-1]
+                if k.startswith(class_name):
+                    found = True
+                    break
+
+            if not found:
+                raise Exception("Error generating manual bound method: %s" % k)
+            if not class_name in self.manual_bound_methods:
+                self.manual_bound_methods[class_name] = []
+            self.manual_bound_methods[class_name].append(k)
 
     def init_class_properties(self, properties):
         ref_list = []
