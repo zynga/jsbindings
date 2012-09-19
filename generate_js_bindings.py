@@ -8,7 +8,7 @@
 # License: MIT
 # ----------------------------------------------------------------------------
 '''
-Generates Javasscript Bindings glue code after C / Objective-C code
+Generates JavaScript Bindings glue code after C / Objective-C code
 '''
 
 __docformat__ = 'restructuredtext'
@@ -46,7 +46,7 @@ class ParseOKException(Exception):
 BINDINGS_PREFIX = 'js_bindings_'
 PROXY_PREFIX = 'JSB_'
 METHOD_CONSTRUCTOR, METHOD_CLASS, METHOD_INIT, METHOD_REGULAR = xrange(4)
-JSB_VERSION = 'v0.2'
+JSB_VERSION = 'v0.3'
 
 
 # uncapitalize from: http://stackoverflow.com/a/3847369
@@ -70,727 +70,69 @@ def xml2d(e):
     return {e.tag: _xml2d(e)}
 
 
-# Generates Object Oriented Code from a C function
-class JSBGenerateCOO(object):
-    def __init__(self, functions, c_object_properties, namespace):
-        self.namespace = namespace
-        self.bs_funcs = functions
-        self.c_object_properties = c_object_properties
-        # self.fd_h = open('%s%s_auto_classes.h' % (BINDINGS_PREFIX, self.namespace), 'w')
-        self.fd_mm = open('%s%s_auto_classes.mm' % (BINDINGS_PREFIX, self.namespace), 'w')
-        # self.fd_registration = open('%s%s_auto_classes_registration.h' % (BINDINGS_PREFIX, self.namespace), 'w')
+class JSBGenerate(object):
 
+    def __init__(self, config):
+
+        #
+        # UGLY CODE
+        # XXX
+        self.config = config
+        self.namespace = config.namespace
+        self.bs = config.bs
+
+        # functions
+        self.struct_properties = config.struct_properties
+        self.import_files = config.import_files
+        self.functions_to_bind = config.functions_to_bind
+        self.callback_functions = config.callback_functions
+        self.struct_opaque = config.struct_opaque
+        self.struct_manual = config.struct_manual
+        self.functions_bound = config.functions_bound
+        self.function_properties = config.function_properties
+        self.function_prefix = config.function_prefix
+
+        # Class specific (should)
+        self.class_properties = config.class_properties
+        self.classes_to_bind = config.classes_to_bind
+        self.classes_to_ignore = config.classes_to_ignore
+        self.method_properties = config.method_properties
+        self.class_properties = config.class_properties
+        self.complement = config.complement
+        self.class_manual = config.class_manual
+        self.parsed_classes = config.parsed_classes
+        self.supported_classes = config.supported_classes
+        self._inherit_class_methods = config._inherit_class_methods
+        self.callback_methods = config.callback_methods
+        self.manual_methods = config.manual_methods
+        self.class_prefix = config.class_prefix
     #
-    # BEGIN of Helper functions
+    # BEGIN Helper functions
     #
-    def get_base_class(self, klass_name):
-        '''returns the base class of a given class name'''
-        base_class = self.c_object_properties.get('base_class', {None: None})
-        base_class = base_class.keys()[0]
-
-        classes = self.c_object_properties['function_prefix']
-        for k in classes:
-            if k == klass_name:
-                if classes[k] == None:
-                    return base_class
-                return classes[k]
-
-    def sort_oo_functions(self):
-        """returns a list of the OO function-classes to parse. Inheritance is taken into account. Base classes are returned first. Only supports 1 level of inheritance"""
-
-        tree = {}
-        l = []
-        for k in self.c_object_properties['function_prefix']:
-            v = self.c_object_properties['function_prefix'][k]
-
-            if not v in tree:
-                tree[v] = []
-            tree[v].append(k)
-
-        # Start for orphan
-        # XXX Only supports one level of inheritance. Good enough for Chipmunk
-        orphans = tree[None]
-        for k in orphans:
-            l.append(k)
-            if k in tree:
-                for kk in tree[k]:
-                    l.append(kk)
-        return l
-
-    #
-    # END of Helper functions
-    #
-    def generate_implementation_prefix(self):
-        pass
-
-    def generate_implementation_suffix(self):
-        pass
-
-    def generate_implementation_class_variables(self, klass_name):
-        template = '''
-/*
- * %s
- */
-#pragma mark - %s
-
-JSClass* %s_class = NULL;
-JSObject* %s_object = NULL;
-'''
-        name = '%s%s' % (PROXY_PREFIX, klass_name)
-        self.fd_mm.write(template % (klass_name,
-                                    klass_name,
-                                    name,
-                                    name))
-
-    def generate_implementation_class_constructor(self, klass_name):
-        template = '''
-// Constructor
-JSBool %s_constructor(JSContext *cx, uint32_t argc, jsval *vp)
-{
-    JSObject *jsobj = JS_NewObject(cx, JSB_%s_class, JSB_%s_object, NULL);
-    cpSpace *handle = %s%s();
-    JS_SetPrivate(jsobj, handle);
-
-    JS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(jsobj));
-    return JS_TRUE;
-}
-'''
-        name = '%s%s' % (PROXY_PREFIX, klass_name)
-        self.fd_mm.write(template % (name,
-                                    klass_name, klass_name,
-                                    klass_name, 'New',
-                                    ))
-
-    def generate_implementation_class_destructor(self, klass_name):
-        template = '''
-// Destructor
-void %s_finalize(JSFreeOp *fop, JSObject *obj)
-{
-    CCLOGINFO(@"jsbindings: finalizing JS object %%p (%s)", obj);
-    void *handle = JS_GetPrivate(obj);
-    NSCAssert( handle, @"Invalid handle for %s");
-
-    %s%s( (%s*)handle);
-}
-'''
-        name = '%s%s' % (PROXY_PREFIX, klass_name)
-        self.fd_mm.write(template % (name,
-                                    klass_name,
-                                    klass_name,
-                                    klass_name, 'Free', klass_name
-                                    ))
-
-    def generate_implementation_class_methods(self, klass_name):
-        pass
-
-    def generate_implementation_class_jsb(self, klass_name):
-        template_0 = '''
-void %s_createClass(JSContext *cx, JSObject* globalObj, const char* name )
-{
-    %s_class = (JSClass *)calloc(1, sizeof(JSClass));
-    %s_class->name = name;
-    %s_class->addProperty = JS_PropertyStub;
-    %s_class->delProperty = JS_PropertyStub;
-    %s_class->getProperty = JS_PropertyStub;
-    %s_class->setProperty = JS_StrictPropertyStub;
-    %s_class->enumerate = JS_EnumerateStub;
-    %s_class->resolve = JS_ResolveStub;
-    %s_class->convert = JS_ConvertStub;
-    %s_class->finalize = %s_finalize;
-    %s_class->flags = JSCLASS_HAS_PRIVATE;
-'''
-        name = '%s%s' % (PROXY_PREFIX, klass_name)
-        self.fd_mm.write(template_0 % (name,
-                                        name,
-                                        name,
-                                        name,
-                                        name,
-                                        name,
-                                        name,
-                                        name,
-                                        name,
-                                        name,
-                                        name, name,
-                                        name))
-
-        template_propertes = '''
-    static JSPropertySpec properties[] = {
-        {0, 0, 0, 0, 0}
-    };
-'''
-        self.fd_mm.write(template_propertes)
-
-        template_funcs = '''
-    static JSFunctionSpec funcs[] = {
-        JS_FS_END
-    };
-'''
-        self.fd_mm.write(template_funcs)
-
-        template_st_funcs = '''
-    static JSFunctionSpec st_funcs[] = {
-        JS_FS_END
-    };
-'''
-        self.fd_mm.write(template_st_funcs)
-
-        template_end = '''
-    JSB_cpSpace_object = JS_InitClass(cx, globalObj, %s, %s_class, %s_constructor,0,properties,funcs,NULL,st_funcs);
-}
-'''
-        parent = self.get_base_class(klass_name)
-        if parent == None:
-            parent = 'NULL'
-        else:
-            parent = '%s%s_object' % (PROXY_PREFIX, parent)
-        self.fd_mm.write(template_end % (parent, name, name))
-
-    def generate_implementation_class(self, klass_name):
-        self.generate_implementation_class_variables(klass_name)
-        self.generate_implementation_class_constructor(klass_name)
-        self.generate_implementation_class_destructor(klass_name)
-        self.generate_implementation_class_methods(klass_name)
-        self.generate_implementation_class_jsb(klass_name)
-
-    def generate_implementation(self):
-        self.generate_implementation_prefix()
-
-        klasses = self.sort_oo_functions()
-        for klass_name in klasses:
-            self.generate_implementation_class(klass_name)
-
-        self.generate_implementation_suffix()
-
-    def generate_bindings(self):
-        self.generate_implementation()
-
-
-# Main class for the Bindings
-# A bit bloated though
-class JSBindings(object):
-
-    @classmethod
-    def parse_config_file(cls, config_file):
-        cp = ConfigParser.ConfigParser()
-        cp.read(config_file)
-
-        supported_options = {'obj_class_prefix_to_remove': '',
-                             'classes_to_parse': [],
-                             'classes_to_ignore': [],
-                             'class_properties': [],
-                             'bridge_support_file': [],
-                             'complement_file': [],
-                             'inherit_class_methods': 'Auto',
-                             'functions_to_parse': [],
-                             'functions_to_ignore': [],
-                             'function_properties': [],
-                             'function_prefix_to_remove': '',
-                             'method_properties': [],
-                             'struct_properties': [],
-                             'objects_from_c_functions': [],
-                             'import_files': []
-                             }
-
-        for s in cp.sections():
-            config = copy.copy(supported_options)
-
-            # Section is the config namespace
-            config['namespace'] = s
-
-            for o in cp.options(s):
-                if not o in config:
-                    print 'Ignoring unrecognized option: %s' % o
-                    continue
-
-                t = type(config[o])
-                if t == type(True):
-                    v = cp.getboolean(s, o)
-                elif t == type(1):
-                    v = cp.getint(s, o)
-                elif t == type(''):
-                    v = cp.get(s, o)
-                elif t == type([]):
-                    v = cp.get(s, o)
-                    v = v.replace('\t', '')
-                    v = v.replace('\n', '')
-                    v = v.replace(' ', '')
-                    v = v.strip()
-                    v = v.split(',')
-                else:
-                    raise Exception('Unsupported type' % str(t))
-                config[o] = v
-
-            config_path = os.path.dirname(config_file)
-            sp = JSBindings(config, config_path)
-            sp.parse()
-
-    def __init__(self, config, config_path=''):
-
-        self.config_path = config_path
-        self.complement_files = config['complement_file']
-        self.init_complement_file()
-
-        self.bridgesupport_files = config['bridge_support_file']
-        self.init_bridgesupport_file()
-
-        self.namespace = config['namespace']
-
-        #
-        # Classes related
-        #
-        self.class_prefix = config['obj_class_prefix_to_remove']
-        self._inherit_class_methods = config['inherit_class_methods']
-        self.import_files = config['import_files']
-
-        # Add here manually generated classes
-        self.init_class_properties(config['class_properties'])
-        self.init_classes_to_bind(config['classes_to_parse'])
-        self.init_classes_to_ignore(config['classes_to_ignore'])
-
-        # In order to prevent parsing a class many times
-        self.parsed_classes = []
-
-        #
-        # Method related
-        #
-        self.init_method_properties(config['method_properties'])
-
-        self.init_callback_methods()
-        # Current method that is being parsed
-        self.current_method = None
-
-        #
-        # function related
-        #
-        self.function_prefix = config['function_prefix_to_remove']
-        self.init_functions_to_bind(config['functions_to_parse'])
-        self.init_functions_to_ignore(config['functions_to_ignore'])
-        self.init_function_properties(config['function_properties'])
-        self.init_objects_from_c_functions(config['objects_from_c_functions'])
-        self.current_function = None
-        self.callback_functions = []
-
-        #
-        # struct related
-        #
-        self.init_struct_properties(config['struct_properties'])
-
-    def init_complement_file(self):
-        self.complement = {}
-        for f in self.complement_files:
-            # empty string ??
-            if f:
-                fd = open(self.get_path_for(f))
-                self.complement.update(ast.literal_eval(fd.read()))
-                fd.close()
-
-    def init_bridgesupport_file(self):
-        self.bs = {}
-        self.bs['signatures'] = {}
-
-        for f in self.bridgesupport_files:
-            p = ET.parse(self.get_path_for(f))
-            root = p.getroot()
-            xml = xml2d(root)
-            for key in xml['signatures']:
-                # More than 1 file can be loaded
-                # So, older keys should not be overwritten
-                if not key in self.bs['signatures']:
-                    self.bs['signatures'][key] = xml['signatures'][key]
-                else:
-                    l = self.bs['signatures'][key]
-                    if type(l) == type([]):
-                        self.bs['signatures'][key].extend(xml['signatures'][key])
-
-    def init_callback_methods(self):
-        self.callback_methods = {}
-
-        for class_name in self.method_properties:
-            methods = self.method_properties[class_name]
-            for method in methods:
-                if 'callback' in self.method_properties[class_name][method]:
-                    if not class_name in self.callback_methods:
-                        self.callback_methods[class_name] = []
-                    self.callback_methods[class_name].append(method)
-
-    def process_method_properties(self, klass, method_name, props):
-
-        if not klass in self.method_properties:
-            self.method_properties[klass] = {}
-        if not method_name in self.method_properties[klass]:
-            self.method_properties[klass][method_name] = {}
-        self.method_properties[klass][method_name] = copy.copy(props)
-
-        # Process "merge"
-        if 'merge' in props:
-            lm = props['merge'].split('|')
-
-            # append self
-            lm.append(method_name)
-
-            methods = {}
-            # needed to obtain the selector with greater number of args
-            max_args = 0
-            # needed for optional_args_since
-            min_args = 1000
-
-            for m in lm:
-                m = m.strip()
-                args = m.count(':')
-                methods[args] = m
-                if args > max_args:
-                    max_args = args
-                if args < min_args:
-                    min_args = args
-
-                # Automatically add "ignore" in the method_properties, but not in "self"
-                if m != method_name:
-                    self.set_method_property(klass, m, 'ignore', True)
-
-            # Add max/min/calls rules
-            self.set_method_property(klass, method_name, 'calls', methods)
-            self.set_method_property(klass, method_name, 'min_args', min_args)
-            self.set_method_property(klass, method_name, 'max_args', max_args)
-
-            # safety check
-            if method_name.count(':') != max_args:
-                raise Exception("Merge methods should have less arguments that the main method. Check: %s # %s" % (klass, method_name))
-
-        if 'name' in props:
-            # If this name was previously used, the delete it. Only the newer one will be used
-            # this scenario can happen when defining a name using a regexp, and then change it with a single line
-            name = props['name']
-            for m in self.method_properties[klass]:
-                d = self.method_properties[klass][m]
-                old_name = d.get('name', None)
-                if m != method_name and old_name == name:
-                    del(d['name'])
-                    print 'Deleted duplicated from %s (old:%s)  (new:%s)' % (klass, m, method_name)
-
-        if 'manual' in props:
-            if not klass in self.manual_methods:
-                self.manual_methods[klass] = []
-            self.manual_methods[klass].append(method_name)
-
-    def init_method_properties(self, properties):
-        self.method_properties = {}
-        self.manual_methods = {}
-        for prop in properties:
-            # key value
-            try:
-                if not prop or len(prop) == 0:
-                    continue
-                key, value = prop.split('=')
-
-                # From Key get: Class # method
-                klass, method = key.split('#')
-                klass = klass.strip()
-                method = method.strip()
-
-                opts = {}
-                # From value get options
-                options = value.split(';')
-                for o in options:
-                    # Options can have their own Key Value
-                    if ':' in o:
-                        o = o.replace('"', '')
-                        o = o.replace("'", "")
-
-                        # o_value might also have some ':'
-                        # So, it should split by the first ':'
-                        o_list = o.split(':')
-                        o_key = o_list[0]
-                        o_val = ':'.join(o_list[1:])
-                    else:
-                        o_key = o
-                        o_val = True
-                    opts[o_key] = o_val
-
-                expanded_klasses = self.expand_regexp_names([klass], self.supported_classes)
-                for k in expanded_klasses:
-                    self.process_method_properties(k, method, opts)
-            except ValueError:
-                sys.stderr.write("\nERROR parsing line: %s\n\n" % (prop))
-                raise
-
-    def init_function_properties(self, properties):
-        self.function_properties = {}
-        self.struct_manual = []
-        for prop in properties:
-            # key value
-            if not prop or len(prop) == 0:
-                continue
-            key, value = prop.split('=')
-
-            opts = {}
-            # From value get options
-            options = value.split(';')
-            for o in options:
-                # Options can have their own Key Value
-                if ':' in o:
-                    o_key, o_val = o.split(':')
-                    o_val = o_val.replace('"', '')    # remove possible "
-                else:
-                    o_key = o
-                    o_val = None
-                opts[o_key] = o_val
-
-                if o_key == 'manual':
-                    self.function_manual.append(key)
-            self.function_properties[key] = opts
-
-    def init_struct_properties(self, properties):
-        self.struct_properties = {}
-        self.struct_opaque = []
-        self.struct_manual = []
-        for prop in properties:
-            # key value
-            if not prop or len(prop) == 0:
-                continue
-            key, value = prop.split('=')
-
-            opts = {}
-            # From value get options
-            options = value.split(';')
-            for o in options:
-                # Options can have their own Key Value
-                if ':' in o:
-                    o_key, o_val = o.split(':')
-                    o_val = o_val.replace('"', '')    # remove possible "
-                else:
-                    o_key = o
-                    o_val = None
-                opts[o_key] = o_val
-
-                # populate lists. easier to code
-                if o_key == 'opaque':
-                    # '*' is needed for opaque structs
-                    self.struct_opaque.append(key + '*')
-                elif o_key == 'manual':
-                    self.struct_manual.append(key)
-            self.struct_properties[key] = opts
-
-    def init_functions_to_bind(self, functions):
-        self._functions_to_bind = set(functions)
-        ref_list = []
-
-        if 'function' in self.bs['signatures']:
-            for k in self.bs['signatures']['function']:
-                ref_list.append(k['name'])
-            self.functions_to_bind = self.expand_regexp_names(self._functions_to_bind, ref_list)
-        else:
-            self.functions_to_bind = []
-        self.functions_bound = []
-
-    def init_functions_to_ignore(self, klasses):
-        self._functions_to_ignore = klasses
-        self.functions_to_ignore = self.expand_regexp_names(self._functions_to_ignore, self.functions_to_bind)
-
-        copy_set = copy.copy(self.functions_to_bind)
-        for i in self.functions_to_bind:
-            if i in self.functions_to_ignore:
-                print 'Explicitly removing %s from bindings...' % i
-                copy_set.remove(i)
-
-        self.functions_to_bind = copy_set
-
-    def init_objects_from_c_functions(self, properties):
-        self.c_object_properties = {}
-        for prop in properties:
-            # key value
-            if not prop or len(prop) == 0:
-                continue
-            key, value = prop.split('=')
-
-            opts = {}
-            # From value get options
-            options = value.split(';')
-            for o in options:
-                # Options can have their own Key Value
-                if ':' in o:
-                    o_key, o_val = o.split(':')
-                    o_val = o_val.replace('"', '')    # remove possible "
-                else:
-                    o_key = o
-                    o_val = None
-                opts[o_key] = o_val
-            self.c_object_properties[key] = opts
-
-    def get_function_property(self, func_name, property):
-        try:
-            return self.function_properties[func_name][property]
-        except KeyError:
-            return None
-
-    def init_class_properties(self, properties):
-        ref_list = []
-        if 'class' in self.bs['signatures']:
-            for k in self.bs['signatures']['class']:
-                ref_list.append(k['name'])
-
-        self.supported_classes = set()
-        self.class_manual = []
-        self.class_properties = {}
-        for prop in properties:
-            # key value
-            if not prop or len(prop) == 0:
-                continue
-            klass_name, value = prop.split('=')
-
-            # expand regular expression of class name
-            keys = self.expand_regexp_names([klass_name], ref_list)
-
-            # Hack to support "manual" classes here since they are not part of the classes to parse yet
-            if keys == []:
-                keys = [klass_name]
-
-            for key in keys:
-                opts = {}
-                # From value get options
-                options = value.split(';')
-                for o in options:
-                    # Options can have their own Key Value
-                    if ':' in o:
-                        o_key, o_val = o.split(':')
-                        o_val = o_val.replace('"', '')    # remove possible "
-                    else:
-                        o_key = o
-                        o_val = None
-                    opts[o_key] = o_val
-
-                    # populate lists. easier to code
-                    if o_key == 'manual':
-                        # '*' is needed for opaque structs
-                        self.supported_classes.add(key)
-                        self.class_manual.append(key)
-
-                self.class_properties[key] = opts
-
-    def init_classes_to_bind(self, klasses):
-        self._classes_to_bind = set(klasses)
-        ref_list = []
-        if 'class' in self.bs['signatures']:
-            for k in self.bs['signatures']['class']:
-                ref_list.append(k['name'])
-        self.classes_to_bind = self.expand_regexp_names(self._classes_to_bind, ref_list)
-        l = self.ancestors_of_classes_to_bind()
-        s = set(self.classes_to_bind)
-        self.classes_to_bind = s.union(set(l))
-
-    def init_classes_to_ignore(self, klasses):
-        self._classes_to_ignore = klasses
-        self.classes_to_ignore = self.expand_regexp_names(self._classes_to_ignore, self.classes_to_bind)
-
-        copy_set = copy.copy(self.classes_to_bind)
-        for i in self.classes_to_bind:
-            if i in self.classes_to_ignore:
-                print 'Explicitly removing %s from bindings...' % i
-                copy_set.remove(i)
-
-        self.classes_to_bind = copy_set
-        self.supported_classes = self.supported_classes.union(copy_set)
-
-    # appends the config path, unless path is absolute
-    def get_path_for(self, path):
-        if not os.path.isabs(path):
-            return os.path.join(self.config_path, path)
-        return path
-
-    def ancestors_of_classes_to_bind(self):
-        ancestors = []
-        for klass in self.classes_to_bind:
-            new_list = self.ancestors(klass, [klass])
-            ancestors.extend(new_list)
-        return ancestors
-
-    def ancestors(self, klass, list_of_ancestors):
-        if klass not in self.complement:
-            return list_of_ancestors
-
-        info = self.complement[klass]
-        subclass = info['subclass']
-        if not subclass:
-            return list_of_ancestors
-
-        list_of_ancestors.append(subclass)
-
-        return self.ancestors(subclass, list_of_ancestors)
-
-    def expand_regexp_names(self, names_to_expand, list_of_names):
-        valid = []
-        for n in list_of_names:
-            for regexp in names_to_expand:
-                if not regexp or regexp == '':
-                    continue
-                # if last char is not a regexp modifier,
-                # then append '$' to regexp
-                last_char = regexp[-1]
-                if last_char in string.letters or last_char in string.digits or last_char == '_':
-                    result = re.match(regexp + '$', n)
-                else:
-                    result = re.match(regexp, n)
-                if result:
-                    valid.append(n)
-
-        ret = list(set(valid))
-        return ret
-
-    #
-    # Helpers
-    #
-    def enabled_oo_in_functions(self):
-        """whether or not OO JS file should be generated for C API"""
-        l = len(self.c_object_properties)
-        if l == 0:
+    # whether or not the method is a constructor
+    def is_class_constructor(self, method):
+        if self.is_class_method(method) and 'retval' in method:
+            retval = method['retval']
+            dt = retval[0]['declared_type']
+
+            # Should also check the naming convention. eg: 'spriteWith...'
+            if dt == 'id':
+                return True
+        return False
+
+    # whether or not the method is an initializer
+    def is_method_initializer(self, method):
+        # Is this is a method ?
+        if not 'selector' in method:
             return False
 
-        if 'generate_js_file' in self.c_object_properties:
-            k = self.c_object_properties['generate_js_file'].keys()[0]
-            if k.lower() == 'false':
-                return False
-        return True
+        if 'retval' in method:
+            retval = method['retval']
+            dt = retval[0]['declared_type']
 
-    def get_callback_args_for_method(self, method):
-        method_name = method['selector']
-        method_args = method_name.split(':')
-
-        full_args = []
-        args = []
-
-        if 'arg' in method:
-            for i, arg in enumerate(method['arg']):
-                full_args.append(method_args[i] + ':')
-                full_args.append('(' + arg['declared_type'] + ')')
-                full_args.append(arg['name'] + ' ')
-
-                args.append(method_args[i] + ':')
-                args.append(arg['name'] + ' ')
-            return [''.join(full_args), ''.join(args)]
-        return method_name, method_name
-
-    def get_parent_class(self, class_name):
-        try:
-            parent = self.complement[class_name]['subclass']
-        except KeyError:
-            return None
-        return parent
-
-    def get_class_method(self, class_name):
-        class_methods = []
-
-        klass = None
-        list_of_classes = self.bs['signatures']['class']
-        for k in list_of_classes:
-            if k['name'] == class_name:
-                klass = k
-
-        if not klass:
-            raise Exception("Base class not found: %s" % class_name)
-
-        for m in klass['method']:
-            if self.is_class_method(m):
-                class_methods.append(m)
-        return class_methods
+            if method['selector'].startswith('init') and dt == 'id':
+                return True
+        return False
 
     def get_struct_type_and_num_of_elements(self, struct):
         # PRECOND: Structure must be valid
@@ -863,110 +205,8 @@ class JSBindings(object):
             return True
         return False
 
-    # whether or not the method is a constructor
-    def is_class_constructor(self, method):
-        if self.is_class_method(method) and 'retval' in method:
-            retval = method['retval']
-            dt = retval[0]['declared_type']
-
-            # Should also check the naming convention. eg: 'spriteWith...'
-            if dt == 'id':
-                return True
-        return False
-
-    # whether or not the method is an initializer
-    def is_method_initializer(self, method):
-        # Is this is a method ?
-        if not 'selector' in method:
-            return False
-
-        if 'retval' in method:
-            retval = method['retval']
-            dt = retval[0]['declared_type']
-
-            if method['selector'].startswith('init') and dt == 'id':
-                return True
-        return False
-
-    def inherits_class_methods(self, class_name, methods_to_parse=[]):
-        i = self.get_class_property('inherit_class_methods', class_name)
-        if i != None:
-            return i
-
-        inherit = self._inherit_class_methods.lower()
-        if inherit == 'false':
-            return False
-        elif inherit == 'true':
-            return True
-        elif inherit == 'auto':
-            for m in methods_to_parse:
-                if self.is_class_constructor(m):
-                    return False
-        else:
-            raise Exception("Unknown value for inherit_class_methods: %s", self._inherit_class_methods)
-
-        return True
-
-    def requires_swizzle(self, class_name):
-        if class_name in self.callback_methods:
-            for m in self.callback_methods[class_name]:
-                if not self.get_method_property(class_name, m, 'no_swizzle'):
-                    return True
-        return False
-
-    def get_method_property(self, class_name, method_name, prop):
-        try:
-            return self.method_properties[class_name][method_name][prop]
-        except KeyError:
-            return None
-
-    def set_method_property(self, class_name, method_name, prop, value=True):
-
-        if not class_name in self.method_properties:
-            self.method_properties[class_name] = {}
-
-        if not method_name in self.method_properties[class_name]:
-            self.method_properties[class_name][method_name] = {}
-
-        k = self.method_properties[class_name][method_name]
-        k[prop] = value
-
     def is_class_method(self, method):
         return 'class_method' in method and method['class_method'] == 'true'
-
-    def get_method(self, class_name, method_name):
-        for klass in self.bs['signatures']['class']:
-            if klass['name'] == class_name:
-                for m in klass['method']:
-                    if m['selector'] == method_name:
-                        return m
-
-        # Not found... search in protocols
-        list_of_protocols = self.bs['signatures']['informal_protocol']
-        if 'protocols' in self.complement[class_name]:
-            protocols = self.complement[class_name]['protocols']
-            for protocol in protocols:
-                for ip in list_of_protocols:
-                    # protocol match ?
-                    if ip['name'] == protocol:
-                        # traverse method then
-                        for m in ip['method']:
-                            if m['selector'] == method_name:
-                                return m
-
-        raise MethodNotFoundException("Method not found for %s # %s" % (class_name, method_name))
-
-    def get_method_type(self, method):
-        if self.is_class_constructor(method):
-            method_type = METHOD_CONSTRUCTOR
-        elif self.is_class_method(method):
-            method_type = METHOD_CLASS
-        elif self.is_method_initializer(method):
-            method_type = METHOD_INIT
-        else:
-            method_type = METHOD_REGULAR
-
-        return method_type
 
     def get_number_of_arguments(self, function):
         ret = 0
@@ -974,58 +214,17 @@ class JSBindings(object):
             return len(function['arg'])
         return ret
 
-    def convert_selector_name_to_native(self, name):
-        return name.replace(':', '_')
-
-    def convert_selector_name_to_js(self, class_name, selector):
-        # Does it have a rename rule ?
-        try:
-            return self.method_properties[class_name][selector]['name']
-        except KeyError:
-            pass
-
-        # Is it a property ?
-        try:
-            if selector in self.complement[class_name]['properties']:
-                ret = 'get%s%s' % (selector[0].capitalize(), selector[1:])
-                return ret
-        except KeyError:
-            pass
-
-        name = ''
-        parts = selector.split(':')
-        for i, arg in enumerate(parts):
-            if i == 0:
-                name += arg
-            elif arg:
-                name += arg[0].capitalize() + arg[1:]
-
-        return name
-
-    def convert_function_name_to_js(self, function_name):
-        name = self.get_function_property(function_name, 'name')
-        if name != None:
-            return name
-
-        name = function_name
-        if function_name.startswith(self.function_prefix):
-            name = name[len(self.function_prefix):]
-            name = name[0].lower() + name[1:]
-        return name
-
-    def convert_class_name_to_js(self, class_name):
-
-        # rename rule ?
-        if class_name in self.class_properties and 'name' in self.class_properties[class_name]:
-            name = self.class_properties[class_name]['name']
-            name = name.replace('"', '')
-            return name
-
-        # Prefix rule ?
-        if class_name.startswith(self.class_prefix):
-            class_name = class_name[len(self.class_prefix):]
-
-        return class_name
+    #
+    # END helper functions
+    #
+    def generate_pragma_mark(self, class_name, fd):
+        pragm_mark = '''
+/*
+ * %s
+ */
+#pragma mark - %s
+'''
+        fd.write(pragm_mark % (class_name, class_name))
 
     def generate_autogenerate_prefix(self, fd):
         autogenerated_template = '''/*
@@ -1052,99 +251,6 @@ class JSBindings(object):
 '''
         name = self.namespace.upper()
         fd.write(autogenerated_template % name)
-
-    #
-    # "class" constructor and destructor
-    #
-    def generate_constructor(self, class_name):
-
-        # Global Variables
-        # JSB_CCNode
-        # JSB_CCNode
-        constructor_globals = '''
-JSClass* %s_class = NULL;
-JSObject* %s_object = NULL;
-'''
-
-        # 1: JSB_CCNode,
-        # 2: JSB_CCNode,
-        # 8: possible callback code
-        constructor_template = '''// Constructor
-JSBool %s_constructor(JSContext *cx, uint32_t argc, jsval *vp)
-{
-	JSObject *jsobj = [%s createJSObjectWithRealObject:nil context:cx];
-	JS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(jsobj));
-	return JS_TRUE;
-}
-'''
-        proxy_class_name = '%s%s' % (PROXY_PREFIX, class_name)
-        self.mm_file.write(constructor_globals % (proxy_class_name, proxy_class_name))
-        self.mm_file.write(constructor_template % (proxy_class_name, proxy_class_name))
-
-    def generate_destructor(self, class_name):
-        destructor_template = '''
-// Destructor
-void %s_finalize(JSFreeOp *fop, JSObject *obj)
-{
-	CCLOGINFO(@"jsbindings: finalizing JS object %%p (%s)", obj);
-//	JSB_NSObject *proxy = get_proxy_for_jsobject(obj);
-//	if (proxy) {
-//		[[proxy realObj] release];
-//	}
-	del_proxy_for_jsobject( obj );
-}
-'''
-        proxy_class_name = '%s%s' % (PROXY_PREFIX, class_name)
-        self.mm_file.write(destructor_template % (proxy_class_name,
-                                                    class_name))
-
-    #
-    # Method generator functions
-    #
-    def generate_method_call_to_real_object(self, selector_name, num_of_args, ret_js_type, args_declared_type, args_js_type, class_name, method_type):
-
-        args = selector_name.split(':')
-
-        if method_type == METHOD_INIT:
-            prefix = '\t%s *real = [(%s*)[proxy.klass alloc] ' % (class_name, class_name)
-            suffix = '\n\t[proxy setRealObj: real];\n\t[real autorelease];\n'
-            suffix += '\n\tobjc_setAssociatedObject(real, &JSB_association_proxy_key, proxy, OBJC_ASSOCIATION_RETAIN);'
-            suffix += '\n\t[proxy release];'
-        elif method_type == METHOD_REGULAR:
-            prefix = '\t%s *real = (%s*) [proxy realObj];\n\t' % (class_name, class_name)
-            suffix = ''
-            if ret_js_type:
-                prefix = prefix + 'ret_val = '
-            prefix = prefix + '[real '
-        elif method_type == METHOD_CONSTRUCTOR:
-            prefix = '\tret_val = [%s ' % (class_name)
-            suffix = ''
-        elif method_type == METHOD_CLASS:
-            if not ret_js_type:
-                prefix = '\t[%s ' % (class_name)
-            else:
-                prefix = '\tret_val = [%s ' % (class_name)
-            suffix = ''
-        else:
-            raise Exception('Invalid method type')
-
-        call = ''
-
-        for i, arg in enumerate(args):
-            if num_of_args == 0:
-                call += arg
-            elif i + 1 > num_of_args:
-                break
-            elif arg:   # empty arg?
-                if args_js_type[i] == 'o':
-                    call += '%s:arg%d ' % (arg, i)
-                else:
-                    # cast needed to prevent compiler errors
-                    call += '%s:(%s)arg%d ' % (arg, args_declared_type[i], i)
-
-        call += ' ];'
-
-        return '%s%s%s' % (prefix, call, suffix)
 
     # special case: returning Object
     def generate_retval_object(self, declared_type, js_type):
@@ -1197,7 +303,7 @@ void %s_finalize(JSFreeOp *fop, JSObject *obj)
 	%s* buffer = (%s*)JS_GetArrayBufferViewData(typedArray, cx);
 	*buffer = ret_val;
 	JS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(typedArray));
-	'''
+'''
         t, l = self.get_struct_type_and_num_of_elements(js_type)
         return template % (t, l,
                            declared_type, declared_type)
@@ -1209,21 +315,21 @@ void %s_finalize(JSFreeOp *fop, JSObject *obj)
         template = '''
 	jsval ret_jsval = opaque_to_jsval( cx, ret_val );
 	JS_SET_RVAL(cx, vp, ret_jsval);
-	'''
+    '''
         return template
 
     def generate_retval(self, declared_type, js_type, method=None):
         direct_convert = {
-            'i' : 'INT_TO_JSVAL(ret_val)',
-            'u' : 'INT_TO_JSVAL(ret_val)',
-            'b' : 'BOOLEAN_TO_JSVAL(ret_val)',
-            's' : 'STRING_TO_JSVAL(ret_val)',
-            'd' : 'DOUBLE_TO_JSVAL(ret_val)',
-            'c' : 'INT_TO_JSVAL(ret_val)',
-            'long' : 'long_to_jsval(cx, ret_val)',                # long: not supoprted on JS 64-bit
-            'longlong' : 'longlong_to_jsval(cx, ret_val)',        # long long: not supported on JS
-            'void' : 'JSVAL_VOID',
-            None : 'JSVAL_VOID',
+            'i': 'INT_TO_JSVAL(ret_val)',
+            'u': 'INT_TO_JSVAL(ret_val)',
+            'b': 'BOOLEAN_TO_JSVAL(ret_val)',
+            's': 'STRING_TO_JSVAL(ret_val)',
+            'd': 'DOUBLE_TO_JSVAL(ret_val)',
+            'c': 'INT_TO_JSVAL(ret_val)',
+            'long': 'long_to_jsval(cx, ret_val)',                # long: not supoprted on JS 64-bit
+            'longlong': 'longlong_to_jsval(cx, ret_val)',        # long long: not supported on JS
+            'void': 'JSVAL_VOID',
+            None: 'JSVAL_VOID',
         }
         special_convert = {
             'o': self.generate_retval_object,
@@ -1487,23 +593,23 @@ void %s_finalize(JSFreeOp *fop, JSObject *obj)
         # More info:
         # https://developer.mozilla.org/en/SpiderMonkey/JSAPI_Reference/JS_ConvertArguments
         js_types_conversions = {
-            'b' : ['JSBool',    'JS_ValueToBoolean'],
-            'd' : ['double',    'JS_ValueToNumber'],
-            'I' : ['double',    'JS_ValueToNumber'],    # double converted to string
-            'i' : ['int32_t',   'JS_ValueToECMAInt32'],
-            'j' : ['int32_t',   'JS_ValueToECMAInt32'],
-            'u' : ['uint32_t',  'JS_ValueToECMAUint32'],
-            'c' : ['uint16_t',  'JS_ValueToUint16'],
+            'b': ['JSBool',    'JS_ValueToBoolean'],
+            'd': ['double',    'JS_ValueToNumber'],
+            'I': ['double',    'JS_ValueToNumber'],    # double converted to string
+            'i': ['int32_t',   'JS_ValueToECMAInt32'],
+            'j': ['int32_t',   'JS_ValueToECMAInt32'],
+            'u': ['uint32_t',  'JS_ValueToECMAUint32'],
+            'c': ['uint16_t',  'JS_ValueToUint16'],
         }
 
-        js_special_type_conversions =  {
-            'S' : [self.generate_argument_string, 'NSString*'],
-            'o' : [self.generate_argument_object, 'id'],
+        js_special_type_conversions = {
+            'S': [self.generate_argument_string, 'NSString*'],
+            'o': [self.generate_argument_object, 'id'],
             'array': [self.generate_argument_array, 'NSArray*'],
             'set': [self.generate_argument_set, 'NSSet*'],
-            'f' : [self.generate_argument_function, 'js_block'],
-            'long' :     [self.generate_argument_long, 'long'],
-            'longlong' : [self.generate_argument_longlong, 'long long'],
+            'f': [self.generate_argument_function, 'js_block'],
+            'long':     [self.generate_argument_long, 'long'],
+            'longlong': [self.generate_argument_longlong, 'long long'],
         }
 
         # First  time
@@ -1564,6 +670,268 @@ void %s_finalize(JSFreeOp *fop, JSObject *obj)
                     self.mm_file.write('\t}\n')
 
         self.mm_file.write('\tJSB_PRECONDITION(ok, "Error processing arguments");\n')
+
+
+#
+#
+# Generates Classes
+#
+#
+class JSBGenerateClasses(JSBGenerate):
+    def __init__(self, config):
+        super(JSBGenerateClasses, self).__init__(config)
+
+        self.h_file = open('%s%s_classes.h' % (BINDINGS_PREFIX, self.namespace), 'w')
+        self.generate_class_header_prefix()
+        self.mm_file = open('%s%s_classes.mm' % (BINDINGS_PREFIX, self.namespace), 'w')
+
+    #
+    # BEGIN helper functions
+    #
+    def convert_class_name_to_js(self, class_name):
+        # rename rule ?
+        if class_name in self.class_properties and 'name' in self.class_properties[class_name]:
+            name = self.class_properties[class_name]['name']
+            name = name.replace('"', '')
+            return name
+
+        # Prefix rule ?
+        if class_name.startswith(self.class_prefix):
+            class_name = class_name[len(self.class_prefix):]
+
+        return class_name
+
+    def convert_selector_name_to_native(self, name):
+        return name.replace(':', '_')
+
+    def convert_selector_name_to_js(self, class_name, selector):
+        # Does it have a rename rule ?
+        try:
+            return self.method_properties[class_name][selector]['name']
+        except KeyError:
+            pass
+
+        # Is it a property ?
+        try:
+            if selector in self.complement[class_name]['properties']:
+                ret = 'get%s%s' % (selector[0].capitalize(), selector[1:])
+                return ret
+        except KeyError:
+            pass
+
+        name = ''
+        parts = selector.split(':')
+        for i, arg in enumerate(parts):
+            if i == 0:
+                name += arg
+            elif arg:
+                name += arg[0].capitalize() + arg[1:]
+
+        return name
+
+    def get_method(self, class_name, method_name):
+        for klass in self.bs['signatures']['class']:
+            if klass['name'] == class_name:
+                for m in klass['method']:
+                    if m['selector'] == method_name:
+                        return m
+
+        # Not found... search in protocols
+        list_of_protocols = self.bs['signatures']['informal_protocol']
+        if 'protocols' in self.complement[class_name]:
+            protocols = self.complement[class_name]['protocols']
+            for protocol in protocols:
+                for ip in list_of_protocols:
+                    # protocol match ?
+                    if ip['name'] == protocol:
+                        # traverse method then
+                        for m in ip['method']:
+                            if m['selector'] == method_name:
+                                return m
+
+        raise MethodNotFoundException("Method not found for %s # %s" % (class_name, method_name))
+
+    def get_method_type(self, method):
+        if self.is_class_constructor(method):
+            method_type = METHOD_CONSTRUCTOR
+        elif self.is_class_method(method):
+            method_type = METHOD_CLASS
+        elif self.is_method_initializer(method):
+            method_type = METHOD_INIT
+        else:
+            method_type = METHOD_REGULAR
+
+        return method_type
+
+    def get_callback_args_for_method(self, method):
+        method_name = method['selector']
+        method_args = method_name.split(':')
+
+        full_args = []
+        args = []
+
+        if 'arg' in method:
+            for i, arg in enumerate(method['arg']):
+                full_args.append(method_args[i] + ':')
+                full_args.append('(' + arg['declared_type'] + ')')
+                full_args.append(arg['name'] + ' ')
+
+                args.append(method_args[i] + ':')
+                args.append(arg['name'] + ' ')
+            return [''.join(full_args), ''.join(args)]
+        return method_name, method_name
+
+    def get_parent_class(self, class_name):
+        try:
+            parent = self.complement[class_name]['subclass']
+        except KeyError:
+            return None
+        return parent
+
+    def get_class_method(self, class_name):
+        class_methods = []
+
+        klass = None
+        list_of_classes = self.bs['signatures']['class']
+        for k in list_of_classes:
+            if k['name'] == class_name:
+                klass = k
+
+        if not klass:
+            raise Exception("Base class not found: %s" % class_name)
+
+        for m in klass['method']:
+            if self.is_class_method(m):
+                class_methods.append(m)
+        return class_methods
+
+    def inherits_class_methods(self, class_name, methods_to_parse=[]):
+        i = self.get_class_property('inherit_class_methods', class_name)
+        if i != None:
+            return i
+
+        inherit = self._inherit_class_methods.lower()
+        if inherit == 'false':
+            return False
+        elif inherit == 'true':
+            return True
+        elif inherit == 'auto':
+            for m in methods_to_parse:
+                if self.is_class_constructor(m):
+                    return False
+        else:
+            raise Exception("Unknown value for inherit_class_methods: %s", self._inherit_class_methods)
+
+        return True
+
+    def requires_swizzle(self, class_name):
+        if class_name in self.callback_methods:
+            for m in self.callback_methods[class_name]:
+                if not self.get_method_property(class_name, m, 'no_swizzle'):
+                    return True
+        return False
+
+    def get_method_property(self, class_name, method_name, prop):
+        try:
+            return self.method_properties[class_name][method_name][prop]
+        except KeyError:
+            return None
+    #
+    # END helper functions
+    #
+
+    #
+    # "class" constructor and destructor
+    #
+    def generate_constructor(self, class_name):
+
+        # Global Variables
+        # JSB_CCNode
+        # JSB_CCNode
+        constructor_globals = '''
+JSClass* %s_class = NULL;
+JSObject* %s_object = NULL;
+'''
+
+        # 1: JSB_CCNode,
+        # 2: JSB_CCNode,
+        # 8: possible callback code
+        constructor_template = '''// Constructor
+JSBool %s_constructor(JSContext *cx, uint32_t argc, jsval *vp)
+{
+	JSObject *jsobj = [%s createJSObjectWithRealObject:nil context:cx];
+	JS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(jsobj));
+	return JS_TRUE;
+}
+'''
+        proxy_class_name = '%s%s' % (PROXY_PREFIX, class_name)
+        self.mm_file.write(constructor_globals % (proxy_class_name, proxy_class_name))
+        self.mm_file.write(constructor_template % (proxy_class_name, proxy_class_name))
+
+    def generate_destructor(self, class_name):
+        destructor_template = '''
+// Destructor
+void %s_finalize(JSFreeOp *fop, JSObject *obj)
+{
+	CCLOGINFO(@"jsbindings: finalizing JS object %%p (%s)", obj);
+//	JSB_NSObject *proxy = get_proxy_for_jsobject(obj);
+//	if (proxy) {
+//		[[proxy realObj] release];
+//	}
+	del_proxy_for_jsobject( obj );
+}
+'''
+        proxy_class_name = '%s%s' % (PROXY_PREFIX, class_name)
+        self.mm_file.write(destructor_template % (proxy_class_name,
+                                                    class_name))
+
+    #
+    # Method generator functions
+    #
+    def generate_method_call_to_real_object(self, selector_name, num_of_args, ret_js_type, args_declared_type, args_js_type, class_name, method_type):
+
+        args = selector_name.split(':')
+
+        if method_type == METHOD_INIT:
+            prefix = '\t%s *real = [(%s*)[proxy.klass alloc] ' % (class_name, class_name)
+            suffix = '\n\t[proxy setRealObj: real];\n\t[real autorelease];\n'
+            suffix += '\n\tobjc_setAssociatedObject(real, &JSB_association_proxy_key, proxy, OBJC_ASSOCIATION_RETAIN);'
+            suffix += '\n\t[proxy release];'
+        elif method_type == METHOD_REGULAR:
+            prefix = '\t%s *real = (%s*) [proxy realObj];\n\t' % (class_name, class_name)
+            suffix = ''
+            if ret_js_type:
+                prefix = prefix + 'ret_val = '
+            prefix = prefix + '[real '
+        elif method_type == METHOD_CONSTRUCTOR:
+            prefix = '\tret_val = [%s ' % (class_name)
+            suffix = ''
+        elif method_type == METHOD_CLASS:
+            if not ret_js_type:
+                prefix = '\t[%s ' % (class_name)
+            else:
+                prefix = '\tret_val = [%s ' % (class_name)
+            suffix = ''
+        else:
+            raise Exception('Invalid method type')
+
+        call = ''
+
+        for i, arg in enumerate(args):
+            if num_of_args == 0:
+                call += arg
+            elif i + 1 > num_of_args:
+                break
+            elif arg:   # empty arg?
+                if args_js_type[i] == 'o':
+                    call += '%s:arg%d ' % (arg, i)
+                else:
+                    # cast needed to prevent compiler errors
+                    call += '%s:(%s)arg%d ' % (arg, args_declared_type[i], i)
+
+        call += ' ];'
+
+        return '%s%s%s' % (prefix, call, suffix)
 
     def generate_method_prefix(self, class_name, method, num_of_args, method_type):
         # JSB_CCNode, setPosition
@@ -1754,30 +1122,47 @@ JSBool %s_%s%s(JSContext *cx, uint32_t argc, jsval *vp) {
 
         return ok_methods
 
-    def generate_class_mm_prefix(self):
-        import_template = '''
-// needed for callbacks from objective-c to JS
-#import <objc/runtime.h>
-#import "JRSwizzle.h"
+    def generate_callback_code(self, class_name):
+        # CCNode
+        template_prefix = '@implementation %s (JSBindings)\n'
 
-#import "jsfriendapi.h"
-#import "js_bindings_config.h"
-#import "js_bindings_core.h"
-
-#import "%s%s_classes.h"
-
+        # BOOL - ccMouseUp:(NSEvent*)
+        # PROXYJS_CCNode
+        template = '''
+-(%s) %s%s
+{
+%s
+	%s *proxy = objc_getAssociatedObject(self, &JSB_association_proxy_key);
+	if( proxy )
+		[proxy %s];
+}
 '''
-        self.generate_autogenerate_prefix(self.mm_file)
-        self.mm_file.write(import_template % (BINDINGS_PREFIX, self.namespace))
+        template_suffix = '@end\n'
 
-    def generate_pragma_mark(self, class_name, fd):
-        pragm_mark = '''
-/*
- * %s
- */
-#pragma mark - %s
-'''
-        fd.write(pragm_mark % (class_name, class_name))
+        proxy_class_name = PROXY_PREFIX + class_name
+
+        if class_name in self.callback_methods:
+
+            self.mm_file.write(template_prefix % class_name)
+            for m in self.callback_methods[class_name]:
+
+                real_method = self.get_method(class_name, m)
+                fullargs, args = self.get_callback_args_for_method(real_method)
+                js_ret_val, dt_ret_val = self.validate_retval(real_method, class_name)
+
+                if not self.get_method_property(class_name, m, 'no_swizzle'):
+                    swizzle_prefix = 'JSHook_'
+                    call_native = '\t//1st call native, then JS. Order is important\n\t[self JSHook_%s];' % (args)
+                else:
+                    swizzle_prefix = ''
+                    call_native = ''
+                self.mm_file.write(template % (dt_ret_val, swizzle_prefix, fullargs,
+                                                 call_native,
+                                                 proxy_class_name,
+                                                 args
+                                                 ))
+
+            self.mm_file.write(template_suffix)
 
     def generate_class_header_prefix(self):
         self.generate_autogenerate_prefix(self.h_file)
@@ -2073,47 +1458,21 @@ void %s_createClass(JSContext *cx, JSObject* globalObj, const char* name )
 
         self.mm_file.write(init_class_template % (proxy_class_name, proxy_parent_name, proxy_class_name, proxy_class_name))
 
-    def generate_callback_code(self, class_name):
-        # CCNode
-        template_prefix = '@implementation %s (JSBindings)\n'
+    def generate_class_mm_prefix(self):
+        import_template = '''
+// needed for callbacks from objective-c to JS
+#import <objc/runtime.h>
+#import "JRSwizzle.h"
 
-        # BOOL - ccMouseUp:(NSEvent*)
-        # PROXYJS_CCNode
-        template = '''
--(%s) %s%s
-{
-%s
-	%s *proxy = objc_getAssociatedObject(self, &JSB_association_proxy_key);
-	if( proxy )
-		[proxy %s];
-}
+#import "jsfriendapi.h"
+#import "js_bindings_config.h"
+#import "js_bindings_core.h"
+
+#import "%s%s_classes.h"
+
 '''
-        template_suffix = '@end\n'
-
-        proxy_class_name = PROXY_PREFIX + class_name
-
-        if class_name in self.callback_methods:
-
-            self.mm_file.write(template_prefix % class_name)
-            for m in self.callback_methods[class_name]:
-
-                real_method = self.get_method(class_name, m)
-                fullargs, args = self.get_callback_args_for_method(real_method)
-                js_ret_val, dt_ret_val = self.validate_retval(real_method, class_name)
-
-                if not self.get_method_property(class_name, m, 'no_swizzle'):
-                    swizzle_prefix = 'JSHook_'
-                    call_native = '\t//1st call native, then JS. Order is important\n\t[self JSHook_%s];' % (args)
-                else:
-                    swizzle_prefix = ''
-                    call_native = ''
-                self.mm_file.write(template % (dt_ret_val, swizzle_prefix, fullargs,
-                                                 call_native,
-                                                 proxy_class_name,
-                                                 args
-                                                 ))
-
-            self.mm_file.write(template_suffix)
+        self.generate_autogenerate_prefix(self.mm_file)
+        self.mm_file.write(import_template % (BINDINGS_PREFIX, self.namespace))
 
     def generate_class_mm(self, klass, class_name, parent_name):
         self.generate_pragma_mark(class_name, self.mm_file)
@@ -2181,6 +1540,58 @@ void %s_createClass(JSContext *cx, JSObject* globalObj, const char* name )
         self.generate_autogenerate_suffix(self.class_registration_file)
 
         self.class_registration_file.close()
+
+    def generate_bindings(self):
+        self.generate_class_mm_prefix()
+
+        for klass in self.classes_to_bind:
+            if not klass in self.class_manual:
+                self.generate_class_binding(klass)
+
+        self.generate_autogenerate_suffix(self.h_file)
+        self.generate_autogenerate_suffix(self.mm_file)
+
+        self.h_file.close()
+        self.mm_file.close()
+
+        self.generate_classes_registration()
+
+#
+#
+# Generates Object Oriented Code from C functions
+#
+#
+class JSBGenerateFunctions(JSBGenerate):
+    def __init__(self, config):
+        super(JSBGenerateFunctions, self).__init__(config)
+        self.h_file = open('%s%s_functions.h' % (BINDINGS_PREFIX, self.namespace), 'w')
+        self.generate_function_header_prefix()
+        self.mm_file = open('%s%s_functions.mm' % (BINDINGS_PREFIX, self.namespace), 'w')
+        self.generate_function_mm_prefix()
+
+    #
+    # BEGIN helper functions
+    #
+    def get_function_property(self, func_name, property):
+        try:
+            return self.function_properties[func_name][property]
+        except KeyError:
+            return None
+
+    def convert_function_name_to_js(self, function_name):
+        name = self.get_function_property(function_name, 'name')
+        if name != None:
+            return name
+
+        name = function_name
+        if function_name.startswith(self.function_prefix):
+            name = name[len(self.function_prefix):]
+            name = name[0].lower() + name[1:]
+        return name
+
+    #
+    # END helper functions
+    #
 
     def generate_function_mm_prefix(self):
         import_template = '''
@@ -2301,70 +1712,6 @@ JSBool %s%s(JSContext *cx, uint32_t argc, jsval *vp) {
 
         self.function_registration_file.write(template)
 
-    def generate_function_js(self, function):
-        # cp.Space.prototype.getStaticBody = function() {
-        #   return cp.spaceGetStaticBody( this.handle );
-        # };
-        func_template = '''
-/* %s( %s ) */
-%s.%s.prototype.%s = function( %s ) {
-    return %s.%s( %s );
-};
-'''
-
-        # cp.Space = function() {
-        #   this.object = new cp._Space();
-        #   this.handle = this.object.getHandle();
-        # };
-        constructor_template = '''
-/* %s( %s ) */
-%s.%s = function( %s ) {
-    this.object = new %s._%s( %s );
-    this.handle = this.object.getHandle();
-};
-'''
-        if len(self.c_object_properties) == 0:
-            return
-
-        name = function['name']
-        for func_prefix in self.c_object_properties['function_prefix']:
-            if name.startswith(func_prefix):
-
-                args = []
-                if 'arg' in function:
-                    for a in function['arg']:
-                        args.append(a['name'])
-
-                # arguments needed for functions (instance methods)
-                args_func = args[1:]
-                args_func.insert(0, 'this.handle')
-
-                # arguments needed for constructors
-                args_cons = args[:]
-
-                js_namespace = self.c_object_properties['js_namespace'].keys()[0]
-                obj_name = func_prefix.split(self.function_prefix)[1]
-
-                # Constructor or Function ?
-                constructor_suffix = self.c_object_properties['constructor_suffix'].keys()[0]
-                if name.find(constructor_suffix) > 0:
-                    # constructor
-                    self.auto_object_js_file.write(constructor_template % (name, ', '.join(args),
-                        js_namespace, obj_name, ', '.join(args_cons),
-                        js_namespace, obj_name, ', '.join(args_cons)))
-                else:
-                    js_funcname = name[len(func_prefix):]
-                    js_funcname = uncapitalize(js_funcname)
-                    native_funcname = name[len(js_namespace):]
-                    native_funcname = uncapitalize(native_funcname)
-                    self.auto_object_js_file.write(func_template % (name, ', '.join(args),
-                        js_namespace, obj_name, js_funcname, ', '.join(args_func[1:]),
-                        js_namespace, native_funcname, ', '.join(args_func)))
-                break
-
-    def generate_function_oo(self, function):
-        '''Generates Object Oriented code for a particle function'''
-
     def generate_functions_registration(self):
         self.function_registration_file = open('%s%s_functions_registration.h' % (BINDINGS_PREFIX, self.namespace), 'w')
         self.generate_autogenerate_prefix(self.function_registration_file)
@@ -2375,73 +1722,736 @@ JSBool %s%s(JSContext *cx, uint32_t argc, jsval *vp) {
         self.generate_autogenerate_suffix(self.function_registration_file)
         self.function_registration_file.close()
 
+    #
+    # main
+    #
+    def generate_bindings(self):
+        '''Main entry point to generate the JS Bindings for the C functions'''
+        functions = self.bs['signatures']['function']
+
+        for f in functions:
+            if f['name'] in self.functions_to_bind:
+                try:
+                    self.generate_function_binding(f)
+                    self.generate_function_declaration(f['name'])
+                    self.functions_bound.append(f['name'])
+                except ParseException, e:
+                    sys.stderr.write('NOT OK: "%s" Error: %s\n' % (f['name'], str(e)))
+
+        self.generate_function_header_suffix()
+        self.h_file.close()
+
+        self.generate_autogenerate_suffix(self.mm_file)
+        self.mm_file.close()
+
+        self.generate_functions_registration()
+
+
+#
+#
+# Generates Object Oriented Code from C functions
+#
+#
+class JSBGenerateCOO(JSBGenerate):
+    '''Class that generate Object Oriented JS Bindings after C API'''
+    def __init__(self, config):
+        super(JSBGenerateCOO, self).__init__(config)
+        self.bs_funcs = config.bs['signatures']['function']
+        self.c_object_properties = config.c_object_properties
+        # self.fd_h = open('%s%s_auto_classes.h' % (BINDINGS_PREFIX, self.namespace), 'w')
+        self.fd_mm = open('%s%s_auto_classes.mm' % (BINDINGS_PREFIX, self.namespace), 'w')
+        # self.fd_registration = open('%s%s_auto_classes_registration.h' % (BINDINGS_PREFIX, self.namespace), 'w')
+
+    #
+    # BEGIN of Helper functions
+    #
+    def get_base_class(self, klass_name):
+        '''returns the base class of a given class name'''
+        base_class = self.c_object_properties.get('base_class', {None: None})
+        base_class = base_class.keys()[0]
+
+        classes = self.c_object_properties['function_prefix']
+        for k in classes:
+            if k == klass_name:
+                if classes[k] == None:
+                    return base_class
+                return classes[k]
+
+    def sort_oo_functions(self):
+        """returns a list of the OO function-classes to parse. Inheritance is taken into account. Base classes are returned first. Only supports 1 level of inheritance"""
+
+        tree = {}
+        l = []
+        for k in self.c_object_properties['function_prefix']:
+            v = self.c_object_properties['function_prefix'][k]
+
+            if not v in tree:
+                tree[v] = []
+            tree[v].append(k)
+
+        # Start for orphan
+        # XXX Only supports one level of inheritance. Good enough for Chipmunk
+        orphans = tree[None]
+        for k in orphans:
+            l.append(k)
+            if k in tree:
+                for kk in tree[k]:
+                    l.append(kk)
+        return l
+
+    #
+    # END of Helper functions
+    #
+    def generate_implementation_prefix(self):
+        pass
+
+    def generate_implementation_suffix(self):
+        pass
+
+    def generate_implementation_class_variables(self, klass_name):
+        template = '''
+/*
+ * %s
+ */
+#pragma mark - %s
+
+JSClass* %s_class = NULL;
+JSObject* %s_object = NULL;
+'''
+        name = '%s%s' % (PROXY_PREFIX, klass_name)
+        self.fd_mm.write(template % (klass_name,
+                                    klass_name,
+                                    name,
+                                    name))
+
+    def generate_implementation_class_constructor(self, klass_name):
+        template = '''
+// Constructor
+JSBool %s_constructor(JSContext *cx, uint32_t argc, jsval *vp)
+{
+	JSObject *jsobj = JS_NewObject(cx, JSB_%s_class, JSB_%s_object, NULL);
+	cpSpace *handle = %s%s();
+	JS_SetPrivate(jsobj, handle);
+
+	JS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(jsobj));
+	return JS_TRUE;
+}
+'''
+        name = '%s%s' % (PROXY_PREFIX, klass_name)
+        self.fd_mm.write(template % (name,
+                                    klass_name, klass_name,
+                                    klass_name, 'New',
+                                    ))
+
+    def generate_implementation_class_destructor(self, klass_name):
+        template = '''
+// Destructor
+void %s_finalize(JSFreeOp *fop, JSObject *obj)
+{
+	CCLOGINFO(@"jsbindings: finalizing JS object %%p (%s)", obj);
+	void *handle = JS_GetPrivate(obj);
+	NSCAssert( handle, @"Invalid handle for %s");
+
+	%s%s( (%s*)handle);
+}
+'''
+        name = '%s%s' % (PROXY_PREFIX, klass_name)
+        self.fd_mm.write(template % (name,
+                                    klass_name,
+                                    klass_name,
+                                    klass_name, 'Free', klass_name
+                                    ))
+
+    def generate_implementation_class_methods(self, klass_name):
+        pass
+
+    def generate_implementation_class_jsb(self, klass_name):
+        template_0 = '''
+void %s_createClass(JSContext *cx, JSObject* globalObj, const char* name )
+{
+	%s_class = (JSClass *)calloc(1, sizeof(JSClass));
+	%s_class->name = name;
+	%s_class->addProperty = JS_PropertyStub;
+	%s_class->delProperty = JS_PropertyStub;
+	%s_class->getProperty = JS_PropertyStub;
+	%s_class->setProperty = JS_StrictPropertyStub;
+	%s_class->enumerate = JS_EnumerateStub;
+	%s_class->resolve = JS_ResolveStub;
+	%s_class->convert = JS_ConvertStub;
+	%s_class->finalize = %s_finalize;
+	%s_class->flags = JSCLASS_HAS_PRIVATE;
+'''
+        name = '%s%s' % (PROXY_PREFIX, klass_name)
+        self.fd_mm.write(template_0 % (name,
+                                        name,
+                                        name,
+                                        name,
+                                        name,
+                                        name,
+                                        name,
+                                        name,
+                                        name,
+                                        name,
+                                        name, name,
+                                        name))
+
+        template_propertes = '''
+	static JSPropertySpec properties[] = {
+		{0, 0, 0, 0, 0}
+	};
+'''
+        self.fd_mm.write(template_propertes)
+
+        template_funcs = '''
+	static JSFunctionSpec funcs[] = {
+		JS_FS_END
+	};
+'''
+        self.fd_mm.write(template_funcs)
+
+        template_st_funcs = '''
+	static JSFunctionSpec st_funcs[] = {
+		JS_FS_END
+	};
+'''
+        self.fd_mm.write(template_st_funcs)
+
+        template_end = '''
+	JSB_cpSpace_object = JS_InitClass(cx, globalObj, %s, %s_class, %s_constructor,0,properties,funcs,NULL,st_funcs);
+}
+'''
+        parent = self.get_base_class(klass_name)
+        if parent == None:
+            parent = 'NULL'
+        else:
+            parent = '%s%s_object' % (PROXY_PREFIX, parent)
+        self.fd_mm.write(template_end % (parent, name, name))
+
+    def generate_implementation_class(self, klass_name):
+        self.generate_implementation_class_variables(klass_name)
+        self.generate_implementation_class_constructor(klass_name)
+        self.generate_implementation_class_destructor(klass_name)
+        self.generate_implementation_class_methods(klass_name)
+        self.generate_implementation_class_jsb(klass_name)
+
+    def generate_implementation(self):
+        self.generate_implementation_prefix()
+
+        klasses = self.sort_oo_functions()
+        for klass_name in klasses:
+            self.generate_implementation_class(klass_name)
+
+        self.generate_implementation_suffix()
+
+    def generate_bindings(self):
+        self.generate_implementation()
+
+
+#
+#
+# Main class for the Bindings
+#
+#
+class JSBindings(object):
+
+    @classmethod
+    def parse_config_file(cls, config_file):
+        cp = ConfigParser.ConfigParser()
+        cp.read(config_file)
+
+        supported_options = {'obj_class_prefix_to_remove': '',
+                             'classes_to_parse': [],
+                             'classes_to_ignore': [],
+                             'class_properties': [],
+                             'bridge_support_file': [],
+                             'complement_file': [],
+                             'inherit_class_methods': 'Auto',
+                             'functions_to_parse': [],
+                             'functions_to_ignore': [],
+                             'function_properties': [],
+                             'function_prefix_to_remove': '',
+                             'method_properties': [],
+                             'struct_properties': [],
+                             'objects_from_c_functions': [],
+                             'import_files': []
+                             }
+
+        for s in cp.sections():
+            config = copy.copy(supported_options)
+
+            # Section is the config namespace
+            config['namespace'] = s
+
+            for o in cp.options(s):
+                if not o in config:
+                    print 'Ignoring unrecognized option: %s' % o
+                    continue
+
+                t = type(config[o])
+                if t == type(True):
+                    v = cp.getboolean(s, o)
+                elif t == type(1):
+                    v = cp.getint(s, o)
+                elif t == type(''):
+                    v = cp.get(s, o)
+                elif t == type([]):
+                    v = cp.get(s, o)
+                    v = v.replace('\t', '')
+                    v = v.replace('\n', '')
+                    v = v.replace(' ', '')
+                    v = v.strip()
+                    v = v.split(',')
+                else:
+                    raise Exception('Unsupported type' % str(t))
+                config[o] = v
+
+            config_path = os.path.dirname(config_file)
+            sp = JSBindings(config, config_path)
+            sp.generate_bindings()
+
+    def __init__(self, config, config_path=''):
+
+        self.config_path = config_path
+        self.complement_files = config['complement_file']
+        self.init_complement_file()
+
+        self.bridgesupport_files = config['bridge_support_file']
+        self.init_bridgesupport_file()
+
+        self.namespace = config['namespace']
+
+        #
+        # All
+        #
+        self.import_files = config['import_files']
+
+        #
+        # Classes related
+        #
+        self.class_prefix = config['obj_class_prefix_to_remove']
+        self._inherit_class_methods = config['inherit_class_methods']
+
+        # Add here manually generated classes
+        self.init_class_properties(config['class_properties'])
+        self.init_classes_to_bind(config['classes_to_parse'])
+        self.init_classes_to_ignore(config['classes_to_ignore'])
+
+        # In order to prevent parsing a class many times
+        self.parsed_classes = []
+
+        #
+        # Method related
+        #
+        self.init_method_properties(config['method_properties'])
+
+        self.init_callback_methods()
+        # Current method that is being parsed
+        self.current_method = None
+
+        #
+        # function related
+        #
+        self.function_prefix = config['function_prefix_to_remove']
+        self.init_functions_to_bind(config['functions_to_parse'])
+        self.init_functions_to_ignore(config['functions_to_ignore'])
+        self.init_function_properties(config['function_properties'])
+        self.init_objects_from_c_functions(config['objects_from_c_functions'])
+        self.current_function = None
+        self.callback_functions = []
+
+        #
+        # struct related
+        #
+        self.init_struct_properties(config['struct_properties'])
+
+    def init_complement_file(self):
+        self.complement = {}
+        for f in self.complement_files:
+            # empty string ??
+            if f:
+                fd = open(self.get_path_for(f))
+                self.complement.update(ast.literal_eval(fd.read()))
+                fd.close()
+
+    def init_bridgesupport_file(self):
+        self.bs = {}
+        self.bs['signatures'] = {}
+
+        for f in self.bridgesupport_files:
+            p = ET.parse(self.get_path_for(f))
+            root = p.getroot()
+            xml = xml2d(root)
+            for key in xml['signatures']:
+                # More than 1 file can be loaded
+                # So, older keys should not be overwritten
+                if not key in self.bs['signatures']:
+                    self.bs['signatures'][key] = xml['signatures'][key]
+                else:
+                    l = self.bs['signatures'][key]
+                    if type(l) == type([]):
+                        self.bs['signatures'][key].extend(xml['signatures'][key])
+
+    def init_callback_methods(self):
+        self.callback_methods = {}
+
+        for class_name in self.method_properties:
+            methods = self.method_properties[class_name]
+            for method in methods:
+                if 'callback' in self.method_properties[class_name][method]:
+                    if not class_name in self.callback_methods:
+                        self.callback_methods[class_name] = []
+                    self.callback_methods[class_name].append(method)
+
+    def process_method_properties(self, klass, method_name, props):
+
+        if not klass in self.method_properties:
+            self.method_properties[klass] = {}
+        if not method_name in self.method_properties[klass]:
+            self.method_properties[klass][method_name] = {}
+        self.method_properties[klass][method_name] = copy.copy(props)
+
+        # Process "merge"
+        if 'merge' in props:
+            lm = props['merge'].split('|')
+
+            # append self
+            lm.append(method_name)
+
+            methods = {}
+            # needed to obtain the selector with greater number of args
+            max_args = 0
+            # needed for optional_args_since
+            min_args = 1000
+
+            for m in lm:
+                m = m.strip()
+                args = m.count(':')
+                methods[args] = m
+                if args > max_args:
+                    max_args = args
+                if args < min_args:
+                    min_args = args
+
+                # Automatically add "ignore" in the method_properties, but not in "self"
+                if m != method_name:
+                    self.set_method_property(klass, m, 'ignore', True)
+
+            # Add max/min/calls rules
+            self.set_method_property(klass, method_name, 'calls', methods)
+            self.set_method_property(klass, method_name, 'min_args', min_args)
+            self.set_method_property(klass, method_name, 'max_args', max_args)
+
+            # safety check
+            if method_name.count(':') != max_args:
+                raise Exception("Merge methods should have less arguments that the main method. Check: %s # %s" % (klass, method_name))
+
+        if 'name' in props:
+            # If this name was previously used, the delete it. Only the newer one will be used
+            # this scenario can happen when defining a name using a regexp, and then change it with a single line
+            name = props['name']
+            for m in self.method_properties[klass]:
+                d = self.method_properties[klass][m]
+                old_name = d.get('name', None)
+                if m != method_name and old_name == name:
+                    del(d['name'])
+                    print 'Deleted duplicated from %s (old:%s)  (new:%s)' % (klass, m, method_name)
+
+        if 'manual' in props:
+            if not klass in self.manual_methods:
+                self.manual_methods[klass] = []
+            self.manual_methods[klass].append(method_name)
+
+    def init_method_properties(self, properties):
+        self.method_properties = {}
+        self.manual_methods = {}
+        for prop in properties:
+            # key value
+            try:
+                if not prop or len(prop) == 0:
+                    continue
+                key, value = prop.split('=')
+
+                # From Key get: Class # method
+                klass, method = key.split('#')
+                klass = klass.strip()
+                method = method.strip()
+
+                opts = {}
+                # From value get options
+                options = value.split(';')
+                for o in options:
+                    # Options can have their own Key Value
+                    if ':' in o:
+                        o = o.replace('"', '')
+                        o = o.replace("'", "")
+
+                        # o_value might also have some ':'
+                        # So, it should split by the first ':'
+                        o_list = o.split(':')
+                        o_key = o_list[0]
+                        o_val = ':'.join(o_list[1:])
+                    else:
+                        o_key = o
+                        o_val = True
+                    opts[o_key] = o_val
+
+                expanded_klasses = self.expand_regexp_names([klass], self.supported_classes)
+                for k in expanded_klasses:
+                    self.process_method_properties(k, method, opts)
+            except ValueError:
+                sys.stderr.write("\nERROR parsing line: %s\n\n" % (prop))
+                raise
+
+    def init_function_properties(self, properties):
+        self.function_properties = {}
+        self.struct_manual = []
+        for prop in properties:
+            # key value
+            if not prop or len(prop) == 0:
+                continue
+            key, value = prop.split('=')
+
+            opts = {}
+            # From value get options
+            options = value.split(';')
+            for o in options:
+                # Options can have their own Key Value
+                if ':' in o:
+                    o_key, o_val = o.split(':')
+                    o_val = o_val.replace('"', '')    # remove possible "
+                else:
+                    o_key = o
+                    o_val = None
+                opts[o_key] = o_val
+
+                if o_key == 'manual':
+                    self.function_manual.append(key)
+            self.function_properties[key] = opts
+
+    def init_struct_properties(self, properties):
+        self.struct_properties = {}
+        self.struct_opaque = []
+        self.struct_manual = []
+        for prop in properties:
+            # key value
+            if not prop or len(prop) == 0:
+                continue
+            key, value = prop.split('=')
+
+            opts = {}
+            # From value get options
+            options = value.split(';')
+            for o in options:
+                # Options can have their own Key Value
+                if ':' in o:
+                    o_key, o_val = o.split(':')
+                    o_val = o_val.replace('"', '')    # remove possible "
+                else:
+                    o_key = o
+                    o_val = None
+                opts[o_key] = o_val
+
+                # populate lists. easier to code
+                if o_key == 'opaque':
+                    # '*' is needed for opaque structs
+                    self.struct_opaque.append(key + '*')
+                elif o_key == 'manual':
+                    self.struct_manual.append(key)
+            self.struct_properties[key] = opts
+
+    def init_functions_to_bind(self, functions):
+        self._functions_to_bind = set(functions)
+        ref_list = []
+
+        if 'function' in self.bs['signatures']:
+            for k in self.bs['signatures']['function']:
+                ref_list.append(k['name'])
+            self.functions_to_bind = self.expand_regexp_names(self._functions_to_bind, ref_list)
+        else:
+            self.functions_to_bind = []
+        self.functions_bound = []
+
+    def init_functions_to_ignore(self, klasses):
+        self._functions_to_ignore = klasses
+        self.functions_to_ignore = self.expand_regexp_names(self._functions_to_ignore, self.functions_to_bind)
+
+        copy_set = copy.copy(self.functions_to_bind)
+        for i in self.functions_to_bind:
+            if i in self.functions_to_ignore:
+                print 'Explicitly removing %s from bindings...' % i
+                copy_set.remove(i)
+
+        self.functions_to_bind = copy_set
+
+    def init_objects_from_c_functions(self, properties):
+        self.c_object_properties = {}
+        for prop in properties:
+            # key value
+            if not prop or len(prop) == 0:
+                continue
+            key, value = prop.split('=')
+
+            opts = {}
+            # From value get options
+            options = value.split(';')
+            for o in options:
+                # Options can have their own Key Value
+                if ':' in o:
+                    o_key, o_val = o.split(':')
+                    o_val = o_val.replace('"', '')    # remove possible "
+                else:
+                    o_key = o
+                    o_val = None
+                opts[o_key] = o_val
+            self.c_object_properties[key] = opts
+
+    def init_class_properties(self, properties):
+        ref_list = []
+        if 'class' in self.bs['signatures']:
+            for k in self.bs['signatures']['class']:
+                ref_list.append(k['name'])
+
+        self.supported_classes = set()
+        self.class_manual = []
+        self.class_properties = {}
+        for prop in properties:
+            # key value
+            if not prop or len(prop) == 0:
+                continue
+            klass_name, value = prop.split('=')
+
+            # expand regular expression of class name
+            keys = self.expand_regexp_names([klass_name], ref_list)
+
+            # Hack to support "manual" classes here since they are not part of the classes to parse yet
+            if keys == []:
+                keys = [klass_name]
+
+            for key in keys:
+                opts = {}
+                # From value get options
+                options = value.split(';')
+                for o in options:
+                    # Options can have their own Key Value
+                    if ':' in o:
+                        o_key, o_val = o.split(':')
+                        o_val = o_val.replace('"', '')    # remove possible "
+                    else:
+                        o_key = o
+                        o_val = None
+                    opts[o_key] = o_val
+
+                    # populate lists. easier to code
+                    if o_key == 'manual':
+                        # '*' is needed for opaque structs
+                        self.supported_classes.add(key)
+                        self.class_manual.append(key)
+
+                self.class_properties[key] = opts
+
+    def init_classes_to_bind(self, klasses):
+        self._classes_to_bind = set(klasses)
+        ref_list = []
+        if 'class' in self.bs['signatures']:
+            for k in self.bs['signatures']['class']:
+                ref_list.append(k['name'])
+        self.classes_to_bind = self.expand_regexp_names(self._classes_to_bind, ref_list)
+        l = self.ancestors_of_classes_to_bind()
+        s = set(self.classes_to_bind)
+        self.classes_to_bind = s.union(set(l))
+
+    def init_classes_to_ignore(self, klasses):
+        self._classes_to_ignore = klasses
+        self.classes_to_ignore = self.expand_regexp_names(self._classes_to_ignore, self.classes_to_bind)
+
+        copy_set = copy.copy(self.classes_to_bind)
+        for i in self.classes_to_bind:
+            if i in self.classes_to_ignore:
+                print 'Explicitly removing %s from bindings...' % i
+                copy_set.remove(i)
+
+        self.classes_to_bind = copy_set
+        self.supported_classes = self.supported_classes.union(copy_set)
+
+    # appends the config path, unless path is absolute
+    def get_path_for(self, path):
+        if not os.path.isabs(path):
+            return os.path.join(self.config_path, path)
+        return path
+
+    def set_method_property(self, class_name, method_name, prop, value=True):
+
+        if not class_name in self.method_properties:
+            self.method_properties[class_name] = {}
+
+        if not method_name in self.method_properties[class_name]:
+            self.method_properties[class_name][method_name] = {}
+
+        k = self.method_properties[class_name][method_name]
+        k[prop] = value
+
+    def ancestors_of_classes_to_bind(self):
+        ancestors = []
+        for klass in self.classes_to_bind:
+            new_list = self.ancestors(klass, [klass])
+            ancestors.extend(new_list)
+        return ancestors
+
+    def ancestors(self, klass, list_of_ancestors):
+        if klass not in self.complement:
+            return list_of_ancestors
+
+        info = self.complement[klass]
+        subclass = info['subclass']
+        if not subclass:
+            return list_of_ancestors
+
+        list_of_ancestors.append(subclass)
+
+        return self.ancestors(subclass, list_of_ancestors)
+
+    def expand_regexp_names(self, names_to_expand, list_of_names):
+        valid = []
+        for n in list_of_names:
+            for regexp in names_to_expand:
+                if not regexp or regexp == '':
+                    continue
+                # if last char is not a regexp modifier,
+                # then append '$' to regexp
+                last_char = regexp[-1]
+                if last_char in string.letters or last_char in string.digits or last_char == '_':
+                    result = re.match(regexp + '$', n)
+                else:
+                    result = re.match(regexp, n)
+                if result:
+                    valid.append(n)
+
+        ret = list(set(valid))
+        return ret
+
     def generate_bindings(self):
         #
         # Classes
         #
-
         # is there any class to register
         if 'class' in self.bs['signatures']:
-            self.h_file = open('%s%s_classes.h' % (BINDINGS_PREFIX, self.namespace), 'w')
-            self.generate_class_header_prefix()
-            self.mm_file = open('%s%s_classes.mm' % (BINDINGS_PREFIX, self.namespace), 'w')
-            self.generate_class_mm_prefix()
-
-            for klass in self.classes_to_bind:
-                if not klass in self.class_manual:
-                    self.generate_class_binding(klass)
-
-            self.generate_autogenerate_suffix(self.h_file)
-            self.generate_autogenerate_suffix(self.mm_file)
-
-            self.h_file.close()
-            self.mm_file.close()
-
-            self.generate_classes_registration()
+            classes = JSBGenerateClasses(self)
+            classes.generate_bindings()
 
         #
         # Free Functions
         #
-
         # Is there any function to register:
         if 'function' in self.bs['signatures']:
-
-            functions = self.bs['signatures']['function']
-
-            self.h_file = open('%s%s_functions.h' % (BINDINGS_PREFIX, self.namespace), 'w')
-            self.generate_function_header_prefix()
-            self.mm_file = open('%s%s_functions.mm' % (BINDINGS_PREFIX, self.namespace), 'w')
-            self.generate_function_mm_prefix()
-
-            for f in functions:
-                if f['name'] in self.functions_to_bind:
-                    try:
-                        self.generate_function_binding(f)
-                        self.generate_function_declaration(f['name'])
-                        self.functions_bound.append(f['name'])
-                        if self.enabled_oo_in_functions():
-                            # self.generate_function_js(f)
-                            self.generate_function_oo(f)
-                    except ParseException, e:
-                        sys.stderr.write('NOT OK: "%s" Error: %s\n' % (f['name'], str(e)))
-
-            self.generate_function_header_suffix()
-            self.h_file.close()
-
-            self.generate_autogenerate_suffix(self.mm_file)
-            self.mm_file.close()
-
-            self.generate_functions_registration()
+            functions = JSBGenerateFunctions(self)
+            functions.generate_bindings()
 
         #
         # Object Oriented C code
         #
-        if self.enabled_oo_in_functions():
-            coo = JSBGenerateCOO(self.bs['signatures']['function'], self.c_object_properties, self.namespace)
+        if len(self.c_object_properties) > 0:
+            coo = JSBGenerateCOO(self)
             coo.generate_bindings()
-
-    def parse(self):
-        self.generate_bindings()
 
 
 def help():
