@@ -1874,7 +1874,7 @@ JSObject* %s_object = NULL;
 JSBool %s_constructor(JSContext *cx, uint32_t argc, jsval *vp)
 {
 	JSObject *jsobj = JS_NewObject(cx, JSB_%s_class, JSB_%s_object, NULL);
-	cpSpace *handle = %s();
+	cpSpace *handle = %s
 	JS_SetPrivate(jsobj, handle);
 
 	JS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(jsobj));
@@ -1885,13 +1885,23 @@ JSBool %s_constructor(JSContext *cx, uint32_t argc, jsval *vp)
         name = '%s%s' % (PROXY_PREFIX, klass_name)
         func_name = '%s%s' % (klass_name, constructor_suffix)
 
-        if not func_name in self.functions_to_bind:
-            self.fd_mm.write('// Constructor not available ( %s )' % func_name)
+        klass = klass_name
+        while not func_name in self.functions_to_bind:
+            print 'Not found: %s' % func_name
+            klass = self.get_base_class(klass)
+            func_name = '%s%s' % (klass, constructor_suffix)
+            if klass is None:
+                break
+
+        if klass == None:
+            func_name = 'NULL; // No constructor found'
         else:
-            self.fd_mm.write(template % (name,
-                                        klass_name, klass_name,
-                                        func_name,
-                                        ))
+            func_name += '();'
+
+        self.fd_mm.write(template % (name,
+                                    klass_name, klass_name,
+                                    func_name,
+                                    ))
 
     def generate_implementation_class_destructor(self, klass_name):
         template = '''
@@ -1908,14 +1918,23 @@ void %s_finalize(JSFreeOp *fop, JSObject *obj)
         destructor_suffix = self.c_object_properties['destructor_suffix'].keys()[0]
         name = '%s%s' % (PROXY_PREFIX, klass_name)
         func_name = '%s%s' % (klass_name, destructor_suffix)
-        if not func_name in self.functions_to_bind:
-            self.fd_mm.write('// Destructor not available ( %s )' % func_name)
-        else:
-            self.fd_mm.write(template % (name,
-                                        klass_name,
-                                        klass_name,
-                                        func_name, klass_name
-                                        ))
+
+        klass = klass_name
+        while not func_name in self.functions_to_bind:
+            print 'Not found: %s' % func_name
+            klass = self.get_base_class(klass)
+            func_name = '%s%s' % (klass, destructor_suffix)
+            if klass is None:
+                break
+
+        if klass == None:
+            func_name = '// No destructor found: '
+
+        self.fd_mm.write(template % (name,
+                                    klass_name,
+                                    klass_name,
+                                    func_name, klass
+                                    ))
 
     def generate_implementation_class_method(self, klass_name, function):
         func_name = function['name']
@@ -2025,7 +2044,7 @@ void %s_createClass(JSContext *cx, JSObject* globalObj, const char* name )
         self.fd_mm.write(template_st_funcs)
 
         template_end = '''
-	JSB_cpSpace_object = JS_InitClass(cx, globalObj, %s, %s_class, %s_constructor,0,properties,funcs,NULL,st_funcs);
+	%s_object = JS_InitClass(cx, globalObj, %s, %s_class, %s_constructor,0,properties,funcs,NULL,st_funcs);
 }
 '''
         parent = self.get_base_class(klass_name)
@@ -2033,7 +2052,7 @@ void %s_createClass(JSContext *cx, JSObject* globalObj, const char* name )
             parent = 'NULL'
         else:
             parent = '%s%s_object' % (PROXY_PREFIX, parent)
-        self.fd_mm.write(template_end % (parent, name, name))
+        self.fd_mm.write(template_end % (name, parent, name, name))
 
     def generate_implementation_class(self, klass_name):
         self.generate_implementation_class_variables(klass_name)
