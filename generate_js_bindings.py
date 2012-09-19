@@ -91,6 +91,7 @@ class JSBGenerate(object):
         self.functions_bound = config.functions_bound
         self.function_properties = config.function_properties
         self.function_prefix = config.function_prefix
+        self.function_classes = config.function_classes
 
     #
     # BEGIN Helper functions
@@ -549,6 +550,10 @@ class JSBGenerate(object):
         template = '\tok &= jsval_to_block_1( cx, *argvp++, JS_THIS_OBJECT(cx, vp), &arg%d );\n'
         self.fd_mm.write(template % (i))
 
+    def generate_argument_functionclass(self, i, arg_js_type, arg_declared_type):
+        template = '\tok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg%d );\n'
+        self.fd_mm.write(template % (i))
+
     def generate_argument_opaque(self, i, arg_js_type, arg_declared_type):
         template = '\tok &= jsval_to_opaque( cx, *argvp++, (void**)&arg%d );\n'
         self.fd_mm.write(template % (i))
@@ -602,10 +607,15 @@ class JSBGenerate(object):
         self.fd_mm.write('\tjsval *argvp = JS_ARGV(cx,vp);\n')
         self.fd_mm.write('\tJSBool ok = JS_TRUE;\n')
 
+        # first_arg is used by "OO Functions". The first argument should be "self", so argv[0] is skipped in those cases
+        first_arg = properties.get('first_arg', 0)
+
         # Declare variables
         declared_vars = '\t'
         for i, arg in enumerate(args_js_type):
-            if args_declared_type[i] in self.struct_opaque:
+            if i < first_arg:
+                continue
+            if args_declared_type[i] in self.struct_opaque or args_declared_type[i] in self.function_classes:
                 declared_vars += '%s arg%d;' % (args_declared_type[i], i)
             elif args_declared_type[i] in self.struct_manual:
                 declared_vars += '%s arg%d;' % (args_declared_type[i], i)
@@ -618,7 +628,7 @@ class JSBGenerate(object):
             declared_vars += ' '
         self.fd_mm.write('%s\n\n' % declared_vars)
 
-        # Optional Arguments ?
+        # Optional Arguments ? Used when merging methods
         min_args = properties.get('min_args', None)
         max_args = properties.get('max_args', None)
         if min_args != max_args:
@@ -635,10 +645,15 @@ class JSBGenerate(object):
         else:
             for i, arg in enumerate(args_js_type):
 
+                if i < first_arg:
+                    continue
+
                 if optional_args != None and i >= optional_args:
                     self.fd_mm.write('\tif (argc >= %d) {\n\t' % (i + 1))
 
-                if args_declared_type[i] in self.struct_opaque:
+                if args_declared_type[i] in self.function_classes:
+                    self.generate_argument_functionclass(i, arg, args_declared_type[i])
+                elif args_declared_type[i] in self.struct_opaque:
                     self.generate_argument_opaque(i, arg, args_declared_type[i])
                 elif args_declared_type[i] in self.struct_manual:
                     self.generate_argument_struct_manual(i, arg, args_declared_type[i])
@@ -1902,13 +1917,14 @@ void %s_finalize(JSFreeOp *fop, JSObject *obj)
 
         num_of_args = len(args_declared_type)
 
-        # writes method description
-        self.fd_mm.write('\n// Arguments: %s\n// Ret value: %s' % (', '.join(args_declared_type), ret_declared_type))
+        # writes method description. Skip first argument
+        self.fd_mm.write('\n// Arguments: %s\n// Ret value: %s' % (', '.join(args_declared_type[1:]), ret_declared_type))
 
         self.generate_function_prefix(jsb_func_name, max(0, num_of_args - 1))
 
+        # Skip first argument, since argv[0] should be "self"
         if len(args_js_type) > 1:
-            self.generate_arguments(args_declared_type, args_js_type)
+            self.generate_arguments(args_declared_type, args_js_type, {'first_arg': 1})
 
         if ret_js_type:
             self.fd_mm.write('\t%s ret_val;\n' % ret_declared_type)
@@ -2385,6 +2401,10 @@ class JSBindings(object):
                     o_val = None
                 opts[o_key] = o_val
             self.c_object_properties[key] = opts
+
+        self.function_classes = []
+        for k in self.c_object_properties['function_prefix']:
+            self.function_classes.append(k + '*')
 
     def init_class_properties(self, properties):
         ref_list = []
