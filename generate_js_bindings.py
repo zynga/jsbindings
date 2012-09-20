@@ -335,6 +335,14 @@ class JSBGenerate(object):
     '''
         return template
 
+    # If the structure should be returned as an Object. For OO C API (Chipmunk)
+    def generate_retval_functionclass(self, declared_type, js_type):
+        template = '''
+\tjsval ret_jsval = functionclass_to_jsval( cx, ret_val );
+\tJS_SET_RVAL(cx, vp, ret_jsval);
+    '''
+        return template
+
     def generate_retval(self, declared_type, js_type, method=None):
         direct_convert = {
             'i': 'INT_TO_JSVAL(ret_val)',
@@ -359,7 +367,9 @@ class JSBGenerate(object):
             return '\tJS_SET_RVAL(cx, vp, JSVAL_TRUE);'
 
         ret = ''
-        if declared_type in self.struct_opaque:
+        if declared_type in self.function_classes:
+            ret = self.generate_retval_functionclass(declared_type, js_type)
+        elif declared_type in self.struct_opaque:
             ret = self.generate_retval_opaque(declared_type, js_type)
         elif declared_type in self.struct_manual:
             ret = self.generate_retval_struct_manual(declared_type, js_type)
@@ -1834,9 +1844,9 @@ class JSBGenerateOOFunctions(JSBGenerateFunctions):
         return (klass_name in self.manual_bound_methods) and (func_name in self.manual_bound_methods[klass_name])
 
     def create_files(self):
-        # self.fd_h = open('%s%s_auto_classes.h' % (BINDINGS_PREFIX, self.namespace), 'w')
+        self.fd_h = open('%s%s_auto_classes.h' % (BINDINGS_PREFIX, self.namespace), 'w')
         self.fd_mm = open('%s%s_auto_classes.mm' % (BINDINGS_PREFIX, self.namespace), 'w')
-        # self.fd_registration = open('%s%s_auto_classes_registration.h' % (BINDINGS_PREFIX, self.namespace), 'w')
+        self.fd_registration = open('%s%s_auto_classes_registration.h' % (BINDINGS_PREFIX, self.namespace), 'w')
 
     def get_base_class(self, klass_name):
         '''returns the base class of a given class name'''
@@ -2163,9 +2173,32 @@ void %s_createClass(JSContext *cx, JSObject* globalObj, const char* name )
 
         self.generate_implementation_suffix()
 
+    def generate_header(self):
+        '''Generates the .h for the .mm file'''
+
+        template = 'void JSB_%s_createClass(JSContext *cx, JSObject* globalObj, const char* name );\n'
+
+        self.generate_autogenerate_prefix(self.fd_h)
+        klasses = self.sort_oo_classes()
+        for klass_name in klasses:
+            self.fd_h.write(template % klass_name)
+        self.generate_autogenerate_suffix(self.fd_h)
+
+    def generate_registration(self):
+        '''Generates the code that will register the clases into the JS VM'''
+
+        self.generate_autogenerate_prefix(self.fd_registration)
+        klasses = self.sort_oo_classes()
+        for klass_name in klasses:
+            js_class_name = klass_name
+            self.fd_registration.write('%s%s_createClass(_cx, %s, "%s");\n' % (PROXY_PREFIX, klass_name, self.namespace, js_class_name))
+        self.generate_autogenerate_suffix(self.fd_registration)
+
     def generate_bindings(self):
         self.create_files()
         self.generate_implementation()
+        self.generate_header()
+        self.generate_registration()
 
 
 #

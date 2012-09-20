@@ -619,7 +619,7 @@ JSBool JSB_cpBodyAlloc(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	ret_val = cpBodyAlloc( );
 
-	jsval ret_jsval = opaque_to_jsval( cx, ret_val );
+	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -852,7 +852,7 @@ JSBool JSB_cpBodyGetSpace(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	ret_val = cpBodyGetSpace((cpBody*)arg0  );
 
-	jsval ret_jsval = opaque_to_jsval( cx, ret_val );
+	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -970,7 +970,7 @@ JSBool JSB_cpBodyInit(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	ret_val = cpBodyInit((cpBody*)arg0 , (cpFloat)arg1 , (cpFloat)arg2  );
 
-	jsval ret_jsval = opaque_to_jsval( cx, ret_val );
+	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -990,7 +990,7 @@ JSBool JSB_cpBodyInitStatic(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	ret_val = cpBodyInitStatic((cpBody*)arg0  );
 
-	jsval ret_jsval = opaque_to_jsval( cx, ret_val );
+	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -1100,7 +1100,7 @@ JSBool JSB_cpBodyNew(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	ret_val = cpBodyNew((cpFloat)arg0 , (cpFloat)arg1  );
 
-	jsval ret_jsval = opaque_to_jsval( cx, ret_val );
+	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -1114,7 +1114,7 @@ JSBool JSB_cpBodyNewStatic(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	ret_val = cpBodyNewStatic( );
 
-	jsval ret_jsval = opaque_to_jsval( cx, ret_val );
+	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -1412,7 +1412,7 @@ JSBool JSB_cpBoxShapeNew(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	ret_val = cpBoxShapeNew((cpBody*)arg0 , (cpFloat)arg1 , (cpFloat)arg2  );
 
-	jsval ret_jsval = opaque_to_jsval( cx, ret_val );
+	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -1433,7 +1433,7 @@ JSBool JSB_cpBoxShapeNew2(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	ret_val = cpBoxShapeNew2((cpBody*)arg0 , (cpBB)arg1  );
 
-	jsval ret_jsval = opaque_to_jsval( cx, ret_val );
+	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -1492,7 +1492,7 @@ JSBool JSB_cpCircleShapeNew(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	ret_val = cpCircleShapeNew((cpBody*)arg0 , (cpFloat)arg1 , (cpVect)arg2  );
 
-	jsval ret_jsval = opaque_to_jsval( cx, ret_val );
+	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -1560,7 +1560,7 @@ JSBool JSB_cpConstraintGetA(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	ret_val = cpConstraintGetA((cpConstraint*)arg0  );
 
-	jsval ret_jsval = opaque_to_jsval( cx, ret_val );
+	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -1580,7 +1580,7 @@ JSBool JSB_cpConstraintGetB(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	ret_val = cpConstraintGetB((cpConstraint*)arg0  );
 
-	jsval ret_jsval = opaque_to_jsval( cx, ret_val );
+	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -1668,7 +1668,7 @@ JSBool JSB_cpConstraintGetSpace(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	ret_val = cpConstraintGetSpace((cpConstraint*)arg0  );
 
-	jsval ret_jsval = opaque_to_jsval( cx, ret_val );
+	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -1794,7 +1794,7 @@ JSBool JSB_cpDampedRotarySpringNew(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	ret_val = cpDampedRotarySpringNew((cpBody*)arg0 , (cpBody*)arg1 , (cpFloat)arg2 , (cpFloat)arg3 , (cpFloat)arg4  );
 
-	jsval ret_jsval = opaque_to_jsval( cx, ret_val );
+	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -1962,7 +1962,7 @@ JSBool JSB_cpDampedSpringNew(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	ret_val = cpDampedSpringNew((cpBody*)arg0 , (cpBody*)arg1 , (cpVect)arg2 , (cpVect)arg3 , (cpFloat)arg4 , (cpFloat)arg5 , (cpFloat)arg6  );
 
-	jsval ret_jsval = opaque_to_jsval( cx, ret_val );
+	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -2104,7 +2104,7 @@ JSBool JSB_cpGearJointNew(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	ret_val = cpGearJointNew((cpBody*)arg0 , (cpBody*)arg1 , (cpFloat)arg2 , (cpFloat)arg3  );
 
-	jsval ret_jsval = opaque_to_jsval( cx, ret_val );
+	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -2222,7 +2222,7 @@ JSBool JSB_cpGrooveJointNew(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	ret_val = cpGrooveJointNew((cpBody*)arg0 , (cpBody*)arg1 , (cpVect)arg2 , (cpVect)arg3 , (cpVect)arg4  );
 
-	jsval ret_jsval = opaque_to_jsval( cx, ret_val );
+	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -2439,7 +2439,7 @@ JSBool JSB_cpPinJointNew(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	ret_val = cpPinJointNew((cpBody*)arg0 , (cpBody*)arg1 , (cpVect)arg2 , (cpVect)arg3  );
 
-	jsval ret_jsval = opaque_to_jsval( cx, ret_val );
+	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -2552,7 +2552,7 @@ JSBool JSB_cpPivotJointNew(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	ret_val = cpPivotJointNew((cpBody*)arg0 , (cpBody*)arg1 , (cpVect)arg2  );
 
-	jsval ret_jsval = opaque_to_jsval( cx, ret_val );
+	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -2575,7 +2575,7 @@ JSBool JSB_cpPivotJointNew2(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	ret_val = cpPivotJointNew2((cpBody*)arg0 , (cpBody*)arg1 , (cpVect)arg2 , (cpVect)arg3  );
 
-	jsval ret_jsval = opaque_to_jsval( cx, ret_val );
+	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -2721,7 +2721,7 @@ JSBool JSB_cpRatchetJointNew(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	ret_val = cpRatchetJointNew((cpBody*)arg0 , (cpBody*)arg1 , (cpFloat)arg2 , (cpFloat)arg3  );
 
-	jsval ret_jsval = opaque_to_jsval( cx, ret_val );
+	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -2839,7 +2839,7 @@ JSBool JSB_cpRotaryLimitJointNew(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	ret_val = cpRotaryLimitJointNew((cpBody*)arg0 , (cpBody*)arg1 , (cpFloat)arg2 , (cpFloat)arg3  );
 
-	jsval ret_jsval = opaque_to_jsval( cx, ret_val );
+	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -2973,7 +2973,7 @@ JSBool JSB_cpSegmentShapeNew(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	ret_val = cpSegmentShapeNew((cpBody*)arg0 , (cpVect)arg1 , (cpVect)arg2 , (cpFloat)arg3  );
 
-	jsval ret_jsval = opaque_to_jsval( cx, ret_val );
+	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -3083,7 +3083,7 @@ JSBool JSB_cpShapeGetBody(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	ret_val = cpShapeGetBody((cpShape*)arg0  );
 
-	jsval ret_jsval = opaque_to_jsval( cx, ret_val );
+	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -3211,7 +3211,7 @@ JSBool JSB_cpShapeGetSpace(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	ret_val = cpShapeGetSpace((cpShape*)arg0  );
 
-	jsval ret_jsval = opaque_to_jsval( cx, ret_val );
+	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -3446,7 +3446,7 @@ JSBool JSB_cpSimpleMotorNew(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	ret_val = cpSimpleMotorNew((cpBody*)arg0 , (cpBody*)arg1 , (cpFloat)arg2  );
 
-	jsval ret_jsval = opaque_to_jsval( cx, ret_val );
+	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -3562,7 +3562,7 @@ JSBool JSB_cpSlideJointNew(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	ret_val = cpSlideJointNew((cpBody*)arg0 , (cpBody*)arg1 , (cpVect)arg2 , (cpVect)arg3 , (cpFloat)arg4 , (cpFloat)arg5  );
 
-	jsval ret_jsval = opaque_to_jsval( cx, ret_val );
+	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -3668,7 +3668,7 @@ JSBool JSB_cpSpaceAddBody(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	ret_val = cpSpaceAddBody((cpSpace*)arg0 , (cpBody*)arg1  );
 
-	jsval ret_jsval = opaque_to_jsval( cx, ret_val );
+	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -3689,7 +3689,7 @@ JSBool JSB_cpSpaceAddConstraint(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	ret_val = cpSpaceAddConstraint((cpSpace*)arg0 , (cpConstraint*)arg1  );
 
-	jsval ret_jsval = opaque_to_jsval( cx, ret_val );
+	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -3710,7 +3710,7 @@ JSBool JSB_cpSpaceAddShape(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	ret_val = cpSpaceAddShape((cpSpace*)arg0 , (cpShape*)arg1  );
 
-	jsval ret_jsval = opaque_to_jsval( cx, ret_val );
+	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -3731,7 +3731,7 @@ JSBool JSB_cpSpaceAddStaticShape(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	ret_val = cpSpaceAddStaticShape((cpSpace*)arg0 , (cpShape*)arg1  );
 
-	jsval ret_jsval = opaque_to_jsval( cx, ret_val );
+	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -3745,7 +3745,7 @@ JSBool JSB_cpSpaceAlloc(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	ret_val = cpSpaceAlloc( );
 
-	jsval ret_jsval = opaque_to_jsval( cx, ret_val );
+	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -4024,7 +4024,7 @@ JSBool JSB_cpSpaceGetStaticBody(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	ret_val = cpSpaceGetStaticBody((cpSpace*)arg0  );
 
-	jsval ret_jsval = opaque_to_jsval( cx, ret_val );
+	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -4044,7 +4044,7 @@ JSBool JSB_cpSpaceInit(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	ret_val = cpSpaceInit((cpSpace*)arg0  );
 
-	jsval ret_jsval = opaque_to_jsval( cx, ret_val );
+	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -4075,7 +4075,7 @@ JSBool JSB_cpSpaceNew(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	ret_val = cpSpaceNew( );
 
-	jsval ret_jsval = opaque_to_jsval( cx, ret_val );
+	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -4098,7 +4098,7 @@ JSBool JSB_cpSpacePointQueryFirst(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	ret_val = cpSpacePointQueryFirst((cpSpace*)arg0 , (cpVect)arg1 , (cpLayers)arg2 , (cpGroup)arg3  );
 
-	jsval ret_jsval = opaque_to_jsval( cx, ret_val );
+	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
