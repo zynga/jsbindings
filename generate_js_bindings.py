@@ -77,6 +77,9 @@ class JSBGenerate(object):
 
         self.config = config
 
+        # Generating Object Oriented Functions ?
+        self.generating_OOF = False
+
         #
         # UGLY CODE XXX
         # This should be accessed using self.config, not the following ugly code
@@ -367,7 +370,7 @@ class JSBGenerate(object):
             return '\tJS_SET_RVAL(cx, vp, JSVAL_TRUE);'
 
         ret = ''
-        if declared_type in self.function_classes:
+        if declared_type in self.function_classes and self.generating_OOF:
             ret = self.generate_retval_functionclass(declared_type, js_type)
         elif declared_type in self.struct_opaque:
             ret = self.generate_retval_opaque(declared_type, js_type)
@@ -689,7 +692,7 @@ class JSBGenerate(object):
                 if optional_args != None and i >= optional_args:
                     self.fd_mm.write('\tif (argc >= %d) {\n\t' % (i + 1))
 
-                if args_declared_type[i] in self.function_classes:
+                if args_declared_type[i] in self.function_classes and self.generating_OOF:
                     self.generate_argument_functionclass(i, arg, args_declared_type[i])
                 elif args_declared_type[i] in self.struct_opaque:
                     self.generate_argument_opaque(i, arg, args_declared_type[i])
@@ -1810,6 +1813,9 @@ class JSBGenerateOOFunctions(JSBGenerateFunctions):
         # "methods" that were successfully bound to the "classes"
         self.bound_methods = {}
 
+        # Yes, generating Object Oriented Functions
+        self.generating_OOF = True
+
     #
     # BEGIN of Helper functions
     #
@@ -2191,6 +2197,9 @@ void %s_createClass(JSContext *cx, JSObject* globalObj, const char* name )
         klasses = self.sort_oo_classes()
         for klass_name in klasses:
             js_class_name = klass_name
+            if klass_name.startswith(self.function_prefix):
+                js_class_name = klass_name[len(self.function_prefix):]
+
             self.fd_registration.write('%s%s_createClass(_cx, %s, "%s");\n' % (PROXY_PREFIX, klass_name, self.namespace, js_class_name))
         self.generate_autogenerate_suffix(self.fd_registration)
 
