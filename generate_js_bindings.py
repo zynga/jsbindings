@@ -1821,15 +1821,11 @@ class JSBGenerateOOFunctions(JSBGenerateFunctions):
     #
     # BEGIN of Helper functions
     #
-    def is_valid_oo_function(self, klass_name, name):
-        '''returns whether or not the function is a valid OO function of a class. Constructor/Destructors are not valid'''
+    def is_oof_method(self, klass_name, name):
+        '''returns whether or not name is a method of klass_name'''
 
         # Member of the class ?
         if not name.startswith(klass_name):
-            return False
-
-        # Is in the list of supported functions ?
-        if not name in self.functions_to_bind:
             return False
 
         # constructor ?
@@ -1945,10 +1941,11 @@ JSObject* %s_object = NULL;
                                     name))
 
     def generate_implementation_class_constructor(self, klass_name):
-        tempalte_0_pre = '''
+        template_0_pre = '''
 // Constructor
 JSBool %s_constructor(JSContext *cx, uint32_t argc, jsval *vp)
 {
+\tJSB_PRECONDITION(argc==%d, "Invalid number of arguments");
 '''
         template_0_post = '''
 \treturn JS_TRUE;
@@ -1966,11 +1963,17 @@ JSBool %s_constructor(JSContext *cx, uint32_t argc, jsval *vp)
         klass = klass_name
         while not func_name in self.functions_to_bind:
             klass = self.get_base_class(klass)
-            sys.stderr.write('"Constructor" not found: %s. Using parent class: %s\n' % (func_name, klass))
+            sys.stderr.write('Warning: "Constructor" not found: %s. Using parent class: %s\n' % (func_name, klass))
             func_name = '%s%s' % (klass, constructor_suffix)
             if klass is None:
                 break
 
+        # Manually bound constructor ?
+        if klass in self.manual_bound_methods and func_name in self.manual_bound_methods[klass]:
+            sys.stderr.write("'Constructor': %s manually bound" % func_name)
+            return
+
+        num_of_args = 0
         try:
             if klass is not None:
 
@@ -1982,7 +1985,7 @@ JSBool %s_constructor(JSContext *cx, uint32_t argc, jsval *vp)
 
                 # writes method description
                 self.fd_mm.write('// Arguments: %s' % ', '.join(args_declared_type))
-                self.fd_mm.write(tempalte_0_pre % name)
+                self.fd_mm.write(template_0_pre % (name, num_of_args))
                 self.fd_mm.write(template_1_a % (klass_name, klass_name))
 
                 if num_of_args > 0:
@@ -1993,11 +1996,11 @@ JSBool %s_constructor(JSContext *cx, uint32_t argc, jsval *vp)
 
                 self.fd_mm.write(template_1_b)
         except ParseException, e:
-            self.fd_mm.write(tempalte_0_pre % name)
+            self.fd_mm.write(template_0_pre % (name, num_of_args))
             self.fd_mm.write('\tNSCAssert(NO, @"Not possible to generate constructor: %s");\n' % str(e))
 
         if klass is None:
-            self.fd_mm.write(tempalte_0_pre % name)
+            self.fd_mm.write(template_0_pre % (name, num_of_args))
             self.fd_mm.write('\tNSCAssert(NO, @"No constructor");\n')
 
         self.fd_mm.write(template_0_post)
@@ -2079,7 +2082,7 @@ void %s_finalize(JSFreeOp *fop, JSObject *obj)
         self.bound_methods[klass_name] = []
         for func in self.bs_funcs:
             name = func['name']
-            if self.is_valid_oo_function(klass_name, name) and not self.is_manually_bound_oo_function(klass_name, name):
+            if name in self.functions_to_bind and self.is_oof_method(klass_name, name) and not self.is_manually_bound_oo_function(klass_name, name):
                 # XXX: this works in chipmunk because the "classes" has the 'baseclass' at the end:
                 #   cpCircleShape (OK)
                 # But it won't work in this case:
@@ -2140,9 +2143,11 @@ void %s_createClass(JSContext *cx, JSObject* globalObj, const char* name )
         # Manually bound methods too
         if klass_name in self.manual_bound_methods:
             for func_name in self.manual_bound_methods[klass_name]:
-                f = self.get_function(func_name)
-                js_fn_name, native_fn_name, args = self.get_name_for_oof(klass_name, f)
-                self.fd_mm.write(template_funcs_body % (js_fn_name, native_fn_name, args))
+                # skip constructors / destructors
+                if self.is_oof_method(klass_name, func_name):
+                    f = self.get_function(func_name)
+                    js_fn_name, native_fn_name, args = self.get_name_for_oof(klass_name, f)
+                    self.fd_mm.write(template_funcs_body % (js_fn_name, native_fn_name, args))
 
         self.fd_mm.write(template_funcs_post)
 

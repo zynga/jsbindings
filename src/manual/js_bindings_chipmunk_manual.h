@@ -57,8 +57,9 @@ JSBool JSB_cpBody_setUserData(JSContext *cx, uint32_t argc, jsval *vp);
 
 // convertions
 
-JSBool jsval_to_cpBB( JSContext *cx, jsval vp, cpBB *ret );
 jsval cpBB_to_jsval(JSContext *cx, cpBB bb );
+JSBool jsval_to_cpBB( JSContext *cx, jsval vp, cpBB *ret );
+JSBool jsval_to_array_of_cpvect( JSContext *cx, jsval vp, cpVect**verts, int *numVerts);
 
 // requires cocos2d
 #define cpVect_to_jsval CGPoint_to_jsval
@@ -70,6 +71,8 @@ void JSB_cpBase_createClass(JSContext* cx, JSObject* globalObj, const char * nam
 extern JSObject* JSB_cpBase_object;
 extern JSClass* JSB_cpBase_class;
 
+// Manual "constructor" for PolyShape
+JSBool JSB_cpPolyShape_constructor(JSContext *cx, uint32_t argc, jsval *vp);
 
 #endif // JSB_INCLUDE_CHIPMUNK
 

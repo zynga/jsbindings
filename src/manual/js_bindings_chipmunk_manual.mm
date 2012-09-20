@@ -66,6 +66,41 @@ jsval cpBB_to_jsval(JSContext *cx, cpBB bb )
 	return OBJECT_TO_JSVAL(typedArray);
 }
 
+JSBool jsval_to_array_of_cpvect( JSContext *cx, jsval vp, cpVect**verts, int *numVerts)
+{
+	// Parsing sequence
+	JSObject *jsobj;
+	JSBool ok = JS_ValueToObject( cx, vp, &jsobj );
+	JSB_PRECONDITION( ok, "Error converting value to object");
+	
+	JSB_PRECONDITION( jsobj && JS_IsArrayObject( cx, jsobj),  "Object must be an array");
+
+	uint32_t len;
+	JS_GetArrayLength(cx, jsobj, &len);
+	
+	JSB_PRECONDITION( len%2==0, "Array lenght should be even");
+	
+	cpVect array[len];
+	
+	for( uint32_t i=0; i< len;i++ ) {
+		jsval valarg;
+		JS_GetElement(cx, jsobj, i, &valarg);
+
+		double value;
+		ok = JS_ValueToNumber(cx, valarg, &value);
+		JSB_PRECONDITION( ok, "Error converting value to nsobject");
+		
+		if(i%2==0)
+			array[i/2].x = value;
+		else
+			array[i/2].y = value;
+	}
+	
+	*numVerts = len/2;
+	*verts = array;
+	
+	return JS_TRUE;
+}
 
 #pragma mark - Collision Handler
 
@@ -627,6 +662,28 @@ void JSB_cpBase_createClass(JSContext *cx, JSObject* globalObj, const char* name
 	};
 	
 	JSB_cpBase_object = JS_InitClass(cx, globalObj, NULL, JSB_cpBase_class, JSB_cpBase_constructor,0,properties,funcs,NULL,st_funcs);
+}
+
+// Manual "methods"
+// Constructor
+JSBool JSB_cpPolyShape_constructor(JSContext *cx, uint32_t argc, jsval *vp)
+{
+	JSB_PRECONDITION(argc==3, "Invalid number of arguments");
+	JSObject *jsobj = JS_NewObject(cx, JSB_cpPolyShape_class, JSB_cpPolyShape_object, NULL);
+	jsval *argvp = JS_ARGV(cx,vp);
+	JSBool ok = JS_TRUE;
+	cpBody* body; cpVect *verts; cpVect offset;
+	int numVerts;
+	
+	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&body );
+	ok &= jsval_to_array_of_cpvect( cx, *argvp++, &verts, &numVerts);
+	ok &= jsval_to_cpVect( cx, *argvp++, (cpVect*) &offset );
+	JSB_PRECONDITION(ok, "Error processing arguments");
+	cpShape *shape = cpPolyShapeNew(body, numVerts, verts, offset);
+	JS_SetPrivate(jsobj, (void*)shape);
+	JS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(jsobj));
+	
+	return JS_TRUE;
 }
 
 #endif // JSB_INCLUDE_CHIPMUNK

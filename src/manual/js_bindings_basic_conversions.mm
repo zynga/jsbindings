@@ -171,7 +171,10 @@ JSBool jsvals_variadic_to_nsarray( JSContext *cx, jsval *vp, int argc, NSArray**
 		// Number ?
 		if( ! ok ) {
 			double num;
-			ok = JS_ValueToNumber(cx, *vp, &num );
+			
+			// optimization: JS_ValueToNumber is expensive. And can convert an string like "12" to a number
+			if( JSVAL_IS_NUMBER(*vp))
+			   ok = JS_ValueToNumber(cx, *vp, &num );
 			
 			if( ok ) {
 				obj = [NSNumber numberWithDouble:num];
