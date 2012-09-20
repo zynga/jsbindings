@@ -25,6 +25,7 @@ JSObject* JSB_cpConstraint_object = NULL;
 // Constructor
 JSBool JSB_cpConstraint_constructor(JSContext *cx, uint32_t argc, jsval *vp)
 {
+	JSB_PRECONDITION(argc==0, "Invalid number of arguments");
 	NSCAssert(NO, @"No constructor");
 
 	return JS_TRUE;
@@ -292,6 +293,7 @@ JSObject* JSB_cpGrooveJoint_object = NULL;
 // Constructor
 JSBool JSB_cpGrooveJoint_constructor(JSContext *cx, uint32_t argc, jsval *vp)
 {
+	JSB_PRECONDITION(argc==5, "Invalid number of arguments");
 	JSObject *jsobj = JS_NewObject(cx, JSB_cpGrooveJoint_class, JSB_cpGrooveJoint_object, NULL);
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
@@ -478,6 +480,7 @@ JSObject* JSB_cpSimpleMotor_object = NULL;
 // Constructor
 JSBool JSB_cpSimpleMotor_constructor(JSContext *cx, uint32_t argc, jsval *vp)
 {
+	JSB_PRECONDITION(argc==3, "Invalid number of arguments");
 	JSObject *jsobj = JS_NewObject(cx, JSB_cpSimpleMotor_class, JSB_cpSimpleMotor_object, NULL);
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
@@ -579,6 +582,7 @@ JSObject* JSB_cpPivotJoint_object = NULL;
 // Constructor
 JSBool JSB_cpPivotJoint_constructor(JSContext *cx, uint32_t argc, jsval *vp)
 {
+	JSB_PRECONDITION(argc==3, "Invalid number of arguments");
 	JSObject *jsobj = JS_NewObject(cx, JSB_cpPivotJoint_class, JSB_cpPivotJoint_object, NULL);
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
@@ -723,6 +727,7 @@ JSObject* JSB_cpPinJoint_object = NULL;
 // Constructor
 JSBool JSB_cpPinJoint_constructor(JSContext *cx, uint32_t argc, jsval *vp)
 {
+	JSB_PRECONDITION(argc==4, "Invalid number of arguments");
 	JSObject *jsobj = JS_NewObject(cx, JSB_cpPinJoint_class, JSB_cpPinJoint_object, NULL);
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
@@ -905,6 +910,7 @@ JSObject* JSB_cpSlideJoint_object = NULL;
 // Constructor
 JSBool JSB_cpSlideJoint_constructor(JSContext *cx, uint32_t argc, jsval *vp)
 {
+	JSB_PRECONDITION(argc==6, "Invalid number of arguments");
 	JSObject *jsobj = JS_NewObject(cx, JSB_cpSlideJoint_class, JSB_cpSlideJoint_object, NULL);
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
@@ -1126,6 +1132,7 @@ JSObject* JSB_cpGearJoint_object = NULL;
 // Constructor
 JSBool JSB_cpGearJoint_constructor(JSContext *cx, uint32_t argc, jsval *vp)
 {
+	JSB_PRECONDITION(argc==4, "Invalid number of arguments");
 	JSObject *jsobj = JS_NewObject(cx, JSB_cpGearJoint_class, JSB_cpGearJoint_object, NULL);
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
@@ -1265,6 +1272,7 @@ JSObject* JSB_cpDampedRotarySpring_object = NULL;
 // Constructor
 JSBool JSB_cpDampedRotarySpring_constructor(JSContext *cx, uint32_t argc, jsval *vp)
 {
+	JSB_PRECONDITION(argc==5, "Invalid number of arguments");
 	JSObject *jsobj = JS_NewObject(cx, JSB_cpDampedRotarySpring_class, JSB_cpDampedRotarySpring_object, NULL);
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
@@ -1442,6 +1450,7 @@ JSObject* JSB_cpDampedSpring_object = NULL;
 // Constructor
 JSBool JSB_cpDampedSpring_constructor(JSContext *cx, uint32_t argc, jsval *vp)
 {
+	JSB_PRECONDITION(argc==7, "Invalid number of arguments");
 	JSObject *jsobj = JS_NewObject(cx, JSB_cpDampedSpring_class, JSB_cpDampedSpring_object, NULL);
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
@@ -1701,6 +1710,7 @@ JSObject* JSB_cpRatchetJoint_object = NULL;
 // Constructor
 JSBool JSB_cpRatchetJoint_constructor(JSContext *cx, uint32_t argc, jsval *vp)
 {
+	JSB_PRECONDITION(argc==4, "Invalid number of arguments");
 	JSObject *jsobj = JS_NewObject(cx, JSB_cpRatchetJoint_class, JSB_cpRatchetJoint_object, NULL);
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
@@ -1877,6 +1887,7 @@ JSObject* JSB_cpRotaryLimitJoint_object = NULL;
 // Constructor
 JSBool JSB_cpRotaryLimitJoint_constructor(JSContext *cx, uint32_t argc, jsval *vp)
 {
+	JSB_PRECONDITION(argc==4, "Invalid number of arguments");
 	JSObject *jsobj = JS_NewObject(cx, JSB_cpRotaryLimitJoint_class, JSB_cpRotaryLimitJoint_object, NULL);
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
@@ -2016,6 +2027,7 @@ JSObject* JSB_cpArbiter_object = NULL;
 // Constructor
 JSBool JSB_cpArbiter_constructor(JSContext *cx, uint32_t argc, jsval *vp)
 {
+	JSB_PRECONDITION(argc==0, "Invalid number of arguments");
 	NSCAssert(NO, @"No constructor");
 
 	return JS_TRUE;
@@ -2358,6 +2370,7 @@ JSObject* JSB_cpSpace_object = NULL;
 // Constructor
 JSBool JSB_cpSpace_constructor(JSContext *cx, uint32_t argc, jsval *vp)
 {
+	JSB_PRECONDITION(argc==0, "Invalid number of arguments");
 	JSObject *jsobj = JS_NewObject(cx, JSB_cpSpace_class, JSB_cpSpace_object, NULL);
 	void* 	ret_val = cpSpaceNew( );
 	JS_SetPrivate(jsobj, ret_val);
@@ -3254,6 +3267,7 @@ JSObject* JSB_cpBody_object = NULL;
 // Constructor
 JSBool JSB_cpBody_constructor(JSContext *cx, uint32_t argc, jsval *vp)
 {
+	JSB_PRECONDITION(argc==2, "Invalid number of arguments");
 	JSObject *jsobj = JS_NewObject(cx, JSB_cpBody_class, JSB_cpBody_object, NULL);
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
@@ -4154,6 +4168,7 @@ JSObject* JSB_cpShape_object = NULL;
 // Constructor
 JSBool JSB_cpShape_constructor(JSContext *cx, uint32_t argc, jsval *vp)
 {
+	JSB_PRECONDITION(argc==0, "Invalid number of arguments");
 	NSCAssert(NO, @"No constructor");
 
 	return JS_TRUE;
@@ -4635,6 +4650,7 @@ JSObject* JSB_cpCircleShape_object = NULL;
 // Constructor
 JSBool JSB_cpCircleShape_constructor(JSContext *cx, uint32_t argc, jsval *vp)
 {
+	JSB_PRECONDITION(argc==3, "Invalid number of arguments");
 	JSObject *jsobj = JS_NewObject(cx, JSB_cpCircleShape_class, JSB_cpCircleShape_object, NULL);
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
@@ -4734,6 +4750,7 @@ JSObject* JSB_cpSegmentShape_object = NULL;
 // Constructor
 JSBool JSB_cpSegmentShape_constructor(JSContext *cx, uint32_t argc, jsval *vp)
 {
+	JSB_PRECONDITION(argc==4, "Invalid number of arguments");
 	JSObject *jsobj = JS_NewObject(cx, JSB_cpSegmentShape_class, JSB_cpSegmentShape_object, NULL);
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
@@ -4894,6 +4911,7 @@ JSObject* JSB_cpBoxShape_object = NULL;
 // Constructor
 JSBool JSB_cpBoxShape_constructor(JSContext *cx, uint32_t argc, jsval *vp)
 {
+	JSB_PRECONDITION(argc==3, "Invalid number of arguments");
 	JSObject *jsobj = JS_NewObject(cx, JSB_cpBoxShape_class, JSB_cpBoxShape_object, NULL);
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
@@ -4954,14 +4972,6 @@ void JSB_cpBoxShape_createClass(JSContext *cx, JSObject* globalObj, const char* 
 
 JSClass* JSB_cpPolyShape_class = NULL;
 JSObject* JSB_cpPolyShape_object = NULL;
-
-// Constructor
-JSBool JSB_cpPolyShape_constructor(JSContext *cx, uint32_t argc, jsval *vp)
-{
-	NSCAssert(NO, @"Not possible to generate constructor: Unsupported argument: cpVect*");
-
-	return JS_TRUE;
-}
 
 // Destructor
 void JSB_cpPolyShape_finalize(JSFreeOp *fop, JSObject *obj)
