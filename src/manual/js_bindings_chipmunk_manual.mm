@@ -80,7 +80,7 @@ JSBool jsval_to_array_of_cpvect( JSContext *cx, jsval vp, cpVect**verts, int *nu
 	
 	JSB_PRECONDITION( len%2==0, "Array lenght should be even");
 	
-	cpVect array[len];
+	cpVect *array = (cpVect*)malloc( sizeof(cpVect) * len/2);
 	
 	for( uint32_t i=0; i< len;i++ ) {
 		jsval valarg;
@@ -682,6 +682,8 @@ JSBool JSB_cpPolyShape_constructor(JSContext *cx, uint32_t argc, jsval *vp)
 	cpShape *shape = cpPolyShapeNew(body, numVerts, verts, offset);
 	JS_SetPrivate(jsobj, (void*)shape);
 	JS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(jsobj));
+	
+	free(verts);
 	
 	return JS_TRUE;
 }
