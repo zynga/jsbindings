@@ -74,4 +74,4 @@ jsval CGRect_to_jsval( JSContext *cx, CGRect r);
 jsval NSArray_to_jsval( JSContext *cx, NSArray *array);
 jsval NSSet_to_jsval( JSContext *cx, NSSet *set);
 jsval opaque_to_jsval( JSContext *cx, void* opaque);
-jsval functionclass_to_jsval( JSContext *cx, void* handle, JSObject* object, JSClass *klass);
+jsval functionclass_to_jsval( JSContext *cx, void* handle, JSObject* object, JSClass *klass, const char* optional_class_name);

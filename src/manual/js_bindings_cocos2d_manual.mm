@@ -198,7 +198,7 @@ jsval ccColor4F_to_jsval( JSContext *cx, ccColor4F p )
 JSBool JSB_CCMenuItem_setBlock_( JSContext *cx, uint32_t argc, jsval *vp ) {
 	
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
-	JSB_NSObject *proxy = get_proxy_for_jsobject(jsthis);
+	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
 	
 	JSB_PRECONDITION( proxy && [proxy realObj], "Invalid Proxy object");
 	JSB_PRECONDITION( argc == 2, "Invalid number of arguments. Expecting 2 args" );
@@ -208,10 +208,10 @@ JSBool JSB_CCMenuItem_setBlock_( JSContext *cx, uint32_t argc, jsval *vp ) {
 	JSBool ok = JS_TRUE;
 
 	ok &= JS_ValueToObject(cx, *argvp, &js_this);
-	ok &= set_reserved_slot(jsthis, 0, *argvp++ );
+	ok &= jsb_set_reserved_slot(jsthis, 0, *argvp++ );
 
 	ok &= jsval_to_block_1( cx, *argvp, js_this, &js_func );
-	ok &= set_reserved_slot(jsthis, 1, *argvp++ );
+	ok &= jsb_set_reserved_slot(jsthis, 1, *argvp++ );
 	
 	if( ! ok )
 		return JS_FALSE;
@@ -258,8 +258,8 @@ JSBool JSB_CCMenuItemFont_itemWithString_block__static(JSContext *cx, uint32_t a
 	JS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(jsobj));
 
 	// "root" object and function
-	set_reserved_slot(jsobj, 0, argvp[1] );
-	set_reserved_slot(jsobj, 1, argvp[2] );
+	jsb_set_reserved_slot(jsobj, 0, argvp[1] );
+	jsb_set_reserved_slot(jsobj, 1, argvp[2] );
 
 	return JS_TRUE;
 }
@@ -267,7 +267,7 @@ JSBool JSB_CCMenuItemFont_itemWithString_block__static(JSContext *cx, uint32_t a
 // "init" in JS
 JSBool JSB_CCMenuItemFont_initWithString_block_(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
-	JSB_NSObject *proxy = get_proxy_for_jsobject(jsthis);
+	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
 	
 	JSB_PRECONDITION( proxy && ![proxy realObj], "Invalid Proxy object");
 	JSB_PRECONDITION( argc ==1 || argc == 3, "Invalid number of arguments. Expecting 1 or 3 args" );
@@ -300,8 +300,8 @@ JSBool JSB_CCMenuItemFont_initWithString_block_(JSContext *cx, uint32_t argc, js
 	JS_SET_RVAL(cx, vp, JSVAL_VOID);
 	
 	// "root" object and function
-	set_reserved_slot(jsthis, 0, argvp[1] );
-	set_reserved_slot(jsthis, 1, argvp[2] );
+	jsb_set_reserved_slot(jsthis, 0, argvp[1] );
+	jsb_set_reserved_slot(jsthis, 1, argvp[2] );
 		
 	return JS_TRUE;
 }
@@ -339,8 +339,8 @@ JSBool JSB_CCMenuItemLabel_itemWithLabel_block__static(JSContext *cx, uint32_t a
 	JS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(jsobj));
 	
 	// "root" object and function
-	set_reserved_slot(jsobj, 0, argvp[1] );
-	set_reserved_slot(jsobj, 1, argvp[2] );
+	jsb_set_reserved_slot(jsobj, 0, argvp[1] );
+	jsb_set_reserved_slot(jsobj, 1, argvp[2] );
 	
 	return JS_TRUE;
 }
@@ -348,7 +348,7 @@ JSBool JSB_CCMenuItemLabel_itemWithLabel_block__static(JSContext *cx, uint32_t a
 // "init" in JS
 JSBool JSB_CCMenuItemLabel_initWithLabel_block_(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
-	JSB_NSObject *proxy = get_proxy_for_jsobject(jsthis);
+	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
 	
 	JSB_PRECONDITION( proxy && [proxy realObj], "Invalid Proxy object");
 	JSB_PRECONDITION( argc ==1 || argc == 3, "Invalid number of arguments. Expecting 1 or 3 args" );
@@ -379,8 +379,8 @@ JSBool JSB_CCMenuItemLabel_initWithLabel_block_(JSContext *cx, uint32_t argc, js
 	JS_SET_RVAL(cx, vp, JSVAL_VOID);
 	
 	// "root" object and function
-	set_reserved_slot(jsthis, 0, argvp[1] );
-	set_reserved_slot(jsthis, 1, argvp[2] );
+	jsb_set_reserved_slot(jsthis, 0, argvp[1] );
+	jsb_set_reserved_slot(jsthis, 1, argvp[2] );
 	
 	return JS_TRUE;
 }
@@ -432,8 +432,8 @@ JSBool JSB_CCMenuItemImage_itemWithNormalImage_selectedImage_disabledImage_block
 	JS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(jsobj));
 	
 	// "root" object and function
-	set_reserved_slot(jsobj, 0, valthis );
-	set_reserved_slot(jsobj, 1, valfn );
+	jsb_set_reserved_slot(jsobj, 0, valthis );
+	jsb_set_reserved_slot(jsobj, 1, valfn );
 	
 	return JS_TRUE;
 }
@@ -441,7 +441,7 @@ JSBool JSB_CCMenuItemImage_itemWithNormalImage_selectedImage_disabledImage_block
 // "init" in JS
 JSBool JSB_CCMenuItemImage_initWithNormalImage_selectedImage_disabledImage_block_(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
-	JSB_NSObject *proxy = get_proxy_for_jsobject(jsthis);
+	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
 	
 	JSB_PRECONDITION( proxy && [proxy realObj], "Invalid Proxy object");
 	JSB_PRECONDITION( argc >=2 && argc <= 5, "Invalid number of arguments. Expecting: 2 <= args <= 5" );
@@ -488,8 +488,8 @@ JSBool JSB_CCMenuItemImage_initWithNormalImage_selectedImage_disabledImage_block
 	JS_SET_RVAL(cx, vp, JSVAL_VOID);
 	
 	// "root" object and function
-	set_reserved_slot(jsthis, 0, valthis );
-	set_reserved_slot(jsthis, 1, valfn );
+	jsb_set_reserved_slot(jsthis, 0, valthis );
+	jsb_set_reserved_slot(jsthis, 1, valfn );
 	
 	return JS_TRUE;
 }
@@ -540,8 +540,8 @@ JSBool JSB_CCMenuItemSprite_itemWithNormalSprite_selectedSprite_disabledSprite_b
 	JS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(jsobj));
 	
 	// "root" object and function
-	set_reserved_slot(jsobj, 0, valthis );
-	set_reserved_slot(jsobj, 1, valfn );
+	jsb_set_reserved_slot(jsobj, 0, valthis );
+	jsb_set_reserved_slot(jsobj, 1, valfn );
 	
 	return JS_TRUE;
 }
@@ -549,7 +549,7 @@ JSBool JSB_CCMenuItemSprite_itemWithNormalSprite_selectedSprite_disabledSprite_b
 // "init" in JS
 JSBool JSB_CCMenuItemSprite_initWithNormalSprite_selectedSprite_disabledSprite_block_(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
-	JSB_NSObject *proxy = get_proxy_for_jsobject(jsthis);
+	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
 	
 	JSB_PRECONDITION( proxy && [proxy realObj], "Invalid Proxy object");
 	JSB_PRECONDITION( argc >=2 && argc <= 5 && argc != 3, "Invalid number of arguments. 2 <= args <= 5 but not 3" );
@@ -594,8 +594,8 @@ JSBool JSB_CCMenuItemSprite_initWithNormalSprite_selectedSprite_disabledSprite_b
 	JS_SET_RVAL(cx, vp, JSVAL_VOID);
 	
 	// "root" object and function
-	set_reserved_slot(jsthis, 0, valthis );
-	set_reserved_slot(jsthis, 1, valfn );
+	jsb_set_reserved_slot(jsthis, 0, valthis );
+	jsb_set_reserved_slot(jsthis, 1, valfn );
 
 	return JS_TRUE;
 }
@@ -639,8 +639,8 @@ JSBool JSB_CCCallBlockN_actionWithBlock__static(JSContext *cx, uint32_t argc, js
 	JS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(jsobj));
 	
 	// "root" object and function
-	set_reserved_slot(jsobj, 0, valthis );
-	set_reserved_slot(jsobj, 1, valfn );
+	jsb_set_reserved_slot(jsobj, 0, valthis );
+	jsb_set_reserved_slot(jsobj, 1, valfn );
 	
 	return JS_TRUE;	
 }
@@ -650,7 +650,7 @@ JSBool JSB_CCCallBlockN_actionWithBlock__static(JSContext *cx, uint32_t argc, js
 JSBool JSB_CCTexture2D_setTexParameters_(JSContext *cx, uint32_t argc, jsval *vp)
 {
 	JSObject* obj = (JSObject *)JS_THIS_OBJECT(cx, vp);
-	JSB_NSObject *proxy = get_proxy_for_jsobject(obj);
+	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(obj);
 	
 	JSB_PRECONDITION( proxy && [proxy realObj], "Invalid Proxy object");
 	JSB_PRECONDITION( argc == 4, "Invalid number of arguments. Expecting 4 args" );
@@ -686,7 +686,7 @@ JSBool JSB_CCTexture2D_setTexParameters_(JSContext *cx, uint32_t argc, jsval *vp
 JSBool JSB_CCDrawNode_drawPolyWithVerts_count_fillColor_borderWidth_borderColor_(JSContext *cx, uint32_t argc, jsval *vp)
 {
 	JSObject* obj = (JSObject *)JS_THIS_OBJECT(cx, vp);
-	JSB_NSObject *proxy = get_proxy_for_jsobject(obj);
+	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(obj);
 	
 	JSB_PRECONDITION( proxy && [proxy realObj], "Invalid Proxy object");
 	JSB_PRECONDITION( argc == 4, "Invalid number of arguments" );
@@ -741,7 +741,7 @@ JSBool JSB_CCDrawNode_drawPolyWithVerts_count_fillColor_borderWidth_borderColor_
 JSBool JSB_CCNode_schedule_interval_repeat_delay_(JSContext *cx, uint32_t argc, jsval *vp)
 {
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
-	JSB_NSObject *proxy = get_proxy_for_jsobject(jsthis);
+	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
 	
 	JSB_PRECONDITION( proxy && [proxy realObj], "Invalid Proxy object");
 	JSB_PRECONDITION( argc >=1 && argc <=4, "Invalid number of arguments" );
@@ -827,7 +827,7 @@ JSBool JSB_CCNode_schedule_interval_repeat_delay_(JSContext *cx, uint32_t argc, 
 JSBool JSB_CCParticleSystem_setBlendFunc_(JSContext *cx, uint32_t argc, jsval *vp)
 {
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
-	JSB_NSObject *proxy = get_proxy_for_jsobject(jsthis);
+	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
 	
 	JSB_PRECONDITION( proxy && [proxy realObj], "Invalid Proxy object");
 	JSB_PRECONDITION( argc==2, "Invalid number of arguments" );

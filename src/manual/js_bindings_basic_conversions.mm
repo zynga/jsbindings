@@ -91,7 +91,7 @@ JSBool jsval_to_nsobject( JSContext *cx, jsval vp, NSObject **ret )
 	// root it
 	vp = OBJECT_TO_JSVAL(jsobj);
 	
-	JSB_NSObject* proxy = get_proxy_for_jsobject(jsobj);
+	JSB_NSObject* proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsobj);
 	
 	JSB_PRECONDITION( proxy, "Error obtaining proxy");
 
@@ -495,11 +495,20 @@ jsval opaque_to_jsval( JSContext *cx, void *opaque )
 #endif
 }
 
-jsval functionclass_to_jsval( JSContext *cx, void* handle, JSObject* object, JSClass *klass)
+jsval functionclass_to_jsval( JSContext *cx, void* handle, JSObject* object, JSClass *klass, const char* class_name)
 {
-	JSObject *jsobj = JS_NewObject(cx, klass, object, NULL);
-	JS_SetPrivate(jsobj, handle);
-	
+	JSObject *jsobj;
+
+	jsobj = jsb_get_jsobject_for_proxy(handle);
+	if( !jsobj ) {
+		jsobj = JS_NewObject(cx, klass, object, NULL);
+		NSCAssert(jsobj, @"Invalid object");
+		CCLOGINFO(@"jsbindings: Constructing JS object %p (%s), handle: %p", jsobj, class_name, handle);
+		JS_SetPrivate(jsobj, handle);
+		jsb_set_jsobject_for_proxy(jsobj, handle);
+	} else
+		CCLOGINFO(@"jsbindings: Reusing JS object %p (%s), handle: %p", jsobj, class_name, handle);
+
 	return OBJECT_TO_JSVAL(jsobj);
 }
 

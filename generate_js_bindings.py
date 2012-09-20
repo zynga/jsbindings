@@ -99,7 +99,6 @@ class JSBGenerate(object):
         self.function_classes = config.function_classes
 
         # OO Functions
-        self.bs_funcs = config.bs['signatures']['function']
         self.c_object_properties = config.c_object_properties
         self.manual_bound_methods = config.manual_bound_methods
 
@@ -341,12 +340,12 @@ class JSBGenerate(object):
     # If the structure should be returned as an Object. For OO C API (Chipmunk)
     def generate_retval_functionclass(self, declared_type, js_type):
         template = '''
-\tjsval ret_jsval = functionclass_to_jsval( cx, ret_val, %s, %s );
+\tjsval ret_jsval = functionclass_to_jsval( cx, ret_val, %s, %s, "%s" );
 \tJS_SET_RVAL(cx, vp, ret_jsval);
     '''
         # remove '*' from class name
         klass = declared_type[:-1]
-        return template % ('JSB_%s_object' % klass, 'JSB_%s_class' % klass)
+        return template % ('JSB_%s_object' % klass, 'JSB_%s_class' % klass, klass)
 
     def generate_retval(self, declared_type, js_type, method=None):
         direct_convert = {
@@ -919,11 +918,11 @@ JSBool %s_constructor(JSContext *cx, uint32_t argc, jsval *vp)
 void %s_finalize(JSFreeOp *fop, JSObject *obj)
 {
 \tCCLOGINFO(@"jsbindings: finalizing JS object %%p (%s)", obj);
-//\tJSB_NSObject *proxy = get_proxy_for_jsobject(obj);
+//\tJSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(obj);
 //\tif (proxy) {
 //\t\t[[proxy realObj] release];
 //\t}
-\tdel_proxy_for_jsobject( obj );
+\tjsb_del_proxy_for_jsobject( obj );
 }
 '''
         proxy_class_name = '%s%s' % (PROXY_PREFIX, class_name)
@@ -987,7 +986,7 @@ JSBool %s_%s%s(JSContext *cx, uint32_t argc, jsval *vp) {
 '''
         template_init = '''
 \tJSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
-\tJSB_NSObject *proxy = get_proxy_for_jsobject(jsthis);
+\tJSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
 
 \tJSB_PRECONDITION( proxy && %s[proxy realObj], "Invalid Proxy object");
 '''
@@ -1953,9 +1952,11 @@ JSBool %s_constructor(JSContext *cx, uint32_t argc, jsval *vp)
 '''
         template_1_a = '\tJSObject *jsobj = JS_NewObject(cx, JSB_%s_class, JSB_%s_object, NULL);\n'
         template_1_b = '''
+\n\tjsb_set_jsobject_for_proxy(jsobj, ret_val);
 \tJS_SetPrivate(jsobj, ret_val);
 \tJS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(jsobj));
 '''
+
         constructor_suffix = self.c_object_properties['constructor_suffix'].keys()[0]
         name = '%s%s' % (PROXY_PREFIX, klass_name)
         func_name = '%s%s' % (klass_name, constructor_suffix)
@@ -1995,6 +1996,8 @@ JSBool %s_constructor(JSContext *cx, uint32_t argc, jsval *vp)
                 self.fd_mm.write('\tvoid* %s' % call)
 
                 self.fd_mm.write(template_1_b)
+                self.fd_mm.write('\tCCLOGINFO(@"jsbindings: Constructing JS object %%p (%s), handle: %%p", jsobj, ret_val);' % klass_name)
+
         except ParseException, e:
             self.fd_mm.write(template_0_pre % (name, num_of_args))
             self.fd_mm.write('\tNSCAssert(NO, @"Not possible to generate constructor: %s");\n' % str(e))
@@ -2010,10 +2013,11 @@ JSBool %s_constructor(JSContext *cx, uint32_t argc, jsval *vp)
 // Destructor
 void %s_finalize(JSFreeOp *fop, JSObject *obj)
 {
-\tCCLOGINFO(@"jsbindings: finalizing JS object %%p (%s)", obj);
 \tvoid *handle = JS_GetPrivate(obj);
 \tNSCAssert( handle, @"Invalid handle for %s");
+\tCCLOGINFO(@"jsbindings: finalizing JS object %%p (%s), handle: %%p", obj, handle);
 
+\tjsb_del_jsobject_for_proxy(handle);
 \t%s( (%s*)handle);
 }
 '''
@@ -2080,7 +2084,7 @@ void %s_finalize(JSFreeOp *fop, JSObject *obj)
         '''Generates the bindings for all the "methods"'''
 
         self.bound_methods[klass_name] = []
-        for func in self.bs_funcs:
+        for func in self.bs['signatures']['function']:
             name = func['name']
             if name in self.functions_to_bind and self.is_oof_method(klass_name, name) and not self.is_manually_bound_oo_function(klass_name, name):
                 # XXX: this works in chipmunk because the "classes" has the 'baseclass' at the end:

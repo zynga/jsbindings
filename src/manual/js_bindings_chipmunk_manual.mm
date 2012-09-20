@@ -31,6 +31,7 @@
 
 #import "js_bindings_chipmunk_manual.h"
 #import "js_bindings_basic_conversions.h"
+#import "js_bindings_core.h"
 #import "uthash.h"
 
 
@@ -139,8 +140,8 @@ static cpBool myCollisionBegin(cpArbiter *arb, cpSpace *space, void *data)
 	
 	jsval args[2];
 	if( handler->is_oo ) {
-		args[0] = functionclass_to_jsval(handler->cx, arb, JSB_cpArbiter_object, JSB_cpArbiter_class);
-		args[1] = functionclass_to_jsval(handler->cx, space, JSB_cpSpace_object, JSB_cpSpace_class);
+		args[0] = functionclass_to_jsval(handler->cx, arb, JSB_cpArbiter_object, JSB_cpArbiter_class, "cpArbiter");
+		args[1] = functionclass_to_jsval(handler->cx, space, JSB_cpSpace_object, JSB_cpSpace_class, "cpArbiter");
 	} else {
 		args[0] = opaque_to_jsval( handler->cx, arb);
 		args[1] = opaque_to_jsval( handler->cx, space );
@@ -162,8 +163,8 @@ static cpBool myCollisionPre(cpArbiter *arb, cpSpace *space, void *data)
 	
 	jsval args[2];
 	if( handler->is_oo ) {
-		args[0] = functionclass_to_jsval(handler->cx, arb, JSB_cpArbiter_object, JSB_cpArbiter_class);
-		args[1] = functionclass_to_jsval(handler->cx, space, JSB_cpSpace_object, JSB_cpSpace_class);
+		args[0] = functionclass_to_jsval(handler->cx, arb, JSB_cpArbiter_object, JSB_cpArbiter_class, "cpArbiter");
+		args[1] = functionclass_to_jsval(handler->cx, space, JSB_cpSpace_object, JSB_cpSpace_class, "cpArbiter");
 	} else {
 		args[0] = opaque_to_jsval( handler->cx, arb);
 		args[1] = opaque_to_jsval( handler->cx, space );
@@ -186,8 +187,8 @@ static void myCollisionPost(cpArbiter *arb, cpSpace *space, void *data)
 	jsval args[2];
 	
 	if( handler->is_oo ) {
-		args[0] = functionclass_to_jsval(handler->cx, arb, JSB_cpArbiter_object, JSB_cpArbiter_class);
-		args[1] = functionclass_to_jsval(handler->cx, space, JSB_cpSpace_object, JSB_cpSpace_class);
+		args[0] = functionclass_to_jsval(handler->cx, arb, JSB_cpArbiter_object, JSB_cpArbiter_class, "cpArbiter");
+		args[1] = functionclass_to_jsval(handler->cx, space, JSB_cpSpace_object, JSB_cpSpace_class, "cpArbiter");
 	} else {
 		args[0] = opaque_to_jsval( handler->cx, arb);
 		args[1] = opaque_to_jsval( handler->cx, space );
@@ -203,8 +204,8 @@ static void myCollisionSeparate(cpArbiter *arb, cpSpace *space, void *data)
 	
 	jsval args[2];
 	if( handler->is_oo ) {
-		args[0] = functionclass_to_jsval(handler->cx, arb, JSB_cpArbiter_object, JSB_cpArbiter_class);
-		args[1] = functionclass_to_jsval(handler->cx, space, JSB_cpSpace_object, JSB_cpSpace_class);
+		args[0] = functionclass_to_jsval(handler->cx, arb, JSB_cpArbiter_object, JSB_cpArbiter_class, "cpArbiter");
+		args[1] = functionclass_to_jsval(handler->cx, space, JSB_cpSpace_object, JSB_cpSpace_class, "cpArbiter");
 	} else {
 		args[0] = opaque_to_jsval( handler->cx, arb);
 		args[1] = opaque_to_jsval( handler->cx, space );
@@ -387,8 +388,8 @@ JSBool __jsb_cpArbiter_getBodies(JSContext *cx, jsval *vp, jsval *argvp, cpArbit
 	
 	jsval valA, valB;
 	if( is_oo ) {
-		valA = functionclass_to_jsval(cx, bodyA, JSB_cpBody_object, JSB_cpBody_class);
-		valB = functionclass_to_jsval(cx, bodyB, JSB_cpBody_object, JSB_cpBody_class);
+		valA = functionclass_to_jsval(cx, bodyA, JSB_cpBody_object, JSB_cpBody_class, "cpArbiter");
+		valB = functionclass_to_jsval(cx, bodyB, JSB_cpBody_object, JSB_cpBody_class, "cpArbiter");
 	} else {
 		valA = opaque_to_jsval(cx, bodyA);
 		valB = opaque_to_jsval(cx, bodyB);		
@@ -440,8 +441,8 @@ JSBool __jsb_cpArbiter_getShapes(JSContext *cx, jsval *vp, jsval *argvp, cpArbit
 
 	jsval valA, valB;
 	if( is_oo ) {
-		valA = functionclass_to_jsval(cx, shapeA, JSB_cpShape_object, JSB_cpShape_class);
-		valB = functionclass_to_jsval(cx, shapeB, JSB_cpShape_object, JSB_cpShape_class);
+		valA = functionclass_to_jsval(cx, shapeA, JSB_cpShape_object, JSB_cpShape_class, "cpShape");
+		valB = functionclass_to_jsval(cx, shapeB, JSB_cpShape_object, JSB_cpShape_class, "cpShape");
 	} else {
 		valA = opaque_to_jsval(cx, shapeA);
 		valB = opaque_to_jsval(cx, shapeB);
@@ -589,6 +590,7 @@ JSBool JSB_cpBase_constructor(JSContext *cx, uint32_t argc, jsval *vp)
 	JSB_PRECONDITION(ok, "Error converting arguments for JSB_cpBase_constructor");
 	
 	JS_SetPrivate(jsobj, handle);
+	jsb_set_jsobject_for_proxy(jsobj, handle);
 	
 	JS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(jsobj));
 	return JS_TRUE;
@@ -681,6 +683,8 @@ JSBool JSB_cpPolyShape_constructor(JSContext *cx, uint32_t argc, jsval *vp)
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpShape *shape = cpPolyShapeNew(body, numVerts, verts, offset);
 	JS_SetPrivate(jsobj, (void*)shape);
+	jsb_set_jsobject_for_proxy(jsobj, shape);
+	
 	JS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(jsobj));
 	
 	free(verts);

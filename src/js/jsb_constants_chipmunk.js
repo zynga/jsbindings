@@ -20,6 +20,17 @@ cp.BoxShape2 = function(body, box)
 	return new cp.PolyShape(body, verts, cp.vzero);
 };
 
+// Properties, for Chipmunk-JS compatibility
+Object.defineProperties(cp.Base.prototype,
+				{
+					"handle" : {
+						get : function(){
+                            return this.getHandle();
+                        },
+                        enumerable : true,
+						configurable : true
+					}
+				});
 
 // Properties, for Chipmunk-JS compatibility
 Object.defineProperties(cp.Space.prototype,

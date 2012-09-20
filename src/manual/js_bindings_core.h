@@ -115,12 +115,24 @@ extern char * JSB_association_proxy_key;
 #ifdef __cplusplus
 extern "C" {
 #endif
-	@class JSB_NSObject;
-	JSB_NSObject* get_proxy_for_jsobject(JSObject *jsobj);
-	void set_proxy_for_jsobject(JSB_NSObject* proxy, JSObject *jsobj);
-	void del_proxy_for_jsobject(JSObject *jsobj);
-	
-	JSBool set_reserved_slot(JSObject *obj, uint32_t idx, jsval value);
+
+// JSObject -> proxy
+/** gets a proxy for a given JSObject */
+void* jsb_get_proxy_for_jsobject(JSObject *jsobj);
+/** sets a proxy for a given JSObject */
+void jsb_set_proxy_for_jsobject(void* proxy, JSObject *jsobj);
+/** dels a proxy for a given JSObject */
+void jsb_del_proxy_for_jsobject(JSObject *jsobj);
+
+// reverse: proxy -> JSObject
+/** gets a JSObject for a given proxy */
+JSObject* jsb_get_jsobject_for_proxy(void *proxy);
+/** sets a JSObject for a given proxy */
+void jsb_set_jsobject_for_proxy(JSObject *jsobj, void* proxy);
+/** delts a JSObject for a given proxy */
+void jsb_del_jsobject_for_proxy(void* proxy);
+
+JSBool jsb_set_reserved_slot(JSObject *obj, uint32_t idx, jsval value);
 	
 #ifdef __cplusplus
 }
