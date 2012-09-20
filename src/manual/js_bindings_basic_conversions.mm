@@ -492,10 +492,12 @@ jsval opaque_to_jsval( JSContext *cx, void *opaque )
 #endif
 }
 
-jsval functionclass_to_jsval( JSContext *cx, void* handle)
+jsval functionclass_to_jsval( JSContext *cx, void* handle, JSObject* object, JSClass *klass)
 {
-	NSCAssert(NO, @"Not implemented");
-	return JSVAL_VOID;
+	JSObject *jsobj = JS_NewObject(cx, klass, object, NULL);
+	JS_SetPrivate(jsobj, handle);
+	
+	return OBJECT_TO_JSVAL(jsobj);
 }
 
 jsval int_to_jsval( JSContext *cx, int number )

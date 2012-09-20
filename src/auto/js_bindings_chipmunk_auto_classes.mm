@@ -80,7 +80,7 @@ JSBool JSB_cpConstraint_getA(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	ret_val = cpConstraintGetA((cpConstraint*)arg0  );
 
-	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
+	jsval ret_jsval = functionclass_to_jsval( cx, ret_val, JSB_cpBody_object, JSB_cpBody_class );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -98,7 +98,7 @@ JSBool JSB_cpConstraint_getB(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	ret_val = cpConstraintGetB((cpConstraint*)arg0  );
 
-	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
+	jsval ret_jsval = functionclass_to_jsval( cx, ret_val, JSB_cpBody_object, JSB_cpBody_class );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -176,7 +176,7 @@ JSBool JSB_cpConstraint_getSpace(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	ret_val = cpConstraintGetSpace((cpConstraint*)arg0  );
 
-	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
+	jsval ret_jsval = functionclass_to_jsval( cx, ret_val, JSB_cpSpace_object, JSB_cpSpace_class );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -2414,7 +2414,7 @@ JSBool JSB_cpSpace_addBody(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	ret_val = cpSpaceAddBody((cpSpace*)arg0 , (cpBody*)arg1  );
 
-	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
+	jsval ret_jsval = functionclass_to_jsval( cx, ret_val, JSB_cpBody_object, JSB_cpBody_class );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -2438,7 +2438,7 @@ JSBool JSB_cpSpace_addConstraint(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	ret_val = cpSpaceAddConstraint((cpSpace*)arg0 , (cpConstraint*)arg1  );
 
-	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
+	jsval ret_jsval = functionclass_to_jsval( cx, ret_val, JSB_cpConstraint_object, JSB_cpConstraint_class );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -2462,7 +2462,7 @@ JSBool JSB_cpSpace_addShape(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	ret_val = cpSpaceAddShape((cpSpace*)arg0 , (cpShape*)arg1  );
 
-	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
+	jsval ret_jsval = functionclass_to_jsval( cx, ret_val, JSB_cpShape_object, JSB_cpShape_class );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -2486,7 +2486,7 @@ JSBool JSB_cpSpace_addStaticShape(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	ret_val = cpSpaceAddStaticShape((cpSpace*)arg0 , (cpShape*)arg1  );
 
-	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
+	jsval ret_jsval = functionclass_to_jsval( cx, ret_val, JSB_cpShape_object, JSB_cpShape_class );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -2504,7 +2504,7 @@ JSBool JSB_cpSpace_alloc(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	ret_val = cpSpaceAlloc( );
 
-	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
+	jsval ret_jsval = functionclass_to_jsval( cx, ret_val, JSB_cpSpace_object, JSB_cpSpace_class );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -2752,7 +2752,7 @@ JSBool JSB_cpSpace_getStaticBody(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	ret_val = cpSpaceGetStaticBody((cpSpace*)arg0  );
 
-	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
+	jsval ret_jsval = functionclass_to_jsval( cx, ret_val, JSB_cpBody_object, JSB_cpBody_class );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -2770,7 +2770,7 @@ JSBool JSB_cpSpace_init(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	ret_val = cpSpaceInit((cpSpace*)arg0  );
 
-	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
+	jsval ret_jsval = functionclass_to_jsval( cx, ret_val, JSB_cpSpace_object, JSB_cpSpace_class );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -2811,7 +2811,7 @@ JSBool JSB_cpSpace_pointQueryFirst(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	ret_val = cpSpacePointQueryFirst((cpSpace*)arg0 , (cpVect)arg1 , (cpLayers)arg2 , (cpGroup)arg3  );
 
-	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
+	jsval ret_jsval = functionclass_to_jsval( cx, ret_val, JSB_cpShape_object, JSB_cpShape_class );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -3325,7 +3325,7 @@ JSBool JSB_cpBody_alloc(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	ret_val = cpBodyAlloc( );
 
-	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
+	jsval ret_jsval = functionclass_to_jsval( cx, ret_val, JSB_cpBody_object, JSB_cpBody_class );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -3528,7 +3528,7 @@ JSBool JSB_cpBody_getSpace(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	ret_val = cpBodyGetSpace((cpBody*)arg0  );
 
-	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
+	jsval ret_jsval = functionclass_to_jsval( cx, ret_val, JSB_cpSpace_object, JSB_cpSpace_class );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -3649,7 +3649,7 @@ JSBool JSB_cpBody_init(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	ret_val = cpBodyInit((cpBody*)arg0 , (cpFloat)arg1 , (cpFloat)arg2  );
 
-	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
+	jsval ret_jsval = functionclass_to_jsval( cx, ret_val, JSB_cpBody_object, JSB_cpBody_class );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -3667,7 +3667,7 @@ JSBool JSB_cpBody_initStatic(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	ret_val = cpBodyInitStatic((cpBody*)arg0  );
 
-	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
+	jsval ret_jsval = functionclass_to_jsval( cx, ret_val, JSB_cpBody_object, JSB_cpBody_class );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -4231,7 +4231,7 @@ JSBool JSB_cpShape_getBody(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	ret_val = cpShapeGetBody((cpShape*)arg0  );
 
-	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
+	jsval ret_jsval = functionclass_to_jsval( cx, ret_val, JSB_cpBody_object, JSB_cpBody_class );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -4345,7 +4345,7 @@ JSBool JSB_cpShape_getSpace(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	ret_val = cpShapeGetSpace((cpShape*)arg0  );
 
-	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
+	jsval ret_jsval = functionclass_to_jsval( cx, ret_val, JSB_cpSpace_object, JSB_cpSpace_class );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;

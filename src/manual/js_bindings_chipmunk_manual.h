@@ -32,6 +32,8 @@
 #include "chipmunk.h"
 #include "jsapi.h"
 
+#import "js_bindings_chipmunk_auto_classes.h"
+
 // Free Functions
 JSBool JSB_cpSpaceAddCollisionHandler(JSContext *cx, uint32_t argc, jsval *vp);
 JSBool JSB_cpSpaceRemoveCollisionHandler(JSContext *cx, uint32_t argc, jsval *vp);

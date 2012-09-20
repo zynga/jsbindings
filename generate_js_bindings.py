@@ -341,10 +341,12 @@ class JSBGenerate(object):
     # If the structure should be returned as an Object. For OO C API (Chipmunk)
     def generate_retval_functionclass(self, declared_type, js_type):
         template = '''
-\tjsval ret_jsval = functionclass_to_jsval( cx, ret_val );
+\tjsval ret_jsval = functionclass_to_jsval( cx, ret_val, %s, %s );
 \tJS_SET_RVAL(cx, vp, ret_jsval);
     '''
-        return template
+        # remove '*' from class name
+        klass = declared_type[:-1]
+        return template % ('JSB_%s_object' % klass, 'JSB_%s_class' % klass)
 
     def generate_retval(self, declared_type, js_type, method=None):
         direct_convert = {
@@ -2182,12 +2184,12 @@ void %s_createClass(JSContext *cx, JSObject* globalObj, const char* name )
     def generate_header(self):
         '''Generates the .h for the .mm file'''
 
-        template = 'void JSB_%s_createClass(JSContext *cx, JSObject* globalObj, const char* name );\n'
+        template = 'extern JSObject *JSB_%s_object;\nextern JSClass *JSB_%s_class;\nvoid JSB_%s_createClass(JSContext *cx, JSObject* globalObj, const char* name );\n'
 
         self.generate_autogenerate_prefix(self.fd_h)
         klasses = self.sort_oo_classes()
         for klass_name in klasses:
-            self.fd_h.write(template % klass_name)
+            self.fd_h.write(template % (klass_name, klass_name, klass_name))
         self.generate_autogenerate_suffix(self.fd_h)
 
     def generate_registration(self):
