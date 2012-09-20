@@ -22,7 +22,7 @@ JSBool JSB_cpArbiterGetCount(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpArbiter* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	int ret_val;
 
@@ -39,7 +39,7 @@ JSBool JSB_cpArbiterGetDepth(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpArbiter* arg0; int32_t arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= JS_ValueToECMAInt32( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpFloat ret_val;
@@ -57,7 +57,7 @@ JSBool JSB_cpArbiterGetElasticity(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpArbiter* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpFloat ret_val;
 
@@ -74,7 +74,7 @@ JSBool JSB_cpArbiterGetFriction(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpArbiter* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpFloat ret_val;
 
@@ -91,7 +91,7 @@ JSBool JSB_cpArbiterGetNormal(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpArbiter* arg0; int32_t arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= JS_ValueToECMAInt32( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpVect ret_val;
@@ -112,7 +112,7 @@ JSBool JSB_cpArbiterGetPoint(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpArbiter* arg0; int32_t arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= JS_ValueToECMAInt32( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpVect ret_val;
@@ -133,7 +133,7 @@ JSBool JSB_cpArbiterGetSurfaceVelocity(JSContext *cx, uint32_t argc, jsval *vp) 
 	JSBool ok = JS_TRUE;
 	cpArbiter* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpVect ret_val;
 
@@ -153,7 +153,7 @@ JSBool JSB_cpArbiterIgnore(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpArbiter* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
 	cpArbiterIgnore((cpArbiter*)arg0  );
@@ -169,7 +169,7 @@ JSBool JSB_cpArbiterIsFirstContact(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpArbiter* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpBool ret_val;
 
@@ -186,7 +186,7 @@ JSBool JSB_cpArbiterSetElasticity(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpArbiter* arg0; double arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
@@ -203,7 +203,7 @@ JSBool JSB_cpArbiterSetFriction(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpArbiter* arg0; double arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
@@ -220,7 +220,7 @@ JSBool JSB_cpArbiterSetSurfaceVelocity(JSContext *cx, uint32_t argc, jsval *vp) 
 	JSBool ok = JS_TRUE;
 	cpArbiter* arg0; cpVect arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= jsval_to_cpVect( cx, *argvp++, (cpVect*) &arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
@@ -237,7 +237,7 @@ JSBool JSB_cpArbiterTotalImpulse(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpArbiter* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpVect ret_val;
 
@@ -257,7 +257,7 @@ JSBool JSB_cpArbiterTotalImpulseWithFriction(JSContext *cx, uint32_t argc, jsval
 	JSBool ok = JS_TRUE;
 	cpArbiter* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpVect ret_val;
 
@@ -277,7 +277,7 @@ JSBool JSB_cpArbiterTotalKE(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpArbiter* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpFloat ret_val;
 
@@ -586,7 +586,7 @@ JSBool JSB_cpBodyActivate(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
 	cpBodyActivate((cpBody*)arg0  );
@@ -602,8 +602,8 @@ JSBool JSB_cpBodyActivateStatic(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; cpShape* arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg1 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
 	cpBodyActivateStatic((cpBody*)arg0 , (cpShape*)arg1  );
@@ -619,7 +619,7 @@ JSBool JSB_cpBodyAlloc(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	ret_val = cpBodyAlloc( );
 
-	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
+	jsval ret_jsval = opaque_to_jsval( cx, ret_val );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -633,7 +633,7 @@ JSBool JSB_cpBodyApplyForce(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; cpVect arg1; cpVect arg2; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= jsval_to_cpVect( cx, *argvp++, (cpVect*) &arg1 );
 	ok &= jsval_to_cpVect( cx, *argvp++, (cpVect*) &arg2 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
@@ -651,7 +651,7 @@ JSBool JSB_cpBodyApplyImpulse(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; cpVect arg1; cpVect arg2; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= jsval_to_cpVect( cx, *argvp++, (cpVect*) &arg1 );
 	ok &= jsval_to_cpVect( cx, *argvp++, (cpVect*) &arg2 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
@@ -669,7 +669,7 @@ JSBool JSB_cpBodyDestroy(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
 	cpBodyDestroy((cpBody*)arg0  );
@@ -685,7 +685,7 @@ JSBool JSB_cpBodyFree(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
 	cpBodyFree((cpBody*)arg0  );
@@ -701,7 +701,7 @@ JSBool JSB_cpBodyGetAngVel(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpFloat ret_val;
 
@@ -718,7 +718,7 @@ JSBool JSB_cpBodyGetAngVelLimit(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpFloat ret_val;
 
@@ -735,7 +735,7 @@ JSBool JSB_cpBodyGetAngle(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpFloat ret_val;
 
@@ -752,7 +752,7 @@ JSBool JSB_cpBodyGetForce(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpVect ret_val;
 
@@ -772,7 +772,7 @@ JSBool JSB_cpBodyGetMass(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpFloat ret_val;
 
@@ -789,7 +789,7 @@ JSBool JSB_cpBodyGetMoment(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpFloat ret_val;
 
@@ -806,7 +806,7 @@ JSBool JSB_cpBodyGetPos(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpVect ret_val;
 
@@ -826,7 +826,7 @@ JSBool JSB_cpBodyGetRot(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpVect ret_val;
 
@@ -846,13 +846,13 @@ JSBool JSB_cpBodyGetSpace(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpSpace* ret_val;
 
 	ret_val = cpBodyGetSpace((cpBody*)arg0  );
 
-	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
+	jsval ret_jsval = opaque_to_jsval( cx, ret_val );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -866,7 +866,7 @@ JSBool JSB_cpBodyGetTorque(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpFloat ret_val;
 
@@ -883,7 +883,7 @@ JSBool JSB_cpBodyGetVel(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpVect ret_val;
 
@@ -903,7 +903,7 @@ JSBool JSB_cpBodyGetVelAtLocalPoint(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; cpVect arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= jsval_to_cpVect( cx, *argvp++, (cpVect*) &arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpVect ret_val;
@@ -924,7 +924,7 @@ JSBool JSB_cpBodyGetVelAtWorldPoint(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; cpVect arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= jsval_to_cpVect( cx, *argvp++, (cpVect*) &arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpVect ret_val;
@@ -945,7 +945,7 @@ JSBool JSB_cpBodyGetVelLimit(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpFloat ret_val;
 
@@ -962,7 +962,7 @@ JSBool JSB_cpBodyInit(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; double arg1; double arg2; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg2 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
@@ -970,7 +970,7 @@ JSBool JSB_cpBodyInit(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	ret_val = cpBodyInit((cpBody*)arg0 , (cpFloat)arg1 , (cpFloat)arg2  );
 
-	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
+	jsval ret_jsval = opaque_to_jsval( cx, ret_val );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -984,13 +984,13 @@ JSBool JSB_cpBodyInitStatic(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpBody* ret_val;
 
 	ret_val = cpBodyInitStatic((cpBody*)arg0  );
 
-	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
+	jsval ret_jsval = opaque_to_jsval( cx, ret_val );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -1004,7 +1004,7 @@ JSBool JSB_cpBodyIsRogue(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpBool ret_val;
 
@@ -1021,7 +1021,7 @@ JSBool JSB_cpBodyIsSleeping(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpBool ret_val;
 
@@ -1038,7 +1038,7 @@ JSBool JSB_cpBodyIsStatic(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpBool ret_val;
 
@@ -1055,7 +1055,7 @@ JSBool JSB_cpBodyKineticEnergy(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpFloat ret_val;
 
@@ -1072,7 +1072,7 @@ JSBool JSB_cpBodyLocal2World(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; cpVect arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= jsval_to_cpVect( cx, *argvp++, (cpVect*) &arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpVect ret_val;
@@ -1100,7 +1100,7 @@ JSBool JSB_cpBodyNew(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	ret_val = cpBodyNew((cpFloat)arg0 , (cpFloat)arg1  );
 
-	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
+	jsval ret_jsval = opaque_to_jsval( cx, ret_val );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -1114,7 +1114,7 @@ JSBool JSB_cpBodyNewStatic(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	ret_val = cpBodyNewStatic( );
 
-	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
+	jsval ret_jsval = opaque_to_jsval( cx, ret_val );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -1128,7 +1128,7 @@ JSBool JSB_cpBodyResetForces(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
 	cpBodyResetForces((cpBody*)arg0  );
@@ -1144,7 +1144,7 @@ JSBool JSB_cpBodySetAngVel(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; double arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
@@ -1161,7 +1161,7 @@ JSBool JSB_cpBodySetAngVelLimit(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; double arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
@@ -1178,7 +1178,7 @@ JSBool JSB_cpBodySetAngle(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; double arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
@@ -1195,7 +1195,7 @@ JSBool JSB_cpBodySetForce(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; cpVect arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= jsval_to_cpVect( cx, *argvp++, (cpVect*) &arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
@@ -1212,7 +1212,7 @@ JSBool JSB_cpBodySetMass(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; double arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
@@ -1229,7 +1229,7 @@ JSBool JSB_cpBodySetMoment(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; double arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
@@ -1246,7 +1246,7 @@ JSBool JSB_cpBodySetPos(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; cpVect arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= jsval_to_cpVect( cx, *argvp++, (cpVect*) &arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
@@ -1263,7 +1263,7 @@ JSBool JSB_cpBodySetTorque(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; double arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
@@ -1280,7 +1280,7 @@ JSBool JSB_cpBodySetVel(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; cpVect arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= jsval_to_cpVect( cx, *argvp++, (cpVect*) &arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
@@ -1297,7 +1297,7 @@ JSBool JSB_cpBodySetVelLimit(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; double arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
@@ -1314,7 +1314,7 @@ JSBool JSB_cpBodySleep(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
 	cpBodySleep((cpBody*)arg0  );
@@ -1330,8 +1330,8 @@ JSBool JSB_cpBodySleepWithGroup(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; cpBody* arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg1 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
 	cpBodySleepWithGroup((cpBody*)arg0 , (cpBody*)arg1  );
@@ -1347,7 +1347,7 @@ JSBool JSB_cpBodyUpdatePosition(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; double arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
@@ -1364,7 +1364,7 @@ JSBool JSB_cpBodyUpdateVelocity(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; cpVect arg1; double arg2; double arg3; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= jsval_to_cpVect( cx, *argvp++, (cpVect*) &arg1 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg2 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg3 );
@@ -1383,7 +1383,7 @@ JSBool JSB_cpBodyWorld2Local(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; cpVect arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= jsval_to_cpVect( cx, *argvp++, (cpVect*) &arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpVect ret_val;
@@ -1404,7 +1404,7 @@ JSBool JSB_cpBoxShapeNew(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; double arg1; double arg2; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg2 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
@@ -1412,7 +1412,7 @@ JSBool JSB_cpBoxShapeNew(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	ret_val = cpBoxShapeNew((cpBody*)arg0 , (cpFloat)arg1 , (cpFloat)arg2  );
 
-	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
+	jsval ret_jsval = opaque_to_jsval( cx, ret_val );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -1426,14 +1426,14 @@ JSBool JSB_cpBoxShapeNew2(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; cpBB arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= jsval_to_cpBB( cx, *argvp++, (cpBB*) &arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpShape* ret_val;
 
 	ret_val = cpBoxShapeNew2((cpBody*)arg0 , (cpBB)arg1  );
 
-	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
+	jsval ret_jsval = opaque_to_jsval( cx, ret_val );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -1447,7 +1447,7 @@ JSBool JSB_cpCircleShapeGetOffset(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpShape* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpVect ret_val;
 
@@ -1467,7 +1467,7 @@ JSBool JSB_cpCircleShapeGetRadius(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpShape* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpFloat ret_val;
 
@@ -1484,7 +1484,7 @@ JSBool JSB_cpCircleShapeNew(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; double arg1; cpVect arg2; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
 	ok &= jsval_to_cpVect( cx, *argvp++, (cpVect*) &arg2 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
@@ -1492,7 +1492,7 @@ JSBool JSB_cpCircleShapeNew(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	ret_val = cpCircleShapeNew((cpBody*)arg0 , (cpFloat)arg1 , (cpVect)arg2  );
 
-	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
+	jsval ret_jsval = opaque_to_jsval( cx, ret_val );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -1506,7 +1506,7 @@ JSBool JSB_cpConstraintActivateBodies(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
 	cpConstraintActivateBodies((cpConstraint*)arg0  );
@@ -1522,7 +1522,7 @@ JSBool JSB_cpConstraintDestroy(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
 	cpConstraintDestroy((cpConstraint*)arg0  );
@@ -1538,7 +1538,7 @@ JSBool JSB_cpConstraintFree(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
 	cpConstraintFree((cpConstraint*)arg0  );
@@ -1554,13 +1554,13 @@ JSBool JSB_cpConstraintGetA(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpBody* ret_val;
 
 	ret_val = cpConstraintGetA((cpConstraint*)arg0  );
 
-	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
+	jsval ret_jsval = opaque_to_jsval( cx, ret_val );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -1574,13 +1574,13 @@ JSBool JSB_cpConstraintGetB(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpBody* ret_val;
 
 	ret_val = cpConstraintGetB((cpConstraint*)arg0  );
 
-	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
+	jsval ret_jsval = opaque_to_jsval( cx, ret_val );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -1594,7 +1594,7 @@ JSBool JSB_cpConstraintGetErrorBias(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpFloat ret_val;
 
@@ -1611,7 +1611,7 @@ JSBool JSB_cpConstraintGetImpulse(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpFloat ret_val;
 
@@ -1628,7 +1628,7 @@ JSBool JSB_cpConstraintGetMaxBias(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpFloat ret_val;
 
@@ -1645,7 +1645,7 @@ JSBool JSB_cpConstraintGetMaxForce(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpFloat ret_val;
 
@@ -1662,13 +1662,13 @@ JSBool JSB_cpConstraintGetSpace(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpSpace* ret_val;
 
 	ret_val = cpConstraintGetSpace((cpConstraint*)arg0  );
 
-	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
+	jsval ret_jsval = opaque_to_jsval( cx, ret_val );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -1682,7 +1682,7 @@ JSBool JSB_cpConstraintSetErrorBias(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; double arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
@@ -1699,7 +1699,7 @@ JSBool JSB_cpConstraintSetMaxBias(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; double arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
@@ -1716,7 +1716,7 @@ JSBool JSB_cpConstraintSetMaxForce(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; double arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
@@ -1733,7 +1733,7 @@ JSBool JSB_cpDampedRotarySpringGetDamping(JSContext *cx, uint32_t argc, jsval *v
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpFloat ret_val;
 
@@ -1750,7 +1750,7 @@ JSBool JSB_cpDampedRotarySpringGetRestAngle(JSContext *cx, uint32_t argc, jsval 
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpFloat ret_val;
 
@@ -1767,7 +1767,7 @@ JSBool JSB_cpDampedRotarySpringGetStiffness(JSContext *cx, uint32_t argc, jsval 
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpFloat ret_val;
 
@@ -1784,8 +1784,8 @@ JSBool JSB_cpDampedRotarySpringNew(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; cpBody* arg1; double arg2; double arg3; double arg4; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg1 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg1 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg2 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg3 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg4 );
@@ -1794,7 +1794,7 @@ JSBool JSB_cpDampedRotarySpringNew(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	ret_val = cpDampedRotarySpringNew((cpBody*)arg0 , (cpBody*)arg1 , (cpFloat)arg2 , (cpFloat)arg3 , (cpFloat)arg4  );
 
-	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
+	jsval ret_jsval = opaque_to_jsval( cx, ret_val );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -1808,7 +1808,7 @@ JSBool JSB_cpDampedRotarySpringSetDamping(JSContext *cx, uint32_t argc, jsval *v
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; double arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
@@ -1825,7 +1825,7 @@ JSBool JSB_cpDampedRotarySpringSetRestAngle(JSContext *cx, uint32_t argc, jsval 
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; double arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
@@ -1842,7 +1842,7 @@ JSBool JSB_cpDampedRotarySpringSetStiffness(JSContext *cx, uint32_t argc, jsval 
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; double arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
@@ -1859,7 +1859,7 @@ JSBool JSB_cpDampedSpringGetAnchr1(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpVect ret_val;
 
@@ -1879,7 +1879,7 @@ JSBool JSB_cpDampedSpringGetAnchr2(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpVect ret_val;
 
@@ -1899,7 +1899,7 @@ JSBool JSB_cpDampedSpringGetDamping(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpFloat ret_val;
 
@@ -1916,7 +1916,7 @@ JSBool JSB_cpDampedSpringGetRestLength(JSContext *cx, uint32_t argc, jsval *vp) 
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpFloat ret_val;
 
@@ -1933,7 +1933,7 @@ JSBool JSB_cpDampedSpringGetStiffness(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpFloat ret_val;
 
@@ -1950,8 +1950,8 @@ JSBool JSB_cpDampedSpringNew(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; cpBody* arg1; cpVect arg2; cpVect arg3; double arg4; double arg5; double arg6; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg1 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg1 );
 	ok &= jsval_to_cpVect( cx, *argvp++, (cpVect*) &arg2 );
 	ok &= jsval_to_cpVect( cx, *argvp++, (cpVect*) &arg3 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg4 );
@@ -1962,7 +1962,7 @@ JSBool JSB_cpDampedSpringNew(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	ret_val = cpDampedSpringNew((cpBody*)arg0 , (cpBody*)arg1 , (cpVect)arg2 , (cpVect)arg3 , (cpFloat)arg4 , (cpFloat)arg5 , (cpFloat)arg6  );
 
-	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
+	jsval ret_jsval = opaque_to_jsval( cx, ret_val );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -1976,7 +1976,7 @@ JSBool JSB_cpDampedSpringSetAnchr1(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; cpVect arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= jsval_to_cpVect( cx, *argvp++, (cpVect*) &arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
@@ -1993,7 +1993,7 @@ JSBool JSB_cpDampedSpringSetAnchr2(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; cpVect arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= jsval_to_cpVect( cx, *argvp++, (cpVect*) &arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
@@ -2010,7 +2010,7 @@ JSBool JSB_cpDampedSpringSetDamping(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; double arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
@@ -2027,7 +2027,7 @@ JSBool JSB_cpDampedSpringSetRestLength(JSContext *cx, uint32_t argc, jsval *vp) 
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; double arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
@@ -2044,7 +2044,7 @@ JSBool JSB_cpDampedSpringSetStiffness(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; double arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
@@ -2061,7 +2061,7 @@ JSBool JSB_cpGearJointGetPhase(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpFloat ret_val;
 
@@ -2078,7 +2078,7 @@ JSBool JSB_cpGearJointGetRatio(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpFloat ret_val;
 
@@ -2095,8 +2095,8 @@ JSBool JSB_cpGearJointNew(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; cpBody* arg1; double arg2; double arg3; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg1 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg1 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg2 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg3 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
@@ -2104,7 +2104,7 @@ JSBool JSB_cpGearJointNew(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	ret_val = cpGearJointNew((cpBody*)arg0 , (cpBody*)arg1 , (cpFloat)arg2 , (cpFloat)arg3  );
 
-	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
+	jsval ret_jsval = opaque_to_jsval( cx, ret_val );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -2118,7 +2118,7 @@ JSBool JSB_cpGearJointSetPhase(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; double arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
@@ -2135,7 +2135,7 @@ JSBool JSB_cpGearJointSetRatio(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; double arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
@@ -2152,7 +2152,7 @@ JSBool JSB_cpGrooveJointGetAnchr2(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpVect ret_val;
 
@@ -2172,7 +2172,7 @@ JSBool JSB_cpGrooveJointGetGrooveA(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpVect ret_val;
 
@@ -2192,7 +2192,7 @@ JSBool JSB_cpGrooveJointGetGrooveB(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpVect ret_val;
 
@@ -2212,8 +2212,8 @@ JSBool JSB_cpGrooveJointNew(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; cpBody* arg1; cpVect arg2; cpVect arg3; cpVect arg4; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg1 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg1 );
 	ok &= jsval_to_cpVect( cx, *argvp++, (cpVect*) &arg2 );
 	ok &= jsval_to_cpVect( cx, *argvp++, (cpVect*) &arg3 );
 	ok &= jsval_to_cpVect( cx, *argvp++, (cpVect*) &arg4 );
@@ -2222,7 +2222,7 @@ JSBool JSB_cpGrooveJointNew(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	ret_val = cpGrooveJointNew((cpBody*)arg0 , (cpBody*)arg1 , (cpVect)arg2 , (cpVect)arg3 , (cpVect)arg4  );
 
-	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
+	jsval ret_jsval = opaque_to_jsval( cx, ret_val );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -2236,7 +2236,7 @@ JSBool JSB_cpGrooveJointSetAnchr2(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; cpVect arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= jsval_to_cpVect( cx, *argvp++, (cpVect*) &arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
@@ -2253,7 +2253,7 @@ JSBool JSB_cpGrooveJointSetGrooveA(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; cpVect arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= jsval_to_cpVect( cx, *argvp++, (cpVect*) &arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
@@ -2270,7 +2270,7 @@ JSBool JSB_cpGrooveJointSetGrooveB(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; cpVect arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= jsval_to_cpVect( cx, *argvp++, (cpVect*) &arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
@@ -2373,7 +2373,7 @@ JSBool JSB_cpPinJointGetAnchr1(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpVect ret_val;
 
@@ -2393,7 +2393,7 @@ JSBool JSB_cpPinJointGetAnchr2(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpVect ret_val;
 
@@ -2413,7 +2413,7 @@ JSBool JSB_cpPinJointGetDist(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpFloat ret_val;
 
@@ -2430,8 +2430,8 @@ JSBool JSB_cpPinJointNew(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; cpBody* arg1; cpVect arg2; cpVect arg3; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg1 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg1 );
 	ok &= jsval_to_cpVect( cx, *argvp++, (cpVect*) &arg2 );
 	ok &= jsval_to_cpVect( cx, *argvp++, (cpVect*) &arg3 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
@@ -2439,7 +2439,7 @@ JSBool JSB_cpPinJointNew(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	ret_val = cpPinJointNew((cpBody*)arg0 , (cpBody*)arg1 , (cpVect)arg2 , (cpVect)arg3  );
 
-	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
+	jsval ret_jsval = opaque_to_jsval( cx, ret_val );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -2453,7 +2453,7 @@ JSBool JSB_cpPinJointSetAnchr1(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; cpVect arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= jsval_to_cpVect( cx, *argvp++, (cpVect*) &arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
@@ -2470,7 +2470,7 @@ JSBool JSB_cpPinJointSetAnchr2(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; cpVect arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= jsval_to_cpVect( cx, *argvp++, (cpVect*) &arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
@@ -2487,7 +2487,7 @@ JSBool JSB_cpPinJointSetDist(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; double arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
@@ -2504,7 +2504,7 @@ JSBool JSB_cpPivotJointGetAnchr1(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpVect ret_val;
 
@@ -2524,7 +2524,7 @@ JSBool JSB_cpPivotJointGetAnchr2(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpVect ret_val;
 
@@ -2544,15 +2544,15 @@ JSBool JSB_cpPivotJointNew(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; cpBody* arg1; cpVect arg2; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg1 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg1 );
 	ok &= jsval_to_cpVect( cx, *argvp++, (cpVect*) &arg2 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpConstraint* ret_val;
 
 	ret_val = cpPivotJointNew((cpBody*)arg0 , (cpBody*)arg1 , (cpVect)arg2  );
 
-	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
+	jsval ret_jsval = opaque_to_jsval( cx, ret_val );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -2566,8 +2566,8 @@ JSBool JSB_cpPivotJointNew2(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; cpBody* arg1; cpVect arg2; cpVect arg3; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg1 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg1 );
 	ok &= jsval_to_cpVect( cx, *argvp++, (cpVect*) &arg2 );
 	ok &= jsval_to_cpVect( cx, *argvp++, (cpVect*) &arg3 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
@@ -2575,7 +2575,7 @@ JSBool JSB_cpPivotJointNew2(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	ret_val = cpPivotJointNew2((cpBody*)arg0 , (cpBody*)arg1 , (cpVect)arg2 , (cpVect)arg3  );
 
-	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
+	jsval ret_jsval = opaque_to_jsval( cx, ret_val );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -2589,7 +2589,7 @@ JSBool JSB_cpPivotJointSetAnchr1(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; cpVect arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= jsval_to_cpVect( cx, *argvp++, (cpVect*) &arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
@@ -2606,7 +2606,7 @@ JSBool JSB_cpPivotJointSetAnchr2(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; cpVect arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= jsval_to_cpVect( cx, *argvp++, (cpVect*) &arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
@@ -2623,7 +2623,7 @@ JSBool JSB_cpPolyShapeGetNumVerts(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpShape* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	int ret_val;
 
@@ -2640,7 +2640,7 @@ JSBool JSB_cpPolyShapeGetVert(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpShape* arg0; int32_t arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= JS_ValueToECMAInt32( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpVect ret_val;
@@ -2661,7 +2661,7 @@ JSBool JSB_cpRatchetJointGetAngle(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpFloat ret_val;
 
@@ -2678,7 +2678,7 @@ JSBool JSB_cpRatchetJointGetPhase(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpFloat ret_val;
 
@@ -2695,7 +2695,7 @@ JSBool JSB_cpRatchetJointGetRatchet(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpFloat ret_val;
 
@@ -2712,8 +2712,8 @@ JSBool JSB_cpRatchetJointNew(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; cpBody* arg1; double arg2; double arg3; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg1 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg1 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg2 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg3 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
@@ -2721,7 +2721,7 @@ JSBool JSB_cpRatchetJointNew(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	ret_val = cpRatchetJointNew((cpBody*)arg0 , (cpBody*)arg1 , (cpFloat)arg2 , (cpFloat)arg3  );
 
-	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
+	jsval ret_jsval = opaque_to_jsval( cx, ret_val );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -2735,7 +2735,7 @@ JSBool JSB_cpRatchetJointSetAngle(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; double arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
@@ -2752,7 +2752,7 @@ JSBool JSB_cpRatchetJointSetPhase(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; double arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
@@ -2769,7 +2769,7 @@ JSBool JSB_cpRatchetJointSetRatchet(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; double arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
@@ -2796,7 +2796,7 @@ JSBool JSB_cpRotaryLimitJointGetMax(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpFloat ret_val;
 
@@ -2813,7 +2813,7 @@ JSBool JSB_cpRotaryLimitJointGetMin(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpFloat ret_val;
 
@@ -2830,8 +2830,8 @@ JSBool JSB_cpRotaryLimitJointNew(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; cpBody* arg1; double arg2; double arg3; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg1 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg1 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg2 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg3 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
@@ -2839,7 +2839,7 @@ JSBool JSB_cpRotaryLimitJointNew(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	ret_val = cpRotaryLimitJointNew((cpBody*)arg0 , (cpBody*)arg1 , (cpFloat)arg2 , (cpFloat)arg3  );
 
-	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
+	jsval ret_jsval = opaque_to_jsval( cx, ret_val );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -2853,7 +2853,7 @@ JSBool JSB_cpRotaryLimitJointSetMax(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; double arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
@@ -2870,7 +2870,7 @@ JSBool JSB_cpRotaryLimitJointSetMin(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; double arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
@@ -2887,7 +2887,7 @@ JSBool JSB_cpSegmentShapeGetA(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpShape* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpVect ret_val;
 
@@ -2907,7 +2907,7 @@ JSBool JSB_cpSegmentShapeGetB(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpShape* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpVect ret_val;
 
@@ -2927,7 +2927,7 @@ JSBool JSB_cpSegmentShapeGetNormal(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpShape* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpVect ret_val;
 
@@ -2947,7 +2947,7 @@ JSBool JSB_cpSegmentShapeGetRadius(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpShape* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpFloat ret_val;
 
@@ -2964,7 +2964,7 @@ JSBool JSB_cpSegmentShapeNew(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; cpVect arg1; cpVect arg2; double arg3; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= jsval_to_cpVect( cx, *argvp++, (cpVect*) &arg1 );
 	ok &= jsval_to_cpVect( cx, *argvp++, (cpVect*) &arg2 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg3 );
@@ -2973,7 +2973,7 @@ JSBool JSB_cpSegmentShapeNew(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	ret_val = cpSegmentShapeNew((cpBody*)arg0 , (cpVect)arg1 , (cpVect)arg2 , (cpFloat)arg3  );
 
-	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
+	jsval ret_jsval = opaque_to_jsval( cx, ret_val );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -2987,7 +2987,7 @@ JSBool JSB_cpSegmentShapeSetNeighbors(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpShape* arg0; cpVect arg1; cpVect arg2; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= jsval_to_cpVect( cx, *argvp++, (cpVect*) &arg1 );
 	ok &= jsval_to_cpVect( cx, *argvp++, (cpVect*) &arg2 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
@@ -3005,7 +3005,7 @@ JSBool JSB_cpShapeCacheBB(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpShape* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpBB ret_val;
 
@@ -3025,7 +3025,7 @@ JSBool JSB_cpShapeDestroy(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpShape* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
 	cpShapeDestroy((cpShape*)arg0  );
@@ -3041,7 +3041,7 @@ JSBool JSB_cpShapeFree(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpShape* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
 	cpShapeFree((cpShape*)arg0  );
@@ -3057,7 +3057,7 @@ JSBool JSB_cpShapeGetBB(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpShape* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpBB ret_val;
 
@@ -3077,13 +3077,13 @@ JSBool JSB_cpShapeGetBody(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpShape* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpBody* ret_val;
 
 	ret_val = cpShapeGetBody((cpShape*)arg0  );
 
-	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
+	jsval ret_jsval = opaque_to_jsval( cx, ret_val );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -3097,7 +3097,7 @@ JSBool JSB_cpShapeGetCollisionType(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpShape* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpCollisionType ret_val;
 
@@ -3117,7 +3117,7 @@ JSBool JSB_cpShapeGetElasticity(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpShape* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpFloat ret_val;
 
@@ -3134,7 +3134,7 @@ JSBool JSB_cpShapeGetFriction(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpShape* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpFloat ret_val;
 
@@ -3151,7 +3151,7 @@ JSBool JSB_cpShapeGetGroup(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpShape* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpGroup ret_val;
 
@@ -3171,7 +3171,7 @@ JSBool JSB_cpShapeGetLayers(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpShape* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpLayers ret_val;
 
@@ -3188,7 +3188,7 @@ JSBool JSB_cpShapeGetSensor(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpShape* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpBool ret_val;
 
@@ -3205,13 +3205,13 @@ JSBool JSB_cpShapeGetSpace(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpShape* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpSpace* ret_val;
 
 	ret_val = cpShapeGetSpace((cpShape*)arg0  );
 
-	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
+	jsval ret_jsval = opaque_to_jsval( cx, ret_val );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -3225,7 +3225,7 @@ JSBool JSB_cpShapeGetSurfaceVelocity(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpShape* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpVect ret_val;
 
@@ -3245,7 +3245,7 @@ JSBool JSB_cpShapePointQuery(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpShape* arg0; cpVect arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= jsval_to_cpVect( cx, *argvp++, (cpVect*) &arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpBool ret_val;
@@ -3263,8 +3263,8 @@ JSBool JSB_cpShapeSetBody(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpShape* arg0; cpBody* arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg1 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
 	cpShapeSetBody((cpShape*)arg0 , (cpBody*)arg1  );
@@ -3280,7 +3280,7 @@ JSBool JSB_cpShapeSetCollisionType(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpShape* arg0; cpCollisionType arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= jsval_to_int( cx, *argvp++, (int*) &arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
@@ -3297,7 +3297,7 @@ JSBool JSB_cpShapeSetElasticity(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpShape* arg0; double arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
@@ -3314,7 +3314,7 @@ JSBool JSB_cpShapeSetFriction(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpShape* arg0; double arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
@@ -3331,7 +3331,7 @@ JSBool JSB_cpShapeSetGroup(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpShape* arg0; cpGroup arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= jsval_to_int( cx, *argvp++, (int*) &arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
@@ -3348,7 +3348,7 @@ JSBool JSB_cpShapeSetLayers(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpShape* arg0; uint32_t arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= JS_ValueToECMAUint32( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
@@ -3365,7 +3365,7 @@ JSBool JSB_cpShapeSetSensor(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpShape* arg0; int32_t arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= JS_ValueToECMAInt32( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
@@ -3382,7 +3382,7 @@ JSBool JSB_cpShapeSetSurfaceVelocity(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpShape* arg0; cpVect arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= jsval_to_cpVect( cx, *argvp++, (cpVect*) &arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
@@ -3399,7 +3399,7 @@ JSBool JSB_cpShapeUpdate(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpShape* arg0; cpVect arg1; cpVect arg2; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= jsval_to_cpVect( cx, *argvp++, (cpVect*) &arg1 );
 	ok &= jsval_to_cpVect( cx, *argvp++, (cpVect*) &arg2 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
@@ -3421,7 +3421,7 @@ JSBool JSB_cpSimpleMotorGetRate(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpFloat ret_val;
 
@@ -3438,15 +3438,15 @@ JSBool JSB_cpSimpleMotorNew(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; cpBody* arg1; double arg2; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg1 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg1 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg2 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpConstraint* ret_val;
 
 	ret_val = cpSimpleMotorNew((cpBody*)arg0 , (cpBody*)arg1 , (cpFloat)arg2  );
 
-	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
+	jsval ret_jsval = opaque_to_jsval( cx, ret_val );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -3460,7 +3460,7 @@ JSBool JSB_cpSimpleMotorSetRate(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; double arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
@@ -3477,7 +3477,7 @@ JSBool JSB_cpSlideJointGetAnchr1(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpVect ret_val;
 
@@ -3497,7 +3497,7 @@ JSBool JSB_cpSlideJointGetAnchr2(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpVect ret_val;
 
@@ -3517,7 +3517,7 @@ JSBool JSB_cpSlideJointGetMax(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpFloat ret_val;
 
@@ -3534,7 +3534,7 @@ JSBool JSB_cpSlideJointGetMin(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpFloat ret_val;
 
@@ -3551,8 +3551,8 @@ JSBool JSB_cpSlideJointNew(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; cpBody* arg1; cpVect arg2; cpVect arg3; double arg4; double arg5; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg1 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg1 );
 	ok &= jsval_to_cpVect( cx, *argvp++, (cpVect*) &arg2 );
 	ok &= jsval_to_cpVect( cx, *argvp++, (cpVect*) &arg3 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg4 );
@@ -3562,7 +3562,7 @@ JSBool JSB_cpSlideJointNew(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	ret_val = cpSlideJointNew((cpBody*)arg0 , (cpBody*)arg1 , (cpVect)arg2 , (cpVect)arg3 , (cpFloat)arg4 , (cpFloat)arg5  );
 
-	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
+	jsval ret_jsval = opaque_to_jsval( cx, ret_val );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -3576,7 +3576,7 @@ JSBool JSB_cpSlideJointSetAnchr1(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; cpVect arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= jsval_to_cpVect( cx, *argvp++, (cpVect*) &arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
@@ -3593,7 +3593,7 @@ JSBool JSB_cpSlideJointSetAnchr2(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; cpVect arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= jsval_to_cpVect( cx, *argvp++, (cpVect*) &arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
@@ -3610,7 +3610,7 @@ JSBool JSB_cpSlideJointSetMax(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; double arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
@@ -3627,7 +3627,7 @@ JSBool JSB_cpSlideJointSetMin(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; double arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
@@ -3644,8 +3644,8 @@ JSBool JSB_cpSpaceActivateShapesTouchingShape(JSContext *cx, uint32_t argc, jsva
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; cpShape* arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg1 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
 	cpSpaceActivateShapesTouchingShape((cpSpace*)arg0 , (cpShape*)arg1  );
@@ -3661,14 +3661,14 @@ JSBool JSB_cpSpaceAddBody(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; cpBody* arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg1 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpBody* ret_val;
 
 	ret_val = cpSpaceAddBody((cpSpace*)arg0 , (cpBody*)arg1  );
 
-	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
+	jsval ret_jsval = opaque_to_jsval( cx, ret_val );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -3682,14 +3682,14 @@ JSBool JSB_cpSpaceAddConstraint(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; cpConstraint* arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg1 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpConstraint* ret_val;
 
 	ret_val = cpSpaceAddConstraint((cpSpace*)arg0 , (cpConstraint*)arg1  );
 
-	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
+	jsval ret_jsval = opaque_to_jsval( cx, ret_val );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -3703,14 +3703,14 @@ JSBool JSB_cpSpaceAddShape(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; cpShape* arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg1 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpShape* ret_val;
 
 	ret_val = cpSpaceAddShape((cpSpace*)arg0 , (cpShape*)arg1  );
 
-	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
+	jsval ret_jsval = opaque_to_jsval( cx, ret_val );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -3724,14 +3724,14 @@ JSBool JSB_cpSpaceAddStaticShape(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; cpShape* arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg1 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpShape* ret_val;
 
 	ret_val = cpSpaceAddStaticShape((cpSpace*)arg0 , (cpShape*)arg1  );
 
-	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
+	jsval ret_jsval = opaque_to_jsval( cx, ret_val );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -3745,7 +3745,7 @@ JSBool JSB_cpSpaceAlloc(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	ret_val = cpSpaceAlloc( );
 
-	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
+	jsval ret_jsval = opaque_to_jsval( cx, ret_val );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -3759,8 +3759,8 @@ JSBool JSB_cpSpaceContainsBody(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; cpBody* arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg1 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpBool ret_val;
 
@@ -3777,8 +3777,8 @@ JSBool JSB_cpSpaceContainsConstraint(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; cpConstraint* arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg1 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpBool ret_val;
 
@@ -3795,8 +3795,8 @@ JSBool JSB_cpSpaceContainsShape(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; cpShape* arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg1 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpBool ret_val;
 
@@ -3813,7 +3813,7 @@ JSBool JSB_cpSpaceDestroy(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
 	cpSpaceDestroy((cpSpace*)arg0  );
@@ -3829,7 +3829,7 @@ JSBool JSB_cpSpaceFree(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
 	cpSpaceFree((cpSpace*)arg0  );
@@ -3845,7 +3845,7 @@ JSBool JSB_cpSpaceGetCollisionBias(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpFloat ret_val;
 
@@ -3862,7 +3862,7 @@ JSBool JSB_cpSpaceGetCollisionPersistence(JSContext *cx, uint32_t argc, jsval *v
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpTimestamp ret_val;
 
@@ -3879,7 +3879,7 @@ JSBool JSB_cpSpaceGetCollisionSlop(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpFloat ret_val;
 
@@ -3896,7 +3896,7 @@ JSBool JSB_cpSpaceGetCurrentTimeStep(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpFloat ret_val;
 
@@ -3913,7 +3913,7 @@ JSBool JSB_cpSpaceGetDamping(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpFloat ret_val;
 
@@ -3930,7 +3930,7 @@ JSBool JSB_cpSpaceGetEnableContactGraph(JSContext *cx, uint32_t argc, jsval *vp)
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpBool ret_val;
 
@@ -3947,7 +3947,7 @@ JSBool JSB_cpSpaceGetGravity(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpVect ret_val;
 
@@ -3967,7 +3967,7 @@ JSBool JSB_cpSpaceGetIdleSpeedThreshold(JSContext *cx, uint32_t argc, jsval *vp)
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpFloat ret_val;
 
@@ -3984,7 +3984,7 @@ JSBool JSB_cpSpaceGetIterations(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	int ret_val;
 
@@ -4001,7 +4001,7 @@ JSBool JSB_cpSpaceGetSleepTimeThreshold(JSContext *cx, uint32_t argc, jsval *vp)
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpFloat ret_val;
 
@@ -4018,13 +4018,13 @@ JSBool JSB_cpSpaceGetStaticBody(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpBody* ret_val;
 
 	ret_val = cpSpaceGetStaticBody((cpSpace*)arg0  );
 
-	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
+	jsval ret_jsval = opaque_to_jsval( cx, ret_val );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -4038,13 +4038,13 @@ JSBool JSB_cpSpaceInit(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpSpace* ret_val;
 
 	ret_val = cpSpaceInit((cpSpace*)arg0  );
 
-	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
+	jsval ret_jsval = opaque_to_jsval( cx, ret_val );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -4058,7 +4058,7 @@ JSBool JSB_cpSpaceIsLocked(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpBool ret_val;
 
@@ -4075,7 +4075,7 @@ JSBool JSB_cpSpaceNew(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	ret_val = cpSpaceNew( );
 
-	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
+	jsval ret_jsval = opaque_to_jsval( cx, ret_val );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -4089,7 +4089,7 @@ JSBool JSB_cpSpacePointQueryFirst(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; cpVect arg1; uint32_t arg2; cpGroup arg3; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= jsval_to_cpVect( cx, *argvp++, (cpVect*) &arg1 );
 	ok &= JS_ValueToECMAUint32( cx, *argvp++, &arg2 );
 	ok &= jsval_to_int( cx, *argvp++, (int*) &arg3 );
@@ -4098,7 +4098,7 @@ JSBool JSB_cpSpacePointQueryFirst(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	ret_val = cpSpacePointQueryFirst((cpSpace*)arg0 , (cpVect)arg1 , (cpLayers)arg2 , (cpGroup)arg3  );
 
-	jsval ret_jsval = functionclass_to_jsval( cx, ret_val );
+	jsval ret_jsval = opaque_to_jsval( cx, ret_val );
 	JS_SET_RVAL(cx, vp, ret_jsval);
     
 	return JS_TRUE;
@@ -4112,8 +4112,8 @@ JSBool JSB_cpSpaceReindexShape(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; cpShape* arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg1 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
 	cpSpaceReindexShape((cpSpace*)arg0 , (cpShape*)arg1  );
@@ -4129,8 +4129,8 @@ JSBool JSB_cpSpaceReindexShapesForBody(JSContext *cx, uint32_t argc, jsval *vp) 
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; cpBody* arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg1 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
 	cpSpaceReindexShapesForBody((cpSpace*)arg0 , (cpBody*)arg1  );
@@ -4146,7 +4146,7 @@ JSBool JSB_cpSpaceReindexStatic(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
 	cpSpaceReindexStatic((cpSpace*)arg0  );
@@ -4162,8 +4162,8 @@ JSBool JSB_cpSpaceRemoveBody(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; cpBody* arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg1 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
 	cpSpaceRemoveBody((cpSpace*)arg0 , (cpBody*)arg1  );
@@ -4179,8 +4179,8 @@ JSBool JSB_cpSpaceRemoveConstraint(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; cpConstraint* arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg1 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
 	cpSpaceRemoveConstraint((cpSpace*)arg0 , (cpConstraint*)arg1  );
@@ -4196,8 +4196,8 @@ JSBool JSB_cpSpaceRemoveShape(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; cpShape* arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg1 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
 	cpSpaceRemoveShape((cpSpace*)arg0 , (cpShape*)arg1  );
@@ -4213,8 +4213,8 @@ JSBool JSB_cpSpaceRemoveStaticShape(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; cpShape* arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg1 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
 	cpSpaceRemoveStaticShape((cpSpace*)arg0 , (cpShape*)arg1  );
@@ -4230,7 +4230,7 @@ JSBool JSB_cpSpaceSetCollisionBias(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; double arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
@@ -4247,7 +4247,7 @@ JSBool JSB_cpSpaceSetCollisionPersistence(JSContext *cx, uint32_t argc, jsval *v
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; uint32_t arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= JS_ValueToECMAUint32( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
@@ -4264,7 +4264,7 @@ JSBool JSB_cpSpaceSetCollisionSlop(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; double arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
@@ -4281,7 +4281,7 @@ JSBool JSB_cpSpaceSetDamping(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; double arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
@@ -4298,7 +4298,7 @@ JSBool JSB_cpSpaceSetEnableContactGraph(JSContext *cx, uint32_t argc, jsval *vp)
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; int32_t arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= JS_ValueToECMAInt32( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
@@ -4315,7 +4315,7 @@ JSBool JSB_cpSpaceSetGravity(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; cpVect arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= jsval_to_cpVect( cx, *argvp++, (cpVect*) &arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
@@ -4332,7 +4332,7 @@ JSBool JSB_cpSpaceSetIdleSpeedThreshold(JSContext *cx, uint32_t argc, jsval *vp)
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; double arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
@@ -4349,7 +4349,7 @@ JSBool JSB_cpSpaceSetIterations(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; int32_t arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= JS_ValueToECMAInt32( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
@@ -4366,7 +4366,7 @@ JSBool JSB_cpSpaceSetSleepTimeThreshold(JSContext *cx, uint32_t argc, jsval *vp)
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; double arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
@@ -4383,7 +4383,7 @@ JSBool JSB_cpSpaceStep(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; double arg1; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 
@@ -4400,7 +4400,7 @@ JSBool JSB_cpSpaceUseSpatialHash(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; double arg1; int32_t arg2; 
 
-	ok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg0 );
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
 	ok &= JS_ValueToECMAInt32( cx, *argvp++, &arg2 );
 	JSB_PRECONDITION(ok, "Error processing arguments");
