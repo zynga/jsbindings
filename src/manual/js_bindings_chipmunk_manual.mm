@@ -80,6 +80,8 @@ struct collision_handler {
 	JSContext			*cx;
 
 	unsigned long		hash_key;
+
+	unsigned int		is_oo; // Objected oriented API ?
 	UT_hash_handle  hh;
 };
 
@@ -101,8 +103,13 @@ static cpBool myCollisionBegin(cpArbiter *arb, cpSpace *space, void *data)
 	struct collision_handler *handler = (struct collision_handler*) data;
 	
 	jsval args[2];
-	args[0] = opaque_to_jsval( handler->cx, arb);
-	args[1] = opaque_to_jsval( handler->cx, space );
+	if( handler->is_oo ) {
+		args[0] = functionclass_to_jsval(handler->cx, arb, JSB_cpArbiter_object, JSB_cpArbiter_class);
+		args[1] = functionclass_to_jsval(handler->cx, space, JSB_cpSpace_object, JSB_cpSpace_class);
+	} else {
+		args[0] = opaque_to_jsval( handler->cx, arb);
+		args[1] = opaque_to_jsval( handler->cx, space );
+	}
 	
 	jsval rval;
 	JS_CallFunctionValue( handler->cx, handler->jsthis, handler->begin, 2, args, &rval);
@@ -119,8 +126,13 @@ static cpBool myCollisionPre(cpArbiter *arb, cpSpace *space, void *data)
 	struct collision_handler *handler = (struct collision_handler*) data;
 	
 	jsval args[2];
-	args[0] = opaque_to_jsval( handler->cx, arb);
-	args[1] = opaque_to_jsval( handler->cx, space );
+	if( handler->is_oo ) {
+		args[0] = functionclass_to_jsval(handler->cx, arb, JSB_cpArbiter_object, JSB_cpArbiter_class);
+		args[1] = functionclass_to_jsval(handler->cx, space, JSB_cpSpace_object, JSB_cpSpace_class);
+	} else {
+		args[0] = opaque_to_jsval( handler->cx, arb);
+		args[1] = opaque_to_jsval( handler->cx, space );
+	}
 	
 	jsval rval;
 	JS_CallFunctionValue( handler->cx, handler->jsthis, handler->pre, 2, args, &rval);
@@ -137,8 +149,14 @@ static void myCollisionPost(cpArbiter *arb, cpSpace *space, void *data)
 	struct collision_handler *handler = (struct collision_handler*) data;
 	
 	jsval args[2];
-	args[0] = opaque_to_jsval( handler->cx, arb);
-	args[1] = opaque_to_jsval( handler->cx, space );
+	
+	if( handler->is_oo ) {
+		args[0] = functionclass_to_jsval(handler->cx, arb, JSB_cpArbiter_object, JSB_cpArbiter_class);
+		args[1] = functionclass_to_jsval(handler->cx, space, JSB_cpSpace_object, JSB_cpSpace_class);
+	} else {
+		args[0] = opaque_to_jsval( handler->cx, arb);
+		args[1] = opaque_to_jsval( handler->cx, space );
+	}
 	
 	jsval ignore;
 	JS_CallFunctionValue( handler->cx, handler->jsthis, handler->post, 2, args, &ignore);
@@ -149,8 +167,13 @@ static void myCollisionSeparate(cpArbiter *arb, cpSpace *space, void *data)
 	struct collision_handler *handler = (struct collision_handler*) data;
 	
 	jsval args[2];
-	args[0] = opaque_to_jsval( handler->cx, arb);
-	args[1] = opaque_to_jsval( handler->cx, space );
+	if( handler->is_oo ) {
+		args[0] = functionclass_to_jsval(handler->cx, arb, JSB_cpArbiter_object, JSB_cpArbiter_class);
+		args[1] = functionclass_to_jsval(handler->cx, space, JSB_cpSpace_object, JSB_cpSpace_class);
+	} else {
+		args[0] = opaque_to_jsval( handler->cx, arb);
+		args[1] = opaque_to_jsval( handler->cx, space );
+	}
 	
 	jsval ignore;
 	JS_CallFunctionValue( handler->cx, handler->jsthis, handler->separate, 2, args, &ignore);
@@ -160,7 +183,7 @@ static void myCollisionSeparate(cpArbiter *arb, cpSpace *space, void *data)
 #pragma mark addCollisionHandler
 
 static
-JSBool __jsb_cpSpace_addCollisionHandler(JSContext *cx, jsval *vp, jsval *argvp, cpSpace *space)
+JSBool __jsb_cpSpace_addCollisionHandler(JSContext *cx, jsval *vp, jsval *argvp, cpSpace *space, unsigned int is_oo)
 {
 	struct collision_handler *handler = (struct collision_handler*) malloc( sizeof(*handler) );
 
@@ -179,6 +202,9 @@ JSBool __jsb_cpSpace_addCollisionHandler(JSContext *cx, jsval *vp, jsval *argvp,
 	handler->separate = *argvp++;
 	
 	JSB_PRECONDITION(ok, "Error parsing arguments");
+	
+	// Object Oriented API ?
+	handler->is_oo = is_oo;
 	
 	if( ! JSVAL_IS_NULL(handler->begin) )
 		JS_AddNamedValueRoot(cx, &handler->begin, "begin collision_handler");
@@ -230,7 +256,7 @@ JSBool JSB_cpSpaceAddCollisionHandler(JSContext *cx, uint32_t argc, jsval *vp)
 	JSBool ok = jsval_to_opaque( cx, *argvp++, (void**)&space);
 	JSB_PRECONDITION(ok, "Error parsing arguments");
 	
-	return __jsb_cpSpace_addCollisionHandler(cx, vp, argvp, space);
+	return __jsb_cpSpace_addCollisionHandler(cx, vp, argvp, space, 0);
 }
 
 // method
@@ -243,7 +269,7 @@ JSBool JSB_cpSpace_addCollisionHandler(JSContext *cx, uint32_t argc, jsval *vp)
 	void *handle = JS_GetPrivate(jsthis);
 	JSB_PRECONDITION( handle, "Invalid private object");
 	
-	return __jsb_cpSpace_addCollisionHandler(cx, vp, JS_ARGV(cx,vp), (cpSpace*)handle);
+	return __jsb_cpSpace_addCollisionHandler(cx, vp, JS_ARGV(cx,vp), (cpSpace*)handle, 1);
 }
 
 #pragma mark removeCollisionHandler
@@ -318,13 +344,20 @@ JSBool JSB_cpSpace_removeCollisionHandler(JSContext *cx, uint32_t argc, jsval *v
 
 #pragma mark getBodies
 static
-JSBool __jsb_cpArbiter_getBodies(JSContext *cx, jsval *vp, jsval *argvp, cpArbiter *arbiter)
+JSBool __jsb_cpArbiter_getBodies(JSContext *cx, jsval *vp, jsval *argvp, cpArbiter *arbiter, unsigned int is_oo)
 {
 	cpBody *bodyA;
 	cpBody *bodyB;
 	cpArbiterGetBodies(arbiter, &bodyA, &bodyB);
-	jsval valA = opaque_to_jsval(cx, bodyA);
-	jsval valB = opaque_to_jsval(cx, bodyB);
+	
+	jsval valA, valB;
+	if( is_oo ) {
+		valA = functionclass_to_jsval(cx, bodyA, JSB_cpBody_object, JSB_cpBody_class);
+		valB = functionclass_to_jsval(cx, bodyB, JSB_cpBody_object, JSB_cpBody_class);
+	} else {
+		valA = opaque_to_jsval(cx, bodyA);
+		valB = opaque_to_jsval(cx, bodyB);		
+	}
 	
 	JSObject *jsobj = JS_NewArrayObject(cx, 2, NULL);
 	JS_SetElement(cx, jsobj, 0, &valA);
@@ -346,7 +379,7 @@ JSBool JSB_cpArbiterGetBodies(JSContext *cx, uint32_t argc, jsval *vp)
 	if( ! jsval_to_opaque( cx, *argvp++, (void**)&arbiter ) )
 		return JS_FALSE;
 
-	return __jsb_cpArbiter_getBodies(cx, vp, argvp, arbiter);
+	return __jsb_cpArbiter_getBodies(cx, vp, argvp, arbiter, 0);
 }
 
 // Method
@@ -359,18 +392,25 @@ JSBool JSB_cpArbiter_getBodies(JSContext *cx, uint32_t argc, jsval *vp)
 	void *handle = JS_GetPrivate(jsthis);
 	JSB_PRECONDITION( handle, "Invalid private object");
 	
-	return __jsb_cpArbiter_getBodies(cx, vp, JS_ARGV(cx,vp), (cpArbiter*)handle);
+	return __jsb_cpArbiter_getBodies(cx, vp, JS_ARGV(cx,vp), (cpArbiter*)handle, 1);
 }
 
 #pragma mark getShapes
 static
-JSBool __jsb_cpArbiter_getShapes(JSContext *cx, jsval *vp, jsval *argvp, cpArbiter *arbiter)
+JSBool __jsb_cpArbiter_getShapes(JSContext *cx, jsval *vp, jsval *argvp, cpArbiter *arbiter, unsigned int is_oo)
 {
 	cpShape *shapeA;
 	cpShape *shapeB;
 	cpArbiterGetShapes(arbiter, &shapeA, &shapeB);
-	jsval valA = opaque_to_jsval(cx, shapeA);
-	jsval valB = opaque_to_jsval(cx, shapeB);
+
+	jsval valA, valB;
+	if( is_oo ) {
+		valA = functionclass_to_jsval(cx, shapeA, JSB_cpShape_object, JSB_cpShape_class);
+		valB = functionclass_to_jsval(cx, shapeB, JSB_cpShape_object, JSB_cpShape_class);
+	} else {
+		valA = opaque_to_jsval(cx, shapeA);
+		valB = opaque_to_jsval(cx, shapeB);
+	}
 	
 	JSObject *jsobj = JS_NewArrayObject(cx, 2, NULL);
 	JS_SetElement(cx, jsobj, 0, &valA);
@@ -392,7 +432,7 @@ JSBool JSB_cpArbiterGetShapes(JSContext *cx, uint32_t argc, jsval *vp)
 	if( ! jsval_to_opaque( cx, *argvp++, (void**) &arbiter ) )
 	   return JS_FALSE;
 
-	return __jsb_cpArbiter_getShapes(cx, vp, argvp, arbiter);
+	return __jsb_cpArbiter_getShapes(cx, vp, argvp, arbiter, 0);
 }
 
 // method
@@ -405,7 +445,7 @@ JSBool JSB_cpArbiter_getShapes(JSContext *cx, uint32_t argc, jsval *vp)
 	void *handle = JS_GetPrivate(jsthis);
 	JSB_PRECONDITION( handle, "Invalid private object");
 	
-	return __jsb_cpArbiter_getShapes(cx, vp, JS_ARGV(cx,vp), (cpArbiter*)handle);
+	return __jsb_cpArbiter_getShapes(cx, vp, JS_ARGV(cx,vp), (cpArbiter*)handle, 1);
 }
 
 #pragma mark - Body
