@@ -19,3 +19,46 @@ cp.BoxShape2 = function(body, box)
 	
 	return new cp.PolyShape(body, verts, cp.vzero);
 };
+
+
+// Properties, for Chipmunk-JS compatibility
+Object.defineProperties(cp.Space.prototype,
+				{
+					"gravity" : {
+						get : function(){
+                            return this.getGravity();
+                        },
+						set : function(newValue){
+                            this.setGravity(newValue);
+                        },
+						enumerable : true,
+						configurable : true
+					},
+					"iterations" : {
+						get : function(){
+                            return this.getIterations();
+                        },
+						set : function(newValue){
+                            this.setIterations(newValue);
+                        },
+						enumerable : true,
+						configurable : true
+					},
+					"damping" : {
+						get : function(){
+                            return this.getDamping();
+                        },
+						set : function(newValue){
+                            this.setDamping(newValue);
+                        },
+						enumerable : true,
+						configurable : true
+					},
+					"staticBody" : {
+						get : function(){
+                            return this.getStaticBody();
+                        },
+						enumerable : true,
+						configurable : true
+					}
+				});
