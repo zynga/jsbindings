@@ -625,6 +625,7 @@ void jsb_del_jsobject_for_proxy(void* proxy)
 	}	
 }
 
+#pragma mark
 
 
 JSBool jsb_set_reserved_slot(JSObject *obj, uint32_t idx, jsval value)
@@ -637,4 +638,33 @@ JSBool jsb_set_reserved_slot(JSObject *obj, uint32_t idx, jsval value)
 	JS_SetReservedSlot(obj, idx, value);
 	
 	return JS_TRUE;
+}
+
+#pragma mark "C" proxy functions
+
+struct jsb_c_proxy_s* jsb_get_c_proxy_for_jsobject( JSObject *jsobj )
+{
+	struct jsb_c_proxy_s *proxy = (struct jsb_c_proxy_s *) JS_GetPrivate(jsobj);
+	NSCAssert(proxy, @"Invalid proxy for JSObject");
+	return proxy;
+}
+
+void jsb_del_c_proxy_for_jsobject( JSObject *jsobj )
+{
+	struct jsb_c_proxy_s *proxy = (struct jsb_c_proxy_s *) JS_GetPrivate(jsobj);
+	NSCAssert(proxy, @"Invalid proxy for JSObject");
+	JS_SetPrivate(jsobj, NULL);
+	
+	free(proxy);
+}
+
+void jsb_set_c_proxy_for_jsobject( JSObject *jsobj, void *handle, unsigned long flags)
+{
+	struct jsb_c_proxy_s *proxy = (struct jsb_c_proxy_s*) malloc(sizeof(*proxy));
+	NSCAssert(proxy, @"No memory for proxy");
+	
+	proxy->handle = handle;
+	proxy->flags = flags;
+	
+	JS_SetPrivate(jsobj, proxy);
 }

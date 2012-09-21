@@ -302,8 +302,8 @@ JSBool JSB_cpSpace_addCollisionHandler(JSContext *cx, uint32_t argc, jsval *vp)
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_PRECONDITION( jsthis, "Invalid jsthis object");
 	
-	void *handle = JS_GetPrivate(jsthis);
-	JSB_PRECONDITION( handle, "Invalid private object");
+	struct jsb_c_proxy_s* proxy = jsb_get_c_proxy_for_jsobject(jsthis);
+	void *handle = proxy->handle;
 	
 	return __jsb_cpSpace_addCollisionHandler(cx, vp, JS_ARGV(cx,vp), (cpSpace*)handle, 1);
 }
@@ -370,8 +370,8 @@ JSBool JSB_cpSpace_removeCollisionHandler(JSContext *cx, uint32_t argc, jsval *v
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_PRECONDITION( jsthis, "Invalid jsthis object");
 	
-	void *handle = JS_GetPrivate(jsthis);
-	JSB_PRECONDITION( handle, "Invalid private object");
+	struct jsb_c_proxy_s* proxy = jsb_get_c_proxy_for_jsobject(jsthis);
+	void *handle = proxy->handle;
 	
 	return __jsb_cpSpace_removeCollisionHandler(cx, vp, JS_ARGV(cx,vp), (cpSpace*)handle);
 }
@@ -425,8 +425,9 @@ JSBool JSB_cpArbiter_getBodies(JSContext *cx, uint32_t argc, jsval *vp)
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_PRECONDITION( jsthis, "Invalid jsthis object");
 	
-	void *handle = JS_GetPrivate(jsthis);
-	JSB_PRECONDITION( handle, "Invalid private object");
+	struct jsb_c_proxy_s* proxy = jsb_get_c_proxy_for_jsobject(jsthis);
+	JSB_PRECONDITION( proxy, "Invalid private object");
+	void *handle = proxy->handle;
 	
 	return __jsb_cpArbiter_getBodies(cx, vp, JS_ARGV(cx,vp), (cpArbiter*)handle, 1);
 }
@@ -478,8 +479,8 @@ JSBool JSB_cpArbiter_getShapes(JSContext *cx, uint32_t argc, jsval *vp)
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_PRECONDITION( jsthis, "Invalid jsthis object");
 	
-	void *handle = JS_GetPrivate(jsthis);
-	JSB_PRECONDITION( handle, "Invalid private object");
+	struct jsb_c_proxy_s* proxy = jsb_get_c_proxy_for_jsobject(jsthis);
+	void *handle = proxy->handle;
 	
 	return __jsb_cpArbiter_getShapes(cx, vp, JS_ARGV(cx,vp), (cpArbiter*)handle, 1);
 }
@@ -516,8 +517,8 @@ JSBool JSB_cpBody_getUserData(JSContext *cx, uint32_t argc, jsval *vp)
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_PRECONDITION( jsthis, "Invalid jsthis object");
 	
-	void *handle = JS_GetPrivate(jsthis);
-	JSB_PRECONDITION( handle, "Invalid private object");
+	struct jsb_c_proxy_s* proxy = jsb_get_c_proxy_for_jsobject(jsthis);
+	void *handle = proxy->handle;
 	
 	return __jsb_cpBody_getUserData(cx, vp, JS_ARGV(cx,vp), (cpBody*)handle);
 }
@@ -559,8 +560,8 @@ JSBool JSB_cpBody_setUserData(JSContext *cx, uint32_t argc, jsval *vp)
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_PRECONDITION( jsthis, "Invalid jsthis object");
 	
-	void *handle = JS_GetPrivate(jsthis);
-	JSB_PRECONDITION( handle, "Invalid private object");
+	struct jsb_c_proxy_s* proxy = jsb_get_c_proxy_for_jsobject(jsthis);
+	void *handle = proxy->handle;
 	
 	return __jsb_cpBody_setUserData(cx, vp, JS_ARGV(cx,vp), (cpBody*)handle);
 }
@@ -588,8 +589,8 @@ JSBool JSB_cpBase_constructor(JSContext *cx, uint32_t argc, jsval *vp)
 	ok = jsval_to_opaque(cx, *argvp++, &handle);
 	
 	JSB_PRECONDITION(ok, "Error converting arguments for JSB_cpBase_constructor");
-	
-	JS_SetPrivate(jsobj, handle);
+
+	jsb_set_c_proxy_for_jsobject(jsobj, handle, JSB_C_FLAG_DO_NOT_CALL_FREE);
 	jsb_set_jsobject_for_proxy(jsobj, handle);
 	
 	JS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(jsobj));
@@ -609,8 +610,8 @@ JSBool JSB_cpBase_getHandle(JSContext *cx, uint32_t argc, jsval *vp)
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_PRECONDITION( jsthis, "Invalid jsthis object");
 	
-	void *handle = JS_GetPrivate(jsthis);
-	JSB_PRECONDITION( handle, "Invalid private object");
+	struct jsb_c_proxy_s* proxy = jsb_get_c_proxy_for_jsobject(jsthis);
+	void *handle = proxy->handle;
 	
 	jsval ret_val = opaque_to_jsval(cx, handle);
 	JS_SET_RVAL(cx, vp, ret_val);
@@ -629,8 +630,9 @@ JSBool JSB_cpBase_setHandle(JSContext *cx, uint32_t argc, jsval *vp)
 	void *handle;
 	JSBool ok = jsval_to_opaque(cx, *argvp++, &handle);
 	JSB_PRECONDITION( ok, "Invalid parsing arguments");
-	
-	JS_SetPrivate(jsthis, handle);
+
+	jsb_set_c_proxy_for_jsobject(jsthis, handle, JSB_C_FLAG_DO_NOT_CALL_FREE);
+	jsb_set_jsobject_for_proxy(jsthis, handle);
 	
 	JS_SET_RVAL(cx, vp, JSVAL_VOID);
 	return JS_TRUE;
@@ -682,7 +684,8 @@ JSBool JSB_cpPolyShape_constructor(JSContext *cx, uint32_t argc, jsval *vp)
 	ok &= jsval_to_cpVect( cx, *argvp++, (cpVect*) &offset );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	cpShape *shape = cpPolyShapeNew(body, numVerts, verts, offset);
-	JS_SetPrivate(jsobj, (void*)shape);
+
+	jsb_set_c_proxy_for_jsobject(jsobj, shape, JSB_C_FLAG_DO_NOT_CALL_FREE);
 	jsb_set_jsobject_for_proxy(jsobj, shape);
 	
 	JS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(jsobj));

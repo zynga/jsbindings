@@ -38,8 +38,8 @@ jsval ccGridSize_to_jsval( JSContext *cx, ccGridSize p)
 {
 	JSObject *typedArray = JS_NewInt32Array( cx, 2 );
 	int32_t *buffer = (int32_t*)JS_GetArrayBufferViewData(typedArray, cx);
-	buffer[0] = p.x;
-	buffer[1] = p.y;
+	buffer[0] = (int32_t)p.x;
+	buffer[1] = (int32_t)p.y;
 	return OBJECT_TO_JSVAL(typedArray);
 }
 

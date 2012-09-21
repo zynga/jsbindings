@@ -1911,8 +1911,8 @@ class JSBGenerateOOFunctions(JSBGenerateFunctions):
         super(JSBGenerateOOFunctions, self).generate_function_prefix(func_name, num_of_args)
         template = '''
 \tJSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
-\t%s* arg0 = (%s*) JS_GetPrivate(jsthis);
-\tJSB_PRECONDITION(arg0, "Invalid handle");
+\tstruct jsb_c_proxy_s *proxy = jsb_get_c_proxy_for_jsobject(jsthis);
+\t%s* arg0 = (%s*) proxy->handle;
 '''
         self.fd_mm.write(template % (self.current_class_name, self.current_class_name))
 
@@ -1953,7 +1953,7 @@ JSBool %s_constructor(JSContext *cx, uint32_t argc, jsval *vp)
         template_1_a = '\tJSObject *jsobj = JS_NewObject(cx, JSB_%s_class, JSB_%s_object, NULL);\n'
         template_1_b = '''
 \n\tjsb_set_jsobject_for_proxy(jsobj, ret_val);
-\tJS_SetPrivate(jsobj, ret_val);
+\tjsb_set_c_proxy_for_jsobject(jsobj, ret_val, JSB_C_FLAG_CALL_FREE);
 \tJS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(jsobj));
 '''
 
@@ -2011,14 +2011,15 @@ JSBool %s_constructor(JSContext *cx, uint32_t argc, jsval *vp)
     def generate_implementation_class_destructor(self, klass_name):
         template = '''
 // Destructor
-void %s_finalize(JSFreeOp *fop, JSObject *obj)
+void %s_finalize(JSFreeOp *fop, JSObject *jsthis)
 {
-\tvoid *handle = JS_GetPrivate(obj);
-\tNSCAssert( handle, @"Invalid handle for %s");
-\tCCLOGINFO(@"jsbindings: finalizing JS object %%p (%s), handle: %%p", obj, handle);
+\tstruct jsb_c_proxy_s *proxy = jsb_get_c_proxy_for_jsobject(jsthis);
+\tCCLOGINFO(@"jsbindings: finalizing JS object %%p (%s), handle: %%p", jsthis, proxy->handle);
 
-\tjsb_del_jsobject_for_proxy(handle);
-\t%s( (%s*)handle);
+\tjsb_del_jsobject_for_proxy(proxy->handle);
+\tif(proxy->flags == JSB_C_FLAG_CALL_FREE)
+\t\t%s( (%s*)proxy->handle);
+\tjsb_del_c_proxy_for_jsobject(jsthis);
 }
 '''
         destructor_suffix = self.c_object_properties['destructor_suffix'].keys()[0]
@@ -2037,7 +2038,6 @@ void %s_finalize(JSFreeOp *fop, JSObject *obj)
             func_name = '// No destructor found: '
 
         self.fd_mm.write(template % (name,
-                                    klass_name,
                                     klass_name,
                                     func_name, klass
                                     ))

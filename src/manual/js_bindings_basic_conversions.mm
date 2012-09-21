@@ -347,10 +347,8 @@ JSBool jsval_to_functionclass( JSContext *cx, jsval vp, void **r)
 	JSBool ok = JS_ValueToObject(cx, vp, &jsobj);
 	JSB_PRECONDITION(ok, "Error converting jsval to object");
 	
-	void *handle = JS_GetPrivate(jsobj);
-	JSB_PRECONDITION(handle, "Error obtaining private from object");
-	
-	*r = (void*)handle;
+	struct jsb_c_proxy_s *proxy = jsb_get_c_proxy_for_jsobject(jsobj);
+	*r = proxy->handle;
 	return JS_TRUE;
 }
 
@@ -504,7 +502,7 @@ jsval functionclass_to_jsval( JSContext *cx, void* handle, JSObject* object, JSC
 		jsobj = JS_NewObject(cx, klass, object, NULL);
 		NSCAssert(jsobj, @"Invalid object");
 		CCLOGINFO(@"jsbindings: Constructing JS object %p (%s), handle: %p", jsobj, class_name, handle);
-		JS_SetPrivate(jsobj, handle);
+		jsb_set_c_proxy_for_jsobject(jsobj, handle, JSB_C_FLAG_DO_NOT_CALL_FREE);
 		jsb_set_jsobject_for_proxy(jsobj, handle);
 	} else
 		CCLOGINFO(@"jsbindings: Reusing JS object %p (%s), handle: %p", jsobj, class_name, handle);
