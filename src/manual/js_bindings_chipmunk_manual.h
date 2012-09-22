@@ -48,9 +48,21 @@ JSBool JSB_cpBodySetUserData(JSContext *cx, uint32_t argc, jsval *vp);
 JSBool JSB_cpSpace_addCollisionHandler(JSContext *cx, uint32_t argc, jsval *vp);
 JSBool JSB_cpSpace_removeCollisionHandler(JSContext *cx, uint32_t argc, jsval *vp);
 
+// manually wrapped for rooting/unrooting purposes
+JSBool JSB_cpSpace_addBody(JSContext *cx, uint32_t argc, jsval *vp);
+JSBool JSB_cpSpace_addConstraint(JSContext *cx, uint32_t argc, jsval *vp);
+JSBool JSB_cpSpace_addShape(JSContext *cx, uint32_t argc, jsval *vp);
+JSBool JSB_cpSpace_addStaticShape(JSContext *cx, uint32_t argc, jsval *vp);
+JSBool JSB_cpSpace_removeBody(JSContext *cx, uint32_t argc, jsval *vp);
+JSBool JSB_cpSpace_removeConstraint(JSContext *cx, uint32_t argc, jsval *vp);
+JSBool JSB_cpSpace_removeShape(JSContext *cx, uint32_t argc, jsval *vp);
+JSBool JSB_cpSpace_removeStaticShape(JSContext *cx, uint32_t argc, jsval *vp);
+
+
 JSBool JSB_cpArbiter_getBodies(JSContext *cx, uint32_t argc, jsval *vp);
 JSBool JSB_cpArbiter_getShapes(JSContext *cx, uint32_t argc, jsval *vp);
 
+JSBool JSB_cpBody_constructor(JSContext *cx, uint32_t argc, jsval *vp);
 JSBool JSB_cpBody_getUserData(JSContext *cx, uint32_t argc, jsval *vp);
 JSBool JSB_cpBody_setUserData(JSContext *cx, uint32_t argc, jsval *vp);
 
@@ -71,8 +83,9 @@ void JSB_cpBase_createClass(JSContext* cx, JSObject* globalObj, const char * nam
 extern JSObject* JSB_cpBase_object;
 extern JSClass* JSB_cpBase_class;
 
-// Manual "constructor" for PolyShape
+// Manual constructor / destructors
 JSBool JSB_cpPolyShape_constructor(JSContext *cx, uint32_t argc, jsval *vp);
+void JSB_cpSpace_finalize(JSFreeOp *fop, JSObject *obj);
 
 #endif // JSB_INCLUDE_CHIPMUNK
 

@@ -326,7 +326,7 @@ JSBool jsval_to_opaque( JSContext *cx, jsval vp, void **r)
 	JSB_PRECONDITION( tmp_arg && JS_IsTypedArrayObject( tmp_arg, cx ), "Not a TypedArray object");
 	JSB_PRECONDITION( JS_GetTypedArrayByteLength( tmp_arg, cx ) == sizeof(void*), "Invalid Typed Array lenght");
 	
-	int32_t* arg_array = (int32_t*)JS_GetArrayBufferViewData( tmp_arg, cx );
+	uint32_t* arg_array = (uint32_t*)JS_GetArrayBufferViewData( tmp_arg, cx );
 	uint64 ret =  arg_array[0];
 	ret = ret << 32;
 	ret |= arg_array[1];
@@ -341,14 +341,16 @@ JSBool jsval_to_opaque( JSContext *cx, jsval vp, void **r)
 	return JS_TRUE;
 }
 
-JSBool jsval_to_functionclass( JSContext *cx, jsval vp, void **r)
+JSBool jsval_to_c_class( JSContext *cx, jsval vp, void **out_native, struct jsb_c_proxy_s **out_proxy)
 {
 	JSObject *jsobj;
 	JSBool ok = JS_ValueToObject(cx, vp, &jsobj);
 	JSB_PRECONDITION(ok, "Error converting jsval to object");
 	
 	struct jsb_c_proxy_s *proxy = jsb_get_c_proxy_for_jsobject(jsobj);
-	*r = proxy->handle;
+	*out_native = proxy->handle;
+	if( out_proxy )
+		*out_proxy = proxy;
 	return JS_TRUE;
 }
 
@@ -375,7 +377,7 @@ JSBool jsval_to_long( JSContext *cx, jsval vp, long *r )
 	JSB_PRECONDITION( tmp_arg && JS_IsTypedArrayObject( tmp_arg, cx ), "Not a TypedArray object");
 	JSB_PRECONDITION( JS_GetTypedArrayByteLength( tmp_arg, cx ) == sizeof(long), "Invalid Typed Array lenght");
 	
-	int32_t* arg_array = (int32_t*)JS_GetArrayBufferViewData( tmp_arg, cx );
+	uint32_t* arg_array = (uint32_t*)JS_GetArrayBufferViewData( tmp_arg, cx );
 	long ret =  arg_array[0];
 	ret = ret << 32;
 	ret |= arg_array[1];
@@ -398,7 +400,7 @@ JSBool jsval_to_longlong( JSContext *cx, jsval vp, long long *r )
 	JSB_PRECONDITION( tmp_arg && JS_IsTypedArrayObject( tmp_arg, cx ), "Not a TypedArray object");
 	JSB_PRECONDITION( JS_GetTypedArrayByteLength( tmp_arg, cx ) == sizeof(long long), "Invalid Typed Array lenght");
 	
-	int32_t* arg_array = (int32_t*)JS_GetArrayBufferViewData( tmp_arg, cx );
+	uint32_t* arg_array = (uint32_t*)JS_GetArrayBufferViewData( tmp_arg, cx );
 	long long ret =  arg_array[0];
 	ret = ret << 32;
 	ret |= arg_array[1];
@@ -493,7 +495,7 @@ jsval opaque_to_jsval( JSContext *cx, void *opaque )
 #endif
 }
 
-jsval functionclass_to_jsval( JSContext *cx, void* handle, JSObject* object, JSClass *klass, const char* class_name)
+jsval c_class_to_jsval( JSContext *cx, void* handle, JSObject* object, JSClass *klass, const char* class_name)
 {
 	JSObject *jsobj;
 
@@ -501,11 +503,9 @@ jsval functionclass_to_jsval( JSContext *cx, void* handle, JSObject* object, JSC
 	if( !jsobj ) {
 		jsobj = JS_NewObject(cx, klass, object, NULL);
 		NSCAssert(jsobj, @"Invalid object");
-		CCLOGINFO(@"jsbindings: Constructing JS object %p (%s), handle: %p", jsobj, class_name, handle);
 		jsb_set_c_proxy_for_jsobject(jsobj, handle, JSB_C_FLAG_DO_NOT_CALL_FREE);
 		jsb_set_jsobject_for_proxy(jsobj, handle);
-	} else
-		CCLOGINFO(@"jsbindings: Reusing JS object %p (%s), handle: %p", jsobj, class_name, handle);
+	}
 
 	return OBJECT_TO_JSVAL(jsobj);
 }

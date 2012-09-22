@@ -20,6 +20,13 @@ cp.BoxShape2 = function(body, box)
 	return new cp.PolyShape(body, verts, cp.vzero);
 };
 
+/// Initialize an static body
+cp.BodyStatic = function()
+{
+	return new cp.Body(Infinity, Infinity);
+};
+
+
 // Properties, for Chipmunk-JS compatibility
 Object.defineProperties(cp.Base.prototype,
 				{

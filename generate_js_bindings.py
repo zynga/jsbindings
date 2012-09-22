@@ -338,9 +338,9 @@ class JSBGenerate(object):
         return template
 
     # If the structure should be returned as an Object. For OO C API (Chipmunk)
-    def generate_retval_functionclass(self, declared_type, js_type):
+    def generate_retval_c_class(self, declared_type, js_type):
         template = '''
-\tjsval ret_jsval = functionclass_to_jsval( cx, ret_val, %s, %s, "%s" );
+\tjsval ret_jsval = c_class_to_jsval( cx, ret_val, %s, %s, "%s" );
 \tJS_SET_RVAL(cx, vp, ret_jsval);
     '''
         # remove '*' from class name
@@ -372,7 +372,7 @@ class JSBGenerate(object):
 
         ret = ''
         if declared_type in self.function_classes and self.generating_OOF:
-            ret = self.generate_retval_functionclass(declared_type, js_type)
+            ret = self.generate_retval_c_class(declared_type, js_type)
         elif declared_type in self.struct_opaque:
             ret = self.generate_retval_opaque(declared_type, js_type)
         elif declared_type in self.struct_manual:
@@ -592,8 +592,8 @@ class JSBGenerate(object):
         template = '\tok &= jsval_to_block_1( cx, *argvp++, JS_THIS_OBJECT(cx, vp), &arg%d );\n'
         self.fd_mm.write(template % (i))
 
-    def generate_argument_functionclass(self, i, arg_js_type, arg_declared_type):
-        template = '\tok &= jsval_to_functionclass( cx, *argvp++, (void**)&arg%d );\n'
+    def generate_argument_c_class(self, i, arg_js_type, arg_declared_type):
+        template = '\tok &= jsval_to_c_class( cx, *argvp++, (void**)&arg%d, NULL );\n'
         self.fd_mm.write(template % (i))
 
     def generate_argument_opaque(self, i, arg_js_type, arg_declared_type):
@@ -694,7 +694,7 @@ class JSBGenerate(object):
                     self.fd_mm.write('\tif (argc >= %d) {\n\t' % (i + 1))
 
                 if args_declared_type[i] in self.function_classes and self.generating_OOF:
-                    self.generate_argument_functionclass(i, arg, args_declared_type[i])
+                    self.generate_argument_c_class(i, arg, args_declared_type[i])
                 elif args_declared_type[i] in self.struct_opaque:
                     self.generate_argument_opaque(i, arg, args_declared_type[i])
                 elif args_declared_type[i] in self.struct_manual:
@@ -1996,7 +1996,6 @@ JSBool %s_constructor(JSContext *cx, uint32_t argc, jsval *vp)
                 self.fd_mm.write('\tvoid* %s' % call)
 
                 self.fd_mm.write(template_1_b)
-                self.fd_mm.write('\tCCLOGINFO(@"jsbindings: Constructing JS object %%p (%s), handle: %%p", jsobj, ret_val);' % klass_name)
 
         except ParseException, e:
             self.fd_mm.write(template_0_pre % (name, num_of_args))
@@ -2036,6 +2035,11 @@ void %s_finalize(JSFreeOp *fop, JSObject *jsthis)
 
         if klass == None:
             func_name = '// No destructor found: '
+
+        # Manually bound constructor ?
+        if klass in self.manual_bound_methods and func_name in self.manual_bound_methods[klass]:
+            sys.stderr.write("'Destructor': %s manually bound" % func_name)
+            return
 
         self.fd_mm.write(template % (name,
                                     klass_name,

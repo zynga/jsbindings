@@ -539,7 +539,6 @@ JSBool JSBCore_forceGC(JSContext *cx, uint32_t argc, jsval *vp)
 
 
 #pragma mark - Hash
-#pragma mark JSObject-> Proxy
 
 typedef struct _hashJSObject
 {
@@ -590,7 +589,7 @@ void jsb_del_proxy_for_jsobject(JSObject *obj)
 	}
 }
 
-#pragma mark JSObject-> Proxy
+#pragma mark Proxy -> JSObject
 
 // Reverse hash: Proxy -> JSObject
 JSObject* jsb_get_jsobject_for_proxy(void *proxy)
@@ -665,6 +664,7 @@ void jsb_set_c_proxy_for_jsobject( JSObject *jsobj, void *handle, unsigned long 
 	
 	proxy->handle = handle;
 	proxy->flags = flags;
+	proxy->jsobj = jsobj;
 	
 	JS_SetPrivate(jsobj, proxy);
 }

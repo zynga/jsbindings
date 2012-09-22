@@ -125,8 +125,9 @@ extern "C" {
 	// handle is a pointer to the native object
 	// flags: flags for the object
 	struct jsb_c_proxy_s {
-		unsigned long flags;
-		void *handle;
+		unsigned long flags;	// Should it be removed at "destructor" time, or not ?
+		void *handle;			// native object, like cpSpace, cpBody, etc.
+		JSObject *jsobj;		// JS Object. Needed for rooting / unrooting
 	};
 	
 	// Functions for setting / removing / getting the proxy used by the "C" Object Oriented API. Think of Chipmunk classes
