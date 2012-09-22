@@ -31,7 +31,11 @@
 
 #import "js_bindings_chipmunk_manual.h"
 #import "js_bindings_basic_conversions.h"
+#import "js_bindings_core.h"
 #import "uthash.h"
+
+// Function declarations
+void static freeSpaceChildren(cpSpace *space);
 
 
 #pragma mark - convertions
@@ -66,6 +70,41 @@ jsval cpBB_to_jsval(JSContext *cx, cpBB bb )
 	return OBJECT_TO_JSVAL(typedArray);
 }
 
+JSBool jsval_to_array_of_cpvect( JSContext *cx, jsval vp, cpVect**verts, int *numVerts)
+{
+	// Parsing sequence
+	JSObject *jsobj;
+	JSBool ok = JS_ValueToObject( cx, vp, &jsobj );
+	JSB_PRECONDITION( ok, "Error converting value to object");
+	
+	JSB_PRECONDITION( jsobj && JS_IsArrayObject( cx, jsobj),  "Object must be an array");
+
+	uint32_t len;
+	JS_GetArrayLength(cx, jsobj, &len);
+	
+	JSB_PRECONDITION( len%2==0, "Array lenght should be even");
+	
+	cpVect *array = (cpVect*)malloc( sizeof(cpVect) * len/2);
+	
+	for( uint32_t i=0; i< len;i++ ) {
+		jsval valarg;
+		JS_GetElement(cx, jsobj, i, &valarg);
+
+		double value;
+		ok = JS_ValueToNumber(cx, valarg, &value);
+		JSB_PRECONDITION( ok, "Error converting value to nsobject");
+		
+		if(i%2==0)
+			array[i/2].x = value;
+		else
+			array[i/2].y = value;
+	}
+	
+	*numVerts = len/2;
+	*verts = array;
+	
+	return JS_TRUE;
+}
 
 #pragma mark - Collision Handler
 
@@ -80,6 +119,8 @@ struct collision_handler {
 	JSContext			*cx;
 
 	unsigned long		hash_key;
+
+	unsigned int		is_oo; // Objected oriented API ?
 	UT_hash_handle  hh;
 };
 
@@ -101,8 +142,13 @@ static cpBool myCollisionBegin(cpArbiter *arb, cpSpace *space, void *data)
 	struct collision_handler *handler = (struct collision_handler*) data;
 	
 	jsval args[2];
-	args[0] = opaque_to_jsval( handler->cx, arb);
-	args[1] = opaque_to_jsval( handler->cx, space );
+	if( handler->is_oo ) {
+		args[0] = c_class_to_jsval(handler->cx, arb, JSB_cpArbiter_object, JSB_cpArbiter_class, "cpArbiter");
+		args[1] = c_class_to_jsval(handler->cx, space, JSB_cpSpace_object, JSB_cpSpace_class, "cpArbiter");
+	} else {
+		args[0] = opaque_to_jsval( handler->cx, arb);
+		args[1] = opaque_to_jsval( handler->cx, space );
+	}
 	
 	jsval rval;
 	JS_CallFunctionValue( handler->cx, handler->jsthis, handler->begin, 2, args, &rval);
@@ -119,8 +165,13 @@ static cpBool myCollisionPre(cpArbiter *arb, cpSpace *space, void *data)
 	struct collision_handler *handler = (struct collision_handler*) data;
 	
 	jsval args[2];
-	args[0] = opaque_to_jsval( handler->cx, arb);
-	args[1] = opaque_to_jsval( handler->cx, space );
+	if( handler->is_oo ) {
+		args[0] = c_class_to_jsval(handler->cx, arb, JSB_cpArbiter_object, JSB_cpArbiter_class, "cpArbiter");
+		args[1] = c_class_to_jsval(handler->cx, space, JSB_cpSpace_object, JSB_cpSpace_class, "cpArbiter");
+	} else {
+		args[0] = opaque_to_jsval( handler->cx, arb);
+		args[1] = opaque_to_jsval( handler->cx, space );
+	}
 	
 	jsval rval;
 	JS_CallFunctionValue( handler->cx, handler->jsthis, handler->pre, 2, args, &rval);
@@ -137,8 +188,14 @@ static void myCollisionPost(cpArbiter *arb, cpSpace *space, void *data)
 	struct collision_handler *handler = (struct collision_handler*) data;
 	
 	jsval args[2];
-	args[0] = opaque_to_jsval( handler->cx, arb);
-	args[1] = opaque_to_jsval( handler->cx, space );
+	
+	if( handler->is_oo ) {
+		args[0] = c_class_to_jsval(handler->cx, arb, JSB_cpArbiter_object, JSB_cpArbiter_class, "cpArbiter");
+		args[1] = c_class_to_jsval(handler->cx, space, JSB_cpSpace_object, JSB_cpSpace_class, "cpArbiter");
+	} else {
+		args[0] = opaque_to_jsval( handler->cx, arb);
+		args[1] = opaque_to_jsval( handler->cx, space );
+	}
 	
 	jsval ignore;
 	JS_CallFunctionValue( handler->cx, handler->jsthis, handler->post, 2, args, &ignore);
@@ -149,42 +206,54 @@ static void myCollisionSeparate(cpArbiter *arb, cpSpace *space, void *data)
 	struct collision_handler *handler = (struct collision_handler*) data;
 	
 	jsval args[2];
-	args[0] = opaque_to_jsval( handler->cx, arb);
-	args[1] = opaque_to_jsval( handler->cx, space );
+	if( handler->is_oo ) {
+		args[0] = c_class_to_jsval(handler->cx, arb, JSB_cpArbiter_object, JSB_cpArbiter_class, "cpArbiter");
+		args[1] = c_class_to_jsval(handler->cx, space, JSB_cpSpace_object, JSB_cpSpace_class, "cpArbiter");
+	} else {
+		args[0] = opaque_to_jsval( handler->cx, arb);
+		args[1] = opaque_to_jsval( handler->cx, space );
+	}
 	
 	jsval ignore;
 	JS_CallFunctionValue( handler->cx, handler->jsthis, handler->separate, 2, args, &ignore);
 }
 
-JSBool JSB_cpSpaceAddCollisionHandler(JSContext *cx, uint32_t argc, jsval *vp)
+#pragma mark - cpSpace
+#pragma mark addCollisionHandler
+
+static
+JSBool __jsb_cpSpace_addCollisionHandler(JSContext *cx, jsval *vp, jsval *argvp, cpSpace *space, unsigned int is_oo)
 {
-	JSB_PRECONDITION( argc==8, "Invalid number of arguments");
-
-	jsval *argvp = JS_ARGV(cx,vp);
-
 	struct collision_handler *handler = (struct collision_handler*) malloc( sizeof(*handler) );
-	if( ! handler )
-		return JS_FALSE;
+
+	JSB_PRECONDITION(handler, "Error allocating memory");
 	
 	JSBool ok = JS_TRUE;
-
+	
 	// args
-	cpSpace *space;
-	ok &= jsval_to_opaque( cx, *argvp++, (void**)&space);
 	ok &= jsval_to_int(cx, *argvp++, (int32_t*) &handler->typeA );
 	ok &= jsval_to_int(cx, *argvp++, (int32_t*) &handler->typeB );
-	
-
 	ok &= JS_ValueToObject(cx, *argvp++, &handler->jsthis );
-
+	
 	handler->begin =  *argvp++;
 	handler->pre = *argvp++;
 	handler->post = *argvp++;
 	handler->separate = *argvp++;
-
-	if( ! ok )
-		return JS_FALSE;
-		
+	
+	JSB_PRECONDITION(ok, "Error parsing arguments");
+	
+	// Object Oriented API ?
+	handler->is_oo = is_oo;
+	
+	if( ! JSVAL_IS_NULL(handler->begin) )
+		JS_AddNamedValueRoot(cx, &handler->begin, "begin collision_handler");
+	if( ! JSVAL_IS_NULL(handler->pre) )
+		JS_AddNamedValueRoot(cx, &handler->pre, "pre collision_handler");
+	if( ! JSVAL_IS_NULL(handler->post) )
+		JS_AddNamedValueRoot(cx, &handler->post, "post collision_handler");
+	if( ! JSVAL_IS_NULL(handler->separate) )
+		JS_AddNamedValueRoot(cx, &handler->separate, "separate collision_handler");
+	
 	handler->cx = cx;
 	
 	cpSpaceAddCollisionHandler(space, handler->typeA, handler->typeB,
@@ -194,7 +263,7 @@ JSBool JSB_cpSpaceAddCollisionHandler(JSContext *cx, uint32_t argc, jsval *vp)
 							   JSVAL_IS_NULL(handler->separate) ? NULL : &myCollisionSeparate,
 							   handler );
 	
-
+	
 	//
 	// Already added ? If so, remove it.
 	// Then add new entry
@@ -206,32 +275,56 @@ JSBool JSB_cpSpaceAddCollisionHandler(JSContext *cx, uint32_t argc, jsval *vp)
 		HASH_DEL( collision_handler_hash, hashElement );
 		free( hashElement );
 	}
-
+	
 	handler->hash_key = paired_key;
 	HASH_ADD_INT( collision_handler_hash, hash_key, handler );
-
-		
+	
+	
 	JS_SET_RVAL(cx, vp, JSVAL_VOID);
 	return JS_TRUE;
 }
 
-JSBool JSB_cpSpaceRemoveCollisionHandler(JSContext *cx, uint32_t argc, jsval *vp)
+JSBool JSB_cpSpaceAddCollisionHandler(JSContext *cx, uint32_t argc, jsval *vp)
 {
-	JSB_PRECONDITION( argc==3, "Invalid number of arguments");
-	
+	JSB_PRECONDITION( argc==8, "Invalid number of arguments");
+
 	jsval *argvp = JS_ARGV(cx,vp);
+
+	// args
+	cpSpace *space;
+	JSBool ok = jsval_to_opaque( cx, *argvp++, (void**)&space);
+	JSB_PRECONDITION(ok, "Error parsing arguments");
+	
+	return __jsb_cpSpace_addCollisionHandler(cx, vp, argvp, space, 0);
+}
+
+// method
+JSBool JSB_cpSpace_addCollisionHandler(JSContext *cx, uint32_t argc, jsval *vp)
+{
+	JSB_PRECONDITION( argc==7, "Invalid number of arguments");
+	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
+	JSB_PRECONDITION( jsthis, "Invalid jsthis object");
+	
+	struct jsb_c_proxy_s* proxy = jsb_get_c_proxy_for_jsobject(jsthis);
+	void *handle = proxy->handle;
+	
+	return __jsb_cpSpace_addCollisionHandler(cx, vp, JS_ARGV(cx,vp), (cpSpace*)handle, 1);
+}
+
+#pragma mark removeCollisionHandler
+
+static
+JSBool __jsb_cpSpace_removeCollisionHandler(JSContext *cx, jsval *vp, jsval *argvp, cpSpace *space)
+{
 	JSBool ok = JS_TRUE;
 	
-	cpSpace* space;
 	cpCollisionType typeA;
 	cpCollisionType typeB;
-	ok &= jsval_to_opaque( cx, *argvp++, (void**)&space);
 	ok &= jsval_to_int(cx, *argvp++, (int32_t*) &typeA );
 	ok &= jsval_to_int(cx, *argvp++, (int32_t*) &typeB );
-	
-	if( ! ok )
-		return JS_FALSE;
 
+	JSB_PRECONDITION(ok, "Error parsing arguments");
+	
 	cpSpaceRemoveCollisionHandler(space, typeA, typeB );
 	
 	// Remove it
@@ -239,6 +332,17 @@ JSBool JSB_cpSpaceRemoveCollisionHandler(JSContext *cx, uint32_t argc, jsval *vp
 	unsigned long key = pair_ints(typeA, typeB );
 	HASH_FIND_INT(collision_handler_hash, &key, hashElement);
     if( hashElement ) {
+		
+		// unroot it
+		if( ! JSVAL_IS_NULL(hashElement->begin) )
+			JS_RemoveValueRoot(cx, &hashElement->begin);
+		if( ! JSVAL_IS_NULL(hashElement->pre) )
+			JS_RemoveValueRoot(cx, &hashElement->pre);
+		if( ! JSVAL_IS_NULL(hashElement->post) )
+			JS_RemoveValueRoot(cx, &hashElement->post);
+		if( ! JSVAL_IS_NULL(hashElement->separate) )
+			JS_RemoveValueRoot(cx, &hashElement->separate);
+		
 		HASH_DEL( collision_handler_hash, hashElement );
 		free( hashElement );
 	}
@@ -247,8 +351,283 @@ JSBool JSB_cpSpaceRemoveCollisionHandler(JSContext *cx, uint32_t argc, jsval *vp
 	return JS_TRUE;
 }
 
+// Free function
+JSBool JSB_cpSpaceRemoveCollisionHandler(JSContext *cx, uint32_t argc, jsval *vp)
+{
+	JSB_PRECONDITION( argc==3, "Invalid number of arguments");
+	
+	jsval *argvp = JS_ARGV(cx,vp);
+	
+	cpSpace* space;
+	JSBool ok = jsval_to_opaque( cx, *argvp++, (void**)&space);
+	
+	JSB_PRECONDITION(ok, "Error parsing arguments");
+
+	return __jsb_cpSpace_removeCollisionHandler(cx, vp, argvp, space);
+}
+
+// method
+JSBool JSB_cpSpace_removeCollisionHandler(JSContext *cx, uint32_t argc, jsval *vp)
+{
+	JSB_PRECONDITION( argc==2, "Invalid number of arguments");
+	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
+	JSB_PRECONDITION( jsthis, "Invalid jsthis object");
+	
+	struct jsb_c_proxy_s* proxy = jsb_get_c_proxy_for_jsobject(jsthis);
+	void *handle = proxy->handle;
+	
+	return __jsb_cpSpace_removeCollisionHandler(cx, vp, JS_ARGV(cx,vp), (cpSpace*)handle);
+}
+
+#pragma mark Free
+
+// Destructor
+void JSB_cpSpace_finalize(JSFreeOp *fop, JSObject *jsthis)
+{
+	struct jsb_c_proxy_s *proxy = jsb_get_c_proxy_for_jsobject(jsthis);
+	CCLOGINFO(@"jsbindings: finalizing JS object %p (cpSpace), handle: %p", jsthis, proxy->handle);
+	
+	// Free Space Children
+	freeSpaceChildren((cpSpace*)proxy->handle);
+	
+	jsb_del_jsobject_for_proxy(proxy->handle);
+	if(proxy->flags == JSB_C_FLAG_CALL_FREE)
+		cpSpaceFree( (cpSpace*)proxy->handle);
+	jsb_del_c_proxy_for_jsobject(jsthis);
+}
+
+#pragma mark Add functios. Root JSObjects
+
+// Arguments: cpBody*
+// Ret value: cpBody*
+JSBool JSB_cpSpace_addBody(JSContext *cx, uint32_t argc, jsval *vp) {
+	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	
+	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
+	struct jsb_c_proxy_s *proxy = jsb_get_c_proxy_for_jsobject(jsthis);
+	cpSpace* arg0 = (cpSpace*) proxy->handle;
+	jsval *argvp = JS_ARGV(cx,vp);
+	JSBool ok = JS_TRUE;
+	cpBody* arg1;
+	
+	jsval retval = *argvp; struct jsb_c_proxy_s *retproxy;
+	ok &= jsval_to_c_class( cx, *argvp++, (void**)&arg1, &retproxy );
+	JSB_PRECONDITION(ok, "Error processing arguments");
+	
+	cpSpaceAddBody((cpSpace*)arg0 , (cpBody*)arg1  );
+	
+	// Root it:
+	JS_AddNamedObjectRoot(cx, &retproxy->jsobj, "cpBody");
+	
+	// addBody returns the same object that was added, so return it without conversions
+	JS_SET_RVAL(cx, vp, retval);
+    
+	return JS_TRUE;
+}
+
+// Arguments: cpConstraint*
+// Ret value: cpConstraint*
+JSBool JSB_cpSpace_addConstraint(JSContext *cx, uint32_t argc, jsval *vp) {
+	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	
+	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
+	struct jsb_c_proxy_s *proxy = jsb_get_c_proxy_for_jsobject(jsthis);
+	cpSpace* arg0 = (cpSpace*) proxy->handle;
+	jsval *argvp = JS_ARGV(cx,vp);
+	JSBool ok = JS_TRUE;
+	cpConstraint* arg1;
+	
+	jsval retval = *argvp; struct jsb_c_proxy_s *retproxy;
+	ok &= jsval_to_c_class( cx, *argvp++, (void**)&arg1, &retproxy );
+	JSB_PRECONDITION(ok, "Error processing arguments");
+	
+	cpSpaceAddConstraint((cpSpace*)arg0 , (cpConstraint*)arg1  );
+	
+	// Root it:
+	JS_AddNamedObjectRoot(cx, &retproxy->jsobj, "cpConstraint");
+	
+	// addConstraint returns the same object that was added, so return it without conversions
+	JS_SET_RVAL(cx, vp, retval);
+    
+	return JS_TRUE;
+}
+
+// Arguments: cpShape*
+// Ret value: cpShape*
+JSBool JSB_cpSpace_addShape(JSContext *cx, uint32_t argc, jsval *vp) {
+	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	
+	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
+	struct jsb_c_proxy_s *proxy = jsb_get_c_proxy_for_jsobject(jsthis);
+	cpSpace* arg0 = (cpSpace*) proxy->handle;
+	jsval *argvp = JS_ARGV(cx,vp);
+	JSBool ok = JS_TRUE;
+	cpShape* arg1;
+
+	jsval retval = *argvp; struct jsb_c_proxy_s *retproxy;
+	ok &= jsval_to_c_class( cx, *argvp++, (void**)&arg1, &retproxy );
+	JSB_PRECONDITION(ok, "Error processing arguments");
+	
+	cpSpaceAddShape((cpSpace*)arg0 , (cpShape*)arg1  );
+	
+	// Root it:
+	JS_AddNamedObjectRoot(cx, &retproxy->jsobj, "cpShape");
+	
+	// addShape returns the same object that was added, so return it without conversions
+	JS_SET_RVAL(cx, vp, retval);
+    
+	return JS_TRUE;
+}
+
+// Arguments: cpShape*
+// Ret value: cpShape*
+JSBool JSB_cpSpace_addStaticShape(JSContext *cx, uint32_t argc, jsval *vp) {
+	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	
+	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
+	struct jsb_c_proxy_s *proxy = jsb_get_c_proxy_for_jsobject(jsthis);
+	cpSpace* arg0 = (cpSpace*) proxy->handle;
+	jsval *argvp = JS_ARGV(cx,vp);
+	JSBool ok = JS_TRUE;
+	cpShape* arg1;
+	
+	jsval retval = *argvp; struct jsb_c_proxy_s *retproxy;
+	ok &= jsval_to_c_class( cx, *argvp++, (void**)&arg1, &retproxy );
+	JSB_PRECONDITION(ok, "Error processing arguments");
+	
+	cpSpaceAddStaticShape((cpSpace*)arg0 , (cpShape*)arg1  );
+	
+	// Root it:
+	JS_AddNamedObjectRoot(cx, &retproxy->jsobj, "cpShape (static)");
+
+	// addStaticShape returns the same object that was added, so return it without conversions
+	JS_SET_RVAL(cx, vp, retval);
+    
+	return JS_TRUE;
+}
+
+#pragma mark Remove functios. Untoot JSObjects
+
+// Arguments: cpBody*
+// Ret value: void
+JSBool JSB_cpSpace_removeBody(JSContext *cx, uint32_t argc, jsval *vp) {
+	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	
+	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
+	struct jsb_c_proxy_s *proxy = jsb_get_c_proxy_for_jsobject(jsthis);
+	cpSpace* arg0 = (cpSpace*) proxy->handle;
+	jsval *argvp = JS_ARGV(cx,vp);
+	JSBool ok = JS_TRUE;
+	cpBody* arg1;
+	
+	struct jsb_c_proxy_s *retproxy;
+	ok &= jsval_to_c_class( cx, *argvp++, (void**)&arg1, &retproxy );
+	JSB_PRECONDITION(ok, "Error processing arguments");
+	
+	cpSpaceRemoveBody((cpSpace*)arg0 , (cpBody*)arg1  );
+	JS_RemoveObjectRoot(cx, &retproxy->jsobj);
+	
+	JS_SET_RVAL(cx, vp, JSVAL_VOID);
+	return JS_TRUE;
+}
+
+// Arguments: cpConstraint*
+// Ret value: void
+JSBool JSB_cpSpace_removeConstraint(JSContext *cx, uint32_t argc, jsval *vp) {
+	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	
+	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
+	struct jsb_c_proxy_s *proxy = jsb_get_c_proxy_for_jsobject(jsthis);
+	cpSpace* arg0 = (cpSpace*) proxy->handle;
+	jsval *argvp = JS_ARGV(cx,vp);
+	JSBool ok = JS_TRUE;
+	cpConstraint* arg1;
+	
+	struct jsb_c_proxy_s *retproxy;
+	ok &= jsval_to_c_class( cx, *argvp++, (void**)&arg1, &retproxy );
+	JSB_PRECONDITION(ok, "Error processing arguments");
+	
+	cpSpaceRemoveConstraint((cpSpace*)arg0 , (cpConstraint*)arg1  );
+	JS_RemoveObjectRoot(cx, &retproxy->jsobj);
+
+	JS_SET_RVAL(cx, vp, JSVAL_VOID);
+	return JS_TRUE;
+}
+
+// Arguments: cpShape*
+// Ret value: void
+JSBool JSB_cpSpace_removeShape(JSContext *cx, uint32_t argc, jsval *vp) {
+	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	
+	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
+	struct jsb_c_proxy_s *proxy = jsb_get_c_proxy_for_jsobject(jsthis);
+	cpSpace* arg0 = (cpSpace*) proxy->handle;
+	jsval *argvp = JS_ARGV(cx,vp);
+	JSBool ok = JS_TRUE;
+	cpShape* arg1;
+	
+	struct jsb_c_proxy_s *retproxy;
+	ok &= jsval_to_c_class( cx, *argvp++, (void**)&arg1, &retproxy );
+	JSB_PRECONDITION(ok, "Error processing arguments");
+	
+	cpSpaceRemoveShape((cpSpace*)arg0 , (cpShape*)arg1  );
+	JS_RemoveObjectRoot(cx, &retproxy->jsobj);
+	
+	JS_SET_RVAL(cx, vp, JSVAL_VOID);
+	return JS_TRUE;
+}
+
+// Arguments: cpShape*
+// Ret value: void
+JSBool JSB_cpSpace_removeStaticShape(JSContext *cx, uint32_t argc, jsval *vp) {
+	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	
+	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
+	struct jsb_c_proxy_s *proxy = jsb_get_c_proxy_for_jsobject(jsthis);
+	cpSpace* arg0 = (cpSpace*) proxy->handle;
+	jsval *argvp = JS_ARGV(cx,vp);
+	JSBool ok = JS_TRUE;
+	cpShape* arg1;
+	
+	struct jsb_c_proxy_s *retproxy;
+	ok &= jsval_to_c_class( cx, *argvp++, (void**)&arg1, &retproxy );
+	JSB_PRECONDITION(ok, "Error processing arguments");
+	
+	cpSpaceRemoveStaticShape((cpSpace*)arg0 , (cpShape*)arg1  );
+	JS_RemoveObjectRoot(cx, &retproxy->jsobj);
+	
+	JS_SET_RVAL(cx, vp, JSVAL_VOID);
+	return JS_TRUE;
+}
 #pragma mark - Arbiter
 
+#pragma mark getBodies
+static
+JSBool __jsb_cpArbiter_getBodies(JSContext *cx, jsval *vp, jsval *argvp, cpArbiter *arbiter, unsigned int is_oo)
+{
+	cpBody *bodyA;
+	cpBody *bodyB;
+	cpArbiterGetBodies(arbiter, &bodyA, &bodyB);
+	
+	jsval valA, valB;
+	if( is_oo ) {
+		valA = c_class_to_jsval(cx, bodyA, JSB_cpBody_object, JSB_cpBody_class, "cpArbiter");
+		valB = c_class_to_jsval(cx, bodyB, JSB_cpBody_object, JSB_cpBody_class, "cpArbiter");
+	} else {
+		valA = opaque_to_jsval(cx, bodyA);
+		valB = opaque_to_jsval(cx, bodyB);		
+	}
+	
+	JSObject *jsobj = JS_NewArrayObject(cx, 2, NULL);
+	JS_SetElement(cx, jsobj, 0, &valA);
+	JS_SetElement(cx, jsobj, 1, &valB);
+	
+	JS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(jsobj));
+	
+	return JS_TRUE;	
+}
+
+// Free function
 JSBool JSB_cpArbiterGetBodies(JSContext *cx, uint32_t argc, jsval *vp)
 {
 	JSB_PRECONDITION( argc==1, "Invalid number of arguments");
@@ -259,22 +638,50 @@ JSBool JSB_cpArbiterGetBodies(JSContext *cx, uint32_t argc, jsval *vp)
 	if( ! jsval_to_opaque( cx, *argvp++, (void**)&arbiter ) )
 		return JS_FALSE;
 
-	cpBody *bodyA;
-	cpBody *bodyB;
-	cpArbiterGetBodies(arbiter, &bodyA, &bodyB);
-	jsval valA = opaque_to_jsval(cx, bodyA);
-	jsval valB = opaque_to_jsval(cx, bodyB);
+	return __jsb_cpArbiter_getBodies(cx, vp, argvp, arbiter, 0);
+}
+
+// Method
+JSBool JSB_cpArbiter_getBodies(JSContext *cx, uint32_t argc, jsval *vp)
+{
+	JSB_PRECONDITION( argc==0, "Invalid number of arguments");
+	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
+	JSB_PRECONDITION( jsthis, "Invalid jsthis object");
+	
+	struct jsb_c_proxy_s* proxy = jsb_get_c_proxy_for_jsobject(jsthis);
+	JSB_PRECONDITION( proxy, "Invalid private object");
+	void *handle = proxy->handle;
+	
+	return __jsb_cpArbiter_getBodies(cx, vp, JS_ARGV(cx,vp), (cpArbiter*)handle, 1);
+}
+
+#pragma mark getShapes
+static
+JSBool __jsb_cpArbiter_getShapes(JSContext *cx, jsval *vp, jsval *argvp, cpArbiter *arbiter, unsigned int is_oo)
+{
+	cpShape *shapeA;
+	cpShape *shapeB;
+	cpArbiterGetShapes(arbiter, &shapeA, &shapeB);
+
+	jsval valA, valB;
+	if( is_oo ) {
+		valA = c_class_to_jsval(cx, shapeA, JSB_cpShape_object, JSB_cpShape_class, "cpShape");
+		valB = c_class_to_jsval(cx, shapeB, JSB_cpShape_object, JSB_cpShape_class, "cpShape");
+	} else {
+		valA = opaque_to_jsval(cx, shapeA);
+		valB = opaque_to_jsval(cx, shapeB);
+	}
 	
 	JSObject *jsobj = JS_NewArrayObject(cx, 2, NULL);
 	JS_SetElement(cx, jsobj, 0, &valA);
 	JS_SetElement(cx, jsobj, 1, &valB);
-
+	
 	JS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(jsobj));
 	
 	return JS_TRUE;
-	
 }
 
+// function
 JSBool JSB_cpArbiterGetShapes(JSContext *cx, uint32_t argc, jsval *vp)
 {
 	JSB_PRECONDITION( argc==1, "Invalid number of arguments");
@@ -284,22 +691,71 @@ JSBool JSB_cpArbiterGetShapes(JSContext *cx, uint32_t argc, jsval *vp)
 	cpArbiter* arbiter;
 	if( ! jsval_to_opaque( cx, *argvp++, (void**) &arbiter ) )
 	   return JS_FALSE;
+
+	return __jsb_cpArbiter_getShapes(cx, vp, argvp, arbiter, 0);
+}
+
+// method
+JSBool JSB_cpArbiter_getShapes(JSContext *cx, uint32_t argc, jsval *vp)
+{
+	JSB_PRECONDITION( argc==0, "Invalid number of arguments");
+	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
+	JSB_PRECONDITION( jsthis, "Invalid jsthis object");
 	
-	cpShape *shapeA;
-	cpShape *shapeB;
-	cpArbiterGetShapes(arbiter, &shapeA, &shapeB);
-	jsval valA = opaque_to_jsval(cx, shapeA);
-	jsval valB = opaque_to_jsval(cx, shapeB);
+	struct jsb_c_proxy_s* proxy = jsb_get_c_proxy_for_jsobject(jsthis);
+	void *handle = proxy->handle;
 	
-	JSObject *jsobj = JS_NewArrayObject(cx, 2, NULL);
-	JS_SetElement(cx, jsobj, 0, &valA);
-	JS_SetElement(cx, jsobj, 1, &valB);
+	return __jsb_cpArbiter_getShapes(cx, vp, JS_ARGV(cx,vp), (cpArbiter*)handle, 1);
+}
+
+#pragma mark - Body
+
+#pragma mark constructor
+
+// Manually added to identify static vs dynamic bodies
+JSBool JSB_cpBody_constructor(JSContext *cx, uint32_t argc, jsval *vp)
+{
+	JSB_PRECONDITION(argc==2, "Invalid number of arguments");
+	JSObject *jsobj = JS_NewObject(cx, JSB_cpBody_class, JSB_cpBody_object, NULL);
+	jsval *argvp = JS_ARGV(cx,vp);
+	JSBool ok = JS_TRUE;
+	double arg0; double arg1;
+	
+	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
+	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
+	JSB_PRECONDITION(ok, "Error processing arguments");
+	
+	void *ret_val = NULL;
+	if( arg0 == INFINITY && arg1 == INFINITY) {
+		ret_val = cpBodyNewStatic();
+		
+		// XXX: Hack. IT WILL LEAK "rogue" objects., But at least it prevents a crash.
+		// The thing is that "rogue" bodies needs to be freed after the space, and I am not sure
+		// how to do it in a "js" way.
+		jsb_set_c_proxy_for_jsobject(jsobj, ret_val, JSB_C_FLAG_DO_NOT_CALL_FREE);
+	} else {
+		ret_val = cpBodyNew((cpFloat)arg0 , (cpFloat)arg1  );
+		jsb_set_c_proxy_for_jsobject(jsobj, ret_val, JSB_C_FLAG_CALL_FREE);
+	}
+	
+	jsb_set_jsobject_for_proxy(jsobj, ret_val);
 	
 	JS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(jsobj));
+	return JS_TRUE;
+}
+
+#pragma mark getUserData
+
+static
+JSBool __jsb_cpBody_getUserData(JSContext *cx, jsval *vp, jsval *argvp, cpBody *body)
+{
+	JSObject *data = (JSObject*) cpBodyGetUserData(body);
+	JS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(data));
 	
 	return JS_TRUE;
 }
 
+// free function
 JSBool JSB_cpBodyGetUserData(JSContext *cx, uint32_t argc, jsval *vp)
 {
 	JSB_PRECONDITION( argc==1, "Invalid number of arguments");
@@ -309,36 +765,252 @@ JSBool JSB_cpBodyGetUserData(JSContext *cx, uint32_t argc, jsval *vp)
 	if( ! jsval_to_opaque( cx, *argvp++, (void**) &body ) )
 		return JS_FALSE;
 
-	JSObject *data = (JSObject*) cpBodyGetUserData(body);
-	
-	
-	JS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(data));
-	
-	return JS_TRUE;
+	return __jsb_cpBody_getUserData(cx, vp, argvp, body);
 }
 
-JSBool JSB_cpBodySetUserData(JSContext *cx, uint32_t argc, jsval *vp)
+// method
+JSBool JSB_cpBody_getUserData(JSContext *cx, uint32_t argc, jsval *vp)
 {
-	JSB_PRECONDITION( argc==2, "Invalid number of arguments");
+	JSB_PRECONDITION( argc==0, "Invalid number of arguments");
+	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
+	JSB_PRECONDITION( jsthis, "Invalid jsthis object");
+	
+	struct jsb_c_proxy_s* proxy = jsb_get_c_proxy_for_jsobject(jsthis);
+	void *handle = proxy->handle;
+	
+	return __jsb_cpBody_getUserData(cx, vp, JS_ARGV(cx,vp), (cpBody*)handle);
+}
 
-	jsval *argvp = JS_ARGV(cx,vp);
-	JSBool ok = JS_TRUE;
-	
-	cpBody *body;
+
+#pragma mark setUserData
+
+static
+JSBool __jsb_cpBody_setUserData(JSContext *cx, jsval *vp, jsval *argvp, cpBody *body)
+{
 	JSObject *jsobj;
+
+	JSBool ok = JS_ValueToObject(cx, *argvp++, &jsobj);
+
+	JSB_PRECONDITION(ok, "Error parsing arguments");
 	
-	ok &=jsval_to_opaque( cx, *argvp++, (void**) &body );
-	ok &=JS_ValueToObject(cx, *argvp++, &jsobj);
-	
-	if( ! ok )
-		return JS_FALSE;
-	
-	cpBodySetUserData(body, jsobj );
-	
+	cpBodySetUserData(body, jsobj);
 	JS_SET_RVAL(cx, vp, JSVAL_VOID);
 	
 	return JS_TRUE;
 }
 
+// free function
+JSBool JSB_cpBodySetUserData(JSContext *cx, uint32_t argc, jsval *vp)
+{
+	JSB_PRECONDITION( argc==2, "Invalid number of arguments");
+
+	jsval *argvp = JS_ARGV(cx,vp);
+	cpBody *body;
+	JSBool ok = jsval_to_opaque( cx, *argvp++, (void**) &body );
+	JSB_PRECONDITION(ok, "Error parsing arguments");
+	return __jsb_cpBody_setUserData(cx, vp, argvp, body);
+}
+
+// method
+JSBool JSB_cpBody_setUserData(JSContext *cx, uint32_t argc, jsval *vp)
+{
+	JSB_PRECONDITION( argc==1, "Invalid number of arguments");
+	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
+	JSB_PRECONDITION( jsthis, "Invalid jsthis object");
+	
+	struct jsb_c_proxy_s* proxy = jsb_get_c_proxy_for_jsobject(jsthis);
+	void *handle = proxy->handle;
+	
+	return __jsb_cpBody_setUserData(cx, vp, JS_ARGV(cx,vp), (cpBody*)handle);
+}
+
+#pragma mark - Object Oriented Chipmunk
+
+/*
+ * Chipmunk Base Object
+ */
+
+JSClass* JSB_cpBase_class = NULL;
+JSObject* JSB_cpBase_object = NULL;
+// Constructor
+JSBool JSB_cpBase_constructor(JSContext *cx, uint32_t argc, jsval *vp)
+{
+	JSB_PRECONDITION( argc==1, "Invalid arguments. Expecting 1");
+	
+	JSObject *jsobj = JS_NewObject(cx, JSB_cpBase_class, JSB_cpBase_object, NULL);
+	
+	jsval *argvp = JS_ARGV(cx,vp);
+	JSBool ok = JS_TRUE;
+	
+	void *handle = NULL;
+	
+	ok = jsval_to_opaque(cx, *argvp++, &handle);
+	
+	JSB_PRECONDITION(ok, "Error converting arguments for JSB_cpBase_constructor");
+
+	jsb_set_c_proxy_for_jsobject(jsobj, handle, JSB_C_FLAG_DO_NOT_CALL_FREE);
+	jsb_set_jsobject_for_proxy(jsobj, handle);
+	
+	JS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(jsobj));
+	return JS_TRUE;
+}
+
+// Destructor
+void JSB_cpBase_finalize(JSFreeOp *fop, JSObject *obj)
+{
+	CCLOGINFO(@"jsbindings: finalizing JS object %p (cpBase)", obj);
+	
+	// should not delete the handle since it was manually added
+}
+
+JSBool JSB_cpBase_getHandle(JSContext *cx, uint32_t argc, jsval *vp)
+{
+	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
+	JSB_PRECONDITION( jsthis, "Invalid jsthis object");
+	
+	struct jsb_c_proxy_s* proxy = jsb_get_c_proxy_for_jsobject(jsthis);
+	void *handle = proxy->handle;
+	
+	jsval ret_val = opaque_to_jsval(cx, handle);
+	JS_SET_RVAL(cx, vp, ret_val);
+	return JS_TRUE;
+}
+
+JSBool JSB_cpBase_setHandle(JSContext *cx, uint32_t argc, jsval *vp)
+{
+	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
+	JSB_PRECONDITION( jsthis, "Invalid jsthis object");
+	
+	JSB_PRECONDITION( argc==1, "Invalid arguments. Expecting 1");
+	
+	jsval *argvp = JS_ARGV(cx,vp);
+	
+	void *handle;
+	JSBool ok = jsval_to_opaque(cx, *argvp++, &handle);
+	JSB_PRECONDITION( ok, "Invalid parsing arguments");
+
+	jsb_set_c_proxy_for_jsobject(jsthis, handle, JSB_C_FLAG_DO_NOT_CALL_FREE);
+	jsb_set_jsobject_for_proxy(jsthis, handle);
+	
+	JS_SET_RVAL(cx, vp, JSVAL_VOID);
+	return JS_TRUE;
+}
+
+
+void JSB_cpBase_createClass(JSContext *cx, JSObject* globalObj, const char* name )
+{
+	JSB_cpBase_class = (JSClass *)calloc(1, sizeof(JSClass));
+	JSB_cpBase_class->name = name;
+	JSB_cpBase_class->addProperty = JS_PropertyStub;
+	JSB_cpBase_class->delProperty = JS_PropertyStub;
+	JSB_cpBase_class->getProperty = JS_PropertyStub;
+	JSB_cpBase_class->setProperty = JS_StrictPropertyStub;
+	JSB_cpBase_class->enumerate = JS_EnumerateStub;
+	JSB_cpBase_class->resolve = JS_ResolveStub;
+	JSB_cpBase_class->convert = JS_ConvertStub;
+	JSB_cpBase_class->finalize = JSB_cpBase_finalize;
+	JSB_cpBase_class->flags = JSCLASS_HAS_PRIVATE;
+	
+	static JSPropertySpec properties[] = {
+		{0, 0, 0, 0, 0}
+	};
+	static JSFunctionSpec funcs[] = {
+		JS_FN("getHandle", JSB_cpBase_getHandle, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("setHandle", JSB_cpBase_setHandle, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FS_END
+	};
+	static JSFunctionSpec st_funcs[] = {
+		JS_FS_END
+	};
+	
+	JSB_cpBase_object = JS_InitClass(cx, globalObj, NULL, JSB_cpBase_class, JSB_cpBase_constructor,0,properties,funcs,NULL,st_funcs);
+}
+
+// Manual "methods"
+// Constructor
+JSBool JSB_cpPolyShape_constructor(JSContext *cx, uint32_t argc, jsval *vp)
+{
+	JSB_PRECONDITION(argc==3, "Invalid number of arguments");
+	JSObject *jsobj = JS_NewObject(cx, JSB_cpPolyShape_class, JSB_cpPolyShape_object, NULL);
+	jsval *argvp = JS_ARGV(cx,vp);
+	JSBool ok = JS_TRUE;
+	cpBody* body; cpVect *verts; cpVect offset;
+	int numVerts;
+	
+	ok &= jsval_to_c_class( cx, *argvp++, (void**)&body, NULL );
+	ok &= jsval_to_array_of_cpvect( cx, *argvp++, &verts, &numVerts);
+	ok &= jsval_to_cpVect( cx, *argvp++, (cpVect*) &offset );
+	JSB_PRECONDITION(ok, "Error processing arguments");
+	cpShape *shape = cpPolyShapeNew(body, numVerts, verts, offset);
+
+	jsb_set_c_proxy_for_jsobject(jsobj, shape, JSB_C_FLAG_DO_NOT_CALL_FREE);
+	jsb_set_jsobject_for_proxy(jsobj, shape);
+	
+	JS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(jsobj));
+	
+	free(verts);
+	
+	return JS_TRUE;
+}
+
+
+#pragma mark Space Free functions
+//
+// When the space is removed, it should all remove its children. But not "free" them.
+// "free" will be performed by the JS Garbage Collector
+//
+// Functions copied & pasted from ChipmunkDemo.c
+// https://github.com/slembcke/Chipmunk-Physics/blob/master/Demo/ChipmunkDemo.c#L89
+//
+
+static void unroot_jsobject_from_handle(void *handle)
+{
+	JSObject *jsobj = jsb_get_jsobject_for_proxy(handle);
+	struct jsb_c_proxy_s *proxy = jsb_get_c_proxy_for_jsobject(jsobj);
+	
+	// HACK context from global
+	JSContext *cx = [[JSBCore sharedInstance] globalContext];
+	JS_RemoveObjectRoot(cx, &proxy->jsobj);
+	
+}
+static void shapeFreeWrap(cpSpace *space, cpShape *shape, void *unused){
+	cpSpaceRemoveShape(space, shape);
+	unroot_jsobject_from_handle(shape);
+//	cpShapeFree(shape);
+}
+
+static void postShapeFree(cpShape *shape, cpSpace *space){
+	cpSpaceAddPostStepCallback(space, (cpPostStepFunc)shapeFreeWrap, shape, NULL);
+}
+
+static void constraintFreeWrap(cpSpace *space, cpConstraint *constraint, void *unused){
+	cpSpaceRemoveConstraint(space, constraint);
+	unroot_jsobject_from_handle(constraint);
+//	cpConstraintFree(constraint);
+}
+
+static void postConstraintFree(cpConstraint *constraint, cpSpace *space){
+	cpSpaceAddPostStepCallback(space, (cpPostStepFunc)constraintFreeWrap, constraint, NULL);
+}
+
+static void bodyFreeWrap(cpSpace *space, cpBody *body, void *unused){
+	cpSpaceRemoveBody(space, body);
+	unroot_jsobject_from_handle(body);
+//	cpBodyFree(body);
+}
+
+static void postBodyFree(cpBody *body, cpSpace *space){
+	cpSpaceAddPostStepCallback(space, (cpPostStepFunc)bodyFreeWrap, body, NULL);
+}
+
+// Safe and future proof way to remove and free all objects that have been added to the space.
+void static freeSpaceChildren(cpSpace *space)
+{
+	// Must remove these BEFORE freeing the body or you will access dangling pointers.
+	cpSpaceEachShape(space, (cpSpaceShapeIteratorFunc)postShapeFree, space);
+	cpSpaceEachConstraint(space, (cpSpaceConstraintIteratorFunc)postConstraintFree, space);
+	
+	cpSpaceEachBody(space, (cpSpaceBodyIteratorFunc)postBodyFree, space);
+}
 
 #endif // JSB_INCLUDE_CHIPMUNK

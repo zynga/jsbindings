@@ -52,14 +52,15 @@ JSBool jsvals_variadic_to_nsarray( JSContext *cx, jsval *vp, int argc, NSArray**
 JSBool jsval_to_CGPoint( JSContext *cx, jsval vp, CGPoint *out );
 JSBool jsval_to_CGSize( JSContext *cx, jsval vp, CGSize *out );
 JSBool jsval_to_CGRect( JSContext *cx, jsval vp, CGRect *out );
+/** converts a jsval to a 'handle'. Typically the handle is pointer to a struct */
 JSBool jsval_to_opaque( JSContext *cx, jsval vp, void **out );
 JSBool jsval_to_int( JSContext *cx, jsval vp, int *out);
 JSBool jsval_to_long( JSContext *cx, jsval vp, long *out);
-JSBool jsval_to_longlong( JSContext *cx, jsval vp, long long *out);	
-	
+JSBool jsval_to_longlong( JSContext *cx, jsval vp, long long *out);
+/** converts a jsval to a "handle" needed for Object Oriented C API */
+JSBool jsval_to_c_class( JSContext *cx, jsval vp, void **r, struct jsb_c_proxy_s **out_proxy_optional);
 /** converts a jsval to a block (1 == receives 1 argument (sender) ) */
 JSBool jsval_to_block_1( JSContext *cx, jsval vp, JSObject *jsthis, js_block *out  );
-
 /** converts a jsval to a block (2 == receives 2 argument (sender + custom) ) */
 JSBool jsval_to_block_2( JSContext *cx, jsval vp, JSObject *jsthis, jsval arg, js_block *out  );
 
@@ -73,3 +74,4 @@ jsval CGRect_to_jsval( JSContext *cx, CGRect r);
 jsval NSArray_to_jsval( JSContext *cx, NSArray *array);
 jsval NSSet_to_jsval( JSContext *cx, NSSet *set);
 jsval opaque_to_jsval( JSContext *cx, void* opaque);
+jsval c_class_to_jsval( JSContext *cx, void* handle, JSObject* object, JSClass *klass, const char* optional_class_name);

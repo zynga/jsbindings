@@ -32,7 +32,7 @@
  It is recommened to turn it off in Release mode.
  */
 #ifndef JSB_ASSERT_ON_FAIL
-#define JSB_ASSERT_ON_FAIL 0
+#define JSB_ASSERT_ON_FAIL 1
 #endif
 
 
