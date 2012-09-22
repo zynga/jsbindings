@@ -91,7 +91,7 @@ JSBool jsval_to_nsobject( JSContext *cx, jsval vp, NSObject **ret )
 	// root it
 	vp = OBJECT_TO_JSVAL(jsobj);
 	
-	JSB_NSObject* proxy = get_proxy_for_jsobject(jsobj);
+	JSB_NSObject* proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsobj);
 	
 	JSB_PRECONDITION( proxy, "Error obtaining proxy");
 
@@ -171,7 +171,10 @@ JSBool jsvals_variadic_to_nsarray( JSContext *cx, jsval *vp, int argc, NSArray**
 		// Number ?
 		if( ! ok ) {
 			double num;
-			ok = JS_ValueToNumber(cx, *vp, &num );
+			
+			// optimization: JS_ValueToNumber is expensive. And can convert an string like "12" to a number
+			if( JSVAL_IS_NUMBER(*vp))
+			   ok = JS_ValueToNumber(cx, *vp, &num );
 			
 			if( ok ) {
 				obj = [NSNumber numberWithDouble:num];
@@ -323,7 +326,7 @@ JSBool jsval_to_opaque( JSContext *cx, jsval vp, void **r)
 	JSB_PRECONDITION( tmp_arg && JS_IsTypedArrayObject( tmp_arg, cx ), "Not a TypedArray object");
 	JSB_PRECONDITION( JS_GetTypedArrayByteLength( tmp_arg, cx ) == sizeof(void*), "Invalid Typed Array lenght");
 	
-	int32_t* arg_array = (int32_t*)JS_GetArrayBufferViewData( tmp_arg, cx );
+	uint32_t* arg_array = (uint32_t*)JS_GetArrayBufferViewData( tmp_arg, cx );
 	uint64 ret =  arg_array[0];
 	ret = ret << 32;
 	ret |= arg_array[1];
@@ -335,6 +338,19 @@ JSBool jsval_to_opaque( JSContext *cx, jsval vp, void **r)
 	JSB_PRECONDITION(ok, "Error converting value to in32");
 #endif
 	*r = (void*)ret;
+	return JS_TRUE;
+}
+
+JSBool jsval_to_c_class( JSContext *cx, jsval vp, void **out_native, struct jsb_c_proxy_s **out_proxy)
+{
+	JSObject *jsobj;
+	JSBool ok = JS_ValueToObject(cx, vp, &jsobj);
+	JSB_PRECONDITION(ok, "Error converting jsval to object");
+	
+	struct jsb_c_proxy_s *proxy = jsb_get_c_proxy_for_jsobject(jsobj);
+	*out_native = proxy->handle;
+	if( out_proxy )
+		*out_proxy = proxy;
 	return JS_TRUE;
 }
 
@@ -361,7 +377,7 @@ JSBool jsval_to_long( JSContext *cx, jsval vp, long *r )
 	JSB_PRECONDITION( tmp_arg && JS_IsTypedArrayObject( tmp_arg, cx ), "Not a TypedArray object");
 	JSB_PRECONDITION( JS_GetTypedArrayByteLength( tmp_arg, cx ) == sizeof(long), "Invalid Typed Array lenght");
 	
-	int32_t* arg_array = (int32_t*)JS_GetArrayBufferViewData( tmp_arg, cx );
+	uint32_t* arg_array = (uint32_t*)JS_GetArrayBufferViewData( tmp_arg, cx );
 	long ret =  arg_array[0];
 	ret = ret << 32;
 	ret |= arg_array[1];
@@ -384,7 +400,7 @@ JSBool jsval_to_longlong( JSContext *cx, jsval vp, long long *r )
 	JSB_PRECONDITION( tmp_arg && JS_IsTypedArrayObject( tmp_arg, cx ), "Not a TypedArray object");
 	JSB_PRECONDITION( JS_GetTypedArrayByteLength( tmp_arg, cx ) == sizeof(long long), "Invalid Typed Array lenght");
 	
-	int32_t* arg_array = (int32_t*)JS_GetArrayBufferViewData( tmp_arg, cx );
+	uint32_t* arg_array = (uint32_t*)JS_GetArrayBufferViewData( tmp_arg, cx );
 	long long ret =  arg_array[0];
 	ret = ret << 32;
 	ret |= arg_array[1];
@@ -477,6 +493,21 @@ jsval opaque_to_jsval( JSContext *cx, void *opaque )
 	int32_t number = (int32_t) opaque;
 	return INT_TO_JSVAL(number);
 #endif
+}
+
+jsval c_class_to_jsval( JSContext *cx, void* handle, JSObject* object, JSClass *klass, const char* class_name)
+{
+	JSObject *jsobj;
+
+	jsobj = jsb_get_jsobject_for_proxy(handle);
+	if( !jsobj ) {
+		jsobj = JS_NewObject(cx, klass, object, NULL);
+		NSCAssert(jsobj, @"Invalid object");
+		jsb_set_c_proxy_for_jsobject(jsobj, handle, JSB_C_FLAG_DO_NOT_CALL_FREE);
+		jsb_set_jsobject_for_proxy(jsobj, handle);
+	}
+
+	return OBJECT_TO_JSVAL(jsobj);
 }
 
 jsval int_to_jsval( JSContext *cx, int number )

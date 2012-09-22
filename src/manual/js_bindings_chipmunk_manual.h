@@ -32,6 +32,9 @@
 #include "chipmunk.h"
 #include "jsapi.h"
 
+#import "js_bindings_chipmunk_auto_classes.h"
+
+// Free Functions
 JSBool JSB_cpSpaceAddCollisionHandler(JSContext *cx, uint32_t argc, jsval *vp);
 JSBool JSB_cpSpaceRemoveCollisionHandler(JSContext *cx, uint32_t argc, jsval *vp);
 
@@ -41,15 +44,48 @@ JSBool JSB_cpArbiterGetShapes(JSContext *cx, uint32_t argc, jsval *vp);
 JSBool JSB_cpBodyGetUserData(JSContext *cx, uint32_t argc, jsval *vp);
 JSBool JSB_cpBodySetUserData(JSContext *cx, uint32_t argc, jsval *vp);
 
+// "Methods" from the OO API
+JSBool JSB_cpSpace_addCollisionHandler(JSContext *cx, uint32_t argc, jsval *vp);
+JSBool JSB_cpSpace_removeCollisionHandler(JSContext *cx, uint32_t argc, jsval *vp);
+
+// manually wrapped for rooting/unrooting purposes
+JSBool JSB_cpSpace_addBody(JSContext *cx, uint32_t argc, jsval *vp);
+JSBool JSB_cpSpace_addConstraint(JSContext *cx, uint32_t argc, jsval *vp);
+JSBool JSB_cpSpace_addShape(JSContext *cx, uint32_t argc, jsval *vp);
+JSBool JSB_cpSpace_addStaticShape(JSContext *cx, uint32_t argc, jsval *vp);
+JSBool JSB_cpSpace_removeBody(JSContext *cx, uint32_t argc, jsval *vp);
+JSBool JSB_cpSpace_removeConstraint(JSContext *cx, uint32_t argc, jsval *vp);
+JSBool JSB_cpSpace_removeShape(JSContext *cx, uint32_t argc, jsval *vp);
+JSBool JSB_cpSpace_removeStaticShape(JSContext *cx, uint32_t argc, jsval *vp);
+
+
+JSBool JSB_cpArbiter_getBodies(JSContext *cx, uint32_t argc, jsval *vp);
+JSBool JSB_cpArbiter_getShapes(JSContext *cx, uint32_t argc, jsval *vp);
+
+JSBool JSB_cpBody_constructor(JSContext *cx, uint32_t argc, jsval *vp);
+JSBool JSB_cpBody_getUserData(JSContext *cx, uint32_t argc, jsval *vp);
+JSBool JSB_cpBody_setUserData(JSContext *cx, uint32_t argc, jsval *vp);
+
 
 // convertions
 
-JSBool jsval_to_cpBB( JSContext *cx, jsval vp, cpBB *ret );
 jsval cpBB_to_jsval(JSContext *cx, cpBB bb );
+JSBool jsval_to_cpBB( JSContext *cx, jsval vp, cpBB *ret );
+JSBool jsval_to_array_of_cpvect( JSContext *cx, jsval vp, cpVect**verts, int *numVerts);
 
 // requires cocos2d
 #define cpVect_to_jsval CGPoint_to_jsval
 #define jsval_to_cpVect jsval_to_CGPoint
+
+
+// Object Oriented Chipmunk
+void JSB_cpBase_createClass(JSContext* cx, JSObject* globalObj, const char * name );
+extern JSObject* JSB_cpBase_object;
+extern JSClass* JSB_cpBase_class;
+
+// Manual constructor / destructors
+JSBool JSB_cpPolyShape_constructor(JSContext *cx, uint32_t argc, jsval *vp);
+void JSB_cpSpace_finalize(JSFreeOp *fop, JSObject *obj);
 
 #endif // JSB_INCLUDE_CHIPMUNK
 

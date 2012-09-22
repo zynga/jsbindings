@@ -41,6 +41,7 @@
 #endif
 
 // chipmunk
+#import "js_bindings_chipmunk_auto_classes.h"
 #import "js_bindings_chipmunk_functions.h"
 #import "js_bindings_chipmunk_manual.h"
 
@@ -123,8 +124,8 @@ JSBool JSBCore_associateObjectWithNative(JSContext *cx, uint32_t argc, jsval *vp
 
 	JSB_PRECONDITION(ok && pureJSObj && nativeJSObj, "Error parsing parameters");
 
-	JSB_NSObject *proxy = get_proxy_for_jsobject( nativeJSObj );
-	set_proxy_for_jsobject( proxy, pureJSObj );
+	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject( nativeJSObj );
+	jsb_set_proxy_for_jsobject( proxy, pureJSObj );
 	[proxy setJsObj:pureJSObj];
 		
 	return JS_TRUE;
@@ -138,7 +139,7 @@ JSBool JSBCore_getAssociatedNative(JSContext *cx, uint32_t argc, jsval *vp)
 	JSObject *pureJSObj;
 	JS_ValueToObject( cx, *argvp++, &pureJSObj );
 	
-	JSB_NSObject *proxy = get_proxy_for_jsobject( pureJSObj );
+	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject( pureJSObj );
 	id native = [proxy realObj];
 	
 	JSObject * obj = get_or_create_jsobject_from_realobj(cx, native);
@@ -404,6 +405,9 @@ JSBool JSBCore_forceGC(JSContext *cx, uint32_t argc, jsval *vp)
 		JSObject *chipmunk = JS_NewObject( _cx, NULL, NULL, NULL);
 		jsval chipmunkVal = OBJECT_TO_JSVAL(chipmunk);
 		JS_SetProperty(_cx, _object, "cp", &chipmunkVal);
+		
+		JSB_cpBase_createClass(_cx, chipmunk, "Base");  // manual base class registration
+#import "js_bindings_chipmunk_auto_classes_registration.h"
 #import "js_bindings_chipmunk_functions_registration.h"
 		
 		// manual
@@ -534,16 +538,22 @@ JSBool JSBCore_forceGC(JSContext *cx, uint32_t argc, jsval *vp)
 @end
 
 
+#pragma mark - Hash
+
 typedef struct _hashJSObject
 {
 	JSObject			*jsObject;
-	JSB_NSObject	*proxy;
+	void				*proxy;
 	UT_hash_handle		hh;
 } tHashJSObject;
 
 static tHashJSObject *hash = NULL;
+static tHashJSObject *reverse_hash = NULL;
 
-JSB_NSObject* get_proxy_for_jsobject(JSObject *obj)
+#pragma mark JSObject-> Proxy
+
+// Hash of JSObject -> proxy
+void* jsb_get_proxy_for_jsobject(JSObject *obj)
 {
 	tHashJSObject *element = NULL;
 	HASH_FIND_INT(hash, &obj, element);
@@ -553,9 +563,9 @@ JSB_NSObject* get_proxy_for_jsobject(JSObject *obj)
 	return nil;
 }
 
-void set_proxy_for_jsobject(JSB_NSObject *proxy, JSObject *obj)
+void jsb_set_proxy_for_jsobject(void *proxy, JSObject *obj)
 {
-	NSCAssert( !get_proxy_for_jsobject(obj), @"Already added. abort");
+	NSCAssert( !jsb_get_proxy_for_jsobject(obj), @"Already added. abort");
 	
 //	printf("Setting proxy for: %p - %p (%s)\n", obj, proxy, [[proxy description] UTF8String] );
 	
@@ -569,21 +579,55 @@ void set_proxy_for_jsobject(JSB_NSObject *proxy, JSObject *obj)
 	HASH_ADD_INT( hash, jsObject, element );
 }
 
-void del_proxy_for_jsobject(JSObject *obj)
+void jsb_del_proxy_for_jsobject(JSObject *obj)
 {
 	tHashJSObject *element = NULL;
 	HASH_FIND_INT(hash, &obj, element);
-	if( element ) {
-		
-//		printf("Deleting proxy for: %p - %p (%s)\n", obj, element->proxy, [[element->proxy description] UTF8String] );
-//		[element->proxy release];
-
+	if( element ) {		
 		HASH_DEL(hash, element);
 		free(element);
 	}
 }
 
-JSBool set_reserved_slot(JSObject *obj, uint32_t idx, jsval value)
+#pragma mark Proxy -> JSObject
+
+// Reverse hash: Proxy -> JSObject
+JSObject* jsb_get_jsobject_for_proxy(void *proxy)
+{
+	tHashJSObject *element = NULL;
+	HASH_FIND_INT(reverse_hash, &proxy, element);
+	
+	if( element )
+		return element->jsObject;
+	return NULL;
+}
+
+void jsb_set_jsobject_for_proxy(JSObject *jsobj, void* proxy)
+{
+	NSCAssert( !jsb_get_jsobject_for_proxy(proxy), @"Already added. abort");
+	
+	tHashJSObject *element = (tHashJSObject*) malloc( sizeof( *element ) );
+	
+	element->proxy = proxy;
+	element->jsObject = jsobj;
+	
+	HASH_ADD_INT( reverse_hash, proxy, element );
+}
+
+void jsb_del_jsobject_for_proxy(void* proxy)
+{
+	tHashJSObject *element = NULL;
+	HASH_FIND_INT(reverse_hash, &proxy, element);
+	if( element ) {		
+		HASH_DEL(reverse_hash, element);
+		free(element);
+	}	
+}
+
+#pragma mark
+
+
+JSBool jsb_set_reserved_slot(JSObject *obj, uint32_t idx, jsval value)
 {
 	JSClass *klass = JS_GetClass(obj);
 	NSUInteger slots = JSCLASS_RESERVED_SLOTS(klass);
@@ -593,4 +637,34 @@ JSBool set_reserved_slot(JSObject *obj, uint32_t idx, jsval value)
 	JS_SetReservedSlot(obj, idx, value);
 	
 	return JS_TRUE;
+}
+
+#pragma mark "C" proxy functions
+
+struct jsb_c_proxy_s* jsb_get_c_proxy_for_jsobject( JSObject *jsobj )
+{
+	struct jsb_c_proxy_s *proxy = (struct jsb_c_proxy_s *) JS_GetPrivate(jsobj);
+	NSCAssert(proxy, @"Invalid proxy for JSObject");
+	return proxy;
+}
+
+void jsb_del_c_proxy_for_jsobject( JSObject *jsobj )
+{
+	struct jsb_c_proxy_s *proxy = (struct jsb_c_proxy_s *) JS_GetPrivate(jsobj);
+	NSCAssert(proxy, @"Invalid proxy for JSObject");
+	JS_SetPrivate(jsobj, NULL);
+	
+	free(proxy);
+}
+
+void jsb_set_c_proxy_for_jsobject( JSObject *jsobj, void *handle, unsigned long flags)
+{
+	struct jsb_c_proxy_s *proxy = (struct jsb_c_proxy_s*) malloc(sizeof(*proxy));
+	NSCAssert(proxy, @"No memory for proxy");
+	
+	proxy->handle = handle;
+	proxy->flags = flags;
+	proxy->jsobj = jsobj;
+	
+	JS_SetPrivate(jsobj, proxy);
 }
