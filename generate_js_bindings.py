@@ -274,8 +274,7 @@ class JSBGenerate(object):
     # special case: returning Object
     def generate_retval_object(self, declared_type, js_type):
         object_template = '''
-\tJSObject *jsobj = get_or_create_jsobject_from_realobj( cx, ret_val );
-\tJS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(jsobj));
+\tJS_SET_RVAL(cx, vp, NSObject_to_jsval(cx, ret_val));
 '''
         return object_template
 
@@ -550,17 +549,17 @@ class JSBGenerate(object):
         return (args_js_type, args_declared_type)
 
     def generate_argument_variadic_2_nsarray(self):
-        template = '\tok &= jsvals_variadic_to_nsarray( cx, argvp, argc, &arg0 );\n'
+        template = '\tok &= jsvals_variadic_to_NSArray( cx, argvp, argc, &arg0 );\n'
         self.fd_mm.write(template)
 
     # Special case for string to NSString generator
     def generate_argument_string(self, i, arg_js_type, arg_declared_type):
-        template = '\tok &= jsval_to_nsstring( cx, *argvp++, &arg%d );\n'
+        template = '\tok &= jsval_to_NSString( cx, *argvp++, &arg%d );\n'
         self.fd_mm.write(template % i)
 
     # Special case for objects
     def generate_argument_object(self, i, arg_js_type, arg_declared_type):
-        object_template = '\tok &= jsval_to_nsobject( cx, *argvp++, &arg%d);\n'
+        object_template = '\tok &= jsval_to_NSObject( cx, *argvp++, &arg%d);\n'
         self.fd_mm.write(object_template % (i))
 
     # Manual conversion for struct
@@ -581,11 +580,11 @@ class JSBGenerate(object):
                                         i, arg_declared_type, i))
 
     def generate_argument_array(self, i, arg_js_type, arg_declared_type):
-        template = '\tok &= jsval_to_nsarray( cx, *argvp++, &arg%d );\n'
+        template = '\tok &= jsval_to_NSArray( cx, *argvp++, &arg%d );\n'
         self.fd_mm.write(template % (i))
 
     def generate_argument_set(self, i, arg_js_type, arg_declared_type):
-        template = '\tok &= jsval_to_nsset( cx, *argvp++, &arg%d );\n'
+        template = '\tok &= jsval_to_NSSet( cx, *argvp++, &arg%d );\n'
         self.fd_mm.write(template % (i))
 
     def generate_argument_function(self, i, arg_js_type, arg_declared_type):
@@ -1302,7 +1301,7 @@ extern JSClass *%s_class;
                 elif dt == 'NSSet':
                     with_args += "\t\t\targv[%d] = NSSet_to_jsval( cx, %s );\n" % (i, arg['name'])
                 elif t == '@' and (dt in self.supported_classes or dt in self.class_manual):
-                    with_args += "\t\t\targv[%d] = OBJECT_TO_JSVAL( get_or_create_jsobject_from_realobj( cx, %s ) );\n" % (i, arg['name'])
+                    with_args += "\t\t\targv[%d] = NSObject_to_jsval( cx, %s );\n" % (i, arg['name'])
                 else:
                     with_args += '\t\t\targv[%d] = JSVAL_VOID; // XXX TODO Value not supported (%s) \n' % (i, dt)
 
