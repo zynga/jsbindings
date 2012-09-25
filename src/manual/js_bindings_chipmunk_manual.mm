@@ -251,7 +251,10 @@ JSBool __jsb_cpSpace_addCollisionHandler(JSContext *cx, jsval *vp, jsval *argvp,
 	// args
 	ok &= jsval_to_int(cx, *argvp++, (int32_t*) &handler->typeA );
 	ok &= jsval_to_int(cx, *argvp++, (int32_t*) &handler->typeB );
-	ok &= JS_ValueToObject(cx, *argvp++, &handler->jsthis );
+	
+	// this is no longer passed, so "this" is going to be "this".
+//	ok &= JS_ValueToObject(cx, *argvp++, &handler->jsthis );
+	handler->jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	
 	handler->begin =  *argvp++;
 	handler->pre = *argvp++;
@@ -304,7 +307,7 @@ JSBool __jsb_cpSpace_addCollisionHandler(JSContext *cx, jsval *vp, jsval *argvp,
 
 JSBool JSB_cpSpaceAddCollisionHandler(JSContext *cx, uint32_t argc, jsval *vp)
 {
-	JSB_PRECONDITION( argc==8, "Invalid number of arguments");
+	JSB_PRECONDITION( argc==7, "Invalid number of arguments");
 
 	jsval *argvp = JS_ARGV(cx,vp);
 
@@ -319,7 +322,7 @@ JSBool JSB_cpSpaceAddCollisionHandler(JSContext *cx, uint32_t argc, jsval *vp)
 // method
 JSBool JSB_cpSpace_addCollisionHandler(JSContext *cx, uint32_t argc, jsval *vp)
 {
-	JSB_PRECONDITION( argc==7, "Invalid number of arguments");
+	JSB_PRECONDITION( argc==6, "Invalid number of arguments");
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_PRECONDITION( jsthis, "Invalid jsthis object");
 	
