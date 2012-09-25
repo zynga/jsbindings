@@ -6,7 +6,6 @@ cp.v = cc.p;
 cp._v = cc._p;
 cp.vzero  = cp.v(0,0);
 
-
 /// Initialize an offset box shaped polygon shape.
 cp.BoxShape2 = function(body, box)
 {
@@ -27,7 +26,22 @@ cp.BodyStatic = function()
 };
 
 
-// Properties, for Chipmunk-JS compatibility
+// "Bounding Box" compatibility with Chipmunk-JS
+cp.BB = function(l, b, r, t)
+{
+	return {l:l, b:b, r:r, t:t};
+};
+
+// helper function to create a BB
+cp.bb = function(l, b, r, t) {
+	return new cp.BB(l, b, r, t);
+};
+
+
+//
+// Some properties
+//
+// "handle" needed in some cases
 Object.defineProperties(cp.Base.prototype,
 				{
 					"handle" : {
@@ -40,6 +54,7 @@ Object.defineProperties(cp.Base.prototype,
 				});
 
 // Properties, for Chipmunk-JS compatibility
+// Space properties
 Object.defineProperties(cp.Space.prototype,
 				{
 					"gravity" : {
@@ -78,5 +93,66 @@ Object.defineProperties(cp.Space.prototype,
                         },
 						enumerable : true,
 						configurable : true
+					},
+					"idleSpeedThreshold" : {
+						get : function(){
+                            return this.getIdleSpeedThreshold();
+                        },
+						set : function(newValue){
+                            this.setIdleSpeedThreshold(newValue);
+                        },
+						enumerable : true,
+						configurable : true
+					},
+					"sleepTimeThreshold": {
+						get : function(){
+                            return this.getSleepTimeThreshold();
+                        },
+						set : function(newValue){
+                            this.setSleepTimeThreshold(newValue);
+                        },
+						enumerable : true,
+						configurable : true
+					},
+					"collisionSlop": {
+						get : function(){
+                            return this.getCollisionSlop();
+                        },
+						set : function(newValue){
+                            this.setCollisionSlop(newValue);
+                        },
+						enumerable : true,
+						configurable : true
+					},
+					"collisionBias": {
+						get : function(){
+                            return this.getCollisionBias();
+                        },
+						set : function(newValue){
+                            this.setCollisionBias(newValue);
+                        },
+						enumerable : true,
+						configurable : true
+					},
+					"collisionPersistence": {
+						get : function(){
+                            return this.getCollisionPersistence();
+                        },
+						set : function(newValue){
+                            this.setCollisionPersistence(newValue);
+                        },
+						enumerable : true,
+						configurable : true
+					},
+					"enableContactGraph": {
+						get : function(){
+                            return this.getEnableContactGraph();
+                        },
+						set : function(newValue){
+                            this.setEnableContactGraph(newValue);
+                        },
+						enumerable : true,
+						configurable : true
 					}
 				});
+

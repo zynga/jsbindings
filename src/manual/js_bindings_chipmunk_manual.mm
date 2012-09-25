@@ -40,34 +40,49 @@ void static freeSpaceChildren(cpSpace *space);
 
 #pragma mark - convertions
 
-// XXX:
-// XXX: It should create "normal" objects instead of TypedArray objects
-// XXX: And the "constructor" should be in JS, like cc.rect(), cc.size() and cc.p()
-// XXX:
 JSBool jsval_to_cpBB( JSContext *cx, jsval vp, cpBB *ret )
 {
-	JSObject *tmp_arg;
-	JSBool ok = JS_ValueToObject( cx, vp, &tmp_arg );
+	JSObject *jsobj;
+	JSBool ok = JS_ValueToObject( cx, vp, &jsobj );
 	JSB_PRECONDITION( ok, "Error converting value to object");
-	JSB_PRECONDITION( JS_IsTypedArrayObject( tmp_arg, cx ), "Not a TypedArray object");
-	JSB_PRECONDITION( JS_GetTypedArrayByteLength( tmp_arg, cx ) == sizeof(cpFloat)*4, "Invalid length");
+	JSB_PRECONDITION( jsobj, "Not a valid JS object");
 	
-	*ret = *(cpBB*)JS_GetArrayBufferViewData( tmp_arg, cx);
+	jsval vall, valb, valr, valt;
+	ok = JS_TRUE;
+	ok &= JS_GetProperty(cx, jsobj, "l", &vall);
+	ok &= JS_GetProperty(cx, jsobj, "b", &valb);
+	ok &= JS_GetProperty(cx, jsobj, "r", &valr);
+	ok &= JS_GetProperty(cx, jsobj, "t", &valt);
+	JSB_PRECONDITION( ok, "Error obtaining point properties");
 	
-	return JS_TRUE;	
+	double l, b, r, t;
+	ok &= JS_ValueToNumber(cx, vall, &l);
+	ok &= JS_ValueToNumber(cx, valb, &b);
+	ok &= JS_ValueToNumber(cx, valr, &r);
+	ok &= JS_ValueToNumber(cx, valt, &t);
+	JSB_PRECONDITION( ok, "Error converting value to numbers");
+	
+	ret->l = l;
+	ret->b = b;
+	ret->r = r;
+	ret->t = t;
+	
+	return JS_TRUE;
 }
 
 jsval cpBB_to_jsval(JSContext *cx, cpBB bb )
 {
-#ifdef __LP64__
-	JSObject *typedArray = JS_NewFloat64Array( cx, 4 );
-#else
-	JSObject *typedArray = JS_NewFloat32Array( cx, 4 );
-#endif
-	cpBB *buffer = (cpBB*)JS_GetArrayBufferViewData(typedArray, cx);
+	JSObject *object = JS_NewObject(cx, NULL, NULL, NULL );
+	if (!object)
+		return JSVAL_VOID;
 	
-	*buffer = bb;
-	return OBJECT_TO_JSVAL(typedArray);
+	if (!JS_DefineProperty(cx, object, "l", DOUBLE_TO_JSVAL(bb.l), NULL, NULL, JSPROP_ENUMERATE | JSPROP_PERMANENT) ||
+		!JS_DefineProperty(cx, object, "b", DOUBLE_TO_JSVAL(bb.b), NULL, NULL, JSPROP_ENUMERATE | JSPROP_PERMANENT) ||
+		!JS_DefineProperty(cx, object, "r", DOUBLE_TO_JSVAL(bb.r), NULL, NULL, JSPROP_ENUMERATE | JSPROP_PERMANENT) ||
+		!JS_DefineProperty(cx, object, "t", DOUBLE_TO_JSVAL(bb.t), NULL, NULL, JSPROP_ENUMERATE | JSPROP_PERMANENT) )
+		return JSVAL_VOID;
+	
+	return OBJECT_TO_JSVAL(object);
 }
 
 JSBool jsval_to_array_of_cpvect( JSContext *cx, jsval vp, cpVect**verts, int *numVerts)
