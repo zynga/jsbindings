@@ -219,6 +219,24 @@ static void myCollisionSeparate(cpArbiter *arb, cpSpace *space, void *data)
 }
 
 #pragma mark - cpSpace
+
+#pragma mark constructor / destructor
+
+void JSB_cpSpace_finalize(JSFreeOp *fop, JSObject *jsthis)
+{
+	struct jsb_c_proxy_s *proxy = jsb_get_c_proxy_for_jsobject(jsthis);
+	CCLOGINFO(@"jsbindings: finalizing JS object %p (cpSpace), handle: %p", jsthis, proxy->handle);
+	
+	// Free Space Children
+	freeSpaceChildren((cpSpace*)proxy->handle);
+	
+	jsb_del_jsobject_for_proxy(proxy->handle);
+	if(proxy->flags == JSB_C_FLAG_CALL_FREE)
+		cpSpaceFree( (cpSpace*)proxy->handle);
+	jsb_del_c_proxy_for_jsobject(jsthis);
+}
+
+
 #pragma mark addCollisionHandler
 
 static
@@ -377,23 +395,6 @@ JSBool JSB_cpSpace_removeCollisionHandler(JSContext *cx, uint32_t argc, jsval *v
 	void *handle = proxy->handle;
 	
 	return __jsb_cpSpace_removeCollisionHandler(cx, vp, JS_ARGV(cx,vp), (cpSpace*)handle);
-}
-
-#pragma mark Free
-
-// Destructor
-void JSB_cpSpace_finalize(JSFreeOp *fop, JSObject *jsthis)
-{
-	struct jsb_c_proxy_s *proxy = jsb_get_c_proxy_for_jsobject(jsthis);
-	CCLOGINFO(@"jsbindings: finalizing JS object %p (cpSpace), handle: %p", jsthis, proxy->handle);
-	
-	// Free Space Children
-	freeSpaceChildren((cpSpace*)proxy->handle);
-	
-	jsb_del_jsobject_for_proxy(proxy->handle);
-	if(proxy->flags == JSB_C_FLAG_CALL_FREE)
-		cpSpaceFree( (cpSpace*)proxy->handle);
-	jsb_del_c_proxy_for_jsobject(jsthis);
 }
 
 #pragma mark Add functios. Root JSObjects
@@ -719,26 +720,26 @@ JSBool JSB_cpBody_constructor(JSContext *cx, uint32_t argc, jsval *vp)
 	JSObject *jsobj = JS_NewObject(cx, JSB_cpBody_class, JSB_cpBody_object, NULL);
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
-	double arg0; double arg1;
+	double m; double i;
 	
-	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
-	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
+	ok &= JS_ValueToNumber( cx, *argvp++, &m );
+	ok &= JS_ValueToNumber( cx, *argvp++, &i );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	
-	void *ret_val = NULL;
-	if( arg0 == INFINITY && arg1 == INFINITY) {
-		ret_val = cpBodyNewStatic();
+	cpBody *ret_body = NULL;
+	if( m == INFINITY && i == INFINITY) {
+		ret_body = cpBodyNewStatic();
 		
 		// XXX: Hack. IT WILL LEAK "rogue" objects., But at least it prevents a crash.
-		// The thing is that "rogue" bodies needs to be freed after the space, and I am not sure
+		// The thing is that "rogue" bodies needs to be freed after the its shape, and I am not sure
 		// how to do it in a "js" way.
-		jsb_set_c_proxy_for_jsobject(jsobj, ret_val, JSB_C_FLAG_DO_NOT_CALL_FREE);
+		jsb_set_c_proxy_for_jsobject(jsobj, ret_body, JSB_C_FLAG_DO_NOT_CALL_FREE);
 	} else {
-		ret_val = cpBodyNew((cpFloat)arg0 , (cpFloat)arg1  );
-		jsb_set_c_proxy_for_jsobject(jsobj, ret_val, JSB_C_FLAG_CALL_FREE);
+		ret_body = cpBodyNew((cpFloat)m , (cpFloat)i  );
+		jsb_set_c_proxy_for_jsobject(jsobj, ret_body, JSB_C_FLAG_CALL_FREE);
 	}
 	
-	jsb_set_jsobject_for_proxy(jsobj, ret_val);
+	jsb_set_jsobject_for_proxy(jsobj, ret_body);
 	
 	JS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(jsobj));
 	return JS_TRUE;
