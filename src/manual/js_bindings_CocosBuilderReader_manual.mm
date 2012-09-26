@@ -99,7 +99,7 @@ JSBool JSB_CCBReader_nodeGraphFromFile_owner_parentSize__static(JSContext *cx, u
 	JSBool ok = JS_TRUE;
 	NSString* arg0; JSObject *arg1; CGSize arg2;
 	
-	ok &= jsval_to_nsstring( cx, *argvp++, &arg0 );
+	ok &= jsval_to_NSString( cx, *argvp++, &arg0 );
 	if( argc >= 2 )
 		ok &= JS_ValueToObject(cx, *argvp++, &arg1 );
 	if( argc >= 3 )
@@ -142,7 +142,7 @@ JSBool JSB_CCBReader_sceneWithNodeGraphFromFile_owner_parentSize__static(JSConte
 	JSBool ok = JS_TRUE;
 	NSString* arg0; JSObject *arg1; CGSize arg2;
 	
-	ok &= jsval_to_nsstring( cx, *argvp++, &arg0 );
+	ok &= jsval_to_NSString( cx, *argvp++, &arg0 );
 	if( argc >= 2 )
 		ok &= JS_ValueToObject(cx, *argvp++, &arg1 );
 	if( argc >= 3 )

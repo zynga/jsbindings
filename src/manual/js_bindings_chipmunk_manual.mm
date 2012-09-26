@@ -40,34 +40,49 @@ void static freeSpaceChildren(cpSpace *space);
 
 #pragma mark - convertions
 
-// XXX:
-// XXX: It should create "normal" objects instead of TypedArray objects
-// XXX: And the "constructor" should be in JS, like cc.rect(), cc.size() and cc.p()
-// XXX:
 JSBool jsval_to_cpBB( JSContext *cx, jsval vp, cpBB *ret )
 {
-	JSObject *tmp_arg;
-	JSBool ok = JS_ValueToObject( cx, vp, &tmp_arg );
+	JSObject *jsobj;
+	JSBool ok = JS_ValueToObject( cx, vp, &jsobj );
 	JSB_PRECONDITION( ok, "Error converting value to object");
-	JSB_PRECONDITION( JS_IsTypedArrayObject( tmp_arg, cx ), "Not a TypedArray object");
-	JSB_PRECONDITION( JS_GetTypedArrayByteLength( tmp_arg, cx ) == sizeof(cpFloat)*4, "Invalid length");
+	JSB_PRECONDITION( jsobj, "Not a valid JS object");
 	
-	*ret = *(cpBB*)JS_GetArrayBufferViewData( tmp_arg, cx);
+	jsval vall, valb, valr, valt;
+	ok = JS_TRUE;
+	ok &= JS_GetProperty(cx, jsobj, "l", &vall);
+	ok &= JS_GetProperty(cx, jsobj, "b", &valb);
+	ok &= JS_GetProperty(cx, jsobj, "r", &valr);
+	ok &= JS_GetProperty(cx, jsobj, "t", &valt);
+	JSB_PRECONDITION( ok, "Error obtaining point properties");
 	
-	return JS_TRUE;	
+	double l, b, r, t;
+	ok &= JS_ValueToNumber(cx, vall, &l);
+	ok &= JS_ValueToNumber(cx, valb, &b);
+	ok &= JS_ValueToNumber(cx, valr, &r);
+	ok &= JS_ValueToNumber(cx, valt, &t);
+	JSB_PRECONDITION( ok, "Error converting value to numbers");
+	
+	ret->l = l;
+	ret->b = b;
+	ret->r = r;
+	ret->t = t;
+	
+	return JS_TRUE;
 }
 
 jsval cpBB_to_jsval(JSContext *cx, cpBB bb )
 {
-#ifdef __LP64__
-	JSObject *typedArray = JS_NewFloat64Array( cx, 4 );
-#else
-	JSObject *typedArray = JS_NewFloat32Array( cx, 4 );
-#endif
-	cpBB *buffer = (cpBB*)JS_GetArrayBufferViewData(typedArray, cx);
+	JSObject *object = JS_NewObject(cx, NULL, NULL, NULL );
+	if (!object)
+		return JSVAL_VOID;
 	
-	*buffer = bb;
-	return OBJECT_TO_JSVAL(typedArray);
+	if (!JS_DefineProperty(cx, object, "l", DOUBLE_TO_JSVAL(bb.l), NULL, NULL, JSPROP_ENUMERATE | JSPROP_PERMANENT) ||
+		!JS_DefineProperty(cx, object, "b", DOUBLE_TO_JSVAL(bb.b), NULL, NULL, JSPROP_ENUMERATE | JSPROP_PERMANENT) ||
+		!JS_DefineProperty(cx, object, "r", DOUBLE_TO_JSVAL(bb.r), NULL, NULL, JSPROP_ENUMERATE | JSPROP_PERMANENT) ||
+		!JS_DefineProperty(cx, object, "t", DOUBLE_TO_JSVAL(bb.t), NULL, NULL, JSPROP_ENUMERATE | JSPROP_PERMANENT) )
+		return JSVAL_VOID;
+	
+	return OBJECT_TO_JSVAL(object);
 }
 
 JSBool jsval_to_array_of_cpvect( JSContext *cx, jsval vp, cpVect**verts, int *numVerts)
@@ -219,6 +234,24 @@ static void myCollisionSeparate(cpArbiter *arb, cpSpace *space, void *data)
 }
 
 #pragma mark - cpSpace
+
+#pragma mark constructor / destructor
+
+void JSB_cpSpace_finalize(JSFreeOp *fop, JSObject *jsthis)
+{
+	struct jsb_c_proxy_s *proxy = jsb_get_c_proxy_for_jsobject(jsthis);
+	CCLOGINFO(@"jsbindings: finalizing JS object %p (cpSpace), handle: %p", jsthis, proxy->handle);
+	
+	// Free Space Children
+	freeSpaceChildren((cpSpace*)proxy->handle);
+	
+	jsb_del_jsobject_for_proxy(proxy->handle);
+	if(proxy->flags == JSB_C_FLAG_CALL_FREE)
+		cpSpaceFree( (cpSpace*)proxy->handle);
+	jsb_del_c_proxy_for_jsobject(jsthis);
+}
+
+
 #pragma mark addCollisionHandler
 
 static
@@ -233,7 +266,10 @@ JSBool __jsb_cpSpace_addCollisionHandler(JSContext *cx, jsval *vp, jsval *argvp,
 	// args
 	ok &= jsval_to_int(cx, *argvp++, (int32_t*) &handler->typeA );
 	ok &= jsval_to_int(cx, *argvp++, (int32_t*) &handler->typeB );
-	ok &= JS_ValueToObject(cx, *argvp++, &handler->jsthis );
+	
+	// this is no longer passed, so "this" is going to be "this".
+//	ok &= JS_ValueToObject(cx, *argvp++, &handler->jsthis );
+	handler->jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	
 	handler->begin =  *argvp++;
 	handler->pre = *argvp++;
@@ -286,7 +322,7 @@ JSBool __jsb_cpSpace_addCollisionHandler(JSContext *cx, jsval *vp, jsval *argvp,
 
 JSBool JSB_cpSpaceAddCollisionHandler(JSContext *cx, uint32_t argc, jsval *vp)
 {
-	JSB_PRECONDITION( argc==8, "Invalid number of arguments");
+	JSB_PRECONDITION( argc==7, "Invalid number of arguments");
 
 	jsval *argvp = JS_ARGV(cx,vp);
 
@@ -301,7 +337,7 @@ JSBool JSB_cpSpaceAddCollisionHandler(JSContext *cx, uint32_t argc, jsval *vp)
 // method
 JSBool JSB_cpSpace_addCollisionHandler(JSContext *cx, uint32_t argc, jsval *vp)
 {
-	JSB_PRECONDITION( argc==7, "Invalid number of arguments");
+	JSB_PRECONDITION( argc==6, "Invalid number of arguments");
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_PRECONDITION( jsthis, "Invalid jsthis object");
 	
@@ -377,23 +413,6 @@ JSBool JSB_cpSpace_removeCollisionHandler(JSContext *cx, uint32_t argc, jsval *v
 	void *handle = proxy->handle;
 	
 	return __jsb_cpSpace_removeCollisionHandler(cx, vp, JS_ARGV(cx,vp), (cpSpace*)handle);
-}
-
-#pragma mark Free
-
-// Destructor
-void JSB_cpSpace_finalize(JSFreeOp *fop, JSObject *jsthis)
-{
-	struct jsb_c_proxy_s *proxy = jsb_get_c_proxy_for_jsobject(jsthis);
-	CCLOGINFO(@"jsbindings: finalizing JS object %p (cpSpace), handle: %p", jsthis, proxy->handle);
-	
-	// Free Space Children
-	freeSpaceChildren((cpSpace*)proxy->handle);
-	
-	jsb_del_jsobject_for_proxy(proxy->handle);
-	if(proxy->flags == JSB_C_FLAG_CALL_FREE)
-		cpSpaceFree( (cpSpace*)proxy->handle);
-	jsb_del_c_proxy_for_jsobject(jsthis);
 }
 
 #pragma mark Add functios. Root JSObjects
@@ -719,26 +738,26 @@ JSBool JSB_cpBody_constructor(JSContext *cx, uint32_t argc, jsval *vp)
 	JSObject *jsobj = JS_NewObject(cx, JSB_cpBody_class, JSB_cpBody_object, NULL);
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
-	double arg0; double arg1;
+	double m; double i;
 	
-	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
-	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
+	ok &= JS_ValueToNumber( cx, *argvp++, &m );
+	ok &= JS_ValueToNumber( cx, *argvp++, &i );
 	JSB_PRECONDITION(ok, "Error processing arguments");
 	
-	void *ret_val = NULL;
-	if( arg0 == INFINITY && arg1 == INFINITY) {
-		ret_val = cpBodyNewStatic();
+	cpBody *ret_body = NULL;
+	if( m == INFINITY && i == INFINITY) {
+		ret_body = cpBodyNewStatic();
 		
 		// XXX: Hack. IT WILL LEAK "rogue" objects., But at least it prevents a crash.
-		// The thing is that "rogue" bodies needs to be freed after the space, and I am not sure
+		// The thing is that "rogue" bodies needs to be freed after the its shape, and I am not sure
 		// how to do it in a "js" way.
-		jsb_set_c_proxy_for_jsobject(jsobj, ret_val, JSB_C_FLAG_DO_NOT_CALL_FREE);
+		jsb_set_c_proxy_for_jsobject(jsobj, ret_body, JSB_C_FLAG_DO_NOT_CALL_FREE);
 	} else {
-		ret_val = cpBodyNew((cpFloat)arg0 , (cpFloat)arg1  );
-		jsb_set_c_proxy_for_jsobject(jsobj, ret_val, JSB_C_FLAG_CALL_FREE);
+		ret_body = cpBodyNew((cpFloat)m , (cpFloat)i  );
+		jsb_set_c_proxy_for_jsobject(jsobj, ret_body, JSB_C_FLAG_CALL_FREE);
 	}
 	
-	jsb_set_jsobject_for_proxy(jsobj, ret_val);
+	jsb_set_jsobject_for_proxy(jsobj, ret_body);
 	
 	JS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(jsobj));
 	return JS_TRUE;

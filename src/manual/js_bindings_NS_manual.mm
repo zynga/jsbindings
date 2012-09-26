@@ -413,7 +413,7 @@ JSBool JSB_UITouch_constructor(JSContext *cx, uint32_t argc, jsval *vp)
 JSBool JSB_UITouch_location(JSContext *cx, uint32_t argc, jsval *vp) {
 	
 	JSObject* obj = (JSObject *)JS_THIS_OBJECT(cx, vp);
-	JSB_NSObject *proxy = jsb_get_proxy_for_jsobject(obj);
+	JSB_NSObject *proxy = (JSB_NSObject*)jsb_get_proxy_for_jsobject(obj);
 	NSCAssert( proxy && [proxy realObj], @"Object already initialzied. error");
 	
 	JSB_PRECONDITION( argc == 0, "Invalid number of arguments" );
@@ -433,7 +433,7 @@ JSBool JSB_UITouch_location(JSContext *cx, uint32_t argc, jsval *vp) {
 JSBool JSB_UITouch_delta(JSContext *cx, uint32_t argc, jsval *vp) {
 	
 	JSObject* obj = (JSObject *)JS_THIS_OBJECT(cx, vp);
-	JSB_NSObject *proxy = jsb_get_proxy_for_jsobject(obj);
+	JSB_NSObject *proxy = (JSB_NSObject*)jsb_get_proxy_for_jsobject(obj);
 	NSCAssert( proxy && [proxy realObj], @"Object already initialzied. error");
 	
 	JSB_PRECONDITION( argc == 0, "Invalid number of arguments" );
@@ -615,7 +615,7 @@ JSBool JSB_UIAccelerometer_sharedAccelerometer_static(JSContext *cx, uint32_t ar
 JSBool JSB_UIAccelerometer_getUpdateInterval(JSContext *cx, uint32_t argc, jsval *vp) {
 	
 	JSObject* obj = (JSObject *)JS_THIS_OBJECT(cx, vp);
-	JSB_NSObject *proxy = jsb_get_proxy_for_jsobject(obj);
+	JSB_NSObject *proxy = (JSB_NSObject*)jsb_get_proxy_for_jsobject(obj);
 	NSCAssert( proxy && [proxy realObj], @"Object already initialzied. error");
 	
 	JSB_PRECONDITION( argc == 0, "Invalid number of arguments" );
@@ -631,7 +631,7 @@ JSBool JSB_UIAccelerometer_getUpdateInterval(JSContext *cx, uint32_t argc, jsval
 JSBool JSB_UIAccelerometer_setUpdateInterval(JSContext *cx, uint32_t argc, jsval *vp) {
 	
 	JSObject* obj = (JSObject *)JS_THIS_OBJECT(cx, vp);
-	JSB_NSObject *proxy = jsb_get_proxy_for_jsobject(obj);
+	JSB_NSObject *proxy = (JSB_NSObject*)jsb_get_proxy_for_jsobject(obj);
 	NSCAssert( proxy && [proxy realObj], @"Object already initialzied. error");
 	
 	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
@@ -651,7 +651,7 @@ JSBool JSB_UIAccelerometer_setUpdateInterval(JSContext *cx, uint32_t argc, jsval
 
 JSBool JSB_UIAccelerometer_setDelegate(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSObject* obj = (JSObject *)JS_THIS_OBJECT(cx, vp);
-	JSB_NSObject *proxy = jsb_get_proxy_for_jsobject(obj);
+	JSB_NSObject *proxy = (JSB_NSObject*)jsb_get_proxy_for_jsobject(obj);
 	NSCAssert( proxy && [proxy realObj], @"Object already initialzied. error");
 	
 	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );

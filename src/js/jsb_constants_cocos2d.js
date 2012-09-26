@@ -334,8 +334,9 @@ cc.Class.extend = function (prop) {
     return Class;
 };
 
+cc.Node.extend = cc.Class.extend;
 cc.Layer.extend = cc.Class.extend;
 cc.LayerGradient.extend = cc.Class.extend;
+cc.LayerColor.extend = cc.Class.extend;
 cc.Sprite.extend = cc.Class.extend;
 cc.MenuItemFont.extend = cc.Class.extend;
-

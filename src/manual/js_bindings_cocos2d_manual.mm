@@ -236,7 +236,7 @@ JSBool JSB_CCMenuItemFont_itemWithString_block__static(JSContext *cx, uint32_t a
 	js_block js_func;
 	JSObject *js_this;
 	
-	ok &= jsval_to_nsstring( cx, argvp[0], &normal );
+	ok &= jsval_to_NSString( cx, argvp[0], &normal );
 		
 	if( argc ==3 ) {
 		// this
@@ -278,7 +278,7 @@ JSBool JSB_CCMenuItemFont_initWithString_block_(JSContext *cx, uint32_t argc, js
 	js_block js_func;
 	JSObject *js_this;
 	
-	ok &= jsval_to_nsstring( cx, argvp[0], &normal );
+	ok &= jsval_to_NSString( cx, argvp[0], &normal );
 	
 	if( argc ==3 ) {
 		// this
@@ -318,7 +318,7 @@ JSBool JSB_CCMenuItemLabel_itemWithLabel_block__static(JSContext *cx, uint32_t a
 	js_block js_func;
 	JSObject *js_this;
 	
-	ok &= jsval_to_nsobject( cx, argvp[0], &label );
+	ok &= jsval_to_NSObject( cx, argvp[0], &label );
 	
 	if( argc ==3 ) {
 		// this
@@ -358,7 +358,7 @@ JSBool JSB_CCMenuItemLabel_initWithLabel_block_(JSContext *cx, uint32_t argc, js
 	js_block js_func;
 	JSObject *js_this;
 	
-	ok &= jsval_to_nsobject( cx, argvp[0], &label );
+	ok &= jsval_to_NSObject( cx, argvp[0], &label );
 	
 	if( argc ==3 ) {
 		// this
@@ -397,13 +397,13 @@ JSBool JSB_CCMenuItemImage_itemWithNormalImage_selectedImage_disabledImage_block
 	JSObject *js_this;
 	jsval valthis, valfn;
 	
-	ok &= jsval_to_nsstring( cx, *argvp++, &normal );
+	ok &= jsval_to_NSString( cx, *argvp++, &normal );
 	
 	if( argc >= 2 )
-		ok &= jsval_to_nsstring( cx, *argvp++, &selected );
+		ok &= jsval_to_NSString( cx, *argvp++, &selected );
 
 	if( argc == 3 || argc == 5)
-		ok &= jsval_to_nsstring( cx, *argvp++, &disabled );
+		ok &= jsval_to_NSString( cx, *argvp++, &disabled );
 
 
 	// cannot merge with previous if() since argvp needs to be incremented
@@ -452,13 +452,13 @@ JSBool JSB_CCMenuItemImage_initWithNormalImage_selectedImage_disabledImage_block
 	JSObject *js_this;
 	jsval valthis, valfn;
 	
-	ok &= jsval_to_nsstring( cx, *argvp++, &normal );
+	ok &= jsval_to_NSString( cx, *argvp++, &normal );
 	
 	if( argc >= 2 )
-		ok &= jsval_to_nsstring( cx, *argvp++, &selected );
+		ok &= jsval_to_NSString( cx, *argvp++, &selected );
 	
 	if( argc == 3 || argc == 5)
-		ok &= jsval_to_nsstring( cx, *argvp++, &disabled );
+		ok &= jsval_to_NSString( cx, *argvp++, &disabled );
 	
 	
 	// cannot merge with previous if() since argvp needs to be incremented
@@ -507,13 +507,13 @@ JSBool JSB_CCMenuItemSprite_itemWithNormalSprite_selectedSprite_disabledSprite_b
 	JSObject *js_this;
 	jsval valthis, valfn;
 	
-	ok &= jsval_to_nsobject( cx, *argvp++, &normal );
+	ok &= jsval_to_NSObject( cx, *argvp++, &normal );
 	
 	if( argc >= 2 )
-		ok &= jsval_to_nsobject( cx, *argvp++, &selected );
+		ok &= jsval_to_NSObject( cx, *argvp++, &selected );
 	
 	if( argc == 5 )
-		ok &= jsval_to_nsobject( cx, *argvp++, &disabled );
+		ok &= jsval_to_NSObject( cx, *argvp++, &disabled );
 	
 	
 	// cannot merge with previous if() since argvp needs to be incremented
@@ -560,13 +560,13 @@ JSBool JSB_CCMenuItemSprite_initWithNormalSprite_selectedSprite_disabledSprite_b
 	JSObject *js_this;
 	jsval valthis, valfn;
 	
-	ok &= jsval_to_nsobject( cx, *argvp++, &normal );
+	ok &= jsval_to_NSObject( cx, *argvp++, &normal );
 	
 	if( argc >= 2 )
-		ok &= jsval_to_nsobject( cx, *argvp++, &selected );
+		ok &= jsval_to_NSObject( cx, *argvp++, &selected );
 	
 	if( argc == 5 )
-		ok &= jsval_to_nsobject( cx, *argvp++, &disabled );
+		ok &= jsval_to_NSObject( cx, *argvp++, &disabled );
 	
 	
 	// cannot merge with previous if() since argvp needs to be incremented
