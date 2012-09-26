@@ -33769,6 +33769,48 @@ JSBool JSB_CCPhysicsDebugNode_debugNodeForCPSpace__static(JSContext *cx, uint32_
 	return JS_TRUE;
 }
 
+// Arguments: cpSpace*
+// Ret value: void (None)
+JSBool JSB_CCPhysicsDebugNode_setSpace_(JSContext *cx, uint32_t argc, jsval *vp) {
+
+	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
+	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
+
+	JSB_PRECONDITION( proxy && [proxy realObj], "Invalid Proxy object");
+	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	jsval *argvp = JS_ARGV(cx,vp);
+	JSBool ok = JS_TRUE;
+	cpSpace* arg0; 
+
+	ok &= jsval_to_opaque( cx, *argvp++, (void**)&arg0 );
+	JSB_PRECONDITION(ok, "Error processing arguments");
+
+	CCPhysicsDebugNode *real = (CCPhysicsDebugNode*) [proxy realObj];
+	[real setSpace:(cpSpace*)arg0  ];
+	JS_SET_RVAL(cx, vp, JSVAL_VOID);
+	return JS_TRUE;
+}
+
+// Arguments: 
+// Ret value: cpSpace* (N/A)
+JSBool JSB_CCPhysicsDebugNode_space(JSContext *cx, uint32_t argc, jsval *vp) {
+
+	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
+	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
+
+	JSB_PRECONDITION( proxy && [proxy realObj], "Invalid Proxy object");
+	JSB_PRECONDITION( argc == 0, "Invalid number of arguments" );
+	cpSpace* ret_val;
+
+	CCPhysicsDebugNode *real = (CCPhysicsDebugNode*) [proxy realObj];
+	ret_val = [real space ];
+
+	jsval ret_jsval = opaque_to_jsval( cx, ret_val );
+	JS_SET_RVAL(cx, vp, ret_jsval);
+    
+	return JS_TRUE;
+}
+
 void JSB_CCPhysicsDebugNode_createClass(JSContext *cx, JSObject* globalObj, const char* name )
 {
 	JSB_CCPhysicsDebugNode_class = (JSClass *)calloc(1, sizeof(JSClass));
@@ -33787,6 +33829,8 @@ void JSB_CCPhysicsDebugNode_createClass(JSContext *cx, JSObject* globalObj, cons
 		{0, 0, 0, 0, 0}
 	};
 	static JSFunctionSpec funcs[] = {
+		JS_FN("setSpace", JSB_CCPhysicsDebugNode_setSpace_, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("getSpace", JSB_CCPhysicsDebugNode_space, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FS_END
 	};
 	static JSFunctionSpec st_funcs[] = {
