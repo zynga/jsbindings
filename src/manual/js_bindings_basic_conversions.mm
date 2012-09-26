@@ -56,11 +56,10 @@ JSObject * get_or_create_jsobject_from_realobj( JSContext *cx, id realObj )
 	return create_jsobject_from_realobj( cx, [realObj class], realObj );
 }
 
-
 #pragma mark - jsval to native
 
 // Convert function
-JSBool jsval_to_nsstring( JSContext *cx, jsval vp, NSString **ret )
+JSBool jsval_to_NSString( JSContext *cx, jsval vp, NSString **ret )
 {
 	JSString *jsstr = JS_ValueToString( cx, vp );
 	JSB_PRECONDITION( jsstr, "invalid string" );
@@ -82,7 +81,7 @@ JSBool jsval_to_nsstring( JSContext *cx, jsval vp, NSString **ret )
 	return JS_TRUE;
 }
 
-JSBool jsval_to_nsobject( JSContext *cx, jsval vp, NSObject **ret )
+JSBool jsval_to_NSObject( JSContext *cx, jsval vp, NSObject **ret )
 {
 	JSObject *jsobj;
 	JSBool ok = JS_ValueToObject( cx, vp, &jsobj );
@@ -100,7 +99,7 @@ JSBool jsval_to_nsobject( JSContext *cx, jsval vp, NSObject **ret )
 	return JS_TRUE;
 }
 
-JSBool jsval_to_nsarray( JSContext *cx, jsval vp, NSArray**ret )
+JSBool jsval_to_NSArray( JSContext *cx, jsval vp, NSArray**ret )
 {
 	// Parsing sequence
 	JSObject *jsobj;
@@ -119,7 +118,7 @@ JSBool jsval_to_nsarray( JSContext *cx, jsval vp, NSArray**ret )
 		
 		// XXX: forcing them to be objects, but they could also be NSString, NSDictionary or NSArray
 		id real_obj;
-		ok = jsval_to_nsobject( cx, valarg, &real_obj );
+		ok = jsval_to_NSObject( cx, valarg, &real_obj );
 		JSB_PRECONDITION( ok, "Error converting value to nsobject");
 		
 		[array addObject:real_obj];
@@ -129,7 +128,7 @@ JSBool jsval_to_nsarray( JSContext *cx, jsval vp, NSArray**ret )
 	return JS_TRUE;
 }
 
-JSBool jsval_to_nsset( JSContext *cx, jsval vp, NSSet** ret)
+JSBool jsval_to_NSSet( JSContext *cx, jsval vp, NSSet** ret)
 {
 	// Parsing sequence
 	JSObject *jsobj;
@@ -147,7 +146,7 @@ JSBool jsval_to_nsset( JSContext *cx, jsval vp, NSSet** ret)
 		
 		// XXX: forcing them to be objects, but they could also be NSString, NSDictionary or NSArray
 		id real_obj;
-		ok = jsval_to_nsobject( cx, valarg, &real_obj );
+		ok = jsval_to_NSObject( cx, valarg, &real_obj );
 		JSB_PRECONDITION( ok, "Error converting value to nsobject");
 		
 		[set addObject:real_obj];
@@ -156,7 +155,7 @@ JSBool jsval_to_nsset( JSContext *cx, jsval vp, NSSet** ret)
 	return JS_TRUE;
 }
 
-JSBool jsvals_variadic_to_nsarray( JSContext *cx, jsval *vp, int argc, NSArray**ret )
+JSBool jsvals_variadic_to_NSArray( JSContext *cx, jsval *vp, int argc, NSArray**ret )
 {
 	NSMutableArray *array = [NSMutableArray arrayWithCapacity:argc];
 	
@@ -166,7 +165,7 @@ JSBool jsvals_variadic_to_nsarray( JSContext *cx, jsval *vp, int argc, NSArray**
 		JSBool ok = JS_FALSE;
 		
 		// Native Object ?
-		ok = jsval_to_nsobject( cx, *vp, &obj );
+		ok = jsval_to_NSObject( cx, *vp, &obj );
 
 		// Number ?
 		if( ! ok ) {
@@ -183,7 +182,7 @@ JSBool jsvals_variadic_to_nsarray( JSContext *cx, jsval *vp, int argc, NSArray**
 		
 		// String ?
 		if( ! ok )
-			ok = jsval_to_nsstring(cx, *vp, (NSString**)&obj );
+			ok = jsval_to_NSString(cx, *vp, (NSString**)&obj );
 		
 		JSB_PRECONDITION( ok, "Error converting variadic arguments");
 
@@ -204,9 +203,7 @@ JSBool jsval_to_block_1( JSContext *cx, jsval vp, JSObject *jsthis, js_block *re
 	js_block block = ^(id sender) {
 
 		jsval rval;
-		
-		JSObject *jsobj = get_or_create_jsobject_from_realobj( cx, sender );
-		jsval val = OBJECT_TO_JSVAL(jsobj);
+		jsval val = NSObject_to_jsval(cx, sender);
 
 		JS_CallFunctionValue(cx, jsthis, vp, 1, &val, &rval);
 	};
@@ -223,11 +220,9 @@ JSBool jsval_to_block_2( JSContext *cx, jsval vp, JSObject *jsthis, jsval arg, j
 	js_block block = ^(id sender) {
 		
 		jsval rval;
-		
-		JSObject *jsobj = get_or_create_jsobject_from_realobj( cx, sender );
-		
 		jsval vals[2];
-		vals[0] = OBJECT_TO_JSVAL(jsobj);
+		
+		vals[0] = NSObject_to_jsval(cx, sender);
 		
 		// arg NEEDS TO BE ROOTED! Potential crash
 		vals[1] = arg;
@@ -335,7 +330,7 @@ JSBool jsval_to_opaque( JSContext *cx, jsval vp, void **r)
 	NSCAssert( sizeof(int)==4, @"fatal!");
 	int32_t ret;
 	JSBool ok = JS_ValueToInt32(cx, vp, &ret );
-	JSB_PRECONDITION(ok, "Error converting value to in32");
+	JSB_PRECONDITION(ok, "Error converting value to int32");
 #endif
 	*r = (void*)ret;
 	return JS_TRUE;
@@ -412,13 +407,28 @@ JSBool jsval_to_longlong( JSContext *cx, jsval vp, long long *r )
 
 #pragma mark - native to jsval
 
+jsval NSObject_to_jsval( JSContext *cx, id obj )
+{
+	jsval ret;
+	if( ! obj )
+		return JSVAL_NULL;
+	
+	JSB_NSObject *proxy = objc_getAssociatedObject(obj, &JSB_association_proxy_key );
+	if( proxy )
+		ret = OBJECT_TO_JSVAL([proxy jsObj]);
+	
+	else
+		ret = OBJECT_TO_JSVAL( create_jsobject_from_realobj( cx, [obj class], obj ) );
+	
+	return ret;
+}
+
 jsval NSArray_to_jsval( JSContext *cx, NSArray *array)
 {
 	JSObject *jsobj = JS_NewArrayObject(cx, 0, NULL);
 	uint32_t index = 0;
 	for( id obj in array ) {
-		JSObject *s = get_or_create_jsobject_from_realobj( cx, obj );
-		jsval val = OBJECT_TO_JSVAL(s);
+		jsval val = NSObject_to_jsval(cx, obj);
 		JS_SetElement(cx, jsobj, index++, &val);
 	}
 	
@@ -430,8 +440,7 @@ jsval NSSet_to_jsval( JSContext *cx, NSSet *set)
 	JSObject *jsobj = JS_NewArrayObject(cx, 0, NULL);
 	uint32_t index = 0;
 	for( id obj in set ) {
-		JSObject *s = get_or_create_jsobject_from_realobj( cx, obj );
-		jsval val = OBJECT_TO_JSVAL(s);
+		jsval val = NSObject_to_jsval(cx, obj);
 		JS_SetElement(cx, jsobj, index++, &val);
 	}
 
@@ -484,13 +493,13 @@ jsval opaque_to_jsval( JSContext *cx, void *opaque )
 #ifdef __LP64__
 	uint64_t number = (uint64_t)opaque;
 	JSObject *typedArray = JS_NewUint32Array( cx, 2 );
-	int32_t *buffer = (int32_t*)JS_GetArrayBufferViewData(typedArray, cx);
+	uint32_t *buffer = (uint32_t*)JS_GetArrayBufferViewData(typedArray, cx);
 	buffer[0] = number >> 32;
 	buffer[1] = number & 0xffffffff;
 	return OBJECT_TO_JSVAL(typedArray);		
 #else
 	NSCAssert( sizeof(int)==4, @"Error!");
-	int32_t number = (int32_t) opaque;
+	uint32_t number = (uint32_t) opaque;
 	return INT_TO_JSVAL(number);
 #endif
 }
@@ -521,7 +530,7 @@ jsval long_to_jsval( JSContext *cx, long number )
 	NSCAssert( sizeof(long)==8, @"Error!");
 
 	JSObject *typedArray = JS_NewUint32Array( cx, 2 );
-	int32_t *buffer = (int32_t*)JS_GetArrayBufferViewData(typedArray, cx);
+	uint32_t *buffer = (uint32_t*)JS_GetArrayBufferViewData(typedArray, cx);
 	buffer[0] = number >> 32;
 	buffer[1] = number & 0xffffffff;
 	return OBJECT_TO_JSVAL(typedArray);		
@@ -535,7 +544,7 @@ jsval longlong_to_jsval( JSContext *cx, long long number )
 {
 	NSCAssert( sizeof(long long)==8, @"Error!");
 	JSObject *typedArray = JS_NewUint32Array( cx, 2 );
-	int32_t *buffer = (int32_t*)JS_GetArrayBufferViewData(typedArray, cx);
+	uint32_t *buffer = (uint32_t*)JS_GetArrayBufferViewData(typedArray, cx);
 	buffer[0] = number >> 32;
 	buffer[1] = number & 0xffffffff;
 	return OBJECT_TO_JSVAL(typedArray);		

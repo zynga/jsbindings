@@ -6,6 +6,35 @@ cp.v = cc.p;
 cp._v = cc._p;
 cp.vzero  = cp.v(0,0);
 
+// Vector: Compatibility with Chipmunk-JS
+cp.v.add = cp.vadd;
+cp.v.clamp = cp.vclamp;
+cp.v.cross = cp.vcross;
+cp.v.dist = cp.vdist;
+cp.v.distsq = cp.vdistsq;
+cp.v.dot = cp.vdot;
+cp.v.eql = cp.veql;
+cp.v.forangle = cp.vforangle;
+cp.v.length = cp.vlength;
+cp.v.lengthsq = cp.vlengthsq;
+cp.v.lerp = cp.vlerp;
+cp.v.lerpconst = cp.vlerpconst;
+cp.v.mult = cp.vmult;
+cp.v.near = cp.vnear;
+cp.v.neg = cp.vneg;
+cp.v.normalize = cp.vnormalize;
+cp.v.normalize_safe = cp.vnormalize_safe;
+cp.v.perp = cp.vperp;
+cp.v.project = cp.vproject;
+cp.v.rotate = cp.vrotate;
+cp.v.rperp = cp.vrperp;
+cp.v.slerp = cp.vslerp;
+cp.v.slerpconst = cp.vslerpconst;
+cp.v.sub = cp.vsub;
+cp.v.toangle = cp.vtoangle;
+cp.v.unrotate = cp.vunrotate;
+
+
 
 /// Initialize an offset box shaped polygon shape.
 cp.BoxShape2 = function(body, box)
@@ -27,7 +56,22 @@ cp.BodyStatic = function()
 };
 
 
-// Properties, for Chipmunk-JS compatibility
+// "Bounding Box" compatibility with Chipmunk-JS
+cp.BB = function(l, b, r, t)
+{
+	return {l:l, b:b, r:r, t:t};
+};
+
+// helper function to create a BB
+cp.bb = function(l, b, r, t) {
+	return new cp.BB(l, b, r, t);
+};
+
+
+//
+// Some properties
+//
+// "handle" needed in some cases
 Object.defineProperties(cp.Base.prototype,
 				{
 					"handle" : {
@@ -40,6 +84,7 @@ Object.defineProperties(cp.Base.prototype,
 				});
 
 // Properties, for Chipmunk-JS compatibility
+// Space properties
 Object.defineProperties(cp.Space.prototype,
 				{
 					"gravity" : {
@@ -78,5 +123,66 @@ Object.defineProperties(cp.Space.prototype,
                         },
 						enumerable : true,
 						configurable : true
+					},
+					"idleSpeedThreshold" : {
+						get : function(){
+                            return this.getIdleSpeedThreshold();
+                        },
+						set : function(newValue){
+                            this.setIdleSpeedThreshold(newValue);
+                        },
+						enumerable : true,
+						configurable : true
+					},
+					"sleepTimeThreshold": {
+						get : function(){
+                            return this.getSleepTimeThreshold();
+                        },
+						set : function(newValue){
+                            this.setSleepTimeThreshold(newValue);
+                        },
+						enumerable : true,
+						configurable : true
+					},
+					"collisionSlop": {
+						get : function(){
+                            return this.getCollisionSlop();
+                        },
+						set : function(newValue){
+                            this.setCollisionSlop(newValue);
+                        },
+						enumerable : true,
+						configurable : true
+					},
+					"collisionBias": {
+						get : function(){
+                            return this.getCollisionBias();
+                        },
+						set : function(newValue){
+                            this.setCollisionBias(newValue);
+                        },
+						enumerable : true,
+						configurable : true
+					},
+					"collisionPersistence": {
+						get : function(){
+                            return this.getCollisionPersistence();
+                        },
+						set : function(newValue){
+                            this.setCollisionPersistence(newValue);
+                        },
+						enumerable : true,
+						configurable : true
+					},
+					"enableContactGraph": {
+						get : function(){
+                            return this.getEnableContactGraph();
+                        },
+						set : function(newValue){
+                            this.setEnableContactGraph(newValue);
+                        },
+						enumerable : true,
+						configurable : true
 					}
 				});
+

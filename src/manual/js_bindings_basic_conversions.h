@@ -35,19 +35,19 @@ JSObject* create_jsobject_from_realobj( JSContext* context, Class klass, id real
 JSObject * get_or_create_jsobject_from_realobj( JSContext *cx, id realObj);
 
 /** converts a jsval to a NSString */
-JSBool jsval_to_nsstring( JSContext *cx , jsval vp, NSString **out );
+JSBool jsval_to_NSString( JSContext *cx , jsval vp, NSString **out );
 
 /** converts a jsval to a NSObject */
-JSBool jsval_to_nsobject( JSContext *cx, jsval vp, NSObject **out );
+JSBool jsval_to_NSObject( JSContext *cx, jsval vp, NSObject **out );
 
 /** converts a jsval to a NSArray */
-JSBool jsval_to_nsarray( JSContext *cx , jsval vp, NSArray **out );
+JSBool jsval_to_NSArray( JSContext *cx , jsval vp, NSArray **out );
 
 /** converts a jsval to a NSSet */
-JSBool jsval_to_nsset( JSContext *cx , jsval vp, NSSet** out );
+JSBool jsval_to_NSSet( JSContext *cx , jsval vp, NSSet** out );
 
 /** converts a variadic jsvals to a NSArray */
-JSBool jsvals_variadic_to_nsarray( JSContext *cx, jsval *vp, int argc, NSArray** out );
+JSBool jsvals_variadic_to_NSArray( JSContext *cx, jsval *vp, int argc, NSArray** out );
 	
 JSBool jsval_to_CGPoint( JSContext *cx, jsval vp, CGPoint *out );
 JSBool jsval_to_CGSize( JSContext *cx, jsval vp, CGSize *out );
@@ -64,7 +64,8 @@ JSBool jsval_to_block_1( JSContext *cx, jsval vp, JSObject *jsthis, js_block *ou
 /** converts a jsval to a block (2 == receives 2 argument (sender + custom) ) */
 JSBool jsval_to_block_2( JSContext *cx, jsval vp, JSObject *jsthis, jsval arg, js_block *out  );
 
-
+/** Converts an NSObject into a jsval. It does not creates a new object it the NSObject has already been converted */
+jsval NSObject_to_jsval( JSContext *cx, id object);
 jsval int_to_jsval( JSContext *cx, int l);
 jsval long_to_jsval( JSContext *cx, long l);
 jsval longlong_to_jsval( JSContext *cx, long long l);
@@ -73,5 +74,7 @@ jsval CGSize_to_jsval( JSContext *cx, CGSize s);
 jsval CGRect_to_jsval( JSContext *cx, CGRect r);
 jsval NSArray_to_jsval( JSContext *cx, NSArray *array);
 jsval NSSet_to_jsval( JSContext *cx, NSSet *set);
+/** Converts an C Structure (handle) into a jsval. It returns jsval that will be sued as a "pointer" to the C Structure */
 jsval opaque_to_jsval( JSContext *cx, void* opaque);
+/** Converts an C class (a structure) into a jsval. It does not creates a new object it the C class has already been converted */
 jsval c_class_to_jsval( JSContext *cx, void* handle, JSObject* object, JSClass *klass, const char* optional_class_name);
