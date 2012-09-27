@@ -565,7 +565,8 @@ void JSB_UITouch_createClass(JSContext* cx, JSObject* globalObj, const char *nam
 		vals[3] = DOUBLE_TO_JSVAL(time);
 		
 		jsval rval;
-		JS_CallFunctionValue(_cx, _js_this, _js_function_value, 4, vals, &rval);
+		JSBool ok = JS_CallFunctionValue(_cx, _js_this, _js_function_value, 4, vals, &rval);
+		JSB_PRECONDITION2(ok, _cx, ,"Error calling accelerometer callback");
 	}
 }
 

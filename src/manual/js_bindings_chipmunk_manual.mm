@@ -85,6 +85,10 @@ jsval cpBB_to_jsval(JSContext *cx, cpBB bb )
 	return OBJECT_TO_JSVAL(object);
 }
 
+// In order to be compatible with Chipmunk-JS API,
+// this function expect to receive an array of numbers, and not an array of vects
+// OK:  [1,2,  3,4,  5,6]   <- expected
+// BAD: [{x:1, y:2}, {x:3,y:4}, {x:5, y:6}]  <- not expected
 JSBool jsval_to_array_of_cpvect( JSContext *cx, jsval vp, cpVect**verts, int *numVerts)
 {
 	// Parsing sequence
@@ -166,8 +170,9 @@ static cpBool myCollisionBegin(cpArbiter *arb, cpSpace *space, void *data)
 	}
 	
 	jsval rval;
-	JS_CallFunctionValue( handler->cx, handler->jsthis, handler->begin, 2, args, &rval);
-	
+	JSBool ok = JS_CallFunctionValue( handler->cx, handler->jsthis, handler->begin, 2, args, &rval);
+	JSB_PRECONDITION2(ok, handler->cx, cpFalse, "Error calling collision callback: begin");
+
 	if( JSVAL_IS_BOOLEAN(rval) ) {
 		JSBool ret = JSVAL_TO_BOOLEAN(rval);
 		return (cpBool)ret;
@@ -189,7 +194,8 @@ static cpBool myCollisionPre(cpArbiter *arb, cpSpace *space, void *data)
 	}
 	
 	jsval rval;
-	JS_CallFunctionValue( handler->cx, handler->jsthis, handler->pre, 2, args, &rval);
+	JSBool ok = JS_CallFunctionValue( handler->cx, handler->jsthis, handler->pre, 2, args, &rval);
+	JSB_PRECONDITION2(ok, handler->cx, JS_FALSE, "Error calling collision callback: pre");
 	
 	if( JSVAL_IS_BOOLEAN(rval) ) {
 		JSBool ret = JSVAL_TO_BOOLEAN(rval);
@@ -213,7 +219,8 @@ static void myCollisionPost(cpArbiter *arb, cpSpace *space, void *data)
 	}
 	
 	jsval ignore;
-	JS_CallFunctionValue( handler->cx, handler->jsthis, handler->post, 2, args, &ignore);
+	JSBool ok = JS_CallFunctionValue( handler->cx, handler->jsthis, handler->post, 2, args, &ignore);
+	JSB_PRECONDITION2(ok, handler->cx, , "Error calling collision callback: Post");
 }
 
 static void myCollisionSeparate(cpArbiter *arb, cpSpace *space, void *data)
@@ -230,8 +237,8 @@ static void myCollisionSeparate(cpArbiter *arb, cpSpace *space, void *data)
 	}
 	
 	jsval ignore;
-	JS_CallFunctionValue( handler->cx, handler->jsthis, handler->separate, 2, args, &ignore);
-}
+	JSBool ok = JS_CallFunctionValue( handler->cx, handler->jsthis, handler->separate, 2, args, &ignore);
+	JSB_PRECONDITION2(ok, handler->cx, , "Error calling collision callback: Separate");}
 
 #pragma mark - cpSpace
 
@@ -322,7 +329,8 @@ JSBool __jsb_cpSpace_addCollisionHandler(JSContext *cx, jsval *vp, jsval *argvp,
 
 JSBool JSB_cpSpaceAddCollisionHandler(JSContext *cx, uint32_t argc, jsval *vp)
 {
-	JSB_PRECONDITION( argc==7, "Invalid number of arguments");
+	JSB_PRECONDITION3(argc==7, cx, JS_FALSE, "Invalid number of arguments");
+
 
 	jsval *argvp = JS_ARGV(cx,vp);
 
@@ -337,7 +345,7 @@ JSBool JSB_cpSpaceAddCollisionHandler(JSContext *cx, uint32_t argc, jsval *vp)
 // method
 JSBool JSB_cpSpace_addCollisionHandler(JSContext *cx, uint32_t argc, jsval *vp)
 {
-	JSB_PRECONDITION( argc==6, "Invalid number of arguments");
+	JSB_PRECONDITION3(argc==6, cx, JS_FALSE, "Invalid number of arguments");
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_PRECONDITION( jsthis, "Invalid jsthis object");
 	
@@ -390,8 +398,8 @@ JSBool __jsb_cpSpace_removeCollisionHandler(JSContext *cx, jsval *vp, jsval *arg
 // Free function
 JSBool JSB_cpSpaceRemoveCollisionHandler(JSContext *cx, uint32_t argc, jsval *vp)
 {
-	JSB_PRECONDITION( argc==3, "Invalid number of arguments");
-	
+	JSB_PRECONDITION3(argc==3, cx, JS_FALSE, "Invalid number of arguments");
+
 	jsval *argvp = JS_ARGV(cx,vp);
 	
 	cpSpace* space;
@@ -405,7 +413,8 @@ JSBool JSB_cpSpaceRemoveCollisionHandler(JSContext *cx, uint32_t argc, jsval *vp
 // method
 JSBool JSB_cpSpace_removeCollisionHandler(JSContext *cx, uint32_t argc, jsval *vp)
 {
-	JSB_PRECONDITION( argc==2, "Invalid number of arguments");
+	JSB_PRECONDITION3(argc==2, cx, JS_FALSE, "Invalid number of arguments");
+
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_PRECONDITION( jsthis, "Invalid jsthis object");
 	
@@ -420,7 +429,7 @@ JSBool JSB_cpSpace_removeCollisionHandler(JSContext *cx, uint32_t argc, jsval *v
 // Arguments: cpBody*
 // Ret value: cpBody*
 JSBool JSB_cpSpace_addBody(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3(argc==1, cx, JS_FALSE, "Invalid number of arguments");
 	
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	struct jsb_c_proxy_s *proxy = jsb_get_c_proxy_for_jsobject(jsthis);
@@ -447,7 +456,7 @@ JSBool JSB_cpSpace_addBody(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpConstraint*
 // Ret value: cpConstraint*
 JSBool JSB_cpSpace_addConstraint(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3(argc==1, cx, JS_FALSE, "Invalid number of arguments");
 	
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	struct jsb_c_proxy_s *proxy = jsb_get_c_proxy_for_jsobject(jsthis);
@@ -474,7 +483,7 @@ JSBool JSB_cpSpace_addConstraint(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpShape*
 // Ret value: cpShape*
 JSBool JSB_cpSpace_addShape(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3(argc==1, cx, JS_FALSE, "Invalid number of arguments");
 	
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	struct jsb_c_proxy_s *proxy = jsb_get_c_proxy_for_jsobject(jsthis);
@@ -501,7 +510,7 @@ JSBool JSB_cpSpace_addShape(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpShape*
 // Ret value: cpShape*
 JSBool JSB_cpSpace_addStaticShape(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3(argc==1, cx, JS_FALSE, "Invalid number of arguments");
 	
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	struct jsb_c_proxy_s *proxy = jsb_get_c_proxy_for_jsobject(jsthis);
@@ -530,7 +539,7 @@ JSBool JSB_cpSpace_addStaticShape(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpBody*
 // Ret value: void
 JSBool JSB_cpSpace_removeBody(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3(argc==1, cx, JS_FALSE, "Invalid number of arguments");
 	
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	struct jsb_c_proxy_s *proxy = jsb_get_c_proxy_for_jsobject(jsthis);
@@ -553,7 +562,7 @@ JSBool JSB_cpSpace_removeBody(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpConstraint*
 // Ret value: void
 JSBool JSB_cpSpace_removeConstraint(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3(argc==1, cx, JS_FALSE, "Invalid number of arguments");
 	
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	struct jsb_c_proxy_s *proxy = jsb_get_c_proxy_for_jsobject(jsthis);
@@ -576,7 +585,7 @@ JSBool JSB_cpSpace_removeConstraint(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpShape*
 // Ret value: void
 JSBool JSB_cpSpace_removeShape(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3(argc==1, cx, JS_FALSE, "Invalid number of arguments");
 	
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	struct jsb_c_proxy_s *proxy = jsb_get_c_proxy_for_jsobject(jsthis);
@@ -599,7 +608,7 @@ JSBool JSB_cpSpace_removeShape(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpShape*
 // Ret value: void
 JSBool JSB_cpSpace_removeStaticShape(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3(argc==1, cx, JS_FALSE, "Invalid number of arguments");
 	
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	struct jsb_c_proxy_s *proxy = jsb_get_c_proxy_for_jsobject(jsthis);
@@ -649,7 +658,7 @@ JSBool __jsb_cpArbiter_getBodies(JSContext *cx, jsval *vp, jsval *argvp, cpArbit
 // Free function
 JSBool JSB_cpArbiterGetBodies(JSContext *cx, uint32_t argc, jsval *vp)
 {
-	JSB_PRECONDITION( argc==1, "Invalid number of arguments");
+	JSB_PRECONDITION3(argc==1, cx, JS_FALSE, "Invalid number of arguments");
 	
 	jsval *argvp = JS_ARGV(cx,vp);
 	
@@ -663,7 +672,8 @@ JSBool JSB_cpArbiterGetBodies(JSContext *cx, uint32_t argc, jsval *vp)
 // Method
 JSBool JSB_cpArbiter_getBodies(JSContext *cx, uint32_t argc, jsval *vp)
 {
-	JSB_PRECONDITION( argc==0, "Invalid number of arguments");
+	JSB_PRECONDITION3(argc==0, cx, JS_FALSE, "Invalid number of arguments");
+
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_PRECONDITION( jsthis, "Invalid jsthis object");
 	
@@ -703,7 +713,7 @@ JSBool __jsb_cpArbiter_getShapes(JSContext *cx, jsval *vp, jsval *argvp, cpArbit
 // function
 JSBool JSB_cpArbiterGetShapes(JSContext *cx, uint32_t argc, jsval *vp)
 {
-	JSB_PRECONDITION( argc==1, "Invalid number of arguments");
+	JSB_PRECONDITION3(argc==1, cx, JS_FALSE, "Invalid number of arguments");
 	
 	jsval *argvp = JS_ARGV(cx,vp);
 	
@@ -717,7 +727,7 @@ JSBool JSB_cpArbiterGetShapes(JSContext *cx, uint32_t argc, jsval *vp)
 // method
 JSBool JSB_cpArbiter_getShapes(JSContext *cx, uint32_t argc, jsval *vp)
 {
-	JSB_PRECONDITION( argc==0, "Invalid number of arguments");
+	JSB_PRECONDITION3(argc==0, cx, JS_FALSE, "Invalid number of arguments");
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_PRECONDITION( jsthis, "Invalid jsthis object");
 	
@@ -734,7 +744,7 @@ JSBool JSB_cpArbiter_getShapes(JSContext *cx, uint32_t argc, jsval *vp)
 // Manually added to identify static vs dynamic bodies
 JSBool JSB_cpBody_constructor(JSContext *cx, uint32_t argc, jsval *vp)
 {
-	JSB_PRECONDITION(argc==2, "Invalid number of arguments");
+	JSB_PRECONDITION3(argc==2, cx, JS_FALSE, "Invalid number of arguments");
 	JSObject *jsobj = JS_NewObject(cx, JSB_cpBody_class, JSB_cpBody_object, NULL);
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
@@ -777,7 +787,7 @@ JSBool __jsb_cpBody_getUserData(JSContext *cx, jsval *vp, jsval *argvp, cpBody *
 // free function
 JSBool JSB_cpBodyGetUserData(JSContext *cx, uint32_t argc, jsval *vp)
 {
-	JSB_PRECONDITION( argc==1, "Invalid number of arguments");
+	JSB_PRECONDITION3(argc==1, cx, JS_FALSE, "Invalid number of arguments");
 
 	jsval *argvp = JS_ARGV(cx,vp);
 	cpBody *body;
@@ -790,7 +800,7 @@ JSBool JSB_cpBodyGetUserData(JSContext *cx, uint32_t argc, jsval *vp)
 // method
 JSBool JSB_cpBody_getUserData(JSContext *cx, uint32_t argc, jsval *vp)
 {
-	JSB_PRECONDITION( argc==0, "Invalid number of arguments");
+	JSB_PRECONDITION3(argc==0, cx, JS_FALSE, "Invalid number of arguments");
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_PRECONDITION( jsthis, "Invalid jsthis object");
 	
@@ -821,7 +831,7 @@ JSBool __jsb_cpBody_setUserData(JSContext *cx, jsval *vp, jsval *argvp, cpBody *
 // free function
 JSBool JSB_cpBodySetUserData(JSContext *cx, uint32_t argc, jsval *vp)
 {
-	JSB_PRECONDITION( argc==2, "Invalid number of arguments");
+	JSB_PRECONDITION3(argc==2, cx, JS_FALSE, "Invalid number of arguments");
 
 	jsval *argvp = JS_ARGV(cx,vp);
 	cpBody *body;
@@ -833,7 +843,7 @@ JSBool JSB_cpBodySetUserData(JSContext *cx, uint32_t argc, jsval *vp)
 // method
 JSBool JSB_cpBody_setUserData(JSContext *cx, uint32_t argc, jsval *vp)
 {
-	JSB_PRECONDITION( argc==1, "Invalid number of arguments");
+	JSB_PRECONDITION3(argc==1, cx, JS_FALSE, "Invalid number of arguments");
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_PRECONDITION( jsthis, "Invalid jsthis object");
 	
@@ -841,6 +851,79 @@ JSBool JSB_cpBody_setUserData(JSContext *cx, uint32_t argc, jsval *vp)
 	void *handle = proxy->handle;
 	
 	return __jsb_cpBody_setUserData(cx, vp, JS_ARGV(cx,vp), (cpBody*)handle);
+}
+
+#pragma mark - Poly related
+
+// cpFloat cpAreaForPoly(const int numVerts, const cpVect *verts);
+JSBool JSB_cpAreaForPoly(JSContext *cx, uint32_t argc, jsval *vp)
+{	
+	JSB_PRECONDITION3(argc==1, cx, JS_FALSE, "Invalid number of arguments");
+	jsval *argvp = JS_ARGV(cx,vp);
+	JSBool ok = JS_TRUE;
+	cpVect *verts;
+	int numVerts;
+	
+	ok &= jsval_to_array_of_cpvect( cx, *argvp++, &verts, &numVerts);
+	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error parsing array");
+	
+	cpFloat area = cpAreaForPoly(numVerts, verts);
+	
+	free(verts);
+	
+	JS_SET_RVAL(cx, vp, DOUBLE_TO_JSVAL(area));
+	return JS_TRUE;
+}
+
+// cpFloat cpMomentForPoly(cpFloat m, int numVerts, const cpVect *verts, cpVect offset);
+JSBool JSB_cpMomentForPoly(JSContext *cx, uint32_t argc, jsval *vp)
+{
+	JSB_PRECONDITION3(argc==3, cx, JS_FALSE, "Invalid number of arguments");
+	jsval *argvp = JS_ARGV(cx,vp);
+	JSBool ok = JS_TRUE;
+	cpVect *verts; cpVect offset;
+	int numVerts;
+	double m;
+	
+	ok &= JS_ValueToNumber(cx, *argvp++, &m);
+	ok &= jsval_to_array_of_cpvect( cx, *argvp++, &verts, &numVerts);
+	ok &= jsval_to_cpVect( cx, *argvp++, (cpVect*) &offset );
+
+	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error parsing args");
+	
+	cpFloat moment = cpMomentForPoly((cpFloat)m, numVerts, verts, offset);
+	
+	free(verts);
+	
+	JS_SET_RVAL(cx, vp, DOUBLE_TO_JSVAL(moment));
+	return JS_TRUE;
+}
+
+// cpVect cpCentroidForPoly(const int numVerts, const cpVect *verts);
+JSBool JSB_cpCentroidForPoly(JSContext *cx, uint32_t argc, jsval *vp)
+{
+	JSB_PRECONDITION3(argc==1, cx, JS_FALSE, "Invalid number of arguments");
+	jsval *argvp = JS_ARGV(cx,vp);
+	JSBool ok = JS_TRUE;
+	cpVect *verts;
+	int numVerts;
+	
+	ok &= jsval_to_array_of_cpvect( cx, *argvp++, &verts, &numVerts);
+	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error parsing args");
+	
+	cpVect centroid = cpCentroidForPoly(numVerts, verts);
+	
+	free(verts);
+	
+	JS_SET_RVAL(cx, vp, cpVect_to_jsval(cx, (CGPoint)centroid));
+	return JS_TRUE;
+}
+
+// void cpRecenterPoly(const int numVerts, cpVect *verts);
+JSBool JSB_cpRecenterPoly(JSContext *cx, uint32_t argc, jsval *vp)
+{
+	NSCAssert(NO, @"NOT IMPLEMENTED");
+	return JS_FALSE;
 }
 
 #pragma mark - Object Oriented Chipmunk
@@ -854,7 +937,7 @@ JSObject* JSB_cpBase_object = NULL;
 // Constructor
 JSBool JSB_cpBase_constructor(JSContext *cx, uint32_t argc, jsval *vp)
 {
-	JSB_PRECONDITION( argc==1, "Invalid arguments. Expecting 1");
+	JSB_PRECONDITION3( argc==1, cx, JS_FALSE, "Invalid arguments. Expecting 1");
 	
 	JSObject *jsobj = JS_NewObject(cx, JSB_cpBase_class, JSB_cpBase_object, NULL);
 	
@@ -886,7 +969,8 @@ JSBool JSB_cpBase_getHandle(JSContext *cx, uint32_t argc, jsval *vp)
 {
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_PRECONDITION( jsthis, "Invalid jsthis object");
-	
+	JSB_PRECONDITION3(argc==0, cx, JS_FALSE, "Invalid number of arguments");
+
 	struct jsb_c_proxy_s* proxy = jsb_get_c_proxy_for_jsobject(jsthis);
 	void *handle = proxy->handle;
 	
@@ -899,8 +983,7 @@ JSBool JSB_cpBase_setHandle(JSContext *cx, uint32_t argc, jsval *vp)
 {
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_PRECONDITION( jsthis, "Invalid jsthis object");
-	
-	JSB_PRECONDITION( argc==1, "Invalid arguments. Expecting 1");
+	JSB_PRECONDITION3(argc==1, cx, JS_FALSE, "Invalid number of arguments");
 	
 	jsval *argvp = JS_ARGV(cx,vp);
 	
@@ -949,7 +1032,7 @@ void JSB_cpBase_createClass(JSContext *cx, JSObject* globalObj, const char* name
 // Constructor
 JSBool JSB_cpPolyShape_constructor(JSContext *cx, uint32_t argc, jsval *vp)
 {
-	JSB_PRECONDITION(argc==3, "Invalid number of arguments");
+	JSB_PRECONDITION3(argc==3, cx, JS_FALSE, "Invalid number of arguments");
 	JSObject *jsobj = JS_NewObject(cx, JSB_cpPolyShape_class, JSB_cpPolyShape_object, NULL);
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;

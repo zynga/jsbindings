@@ -44,6 +44,12 @@ JSBool JSB_cpArbiterGetShapes(JSContext *cx, uint32_t argc, jsval *vp);
 JSBool JSB_cpBodyGetUserData(JSContext *cx, uint32_t argc, jsval *vp);
 JSBool JSB_cpBodySetUserData(JSContext *cx, uint32_t argc, jsval *vp);
 
+// poly related
+JSBool JSB_cpAreaForPoly(JSContext *cx, uint32_t argc, jsval *vp);
+JSBool JSB_cpMomentForPoly(JSContext *cx, uint32_t argc, jsval *vp);
+JSBool JSB_cpCentroidForPoly(JSContext *cx, uint32_t argc, jsval *vp);
+JSBool JSB_cpRecenterPoly(JSContext *cx, uint32_t argc, jsval *vp);
+
 // "Methods" from the OO API
 JSBool JSB_cpSpace_addCollisionHandler(JSContext *cx, uint32_t argc, jsval *vp);
 JSBool JSB_cpSpace_removeCollisionHandler(JSContext *cx, uint32_t argc, jsval *vp);
