@@ -166,8 +166,9 @@ static cpBool myCollisionBegin(cpArbiter *arb, cpSpace *space, void *data)
 	}
 	
 	jsval rval;
-	JS_CallFunctionValue( handler->cx, handler->jsthis, handler->begin, 2, args, &rval);
-	
+	JSBool ok = JS_CallFunctionValue( handler->cx, handler->jsthis, handler->begin, 2, args, &rval);
+	JSB_PRECONDITION2(ok, handler->cx, cpFalse, "Error calling collision callback: begin");
+
 	if( JSVAL_IS_BOOLEAN(rval) ) {
 		JSBool ret = JSVAL_TO_BOOLEAN(rval);
 		return (cpBool)ret;
@@ -189,7 +190,8 @@ static cpBool myCollisionPre(cpArbiter *arb, cpSpace *space, void *data)
 	}
 	
 	jsval rval;
-	JS_CallFunctionValue( handler->cx, handler->jsthis, handler->pre, 2, args, &rval);
+	JSBool ok = JS_CallFunctionValue( handler->cx, handler->jsthis, handler->pre, 2, args, &rval);
+	JSB_PRECONDITION2(ok, handler->cx, JS_FALSE, "Error calling collision callback: pre");
 	
 	if( JSVAL_IS_BOOLEAN(rval) ) {
 		JSBool ret = JSVAL_TO_BOOLEAN(rval);
@@ -213,7 +215,8 @@ static void myCollisionPost(cpArbiter *arb, cpSpace *space, void *data)
 	}
 	
 	jsval ignore;
-	JS_CallFunctionValue( handler->cx, handler->jsthis, handler->post, 2, args, &ignore);
+	JSBool ok = JS_CallFunctionValue( handler->cx, handler->jsthis, handler->post, 2, args, &ignore);
+	JSB_PRECONDITION2(ok, handler->cx, , "Error calling collision callback: Post");
 }
 
 static void myCollisionSeparate(cpArbiter *arb, cpSpace *space, void *data)
@@ -230,8 +233,8 @@ static void myCollisionSeparate(cpArbiter *arb, cpSpace *space, void *data)
 	}
 	
 	jsval ignore;
-	JS_CallFunctionValue( handler->cx, handler->jsthis, handler->separate, 2, args, &ignore);
-}
+	JSBool ok = JS_CallFunctionValue( handler->cx, handler->jsthis, handler->separate, 2, args, &ignore);
+	JSB_PRECONDITION2(ok, handler->cx, , "Error calling collision callback: Separate");}
 
 #pragma mark - cpSpace
 

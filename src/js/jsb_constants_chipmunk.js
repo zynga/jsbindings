@@ -49,6 +49,16 @@ cp.BoxShape2 = function(body, box)
 	return new cp.PolyShape(body, verts, cp.vzero);
 };
 
+/// Initialize a box shaped polygon shape.
+cp.BoxShape = function(body, width, height)
+{
+	var hw = width/2;
+	var hh = height/2;
+	
+	return cp.BoxShape2(body, new cp.BB(-hw, -hh, hw, hh));
+};
+
+
 /// Initialize an static body
 cp.BodyStatic = function()
 {
@@ -186,3 +196,37 @@ Object.defineProperties(cp.Space.prototype,
 					}
 				});
 
+// Body properties
+Object.defineProperties(cp.Body.prototype,
+				{
+					"a" : {
+						get : function(){
+                            return this.getAngle();
+                        },
+						set : function(newValue){
+                            this.setAngle(newValue);
+                        },
+						enumerable : true,
+						configurable : true
+					},
+					"w" : {
+						get : function(){
+                            return this.getAngVel();
+                        },
+						set : function(newValue){
+                            this.setAngVel(newValue);
+                        },
+						enumerable : true,
+						configurable : true
+					},
+					"v" : {
+						get : function(){
+                            return this.getVel();
+                        },
+						set : function(newValue){
+                            this.setVel(newValue);
+                        },
+						enumerable : true,
+						configurable : true
+					}
+				});

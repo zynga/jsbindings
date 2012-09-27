@@ -86,7 +86,8 @@
 		unsigned argc=0;
 		
 		JS_GetProperty(_cx, _jsthis, functionName, &fval);
-		JS_CallFunctionValue(_cx, _jsthis, fval, argc, argv, &rval);
+		JSBool ok = JS_CallFunctionValue(_cx, _jsthis, fval, argc, argv, &rval);
+		JSB_PRECONDITION2(ok, _cx, ,"Error calling CCB forwardInvocation");
 	}
 }
 @end
