@@ -219,6 +219,16 @@ Object.defineProperties(cp.Body.prototype,
 						enumerable : true,
 						configurable : true
 					},
+					"p" : {
+						get : function(){
+                            return this.getPos();
+                        },
+						set : function(newValue){
+                            this.setPos(newValue);
+                        },
+						enumerable : true,
+						configurable : true
+					},
 					"v" : {
 						get : function(){
                             return this.getVel();

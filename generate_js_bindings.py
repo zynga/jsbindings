@@ -987,7 +987,7 @@ JSBool %s_%s%s(JSContext *cx, uint32_t argc, jsval *vp) {
 \tJSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 \tJSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
 
-\tJSB_PRECONDITION( proxy && %s[proxy realObj], "Invalid Proxy object");
+\tJSB_PRECONDITION3( proxy && %s[proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
 '''
 
         selector = method['selector']
@@ -1008,15 +1008,15 @@ JSBool %s_%s%s(JSContext *cx, uint32_t argc, jsval *vp) {
             min_args = properties.get('min_args', None)
             max_args = properties.get('max_args', None)
             if min_args != max_args:
-                method_assert_on_arguments = '\tJSB_PRECONDITION( argc >= %d && argc <= %d , "Invalid number of arguments" );\n' % (min_args, max_args)
+                method_assert_on_arguments = '\tJSB_PRECONDITION3( argc >= %d && argc <= %d , cx, JS_FALSE, "Invalid number of arguments" );\n' % (min_args, max_args)
             elif 'variadic_2_array' in properties:
-                method_assert_on_arguments = '\tJSB_PRECONDITION( argc >= 0, "Invalid number of arguments" );\n'
+                method_assert_on_arguments = '\tJSB_PRECONDITION3( argc >= 0, cx, JS_FALSE, "Invalid number of arguments" );\n'
             else:
                 # default
-                method_assert_on_arguments = '\tJSB_PRECONDITION( argc == %d, "Invalid number of arguments" );\n' % num_of_args
+                method_assert_on_arguments = '\tJSB_PRECONDITION3( argc == %d, cx, JS_FALSE, "Invalid number of arguments" );\n' % num_of_args
         except KeyError:
             # No, it only has required arguments
-            method_assert_on_arguments = '\tJSB_PRECONDITION( argc == %d, "Invalid number of arguments" );\n' % num_of_args
+            method_assert_on_arguments = '\tJSB_PRECONDITION3( argc == %d, cx, JS_FALSE, "Invalid number of arguments" );\n' % num_of_args
         self.fd_mm.write(method_assert_on_arguments)
 
     def generate_method_suffix(self):
