@@ -238,5 +238,16 @@ Object.defineProperties(cp.Body.prototype,
                         },
 						enumerable : true,
 						configurable : true
+					},
+					"i" : {
+						get : function(){
+                            return this.getMoment();
+                        },
+						set : function(newValue){
+                            this.setMoment(newValue);
+                        },
+						enumerable : true,
+						configurable : true
 					}
+
 				});

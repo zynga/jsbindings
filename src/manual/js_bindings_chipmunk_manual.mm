@@ -85,6 +85,10 @@ jsval cpBB_to_jsval(JSContext *cx, cpBB bb )
 	return OBJECT_TO_JSVAL(object);
 }
 
+// In order to be compatible with Chipmunk-JS API,
+// this function expect to receive an array of numbers, and not an array of vects
+// OK:  [1,2,  3,4,  5,6]   <- expected
+// BAD: [{x:1, y:2}, {x:3,y:4}, {x:5, y:6}]  <- not expected
 JSBool jsval_to_array_of_cpvect( JSContext *cx, jsval vp, cpVect**verts, int *numVerts)
 {
 	// Parsing sequence
