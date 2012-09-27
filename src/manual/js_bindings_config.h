@@ -32,12 +32,15 @@
  It is recommened to turn it off in Release mode.
  */
 #ifndef JSB_ASSERT_ON_FAIL
-#define JSB_ASSERT_ON_FAIL 1
+#define JSB_ASSERT_ON_FAIL 0
 #endif
 
 
 #if JSB_ASSERT_ON_FAIL
 #define JSB_PRECONDITION( condition, error_msg) do { NSCAssert( condition, [NSString stringWithUTF8String:error_msg] ); } while(0)
+#define JSB_PRECONDITION2( condition, context, ret_value, error_msg) do { NSCAssert( condition, [NSString stringWithUTF8String:error_msg] ); } while(0)
+#define JSB_PRECONDITION3( condition, context, ret_value, error_msg) do { NSCAssert( condition, [NSString stringWithUTF8String:error_msg] ); } while(0)
+
 #else
 #define JSB_PRECONDITION( condition, error_msg) do {							\
 	if( ! (condition) ) {														\
@@ -45,9 +48,22 @@
 		return JS_FALSE;														\
 	}																			\
 } while(0)
+#define JSB_PRECONDITION2( condition, context, ret_value, error_msg) do {		\
+	if( ! (condition) ) {														\
+		printf("jsb: ERROR in %s: %s\n", __FUNCTION__, error_msg);				\
+		JS_ReportPendingException( context );									\
+		return ret_value;														\
+	}																			\
+} while(0)
+#define JSB_PRECONDITION3( condition, context, ret_value, error_msg) do {		\
+	if( ! (condition) ) {														\
+		printf("jsb: ERROR in %s: %s\n", __FUNCTION__, error_msg);				\
+		JS_ReportError( context, error_msg );									\
+		return ret_value;														\
+	}																			\
+} while(0)
 #endif
 
-#endif // __JS_BINDINGS_CONFIG_H
 
 
 /** @def JSB_INCLUDE_NS
@@ -98,3 +114,6 @@
 #ifndef JSB_INCLUDE_COCOSDENSHION
 #define JSB_INCLUDE_COCOSDENSHION 1
 #endif // JSB_INCLUDE_COCOSDENSHION
+
+
+#endif // __JS_BINDINGS_CONFIG_H

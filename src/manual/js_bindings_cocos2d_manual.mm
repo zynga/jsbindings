@@ -775,7 +775,8 @@ JSBool JSB_CCNode_schedule_interval_repeat_delay_(JSContext *cx, uint32_t argc, 
 		jsval rval;
 		jsval jsdt = DOUBLE_TO_JSVAL(dt);
 		
-		JS_CallFunctionValue(cx, jsthis, funcval, 1, &jsdt, &rval);
+		JSBool ok = JS_CallFunctionValue(cx, jsthis, funcval, 1, &jsdt, &rval);
+		JSB_PRECONDITION2(ok, cx, ,"Error calling collision callback: schedule_interval_repeat_delay");
 	};
 	
 	//
