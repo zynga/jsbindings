@@ -1711,7 +1711,7 @@ JSBool %s%s(JSContext *cx, uint32_t argc, jsval *vp) {
         self.fd_mm.write(template_funcname % (PROXY_PREFIX, func_name))
 
         # Number of arguments
-        self.fd_mm.write('\tJSB_PRECONDITION( argc == %d, "Invalid number of arguments" );\n' % num_of_args)
+        self.fd_mm.write('\tJSB_PRECONDITION3( argc == %d, cx, JS_FALSE, "Invalid number of arguments" );\n' % num_of_args)
 
     def generate_function_suffix(self):
         end_template = '''
@@ -1955,7 +1955,7 @@ JSObject* %s_object = NULL;
 // Constructor
 JSBool %s_constructor(JSContext *cx, uint32_t argc, jsval *vp)
 {
-\tJSB_PRECONDITION(argc==%d, "Invalid number of arguments");
+\tJSB_PRECONDITION3(argc==%d, cx, JS_FALSE, "Invalid number of arguments");
 '''
         template_0_post = '''
 \treturn JS_TRUE;
@@ -2010,11 +2010,11 @@ JSBool %s_constructor(JSContext *cx, uint32_t argc, jsval *vp)
 
         except ParseException, e:
             self.fd_mm.write(template_0_pre % (name, num_of_args))
-            self.fd_mm.write('\ASSERT(NO, "Not possible to generate constructor: %s");\n' % str(e))
+            self.fd_mm.write('\tJSB_PRECONDITION3(NO, cx, JS_TRUE, "Not possible to generate constructor: %s");\n' % str(e))
 
         if klass is None:
             self.fd_mm.write(template_0_pre % (name, num_of_args))
-            self.fd_mm.write('\tASSERT(NO, "No constructor");\n')
+            self.fd_mm.write('\tJSB_PRECONDITION3(NO, cx, JS_TRUE, "No constructor");\n')
 
         self.fd_mm.write(template_0_post)
 

@@ -17,7 +17,7 @@
 // Arguments: cpArbiter*
 // Ret value: int
 JSBool JSB_cpArbiterGetCount(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpArbiter* arg0; 
@@ -34,7 +34,7 @@ JSBool JSB_cpArbiterGetCount(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpArbiter*, int
 // Ret value: cpFloat
 JSBool JSB_cpArbiterGetDepth(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpArbiter* arg0; int32_t arg1; 
@@ -52,7 +52,7 @@ JSBool JSB_cpArbiterGetDepth(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpArbiter*
 // Ret value: cpFloat
 JSBool JSB_cpArbiterGetElasticity(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpArbiter* arg0; 
@@ -69,7 +69,7 @@ JSBool JSB_cpArbiterGetElasticity(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpArbiter*
 // Ret value: cpFloat
 JSBool JSB_cpArbiterGetFriction(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpArbiter* arg0; 
@@ -86,7 +86,7 @@ JSBool JSB_cpArbiterGetFriction(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpArbiter*, int
 // Ret value: cpVect
 JSBool JSB_cpArbiterGetNormal(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpArbiter* arg0; int32_t arg1; 
@@ -107,7 +107,7 @@ JSBool JSB_cpArbiterGetNormal(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpArbiter*, int
 // Ret value: cpVect
 JSBool JSB_cpArbiterGetPoint(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpArbiter* arg0; int32_t arg1; 
@@ -128,7 +128,7 @@ JSBool JSB_cpArbiterGetPoint(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpArbiter*
 // Ret value: cpVect
 JSBool JSB_cpArbiterGetSurfaceVelocity(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpArbiter* arg0; 
@@ -148,7 +148,7 @@ JSBool JSB_cpArbiterGetSurfaceVelocity(JSContext *cx, uint32_t argc, jsval *vp) 
 // Arguments: cpArbiter*
 // Ret value: void
 JSBool JSB_cpArbiterIgnore(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpArbiter* arg0; 
@@ -164,7 +164,7 @@ JSBool JSB_cpArbiterIgnore(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpArbiter*
 // Ret value: cpBool
 JSBool JSB_cpArbiterIsFirstContact(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpArbiter* arg0; 
@@ -181,7 +181,7 @@ JSBool JSB_cpArbiterIsFirstContact(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpArbiter*, cpFloat
 // Ret value: void
 JSBool JSB_cpArbiterSetElasticity(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpArbiter* arg0; double arg1; 
@@ -198,7 +198,7 @@ JSBool JSB_cpArbiterSetElasticity(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpArbiter*, cpFloat
 // Ret value: void
 JSBool JSB_cpArbiterSetFriction(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpArbiter* arg0; double arg1; 
@@ -215,7 +215,7 @@ JSBool JSB_cpArbiterSetFriction(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpArbiter*, cpVect
 // Ret value: void
 JSBool JSB_cpArbiterSetSurfaceVelocity(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpArbiter* arg0; cpVect arg1; 
@@ -232,7 +232,7 @@ JSBool JSB_cpArbiterSetSurfaceVelocity(JSContext *cx, uint32_t argc, jsval *vp) 
 // Arguments: cpArbiter*
 // Ret value: cpVect
 JSBool JSB_cpArbiterTotalImpulse(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpArbiter* arg0; 
@@ -252,7 +252,7 @@ JSBool JSB_cpArbiterTotalImpulse(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpArbiter*
 // Ret value: cpVect
 JSBool JSB_cpArbiterTotalImpulseWithFriction(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpArbiter* arg0; 
@@ -272,7 +272,7 @@ JSBool JSB_cpArbiterTotalImpulseWithFriction(JSContext *cx, uint32_t argc, jsval
 // Arguments: cpArbiter*
 // Ret value: cpFloat
 JSBool JSB_cpArbiterTotalKE(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpArbiter* arg0; 
@@ -289,7 +289,7 @@ JSBool JSB_cpArbiterTotalKE(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpFloat, cpFloat
 // Ret value: cpFloat
 JSBool JSB_cpAreaForCircle(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	double arg0; double arg1; 
@@ -307,7 +307,7 @@ JSBool JSB_cpAreaForCircle(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpVect, cpVect, cpFloat
 // Ret value: cpFloat
 JSBool JSB_cpAreaForSegment(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 3, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 3, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpVect arg0; cpVect arg1; double arg2; 
@@ -326,7 +326,7 @@ JSBool JSB_cpAreaForSegment(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpBB
 // Ret value: cpFloat
 JSBool JSB_cpBBArea(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpBB arg0; 
@@ -343,7 +343,7 @@ JSBool JSB_cpBBArea(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpBB, cpVect
 // Ret value: cpVect
 JSBool JSB_cpBBClampVect(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpBB arg0; cpVect arg1; 
@@ -364,7 +364,7 @@ JSBool JSB_cpBBClampVect(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpBB, cpBB
 // Ret value: cpBool
 JSBool JSB_cpBBContainsBB(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpBB arg0; cpBB arg1; 
@@ -382,7 +382,7 @@ JSBool JSB_cpBBContainsBB(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpBB, cpVect
 // Ret value: cpBool
 JSBool JSB_cpBBContainsVect(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpBB arg0; cpVect arg1; 
@@ -400,7 +400,7 @@ JSBool JSB_cpBBContainsVect(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpBB, cpVect
 // Ret value: cpBB
 JSBool JSB_cpBBExpand(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpBB arg0; cpVect arg1; 
@@ -421,7 +421,7 @@ JSBool JSB_cpBBExpand(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpBB, cpBB
 // Ret value: cpBool
 JSBool JSB_cpBBIntersects(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpBB arg0; cpBB arg1; 
@@ -439,7 +439,7 @@ JSBool JSB_cpBBIntersects(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpBB, cpVect, cpVect
 // Ret value: cpBool
 JSBool JSB_cpBBIntersectsSegment(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 3, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 3, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpBB arg0; cpVect arg1; cpVect arg2; 
@@ -458,7 +458,7 @@ JSBool JSB_cpBBIntersectsSegment(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpBB, cpBB
 // Ret value: cpBB
 JSBool JSB_cpBBMerge(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpBB arg0; cpBB arg1; 
@@ -479,7 +479,7 @@ JSBool JSB_cpBBMerge(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpBB, cpBB
 // Ret value: cpFloat
 JSBool JSB_cpBBMergedArea(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpBB arg0; cpBB arg1; 
@@ -497,7 +497,7 @@ JSBool JSB_cpBBMergedArea(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpFloat, cpFloat, cpFloat, cpFloat
 // Ret value: cpBB
 JSBool JSB_cpBBNew(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 4, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 4, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	double arg0; double arg1; double arg2; double arg3; 
@@ -520,7 +520,7 @@ JSBool JSB_cpBBNew(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpVect, cpFloat
 // Ret value: cpBB
 JSBool JSB_cpBBNewForCircle(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpVect arg0; double arg1; 
@@ -541,7 +541,7 @@ JSBool JSB_cpBBNewForCircle(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpBB, cpVect, cpVect
 // Ret value: cpFloat
 JSBool JSB_cpBBSegmentQuery(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 3, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 3, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpBB arg0; cpVect arg1; cpVect arg2; 
@@ -560,7 +560,7 @@ JSBool JSB_cpBBSegmentQuery(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpBB, cpVect
 // Ret value: cpVect
 JSBool JSB_cpBBWrapVect(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpBB arg0; cpVect arg1; 
@@ -581,7 +581,7 @@ JSBool JSB_cpBBWrapVect(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpBody*
 // Ret value: void
 JSBool JSB_cpBodyActivate(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; 
@@ -597,7 +597,7 @@ JSBool JSB_cpBodyActivate(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpBody*, cpShape*
 // Ret value: void
 JSBool JSB_cpBodyActivateStatic(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; cpShape* arg1; 
@@ -614,7 +614,7 @@ JSBool JSB_cpBodyActivateStatic(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: 
 // Ret value: cpBody*
 JSBool JSB_cpBodyAlloc(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 0, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
 	cpBody* ret_val;
 
 	ret_val = cpBodyAlloc( );
@@ -628,7 +628,7 @@ JSBool JSB_cpBodyAlloc(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpBody*, cpVect, cpVect
 // Ret value: void
 JSBool JSB_cpBodyApplyForce(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 3, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 3, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; cpVect arg1; cpVect arg2; 
@@ -646,7 +646,7 @@ JSBool JSB_cpBodyApplyForce(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpBody*, cpVect, cpVect
 // Ret value: void
 JSBool JSB_cpBodyApplyImpulse(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 3, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 3, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; cpVect arg1; cpVect arg2; 
@@ -664,7 +664,7 @@ JSBool JSB_cpBodyApplyImpulse(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpBody*
 // Ret value: void
 JSBool JSB_cpBodyDestroy(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; 
@@ -680,7 +680,7 @@ JSBool JSB_cpBodyDestroy(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpBody*
 // Ret value: void
 JSBool JSB_cpBodyFree(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; 
@@ -696,7 +696,7 @@ JSBool JSB_cpBodyFree(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpBody*
 // Ret value: cpFloat
 JSBool JSB_cpBodyGetAngVel(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; 
@@ -713,7 +713,7 @@ JSBool JSB_cpBodyGetAngVel(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpBody*
 // Ret value: cpFloat
 JSBool JSB_cpBodyGetAngVelLimit(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; 
@@ -730,7 +730,7 @@ JSBool JSB_cpBodyGetAngVelLimit(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpBody*
 // Ret value: cpFloat
 JSBool JSB_cpBodyGetAngle(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; 
@@ -747,7 +747,7 @@ JSBool JSB_cpBodyGetAngle(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpBody*
 // Ret value: cpVect
 JSBool JSB_cpBodyGetForce(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; 
@@ -767,7 +767,7 @@ JSBool JSB_cpBodyGetForce(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpBody*
 // Ret value: cpFloat
 JSBool JSB_cpBodyGetMass(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; 
@@ -784,7 +784,7 @@ JSBool JSB_cpBodyGetMass(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpBody*
 // Ret value: cpFloat
 JSBool JSB_cpBodyGetMoment(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; 
@@ -801,7 +801,7 @@ JSBool JSB_cpBodyGetMoment(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpBody*
 // Ret value: cpVect
 JSBool JSB_cpBodyGetPos(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; 
@@ -821,7 +821,7 @@ JSBool JSB_cpBodyGetPos(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpBody*
 // Ret value: cpVect
 JSBool JSB_cpBodyGetRot(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; 
@@ -841,7 +841,7 @@ JSBool JSB_cpBodyGetRot(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpBody*
 // Ret value: cpSpace*
 JSBool JSB_cpBodyGetSpace(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; 
@@ -861,7 +861,7 @@ JSBool JSB_cpBodyGetSpace(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpBody*
 // Ret value: cpFloat
 JSBool JSB_cpBodyGetTorque(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; 
@@ -878,7 +878,7 @@ JSBool JSB_cpBodyGetTorque(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpBody*
 // Ret value: cpVect
 JSBool JSB_cpBodyGetVel(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; 
@@ -898,7 +898,7 @@ JSBool JSB_cpBodyGetVel(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpBody*, cpVect
 // Ret value: cpVect
 JSBool JSB_cpBodyGetVelAtLocalPoint(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; cpVect arg1; 
@@ -919,7 +919,7 @@ JSBool JSB_cpBodyGetVelAtLocalPoint(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpBody*, cpVect
 // Ret value: cpVect
 JSBool JSB_cpBodyGetVelAtWorldPoint(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; cpVect arg1; 
@@ -940,7 +940,7 @@ JSBool JSB_cpBodyGetVelAtWorldPoint(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpBody*
 // Ret value: cpFloat
 JSBool JSB_cpBodyGetVelLimit(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; 
@@ -957,7 +957,7 @@ JSBool JSB_cpBodyGetVelLimit(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpBody*, cpFloat, cpFloat
 // Ret value: cpBody*
 JSBool JSB_cpBodyInit(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 3, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 3, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; double arg1; double arg2; 
@@ -979,7 +979,7 @@ JSBool JSB_cpBodyInit(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpBody*
 // Ret value: cpBody*
 JSBool JSB_cpBodyInitStatic(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; 
@@ -999,7 +999,7 @@ JSBool JSB_cpBodyInitStatic(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpBody*
 // Ret value: cpBool
 JSBool JSB_cpBodyIsRogue(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; 
@@ -1016,7 +1016,7 @@ JSBool JSB_cpBodyIsRogue(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpBody*
 // Ret value: cpBool
 JSBool JSB_cpBodyIsSleeping(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; 
@@ -1033,7 +1033,7 @@ JSBool JSB_cpBodyIsSleeping(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpBody*
 // Ret value: cpBool
 JSBool JSB_cpBodyIsStatic(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; 
@@ -1050,7 +1050,7 @@ JSBool JSB_cpBodyIsStatic(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpBody*
 // Ret value: cpFloat
 JSBool JSB_cpBodyKineticEnergy(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; 
@@ -1067,7 +1067,7 @@ JSBool JSB_cpBodyKineticEnergy(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpBody*, cpVect
 // Ret value: cpVect
 JSBool JSB_cpBodyLocal2World(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; cpVect arg1; 
@@ -1088,7 +1088,7 @@ JSBool JSB_cpBodyLocal2World(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpFloat, cpFloat
 // Ret value: cpBody*
 JSBool JSB_cpBodyNew(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	double arg0; double arg1; 
@@ -1109,7 +1109,7 @@ JSBool JSB_cpBodyNew(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: 
 // Ret value: cpBody*
 JSBool JSB_cpBodyNewStatic(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 0, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
 	cpBody* ret_val;
 
 	ret_val = cpBodyNewStatic( );
@@ -1123,7 +1123,7 @@ JSBool JSB_cpBodyNewStatic(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpBody*
 // Ret value: void
 JSBool JSB_cpBodyResetForces(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; 
@@ -1139,7 +1139,7 @@ JSBool JSB_cpBodyResetForces(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpBody*, cpFloat
 // Ret value: void
 JSBool JSB_cpBodySetAngVel(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; double arg1; 
@@ -1156,7 +1156,7 @@ JSBool JSB_cpBodySetAngVel(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpBody*, cpFloat
 // Ret value: void
 JSBool JSB_cpBodySetAngVelLimit(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; double arg1; 
@@ -1173,7 +1173,7 @@ JSBool JSB_cpBodySetAngVelLimit(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpBody*, cpFloat
 // Ret value: void
 JSBool JSB_cpBodySetAngle(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; double arg1; 
@@ -1190,7 +1190,7 @@ JSBool JSB_cpBodySetAngle(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpBody*, cpVect
 // Ret value: void
 JSBool JSB_cpBodySetForce(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; cpVect arg1; 
@@ -1207,7 +1207,7 @@ JSBool JSB_cpBodySetForce(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpBody*, cpFloat
 // Ret value: void
 JSBool JSB_cpBodySetMass(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; double arg1; 
@@ -1224,7 +1224,7 @@ JSBool JSB_cpBodySetMass(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpBody*, cpFloat
 // Ret value: void
 JSBool JSB_cpBodySetMoment(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; double arg1; 
@@ -1241,7 +1241,7 @@ JSBool JSB_cpBodySetMoment(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpBody*, cpVect
 // Ret value: void
 JSBool JSB_cpBodySetPos(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; cpVect arg1; 
@@ -1258,7 +1258,7 @@ JSBool JSB_cpBodySetPos(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpBody*, cpFloat
 // Ret value: void
 JSBool JSB_cpBodySetTorque(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; double arg1; 
@@ -1275,7 +1275,7 @@ JSBool JSB_cpBodySetTorque(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpBody*, cpVect
 // Ret value: void
 JSBool JSB_cpBodySetVel(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; cpVect arg1; 
@@ -1292,7 +1292,7 @@ JSBool JSB_cpBodySetVel(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpBody*, cpFloat
 // Ret value: void
 JSBool JSB_cpBodySetVelLimit(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; double arg1; 
@@ -1309,7 +1309,7 @@ JSBool JSB_cpBodySetVelLimit(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpBody*
 // Ret value: void
 JSBool JSB_cpBodySleep(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; 
@@ -1325,7 +1325,7 @@ JSBool JSB_cpBodySleep(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpBody*, cpBody*
 // Ret value: void
 JSBool JSB_cpBodySleepWithGroup(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; cpBody* arg1; 
@@ -1342,7 +1342,7 @@ JSBool JSB_cpBodySleepWithGroup(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpBody*, cpFloat
 // Ret value: void
 JSBool JSB_cpBodyUpdatePosition(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; double arg1; 
@@ -1359,7 +1359,7 @@ JSBool JSB_cpBodyUpdatePosition(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpBody*, cpVect, cpFloat, cpFloat
 // Ret value: void
 JSBool JSB_cpBodyUpdateVelocity(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 4, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 4, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; cpVect arg1; double arg2; double arg3; 
@@ -1378,7 +1378,7 @@ JSBool JSB_cpBodyUpdateVelocity(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpBody*, cpVect
 // Ret value: cpVect
 JSBool JSB_cpBodyWorld2Local(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; cpVect arg1; 
@@ -1399,7 +1399,7 @@ JSBool JSB_cpBodyWorld2Local(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpBody*, cpFloat, cpFloat
 // Ret value: cpShape*
 JSBool JSB_cpBoxShapeNew(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 3, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 3, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; double arg1; double arg2; 
@@ -1421,7 +1421,7 @@ JSBool JSB_cpBoxShapeNew(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpBody*, cpBB
 // Ret value: cpShape*
 JSBool JSB_cpBoxShapeNew2(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; cpBB arg1; 
@@ -1442,7 +1442,7 @@ JSBool JSB_cpBoxShapeNew2(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpShape*
 // Ret value: cpVect
 JSBool JSB_cpCircleShapeGetOffset(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpShape* arg0; 
@@ -1462,7 +1462,7 @@ JSBool JSB_cpCircleShapeGetOffset(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpShape*
 // Ret value: cpFloat
 JSBool JSB_cpCircleShapeGetRadius(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpShape* arg0; 
@@ -1479,7 +1479,7 @@ JSBool JSB_cpCircleShapeGetRadius(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpBody*, cpFloat, cpVect
 // Ret value: cpShape*
 JSBool JSB_cpCircleShapeNew(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 3, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 3, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; double arg1; cpVect arg2; 
@@ -1501,7 +1501,7 @@ JSBool JSB_cpCircleShapeNew(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpConstraint*
 // Ret value: void
 JSBool JSB_cpConstraintActivateBodies(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; 
@@ -1517,7 +1517,7 @@ JSBool JSB_cpConstraintActivateBodies(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpConstraint*
 // Ret value: void
 JSBool JSB_cpConstraintDestroy(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; 
@@ -1533,7 +1533,7 @@ JSBool JSB_cpConstraintDestroy(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpConstraint*
 // Ret value: void
 JSBool JSB_cpConstraintFree(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; 
@@ -1549,7 +1549,7 @@ JSBool JSB_cpConstraintFree(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpConstraint*
 // Ret value: cpBody*
 JSBool JSB_cpConstraintGetA(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; 
@@ -1569,7 +1569,7 @@ JSBool JSB_cpConstraintGetA(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpConstraint*
 // Ret value: cpBody*
 JSBool JSB_cpConstraintGetB(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; 
@@ -1589,7 +1589,7 @@ JSBool JSB_cpConstraintGetB(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpConstraint*
 // Ret value: cpFloat
 JSBool JSB_cpConstraintGetErrorBias(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; 
@@ -1606,7 +1606,7 @@ JSBool JSB_cpConstraintGetErrorBias(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpConstraint*
 // Ret value: cpFloat
 JSBool JSB_cpConstraintGetImpulse(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; 
@@ -1623,7 +1623,7 @@ JSBool JSB_cpConstraintGetImpulse(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpConstraint*
 // Ret value: cpFloat
 JSBool JSB_cpConstraintGetMaxBias(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; 
@@ -1640,7 +1640,7 @@ JSBool JSB_cpConstraintGetMaxBias(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpConstraint*
 // Ret value: cpFloat
 JSBool JSB_cpConstraintGetMaxForce(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; 
@@ -1657,7 +1657,7 @@ JSBool JSB_cpConstraintGetMaxForce(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpConstraint*
 // Ret value: cpSpace*
 JSBool JSB_cpConstraintGetSpace(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; 
@@ -1677,7 +1677,7 @@ JSBool JSB_cpConstraintGetSpace(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpConstraint*, cpFloat
 // Ret value: void
 JSBool JSB_cpConstraintSetErrorBias(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; double arg1; 
@@ -1694,7 +1694,7 @@ JSBool JSB_cpConstraintSetErrorBias(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpConstraint*, cpFloat
 // Ret value: void
 JSBool JSB_cpConstraintSetMaxBias(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; double arg1; 
@@ -1711,7 +1711,7 @@ JSBool JSB_cpConstraintSetMaxBias(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpConstraint*, cpFloat
 // Ret value: void
 JSBool JSB_cpConstraintSetMaxForce(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; double arg1; 
@@ -1728,7 +1728,7 @@ JSBool JSB_cpConstraintSetMaxForce(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpConstraint*
 // Ret value: cpFloat
 JSBool JSB_cpDampedRotarySpringGetDamping(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; 
@@ -1745,7 +1745,7 @@ JSBool JSB_cpDampedRotarySpringGetDamping(JSContext *cx, uint32_t argc, jsval *v
 // Arguments: cpConstraint*
 // Ret value: cpFloat
 JSBool JSB_cpDampedRotarySpringGetRestAngle(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; 
@@ -1762,7 +1762,7 @@ JSBool JSB_cpDampedRotarySpringGetRestAngle(JSContext *cx, uint32_t argc, jsval 
 // Arguments: cpConstraint*
 // Ret value: cpFloat
 JSBool JSB_cpDampedRotarySpringGetStiffness(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; 
@@ -1779,7 +1779,7 @@ JSBool JSB_cpDampedRotarySpringGetStiffness(JSContext *cx, uint32_t argc, jsval 
 // Arguments: cpBody*, cpBody*, cpFloat, cpFloat, cpFloat
 // Ret value: cpConstraint*
 JSBool JSB_cpDampedRotarySpringNew(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 5, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 5, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; cpBody* arg1; double arg2; double arg3; double arg4; 
@@ -1803,7 +1803,7 @@ JSBool JSB_cpDampedRotarySpringNew(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpConstraint*, cpFloat
 // Ret value: void
 JSBool JSB_cpDampedRotarySpringSetDamping(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; double arg1; 
@@ -1820,7 +1820,7 @@ JSBool JSB_cpDampedRotarySpringSetDamping(JSContext *cx, uint32_t argc, jsval *v
 // Arguments: cpConstraint*, cpFloat
 // Ret value: void
 JSBool JSB_cpDampedRotarySpringSetRestAngle(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; double arg1; 
@@ -1837,7 +1837,7 @@ JSBool JSB_cpDampedRotarySpringSetRestAngle(JSContext *cx, uint32_t argc, jsval 
 // Arguments: cpConstraint*, cpFloat
 // Ret value: void
 JSBool JSB_cpDampedRotarySpringSetStiffness(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; double arg1; 
@@ -1854,7 +1854,7 @@ JSBool JSB_cpDampedRotarySpringSetStiffness(JSContext *cx, uint32_t argc, jsval 
 // Arguments: cpConstraint*
 // Ret value: cpVect
 JSBool JSB_cpDampedSpringGetAnchr1(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; 
@@ -1874,7 +1874,7 @@ JSBool JSB_cpDampedSpringGetAnchr1(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpConstraint*
 // Ret value: cpVect
 JSBool JSB_cpDampedSpringGetAnchr2(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; 
@@ -1894,7 +1894,7 @@ JSBool JSB_cpDampedSpringGetAnchr2(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpConstraint*
 // Ret value: cpFloat
 JSBool JSB_cpDampedSpringGetDamping(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; 
@@ -1911,7 +1911,7 @@ JSBool JSB_cpDampedSpringGetDamping(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpConstraint*
 // Ret value: cpFloat
 JSBool JSB_cpDampedSpringGetRestLength(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; 
@@ -1928,7 +1928,7 @@ JSBool JSB_cpDampedSpringGetRestLength(JSContext *cx, uint32_t argc, jsval *vp) 
 // Arguments: cpConstraint*
 // Ret value: cpFloat
 JSBool JSB_cpDampedSpringGetStiffness(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; 
@@ -1945,7 +1945,7 @@ JSBool JSB_cpDampedSpringGetStiffness(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpBody*, cpBody*, cpVect, cpVect, cpFloat, cpFloat, cpFloat
 // Ret value: cpConstraint*
 JSBool JSB_cpDampedSpringNew(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 7, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 7, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; cpBody* arg1; cpVect arg2; cpVect arg3; double arg4; double arg5; double arg6; 
@@ -1971,7 +1971,7 @@ JSBool JSB_cpDampedSpringNew(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpConstraint*, cpVect
 // Ret value: void
 JSBool JSB_cpDampedSpringSetAnchr1(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; cpVect arg1; 
@@ -1988,7 +1988,7 @@ JSBool JSB_cpDampedSpringSetAnchr1(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpConstraint*, cpVect
 // Ret value: void
 JSBool JSB_cpDampedSpringSetAnchr2(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; cpVect arg1; 
@@ -2005,7 +2005,7 @@ JSBool JSB_cpDampedSpringSetAnchr2(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpConstraint*, cpFloat
 // Ret value: void
 JSBool JSB_cpDampedSpringSetDamping(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; double arg1; 
@@ -2022,7 +2022,7 @@ JSBool JSB_cpDampedSpringSetDamping(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpConstraint*, cpFloat
 // Ret value: void
 JSBool JSB_cpDampedSpringSetRestLength(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; double arg1; 
@@ -2039,7 +2039,7 @@ JSBool JSB_cpDampedSpringSetRestLength(JSContext *cx, uint32_t argc, jsval *vp) 
 // Arguments: cpConstraint*, cpFloat
 // Ret value: void
 JSBool JSB_cpDampedSpringSetStiffness(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; double arg1; 
@@ -2056,7 +2056,7 @@ JSBool JSB_cpDampedSpringSetStiffness(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpConstraint*
 // Ret value: cpFloat
 JSBool JSB_cpGearJointGetPhase(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; 
@@ -2073,7 +2073,7 @@ JSBool JSB_cpGearJointGetPhase(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpConstraint*
 // Ret value: cpFloat
 JSBool JSB_cpGearJointGetRatio(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; 
@@ -2090,7 +2090,7 @@ JSBool JSB_cpGearJointGetRatio(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpBody*, cpBody*, cpFloat, cpFloat
 // Ret value: cpConstraint*
 JSBool JSB_cpGearJointNew(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 4, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 4, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; cpBody* arg1; double arg2; double arg3; 
@@ -2113,7 +2113,7 @@ JSBool JSB_cpGearJointNew(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpConstraint*, cpFloat
 // Ret value: void
 JSBool JSB_cpGearJointSetPhase(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; double arg1; 
@@ -2130,7 +2130,7 @@ JSBool JSB_cpGearJointSetPhase(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpConstraint*, cpFloat
 // Ret value: void
 JSBool JSB_cpGearJointSetRatio(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; double arg1; 
@@ -2147,7 +2147,7 @@ JSBool JSB_cpGearJointSetRatio(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpConstraint*
 // Ret value: cpVect
 JSBool JSB_cpGrooveJointGetAnchr2(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; 
@@ -2167,7 +2167,7 @@ JSBool JSB_cpGrooveJointGetAnchr2(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpConstraint*
 // Ret value: cpVect
 JSBool JSB_cpGrooveJointGetGrooveA(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; 
@@ -2187,7 +2187,7 @@ JSBool JSB_cpGrooveJointGetGrooveA(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpConstraint*
 // Ret value: cpVect
 JSBool JSB_cpGrooveJointGetGrooveB(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; 
@@ -2207,7 +2207,7 @@ JSBool JSB_cpGrooveJointGetGrooveB(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpBody*, cpBody*, cpVect, cpVect, cpVect
 // Ret value: cpConstraint*
 JSBool JSB_cpGrooveJointNew(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 5, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 5, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; cpBody* arg1; cpVect arg2; cpVect arg3; cpVect arg4; 
@@ -2231,7 +2231,7 @@ JSBool JSB_cpGrooveJointNew(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpConstraint*, cpVect
 // Ret value: void
 JSBool JSB_cpGrooveJointSetAnchr2(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; cpVect arg1; 
@@ -2248,7 +2248,7 @@ JSBool JSB_cpGrooveJointSetAnchr2(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpConstraint*, cpVect
 // Ret value: void
 JSBool JSB_cpGrooveJointSetGrooveA(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; cpVect arg1; 
@@ -2265,7 +2265,7 @@ JSBool JSB_cpGrooveJointSetGrooveA(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpConstraint*, cpVect
 // Ret value: void
 JSBool JSB_cpGrooveJointSetGrooveB(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; cpVect arg1; 
@@ -2282,7 +2282,7 @@ JSBool JSB_cpGrooveJointSetGrooveB(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: 
 // Ret value: void
 JSBool JSB_cpInitChipmunk(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 0, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
 
 	cpInitChipmunk( );
 	JS_SET_RVAL(cx, vp, JSVAL_VOID);
@@ -2292,7 +2292,7 @@ JSBool JSB_cpInitChipmunk(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpFloat, cpFloat, cpFloat
 // Ret value: cpFloat
 JSBool JSB_cpMomentForBox(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 3, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 3, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	double arg0; double arg1; double arg2; 
@@ -2311,7 +2311,7 @@ JSBool JSB_cpMomentForBox(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpFloat, cpBB
 // Ret value: cpFloat
 JSBool JSB_cpMomentForBox2(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	double arg0; cpBB arg1; 
@@ -2329,7 +2329,7 @@ JSBool JSB_cpMomentForBox2(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpFloat, cpFloat, cpFloat, cpVect
 // Ret value: cpFloat
 JSBool JSB_cpMomentForCircle(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 4, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 4, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	double arg0; double arg1; double arg2; cpVect arg3; 
@@ -2349,7 +2349,7 @@ JSBool JSB_cpMomentForCircle(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpFloat, cpVect, cpVect
 // Ret value: cpFloat
 JSBool JSB_cpMomentForSegment(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 3, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 3, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	double arg0; cpVect arg1; cpVect arg2; 
@@ -2368,7 +2368,7 @@ JSBool JSB_cpMomentForSegment(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpConstraint*
 // Ret value: cpVect
 JSBool JSB_cpPinJointGetAnchr1(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; 
@@ -2388,7 +2388,7 @@ JSBool JSB_cpPinJointGetAnchr1(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpConstraint*
 // Ret value: cpVect
 JSBool JSB_cpPinJointGetAnchr2(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; 
@@ -2408,7 +2408,7 @@ JSBool JSB_cpPinJointGetAnchr2(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpConstraint*
 // Ret value: cpFloat
 JSBool JSB_cpPinJointGetDist(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; 
@@ -2425,7 +2425,7 @@ JSBool JSB_cpPinJointGetDist(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpBody*, cpBody*, cpVect, cpVect
 // Ret value: cpConstraint*
 JSBool JSB_cpPinJointNew(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 4, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 4, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; cpBody* arg1; cpVect arg2; cpVect arg3; 
@@ -2448,7 +2448,7 @@ JSBool JSB_cpPinJointNew(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpConstraint*, cpVect
 // Ret value: void
 JSBool JSB_cpPinJointSetAnchr1(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; cpVect arg1; 
@@ -2465,7 +2465,7 @@ JSBool JSB_cpPinJointSetAnchr1(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpConstraint*, cpVect
 // Ret value: void
 JSBool JSB_cpPinJointSetAnchr2(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; cpVect arg1; 
@@ -2482,7 +2482,7 @@ JSBool JSB_cpPinJointSetAnchr2(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpConstraint*, cpFloat
 // Ret value: void
 JSBool JSB_cpPinJointSetDist(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; double arg1; 
@@ -2499,7 +2499,7 @@ JSBool JSB_cpPinJointSetDist(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpConstraint*
 // Ret value: cpVect
 JSBool JSB_cpPivotJointGetAnchr1(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; 
@@ -2519,7 +2519,7 @@ JSBool JSB_cpPivotJointGetAnchr1(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpConstraint*
 // Ret value: cpVect
 JSBool JSB_cpPivotJointGetAnchr2(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; 
@@ -2539,7 +2539,7 @@ JSBool JSB_cpPivotJointGetAnchr2(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpBody*, cpBody*, cpVect
 // Ret value: cpConstraint*
 JSBool JSB_cpPivotJointNew(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 3, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 3, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; cpBody* arg1; cpVect arg2; 
@@ -2561,7 +2561,7 @@ JSBool JSB_cpPivotJointNew(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpBody*, cpBody*, cpVect, cpVect
 // Ret value: cpConstraint*
 JSBool JSB_cpPivotJointNew2(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 4, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 4, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; cpBody* arg1; cpVect arg2; cpVect arg3; 
@@ -2584,7 +2584,7 @@ JSBool JSB_cpPivotJointNew2(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpConstraint*, cpVect
 // Ret value: void
 JSBool JSB_cpPivotJointSetAnchr1(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; cpVect arg1; 
@@ -2601,7 +2601,7 @@ JSBool JSB_cpPivotJointSetAnchr1(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpConstraint*, cpVect
 // Ret value: void
 JSBool JSB_cpPivotJointSetAnchr2(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; cpVect arg1; 
@@ -2618,7 +2618,7 @@ JSBool JSB_cpPivotJointSetAnchr2(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpShape*
 // Ret value: int
 JSBool JSB_cpPolyShapeGetNumVerts(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpShape* arg0; 
@@ -2635,7 +2635,7 @@ JSBool JSB_cpPolyShapeGetNumVerts(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpShape*, int
 // Ret value: cpVect
 JSBool JSB_cpPolyShapeGetVert(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpShape* arg0; int32_t arg1; 
@@ -2656,7 +2656,7 @@ JSBool JSB_cpPolyShapeGetVert(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpConstraint*
 // Ret value: cpFloat
 JSBool JSB_cpRatchetJointGetAngle(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; 
@@ -2673,7 +2673,7 @@ JSBool JSB_cpRatchetJointGetAngle(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpConstraint*
 // Ret value: cpFloat
 JSBool JSB_cpRatchetJointGetPhase(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; 
@@ -2690,7 +2690,7 @@ JSBool JSB_cpRatchetJointGetPhase(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpConstraint*
 // Ret value: cpFloat
 JSBool JSB_cpRatchetJointGetRatchet(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; 
@@ -2707,7 +2707,7 @@ JSBool JSB_cpRatchetJointGetRatchet(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpBody*, cpBody*, cpFloat, cpFloat
 // Ret value: cpConstraint*
 JSBool JSB_cpRatchetJointNew(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 4, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 4, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; cpBody* arg1; double arg2; double arg3; 
@@ -2730,7 +2730,7 @@ JSBool JSB_cpRatchetJointNew(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpConstraint*, cpFloat
 // Ret value: void
 JSBool JSB_cpRatchetJointSetAngle(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; double arg1; 
@@ -2747,7 +2747,7 @@ JSBool JSB_cpRatchetJointSetAngle(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpConstraint*, cpFloat
 // Ret value: void
 JSBool JSB_cpRatchetJointSetPhase(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; double arg1; 
@@ -2764,7 +2764,7 @@ JSBool JSB_cpRatchetJointSetPhase(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpConstraint*, cpFloat
 // Ret value: void
 JSBool JSB_cpRatchetJointSetRatchet(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; double arg1; 
@@ -2781,7 +2781,7 @@ JSBool JSB_cpRatchetJointSetRatchet(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: 
 // Ret value: void
 JSBool JSB_cpResetShapeIdCounter(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 0, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
 
 	cpResetShapeIdCounter( );
 	JS_SET_RVAL(cx, vp, JSVAL_VOID);
@@ -2791,7 +2791,7 @@ JSBool JSB_cpResetShapeIdCounter(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpConstraint*
 // Ret value: cpFloat
 JSBool JSB_cpRotaryLimitJointGetMax(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; 
@@ -2808,7 +2808,7 @@ JSBool JSB_cpRotaryLimitJointGetMax(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpConstraint*
 // Ret value: cpFloat
 JSBool JSB_cpRotaryLimitJointGetMin(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; 
@@ -2825,7 +2825,7 @@ JSBool JSB_cpRotaryLimitJointGetMin(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpBody*, cpBody*, cpFloat, cpFloat
 // Ret value: cpConstraint*
 JSBool JSB_cpRotaryLimitJointNew(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 4, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 4, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; cpBody* arg1; double arg2; double arg3; 
@@ -2848,7 +2848,7 @@ JSBool JSB_cpRotaryLimitJointNew(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpConstraint*, cpFloat
 // Ret value: void
 JSBool JSB_cpRotaryLimitJointSetMax(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; double arg1; 
@@ -2865,7 +2865,7 @@ JSBool JSB_cpRotaryLimitJointSetMax(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpConstraint*, cpFloat
 // Ret value: void
 JSBool JSB_cpRotaryLimitJointSetMin(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; double arg1; 
@@ -2882,7 +2882,7 @@ JSBool JSB_cpRotaryLimitJointSetMin(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpShape*
 // Ret value: cpVect
 JSBool JSB_cpSegmentShapeGetA(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpShape* arg0; 
@@ -2902,7 +2902,7 @@ JSBool JSB_cpSegmentShapeGetA(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpShape*
 // Ret value: cpVect
 JSBool JSB_cpSegmentShapeGetB(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpShape* arg0; 
@@ -2922,7 +2922,7 @@ JSBool JSB_cpSegmentShapeGetB(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpShape*
 // Ret value: cpVect
 JSBool JSB_cpSegmentShapeGetNormal(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpShape* arg0; 
@@ -2942,7 +2942,7 @@ JSBool JSB_cpSegmentShapeGetNormal(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpShape*
 // Ret value: cpFloat
 JSBool JSB_cpSegmentShapeGetRadius(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpShape* arg0; 
@@ -2959,7 +2959,7 @@ JSBool JSB_cpSegmentShapeGetRadius(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpBody*, cpVect, cpVect, cpFloat
 // Ret value: cpShape*
 JSBool JSB_cpSegmentShapeNew(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 4, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 4, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; cpVect arg1; cpVect arg2; double arg3; 
@@ -2982,7 +2982,7 @@ JSBool JSB_cpSegmentShapeNew(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpShape*, cpVect, cpVect
 // Ret value: void
 JSBool JSB_cpSegmentShapeSetNeighbors(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 3, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 3, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpShape* arg0; cpVect arg1; cpVect arg2; 
@@ -3000,7 +3000,7 @@ JSBool JSB_cpSegmentShapeSetNeighbors(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpShape*
 // Ret value: cpBB
 JSBool JSB_cpShapeCacheBB(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpShape* arg0; 
@@ -3020,7 +3020,7 @@ JSBool JSB_cpShapeCacheBB(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpShape*
 // Ret value: void
 JSBool JSB_cpShapeDestroy(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpShape* arg0; 
@@ -3036,7 +3036,7 @@ JSBool JSB_cpShapeDestroy(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpShape*
 // Ret value: void
 JSBool JSB_cpShapeFree(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpShape* arg0; 
@@ -3052,7 +3052,7 @@ JSBool JSB_cpShapeFree(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpShape*
 // Ret value: cpBB
 JSBool JSB_cpShapeGetBB(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpShape* arg0; 
@@ -3072,7 +3072,7 @@ JSBool JSB_cpShapeGetBB(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpShape*
 // Ret value: cpBody*
 JSBool JSB_cpShapeGetBody(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpShape* arg0; 
@@ -3092,7 +3092,7 @@ JSBool JSB_cpShapeGetBody(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpShape*
 // Ret value: cpCollisionType
 JSBool JSB_cpShapeGetCollisionType(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpShape* arg0; 
@@ -3112,7 +3112,7 @@ JSBool JSB_cpShapeGetCollisionType(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpShape*
 // Ret value: cpFloat
 JSBool JSB_cpShapeGetElasticity(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpShape* arg0; 
@@ -3129,7 +3129,7 @@ JSBool JSB_cpShapeGetElasticity(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpShape*
 // Ret value: cpFloat
 JSBool JSB_cpShapeGetFriction(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpShape* arg0; 
@@ -3146,7 +3146,7 @@ JSBool JSB_cpShapeGetFriction(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpShape*
 // Ret value: cpGroup
 JSBool JSB_cpShapeGetGroup(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpShape* arg0; 
@@ -3166,7 +3166,7 @@ JSBool JSB_cpShapeGetGroup(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpShape*
 // Ret value: cpLayers
 JSBool JSB_cpShapeGetLayers(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpShape* arg0; 
@@ -3183,7 +3183,7 @@ JSBool JSB_cpShapeGetLayers(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpShape*
 // Ret value: cpBool
 JSBool JSB_cpShapeGetSensor(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpShape* arg0; 
@@ -3200,7 +3200,7 @@ JSBool JSB_cpShapeGetSensor(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpShape*
 // Ret value: cpSpace*
 JSBool JSB_cpShapeGetSpace(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpShape* arg0; 
@@ -3220,7 +3220,7 @@ JSBool JSB_cpShapeGetSpace(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpShape*
 // Ret value: cpVect
 JSBool JSB_cpShapeGetSurfaceVelocity(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpShape* arg0; 
@@ -3240,7 +3240,7 @@ JSBool JSB_cpShapeGetSurfaceVelocity(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpShape*, cpVect
 // Ret value: cpBool
 JSBool JSB_cpShapePointQuery(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpShape* arg0; cpVect arg1; 
@@ -3258,7 +3258,7 @@ JSBool JSB_cpShapePointQuery(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpShape*, cpBody*
 // Ret value: void
 JSBool JSB_cpShapeSetBody(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpShape* arg0; cpBody* arg1; 
@@ -3275,7 +3275,7 @@ JSBool JSB_cpShapeSetBody(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpShape*, cpCollisionType
 // Ret value: void
 JSBool JSB_cpShapeSetCollisionType(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpShape* arg0; cpCollisionType arg1; 
@@ -3292,7 +3292,7 @@ JSBool JSB_cpShapeSetCollisionType(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpShape*, cpFloat
 // Ret value: void
 JSBool JSB_cpShapeSetElasticity(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpShape* arg0; double arg1; 
@@ -3309,7 +3309,7 @@ JSBool JSB_cpShapeSetElasticity(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpShape*, cpFloat
 // Ret value: void
 JSBool JSB_cpShapeSetFriction(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpShape* arg0; double arg1; 
@@ -3326,7 +3326,7 @@ JSBool JSB_cpShapeSetFriction(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpShape*, cpGroup
 // Ret value: void
 JSBool JSB_cpShapeSetGroup(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpShape* arg0; cpGroup arg1; 
@@ -3343,7 +3343,7 @@ JSBool JSB_cpShapeSetGroup(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpShape*, cpLayers
 // Ret value: void
 JSBool JSB_cpShapeSetLayers(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpShape* arg0; uint32_t arg1; 
@@ -3360,7 +3360,7 @@ JSBool JSB_cpShapeSetLayers(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpShape*, cpBool
 // Ret value: void
 JSBool JSB_cpShapeSetSensor(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpShape* arg0; int32_t arg1; 
@@ -3377,7 +3377,7 @@ JSBool JSB_cpShapeSetSensor(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpShape*, cpVect
 // Ret value: void
 JSBool JSB_cpShapeSetSurfaceVelocity(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpShape* arg0; cpVect arg1; 
@@ -3394,7 +3394,7 @@ JSBool JSB_cpShapeSetSurfaceVelocity(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpShape*, cpVect, cpVect
 // Ret value: cpBB
 JSBool JSB_cpShapeUpdate(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 3, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 3, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpShape* arg0; cpVect arg1; cpVect arg2; 
@@ -3416,7 +3416,7 @@ JSBool JSB_cpShapeUpdate(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpConstraint*
 // Ret value: cpFloat
 JSBool JSB_cpSimpleMotorGetRate(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; 
@@ -3433,7 +3433,7 @@ JSBool JSB_cpSimpleMotorGetRate(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpBody*, cpBody*, cpFloat
 // Ret value: cpConstraint*
 JSBool JSB_cpSimpleMotorNew(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 3, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 3, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; cpBody* arg1; double arg2; 
@@ -3455,7 +3455,7 @@ JSBool JSB_cpSimpleMotorNew(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpConstraint*, cpFloat
 // Ret value: void
 JSBool JSB_cpSimpleMotorSetRate(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; double arg1; 
@@ -3472,7 +3472,7 @@ JSBool JSB_cpSimpleMotorSetRate(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpConstraint*
 // Ret value: cpVect
 JSBool JSB_cpSlideJointGetAnchr1(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; 
@@ -3492,7 +3492,7 @@ JSBool JSB_cpSlideJointGetAnchr1(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpConstraint*
 // Ret value: cpVect
 JSBool JSB_cpSlideJointGetAnchr2(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; 
@@ -3512,7 +3512,7 @@ JSBool JSB_cpSlideJointGetAnchr2(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpConstraint*
 // Ret value: cpFloat
 JSBool JSB_cpSlideJointGetMax(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; 
@@ -3529,7 +3529,7 @@ JSBool JSB_cpSlideJointGetMax(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpConstraint*
 // Ret value: cpFloat
 JSBool JSB_cpSlideJointGetMin(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; 
@@ -3546,7 +3546,7 @@ JSBool JSB_cpSlideJointGetMin(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpBody*, cpBody*, cpVect, cpVect, cpFloat, cpFloat
 // Ret value: cpConstraint*
 JSBool JSB_cpSlideJointNew(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 6, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 6, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpBody* arg0; cpBody* arg1; cpVect arg2; cpVect arg3; double arg4; double arg5; 
@@ -3571,7 +3571,7 @@ JSBool JSB_cpSlideJointNew(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpConstraint*, cpVect
 // Ret value: void
 JSBool JSB_cpSlideJointSetAnchr1(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; cpVect arg1; 
@@ -3588,7 +3588,7 @@ JSBool JSB_cpSlideJointSetAnchr1(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpConstraint*, cpVect
 // Ret value: void
 JSBool JSB_cpSlideJointSetAnchr2(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; cpVect arg1; 
@@ -3605,7 +3605,7 @@ JSBool JSB_cpSlideJointSetAnchr2(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpConstraint*, cpFloat
 // Ret value: void
 JSBool JSB_cpSlideJointSetMax(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; double arg1; 
@@ -3622,7 +3622,7 @@ JSBool JSB_cpSlideJointSetMax(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpConstraint*, cpFloat
 // Ret value: void
 JSBool JSB_cpSlideJointSetMin(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpConstraint* arg0; double arg1; 
@@ -3639,7 +3639,7 @@ JSBool JSB_cpSlideJointSetMin(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpSpace*, cpShape*
 // Ret value: void
 JSBool JSB_cpSpaceActivateShapesTouchingShape(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; cpShape* arg1; 
@@ -3656,7 +3656,7 @@ JSBool JSB_cpSpaceActivateShapesTouchingShape(JSContext *cx, uint32_t argc, jsva
 // Arguments: cpSpace*, cpBody*
 // Ret value: cpBody*
 JSBool JSB_cpSpaceAddBody(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; cpBody* arg1; 
@@ -3677,7 +3677,7 @@ JSBool JSB_cpSpaceAddBody(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpSpace*, cpConstraint*
 // Ret value: cpConstraint*
 JSBool JSB_cpSpaceAddConstraint(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; cpConstraint* arg1; 
@@ -3698,7 +3698,7 @@ JSBool JSB_cpSpaceAddConstraint(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpSpace*, cpShape*
 // Ret value: cpShape*
 JSBool JSB_cpSpaceAddShape(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; cpShape* arg1; 
@@ -3719,7 +3719,7 @@ JSBool JSB_cpSpaceAddShape(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpSpace*, cpShape*
 // Ret value: cpShape*
 JSBool JSB_cpSpaceAddStaticShape(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; cpShape* arg1; 
@@ -3740,7 +3740,7 @@ JSBool JSB_cpSpaceAddStaticShape(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: 
 // Ret value: cpSpace*
 JSBool JSB_cpSpaceAlloc(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 0, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
 	cpSpace* ret_val;
 
 	ret_val = cpSpaceAlloc( );
@@ -3754,7 +3754,7 @@ JSBool JSB_cpSpaceAlloc(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpSpace*, cpBody*
 // Ret value: cpBool
 JSBool JSB_cpSpaceContainsBody(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; cpBody* arg1; 
@@ -3772,7 +3772,7 @@ JSBool JSB_cpSpaceContainsBody(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpSpace*, cpConstraint*
 // Ret value: cpBool
 JSBool JSB_cpSpaceContainsConstraint(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; cpConstraint* arg1; 
@@ -3790,7 +3790,7 @@ JSBool JSB_cpSpaceContainsConstraint(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpSpace*, cpShape*
 // Ret value: cpBool
 JSBool JSB_cpSpaceContainsShape(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; cpShape* arg1; 
@@ -3808,7 +3808,7 @@ JSBool JSB_cpSpaceContainsShape(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpSpace*
 // Ret value: void
 JSBool JSB_cpSpaceDestroy(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; 
@@ -3824,7 +3824,7 @@ JSBool JSB_cpSpaceDestroy(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpSpace*
 // Ret value: void
 JSBool JSB_cpSpaceFree(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; 
@@ -3840,7 +3840,7 @@ JSBool JSB_cpSpaceFree(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpSpace*
 // Ret value: cpFloat
 JSBool JSB_cpSpaceGetCollisionBias(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; 
@@ -3857,7 +3857,7 @@ JSBool JSB_cpSpaceGetCollisionBias(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpSpace*
 // Ret value: cpTimestamp
 JSBool JSB_cpSpaceGetCollisionPersistence(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; 
@@ -3874,7 +3874,7 @@ JSBool JSB_cpSpaceGetCollisionPersistence(JSContext *cx, uint32_t argc, jsval *v
 // Arguments: cpSpace*
 // Ret value: cpFloat
 JSBool JSB_cpSpaceGetCollisionSlop(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; 
@@ -3891,7 +3891,7 @@ JSBool JSB_cpSpaceGetCollisionSlop(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpSpace*
 // Ret value: cpFloat
 JSBool JSB_cpSpaceGetCurrentTimeStep(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; 
@@ -3908,7 +3908,7 @@ JSBool JSB_cpSpaceGetCurrentTimeStep(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpSpace*
 // Ret value: cpFloat
 JSBool JSB_cpSpaceGetDamping(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; 
@@ -3925,7 +3925,7 @@ JSBool JSB_cpSpaceGetDamping(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpSpace*
 // Ret value: cpBool
 JSBool JSB_cpSpaceGetEnableContactGraph(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; 
@@ -3942,7 +3942,7 @@ JSBool JSB_cpSpaceGetEnableContactGraph(JSContext *cx, uint32_t argc, jsval *vp)
 // Arguments: cpSpace*
 // Ret value: cpVect
 JSBool JSB_cpSpaceGetGravity(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; 
@@ -3962,7 +3962,7 @@ JSBool JSB_cpSpaceGetGravity(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpSpace*
 // Ret value: cpFloat
 JSBool JSB_cpSpaceGetIdleSpeedThreshold(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; 
@@ -3979,7 +3979,7 @@ JSBool JSB_cpSpaceGetIdleSpeedThreshold(JSContext *cx, uint32_t argc, jsval *vp)
 // Arguments: cpSpace*
 // Ret value: int
 JSBool JSB_cpSpaceGetIterations(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; 
@@ -3996,7 +3996,7 @@ JSBool JSB_cpSpaceGetIterations(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpSpace*
 // Ret value: cpFloat
 JSBool JSB_cpSpaceGetSleepTimeThreshold(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; 
@@ -4013,7 +4013,7 @@ JSBool JSB_cpSpaceGetSleepTimeThreshold(JSContext *cx, uint32_t argc, jsval *vp)
 // Arguments: cpSpace*
 // Ret value: cpBody*
 JSBool JSB_cpSpaceGetStaticBody(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; 
@@ -4033,7 +4033,7 @@ JSBool JSB_cpSpaceGetStaticBody(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpSpace*
 // Ret value: cpSpace*
 JSBool JSB_cpSpaceInit(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; 
@@ -4053,7 +4053,7 @@ JSBool JSB_cpSpaceInit(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpSpace*
 // Ret value: cpBool
 JSBool JSB_cpSpaceIsLocked(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; 
@@ -4070,7 +4070,7 @@ JSBool JSB_cpSpaceIsLocked(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: 
 // Ret value: cpSpace*
 JSBool JSB_cpSpaceNew(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 0, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
 	cpSpace* ret_val;
 
 	ret_val = cpSpaceNew( );
@@ -4084,7 +4084,7 @@ JSBool JSB_cpSpaceNew(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpSpace*, cpVect, cpLayers, cpGroup
 // Ret value: cpShape*
 JSBool JSB_cpSpacePointQueryFirst(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 4, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 4, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; cpVect arg1; uint32_t arg2; cpGroup arg3; 
@@ -4107,7 +4107,7 @@ JSBool JSB_cpSpacePointQueryFirst(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpSpace*, cpShape*
 // Ret value: void
 JSBool JSB_cpSpaceReindexShape(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; cpShape* arg1; 
@@ -4124,7 +4124,7 @@ JSBool JSB_cpSpaceReindexShape(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpSpace*, cpBody*
 // Ret value: void
 JSBool JSB_cpSpaceReindexShapesForBody(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; cpBody* arg1; 
@@ -4141,7 +4141,7 @@ JSBool JSB_cpSpaceReindexShapesForBody(JSContext *cx, uint32_t argc, jsval *vp) 
 // Arguments: cpSpace*
 // Ret value: void
 JSBool JSB_cpSpaceReindexStatic(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; 
@@ -4157,7 +4157,7 @@ JSBool JSB_cpSpaceReindexStatic(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpSpace*, cpBody*
 // Ret value: void
 JSBool JSB_cpSpaceRemoveBody(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; cpBody* arg1; 
@@ -4174,7 +4174,7 @@ JSBool JSB_cpSpaceRemoveBody(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpSpace*, cpConstraint*
 // Ret value: void
 JSBool JSB_cpSpaceRemoveConstraint(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; cpConstraint* arg1; 
@@ -4191,7 +4191,7 @@ JSBool JSB_cpSpaceRemoveConstraint(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpSpace*, cpShape*
 // Ret value: void
 JSBool JSB_cpSpaceRemoveShape(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; cpShape* arg1; 
@@ -4208,7 +4208,7 @@ JSBool JSB_cpSpaceRemoveShape(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpSpace*, cpShape*
 // Ret value: void
 JSBool JSB_cpSpaceRemoveStaticShape(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; cpShape* arg1; 
@@ -4225,7 +4225,7 @@ JSBool JSB_cpSpaceRemoveStaticShape(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpSpace*, cpFloat
 // Ret value: void
 JSBool JSB_cpSpaceSetCollisionBias(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; double arg1; 
@@ -4242,7 +4242,7 @@ JSBool JSB_cpSpaceSetCollisionBias(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpSpace*, cpTimestamp
 // Ret value: void
 JSBool JSB_cpSpaceSetCollisionPersistence(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; uint32_t arg1; 
@@ -4259,7 +4259,7 @@ JSBool JSB_cpSpaceSetCollisionPersistence(JSContext *cx, uint32_t argc, jsval *v
 // Arguments: cpSpace*, cpFloat
 // Ret value: void
 JSBool JSB_cpSpaceSetCollisionSlop(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; double arg1; 
@@ -4276,7 +4276,7 @@ JSBool JSB_cpSpaceSetCollisionSlop(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpSpace*, cpFloat
 // Ret value: void
 JSBool JSB_cpSpaceSetDamping(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; double arg1; 
@@ -4293,7 +4293,7 @@ JSBool JSB_cpSpaceSetDamping(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpSpace*, cpBool
 // Ret value: void
 JSBool JSB_cpSpaceSetEnableContactGraph(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; int32_t arg1; 
@@ -4310,7 +4310,7 @@ JSBool JSB_cpSpaceSetEnableContactGraph(JSContext *cx, uint32_t argc, jsval *vp)
 // Arguments: cpSpace*, cpVect
 // Ret value: void
 JSBool JSB_cpSpaceSetGravity(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; cpVect arg1; 
@@ -4327,7 +4327,7 @@ JSBool JSB_cpSpaceSetGravity(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpSpace*, cpFloat
 // Ret value: void
 JSBool JSB_cpSpaceSetIdleSpeedThreshold(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; double arg1; 
@@ -4344,7 +4344,7 @@ JSBool JSB_cpSpaceSetIdleSpeedThreshold(JSContext *cx, uint32_t argc, jsval *vp)
 // Arguments: cpSpace*, int
 // Ret value: void
 JSBool JSB_cpSpaceSetIterations(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; int32_t arg1; 
@@ -4361,7 +4361,7 @@ JSBool JSB_cpSpaceSetIterations(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpSpace*, cpFloat
 // Ret value: void
 JSBool JSB_cpSpaceSetSleepTimeThreshold(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; double arg1; 
@@ -4378,7 +4378,7 @@ JSBool JSB_cpSpaceSetSleepTimeThreshold(JSContext *cx, uint32_t argc, jsval *vp)
 // Arguments: cpSpace*, cpFloat
 // Ret value: void
 JSBool JSB_cpSpaceStep(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; double arg1; 
@@ -4395,7 +4395,7 @@ JSBool JSB_cpSpaceStep(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpSpace*, cpFloat, int
 // Ret value: void
 JSBool JSB_cpSpaceUseSpatialHash(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 3, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 3, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpSpace* arg0; double arg1; int32_t arg2; 
@@ -4413,7 +4413,7 @@ JSBool JSB_cpSpaceUseSpatialHash(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpFloat
 // Ret value: cpFloat
 JSBool JSB_cpfabs(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	double arg0; 
@@ -4430,7 +4430,7 @@ JSBool JSB_cpfabs(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpFloat, cpFloat, cpFloat
 // Ret value: cpFloat
 JSBool JSB_cpfclamp(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 3, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 3, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	double arg0; double arg1; double arg2; 
@@ -4449,7 +4449,7 @@ JSBool JSB_cpfclamp(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpFloat
 // Ret value: cpFloat
 JSBool JSB_cpfclamp01(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	double arg0; 
@@ -4466,7 +4466,7 @@ JSBool JSB_cpfclamp01(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpFloat, cpFloat, cpFloat
 // Ret value: cpFloat
 JSBool JSB_cpflerp(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 3, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 3, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	double arg0; double arg1; double arg2; 
@@ -4485,7 +4485,7 @@ JSBool JSB_cpflerp(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpFloat, cpFloat, cpFloat
 // Ret value: cpFloat
 JSBool JSB_cpflerpconst(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 3, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 3, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	double arg0; double arg1; double arg2; 
@@ -4504,7 +4504,7 @@ JSBool JSB_cpflerpconst(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpFloat, cpFloat
 // Ret value: cpFloat
 JSBool JSB_cpfmax(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	double arg0; double arg1; 
@@ -4522,7 +4522,7 @@ JSBool JSB_cpfmax(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpFloat, cpFloat
 // Ret value: cpFloat
 JSBool JSB_cpfmin(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	double arg0; double arg1; 
@@ -4540,7 +4540,7 @@ JSBool JSB_cpfmin(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpVect, cpVect
 // Ret value: cpVect
 JSBool JSB_cpvadd(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpVect arg0; cpVect arg1; 
@@ -4561,7 +4561,7 @@ JSBool JSB_cpvadd(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpVect, cpFloat
 // Ret value: cpVect
 JSBool JSB_cpvclamp(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpVect arg0; double arg1; 
@@ -4582,7 +4582,7 @@ JSBool JSB_cpvclamp(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpVect, cpVect
 // Ret value: cpFloat
 JSBool JSB_cpvcross(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpVect arg0; cpVect arg1; 
@@ -4600,7 +4600,7 @@ JSBool JSB_cpvcross(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpVect, cpVect
 // Ret value: cpFloat
 JSBool JSB_cpvdist(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpVect arg0; cpVect arg1; 
@@ -4618,7 +4618,7 @@ JSBool JSB_cpvdist(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpVect, cpVect
 // Ret value: cpFloat
 JSBool JSB_cpvdistsq(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpVect arg0; cpVect arg1; 
@@ -4636,7 +4636,7 @@ JSBool JSB_cpvdistsq(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpVect, cpVect
 // Ret value: cpFloat
 JSBool JSB_cpvdot(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpVect arg0; cpVect arg1; 
@@ -4654,7 +4654,7 @@ JSBool JSB_cpvdot(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpVect, cpVect
 // Ret value: cpBool
 JSBool JSB_cpveql(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpVect arg0; cpVect arg1; 
@@ -4672,7 +4672,7 @@ JSBool JSB_cpveql(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpFloat
 // Ret value: cpVect
 JSBool JSB_cpvforangle(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	double arg0; 
@@ -4692,7 +4692,7 @@ JSBool JSB_cpvforangle(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpVect
 // Ret value: cpFloat
 JSBool JSB_cpvlength(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpVect arg0; 
@@ -4709,7 +4709,7 @@ JSBool JSB_cpvlength(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpVect
 // Ret value: cpFloat
 JSBool JSB_cpvlengthsq(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpVect arg0; 
@@ -4726,7 +4726,7 @@ JSBool JSB_cpvlengthsq(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpVect, cpVect, cpFloat
 // Ret value: cpVect
 JSBool JSB_cpvlerp(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 3, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 3, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpVect arg0; cpVect arg1; double arg2; 
@@ -4748,7 +4748,7 @@ JSBool JSB_cpvlerp(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpVect, cpVect, cpFloat
 // Ret value: cpVect
 JSBool JSB_cpvlerpconst(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 3, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 3, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpVect arg0; cpVect arg1; double arg2; 
@@ -4770,7 +4770,7 @@ JSBool JSB_cpvlerpconst(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpVect, cpFloat
 // Ret value: cpVect
 JSBool JSB_cpvmult(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpVect arg0; double arg1; 
@@ -4791,7 +4791,7 @@ JSBool JSB_cpvmult(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpVect, cpVect, cpFloat
 // Ret value: cpBool
 JSBool JSB_cpvnear(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 3, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 3, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpVect arg0; cpVect arg1; double arg2; 
@@ -4810,7 +4810,7 @@ JSBool JSB_cpvnear(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpVect
 // Ret value: cpVect
 JSBool JSB_cpvneg(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpVect arg0; 
@@ -4830,7 +4830,7 @@ JSBool JSB_cpvneg(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpVect
 // Ret value: cpVect
 JSBool JSB_cpvnormalize(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpVect arg0; 
@@ -4850,7 +4850,7 @@ JSBool JSB_cpvnormalize(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpVect
 // Ret value: cpVect
 JSBool JSB_cpvnormalize_safe(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpVect arg0; 
@@ -4870,7 +4870,7 @@ JSBool JSB_cpvnormalize_safe(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpVect
 // Ret value: cpVect
 JSBool JSB_cpvperp(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpVect arg0; 
@@ -4890,7 +4890,7 @@ JSBool JSB_cpvperp(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpVect, cpVect
 // Ret value: cpVect
 JSBool JSB_cpvproject(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpVect arg0; cpVect arg1; 
@@ -4911,7 +4911,7 @@ JSBool JSB_cpvproject(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpVect, cpVect
 // Ret value: cpVect
 JSBool JSB_cpvrotate(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpVect arg0; cpVect arg1; 
@@ -4932,7 +4932,7 @@ JSBool JSB_cpvrotate(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpVect
 // Ret value: cpVect
 JSBool JSB_cpvrperp(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpVect arg0; 
@@ -4952,7 +4952,7 @@ JSBool JSB_cpvrperp(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpVect, cpVect, cpFloat
 // Ret value: cpVect
 JSBool JSB_cpvslerp(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 3, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 3, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpVect arg0; cpVect arg1; double arg2; 
@@ -4974,7 +4974,7 @@ JSBool JSB_cpvslerp(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpVect, cpVect, cpFloat
 // Ret value: cpVect
 JSBool JSB_cpvslerpconst(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 3, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 3, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpVect arg0; cpVect arg1; double arg2; 
@@ -4996,7 +4996,7 @@ JSBool JSB_cpvslerpconst(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpVect, cpVect
 // Ret value: cpVect
 JSBool JSB_cpvsub(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpVect arg0; cpVect arg1; 
@@ -5017,7 +5017,7 @@ JSBool JSB_cpvsub(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpVect
 // Ret value: cpFloat
 JSBool JSB_cpvtoangle(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpVect arg0; 
@@ -5034,7 +5034,7 @@ JSBool JSB_cpvtoangle(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: cpVect, cpVect
 // Ret value: cpVect
 JSBool JSB_cpvunrotate(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	cpVect arg0; cpVect arg1; 
