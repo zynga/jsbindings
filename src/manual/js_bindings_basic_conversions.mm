@@ -198,7 +198,7 @@ JSBool jsvals_variadic_to_NSArray( JSContext *cx, jsval *vp, int argc, NSArray**
 JSBool jsval_to_block_1( JSContext *cx, jsval vp, JSObject *jsthis, js_block *ret)
 {
 	JSFunction *func = JS_ValueToFunction(cx, vp );
-	JSB_PRECONDITION( func, "Error converting value to function");
+	JSB_PRECONDITION2( func, cx, JS_FALSE, "Error converting value to function");
 	
 	js_block block = ^(id sender) {
 
@@ -216,7 +216,7 @@ JSBool jsval_to_block_1( JSContext *cx, jsval vp, JSObject *jsthis, js_block *re
 JSBool jsval_to_block_2( JSContext *cx, jsval vp, JSObject *jsthis, jsval arg, js_block *ret)
 {
 	JSFunction *func = JS_ValueToFunction(cx, vp );
-	JSB_PRECONDITION( func, "Error converting value to function");
+	JSB_PRECONDITION2( func, cx, JS_FALSE, "Error converting value to function");
 		
 	js_block block = ^(id sender) {
 		
