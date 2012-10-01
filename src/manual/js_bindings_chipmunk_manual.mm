@@ -278,7 +278,7 @@ JSBool __jsb_cpSpace_addCollisionHandler(JSContext *cx, jsval *vp, jsval *argvp,
 //	ok &= JS_ValueToObject(cx, *argvp++, &handler->jsthis );
 	handler->jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	
-	handler->begin =  *argvp++;
+	handler->begin = *argvp++;
 	handler->pre = *argvp++;
 	handler->post = *argvp++;
 	handler->separate = *argvp++;
@@ -288,14 +288,14 @@ JSBool __jsb_cpSpace_addCollisionHandler(JSContext *cx, jsval *vp, jsval *argvp,
 	// Object Oriented API ?
 	handler->is_oo = is_oo;
 	
-	if( ! JSVAL_IS_NULL(handler->begin) )
-		JS_AddNamedValueRoot(cx, &handler->begin, "begin collision_handler");
-	if( ! JSVAL_IS_NULL(handler->pre) )
-		JS_AddNamedValueRoot(cx, &handler->pre, "pre collision_handler");
-	if( ! JSVAL_IS_NULL(handler->post) )
-		JS_AddNamedValueRoot(cx, &handler->post, "post collision_handler");
-	if( ! JSVAL_IS_NULL(handler->separate) )
-		JS_AddNamedValueRoot(cx, &handler->separate, "separate collision_handler");
+//	if( ! JSVAL_IS_NULL(handler->begin) )
+//		JS_AddNamedValueRoot(cx, &handler->begin, "begin collision_handler");
+//	if( ! JSVAL_IS_NULL(handler->pre) )
+//		JS_AddNamedValueRoot(cx, &handler->pre, "pre collision_handler");
+//	if( ! JSVAL_IS_NULL(handler->post) )
+//		JS_AddNamedValueRoot(cx, &handler->post, "post collision_handler");
+//	if( ! JSVAL_IS_NULL(handler->separate) )
+//		JS_AddNamedValueRoot(cx, &handler->separate, "separate collision_handler");
 	
 	handler->cx = cx;
 	
@@ -378,14 +378,14 @@ JSBool __jsb_cpSpace_removeCollisionHandler(JSContext *cx, jsval *vp, jsval *arg
     if( hashElement ) {
 		
 		// unroot it
-		if( ! JSVAL_IS_NULL(hashElement->begin) )
-			JS_RemoveValueRoot(cx, &hashElement->begin);
-		if( ! JSVAL_IS_NULL(hashElement->pre) )
-			JS_RemoveValueRoot(cx, &hashElement->pre);
-		if( ! JSVAL_IS_NULL(hashElement->post) )
-			JS_RemoveValueRoot(cx, &hashElement->post);
-		if( ! JSVAL_IS_NULL(hashElement->separate) )
-			JS_RemoveValueRoot(cx, &hashElement->separate);
+//		if( ! JSVAL_IS_NULL(hashElement->begin) )
+//			JS_RemoveValueRoot(cx, &hashElement->begin);
+//		if( ! JSVAL_IS_NULL(hashElement->pre) )
+//			JS_RemoveValueRoot(cx, &hashElement->pre);
+//		if( ! JSVAL_IS_NULL(hashElement->post) )
+//			JS_RemoveValueRoot(cx, &hashElement->post);
+//		if( ! JSVAL_IS_NULL(hashElement->separate) )
+//			JS_RemoveValueRoot(cx, &hashElement->separate);
 		
 		HASH_DEL( collision_handler_hash, hashElement );
 		free( hashElement );

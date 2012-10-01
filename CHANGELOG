@@ -5,6 +5,8 @@ version 0.3 -
 	- Added missing functions to bindings:
 		- cpAreaForPoly, cpCentroidForPoly, cpMomentForPoly, cpPolysShapeNew
 - [NEW] Better macros to report errors: JSB_PRECONDITION2() & JSB_PRECONDITION3()
+- [NEW] Possibility to generate files compatible with cpp
+- [FIX] Conversions: longlong and 64-bit long are represented by strings (and not an array of two elements)
 
 version 0.2 - XX-Sept-2012 
 - [FIX] config file: only include cocos2d ios on iOS and cocos2d osx on OS X

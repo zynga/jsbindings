@@ -40,12 +40,19 @@
 #define JSB_PRECONDITION( condition, error_msg) do { NSCAssert( condition, [NSString stringWithUTF8String:error_msg] ); } while(0)
 #define JSB_PRECONDITION2( condition, context, ret_value, error_msg) do { NSCAssert( condition, [NSString stringWithUTF8String:error_msg] ); } while(0)
 #define JSB_PRECONDITION3( condition, context, ret_value, error_msg) do { NSCAssert( condition, [NSString stringWithUTF8String:error_msg] ); } while(0)
+#define ASSERT( condition, error_msg) do { NSCAssert( condition, [NSString stringWithUTF8String:error_msg] ); } while(0)
 
 #else
 #define JSB_PRECONDITION( condition, error_msg) do {							\
 	if( ! (condition) ) {														\
 		printf("jsb: ERROR in %s: %s\n", __FUNCTION__, error_msg);				\
 		return JS_FALSE;														\
+	}																			\
+} while(0)
+#define ASSERT( condition, error_msg) do {							\
+	if( ! (condition) ) {														\
+		printf("jsb: ERROR in %s: %s\n", __FUNCTION__, error_msg);				\
+		return false;														\
 	}																			\
 } while(0)
 #define JSB_PRECONDITION2( condition, context, ret_value, error_msg) do {		\
@@ -62,8 +69,26 @@
 		return ret_value;														\
 	}																			\
 } while(0)
+#define JSB_PRECONDITION( condition, error_msg) do {							\
+	if( ! (condition) ) {														\
+		printf("jsb: ERROR in %s: %s\n", __FUNCTION__, error_msg);				\
+		return JS_FALSE;														\
+	}																			\
+} while(0)
 #endif
 
+
+
+/** @def JSB_REPRESENT_LONGLONG_AS_STR
+ When JSB_REPRESENT_LONGLONG_AS_STR is defined, the long long will be represented as JS strings.
+ Otherwise they will be represented as an array of two intengers.
+ It is needed to to use an special representation since there are no 64-bit integers in JS.
+ Representing the long long as string could be a bit slower, but it is easier to debug from JS.
+ Enabled by default.
+ */
+#ifndef JSB_REPRESENT_LONGLONG_AS_STR
+#define JSB_REPRESENT_LONGLONG_AS_STR 1
+#endif // JSB_REPRESENT_LONGLONG_AS_STR
 
 
 /** @def JSB_INCLUDE_NS
