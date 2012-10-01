@@ -66,14 +66,15 @@ JSBool jsval_to_block_2( JSContext *cx, jsval vp, JSObject *jsthis, jsval arg, j
 
 /** Converts an NSObject into a jsval. It does not creates a new object it the NSObject has already been converted */
 jsval NSObject_to_jsval( JSContext *cx, id object);
+jsval NSString_to_jsval( JSContext *cx, NSString *str);
+jsval NSArray_to_jsval( JSContext *cx, NSArray *array);
+jsval NSSet_to_jsval( JSContext *cx, NSSet *set);
 jsval int_to_jsval( JSContext *cx, int l);
 jsval long_to_jsval( JSContext *cx, long l);
 jsval longlong_to_jsval( JSContext *cx, long long l);
 jsval CGPoint_to_jsval( JSContext *cx, CGPoint p );
 jsval CGSize_to_jsval( JSContext *cx, CGSize s);
 jsval CGRect_to_jsval( JSContext *cx, CGRect r);
-jsval NSArray_to_jsval( JSContext *cx, NSArray *array);
-jsval NSSet_to_jsval( JSContext *cx, NSSet *set);
 /** Converts an C Structure (handle) into a jsval. It returns jsval that will be sued as a "pointer" to the C Structure */
 jsval opaque_to_jsval( JSContext *cx, void* opaque);
 /** Converts an C class (a structure) into a jsval. It does not creates a new object it the C class has already been converted */

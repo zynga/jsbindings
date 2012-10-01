@@ -287,8 +287,8 @@ class JSBGenerate(object):
     # special case: returning String
     def generate_retval_string(self, declared_type, js_type):
         template = '''
-\tJSString *ret_obj = JS_NewStringCopyZ(cx, [ret_val UTF8String]);
-\tJS_SET_RVAL(cx, vp, STRING_TO_JSVAL(ret_obj) );
+\tjsval ret_jsval = NSString_to_jsval( cx, (NSString*) ret_val );
+\tJS_SET_RVAL(cx, vp, ret_jsval );
 '''
         return template
 

@@ -59,28 +59,6 @@ JSObject * get_or_create_jsobject_from_realobj( JSContext *cx, id realObj )
 #pragma mark - jsval to native
 
 // Convert function
-JSBool jsval_to_NSString( JSContext *cx, jsval vp, NSString **ret )
-{
-	JSString *jsstr = JS_ValueToString( cx, vp );
-	JSB_PRECONDITION( jsstr, "invalid string" );
-	
-	// root it
-	vp = STRING_TO_JSVAL(jsstr);
-
-	char *ptr = JS_EncodeString(cx, jsstr);
-	
-	JSB_PRECONDITION(ptr, "Error encoding string");
-	
-	NSString *tmp = [NSString stringWithUTF8String: ptr];
-	
-	JSB_PRECONDITION( tmp, "Error creating string from UTF8");
-	
-	*ret = tmp;
-	JS_free( cx, ptr );
-
-	return JS_TRUE;
-}
-
 JSBool jsval_to_NSObject( JSContext *cx, jsval vp, NSObject **ret )
 {
 	JSObject *jsobj;
@@ -95,6 +73,28 @@ JSBool jsval_to_NSObject( JSContext *cx, jsval vp, NSObject **ret )
 	JSB_PRECONDITION( proxy, "Error obtaining proxy");
 
 	*ret = [proxy realObj];
+	
+	return JS_TRUE;
+}
+
+JSBool jsval_to_NSString( JSContext *cx, jsval vp, NSString **ret )
+{
+	JSString *jsstr = JS_ValueToString( cx, vp );
+	JSB_PRECONDITION( jsstr, "invalid string" );
+	
+	// root it
+	vp = STRING_TO_JSVAL(jsstr);
+	
+	char *ptr = JS_EncodeString(cx, jsstr);
+	
+	JSB_PRECONDITION(ptr, "Error encoding string");
+	
+	NSString *tmp = [NSString stringWithUTF8String: ptr];
+	
+	JSB_PRECONDITION( tmp, "Error creating string from UTF8");
+	
+	*ret = tmp;
+	JS_free( cx, ptr );
 	
 	return JS_TRUE;
 }
@@ -391,6 +391,21 @@ JSBool jsval_to_long( JSContext *cx, jsval vp, long *r )
 
 JSBool jsval_to_longlong( JSContext *cx, jsval vp, long long *r )
 {
+#if JSB_REPRESENT_LONGLONG_AS_STR
+	JSString *jsstr = JS_ValueToString(cx, vp);
+	JSB_PRECONDITION3(jsstr, cx, JS_FALSE, "Error converting value to string");
+
+	char *str = JS_EncodeString(cx, jsstr);
+	JSB_PRECONDITION3(str, cx, JS_FALSE, "Error encoding string");
+
+	char *endptr;
+	long long ret = strtoll(str, &endptr, 10);
+	
+	*r = ret;
+	return JS_TRUE;
+
+#else
+
 	JSObject *tmp_arg;
 	JSBool ok = JS_ValueToObject( cx, vp, &tmp_arg );
 	JSB_PRECONDITION( ok, "Error converting value to object");
@@ -404,6 +419,7 @@ JSBool jsval_to_longlong( JSContext *cx, jsval vp, long long *r )
 	
 	*r = ret;
 	return JS_TRUE;
+#endif // JSB_REPRESENT_LONGLONG_AS_STR
 }
 
 
@@ -423,6 +439,12 @@ jsval NSObject_to_jsval( JSContext *cx, id obj )
 		ret = OBJECT_TO_JSVAL( create_jsobject_from_realobj( cx, [obj class], obj ) );
 	
 	return ret;
+}
+
+jsval NSString_to_jsval( JSContext *cx, NSString *str)
+{
+	JSString *ret_obj = JS_NewStringCopyZ(cx, [str UTF8String]);
+	return STRING_TO_JSVAL(ret_obj);
 }
 
 jsval NSArray_to_jsval( JSContext *cx, NSArray *array)
@@ -544,12 +566,20 @@ jsval long_to_jsval( JSContext *cx, long number )
 
 jsval longlong_to_jsval( JSContext *cx, long long number )
 {
+#if JSB_REPRESENT_LONGLONG_AS_STR
+	char chr[128];
+	snprintf(chr, sizeof(number)-1, "%lld", number);
+	JSString *ret_obj = JS_NewStringCopyZ(cx, chr);
+	return STRING_TO_JSVAL(ret_obj);
+
+#else
 	NSCAssert( sizeof(long long)==8, @"Error!");
 	JSObject *typedArray = JS_NewUint32Array( cx, 2 );
 	uint32_t *buffer = (uint32_t*)JS_GetArrayBufferViewData(typedArray, cx);
 	buffer[0] = number >> 32;
 	buffer[1] = number & 0xffffffff;
-	return OBJECT_TO_JSVAL(typedArray);		
+	return OBJECT_TO_JSVAL(typedArray);
+#endif
 }
 
 

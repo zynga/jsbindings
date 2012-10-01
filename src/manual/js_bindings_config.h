@@ -79,6 +79,18 @@
 
 
 
+/** @def JSB_REPRESENT_LONGLONG_AS_STR
+ When JSB_REPRESENT_LONGLONG_AS_STR is defined, the long long will be represented as JS strings.
+ Otherwise they will be represented as an array of two intengers.
+ It is needed to to use an special representation since there are no 64-bit integers in JS.
+ Representing the long long as string could be a bit slower, but it is easier to debug from JS.
+ Enabled by default.
+ */
+#ifndef JSB_REPRESENT_LONGLONG_AS_STR
+#define JSB_REPRESENT_LONGLONG_AS_STR 1
+#endif // JSB_REPRESENT_LONGLONG_AS_STR
+
+
 /** @def JSB_INCLUDE_NS
  Whether or not it should include JS bindings for basic NS* / Cocoa / CocoaTouch objects.
  It should be enabled in order to support bindings for any objective-c projects.
