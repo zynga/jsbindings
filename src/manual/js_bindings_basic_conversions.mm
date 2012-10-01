@@ -368,17 +368,17 @@ JSBool jsval_to_long( JSContext *cx, jsval vp, long *r )
 #ifdef __LP64__
 	// compatibility check
 	NSCAssert( sizeof(long)==8, @"fatal! Compiler error ?");
-	JSObject *tmp_arg;
-	JSBool ok = JS_ValueToObject( cx, vp, &tmp_arg );
-	JSB_PRECONDITION( ok, "Error converting value to object");
-	JSB_PRECONDITION( tmp_arg && JS_IsTypedArrayObject( tmp_arg, cx ), "Not a TypedArray object");
-	JSB_PRECONDITION( JS_GetTypedArrayByteLength( tmp_arg, cx ) == sizeof(long), "Invalid Typed Array lenght");
+	JSString *jsstr = JS_ValueToString(cx, vp);
+	JSB_PRECONDITION3(jsstr, cx, JS_FALSE, "Error converting value to string");
 	
-	uint32_t* arg_array = (uint32_t*)JS_GetArrayBufferViewData( tmp_arg, cx );
-	long ret =  arg_array[0];
-	ret = ret << 32;
-	ret |= arg_array[1];
+	char *str = JS_EncodeString(cx, jsstr);
+	JSB_PRECONDITION3(str, cx, JS_FALSE, "Error encoding string");
 	
+	char *endptr;
+	long ret = strtol(str, &endptr, 10);
+	
+	*r = ret;
+	return JS_TRUE;	
 #else
 	// compatibility check
 	NSCAssert( sizeof(int)==4, @"fatal!, Compiler error ?");
@@ -553,11 +553,10 @@ jsval long_to_jsval( JSContext *cx, long number )
 #ifdef __LP64__
 	NSCAssert( sizeof(long)==8, @"Error!");
 
-	JSObject *typedArray = JS_NewUint32Array( cx, 2 );
-	uint32_t *buffer = (uint32_t*)JS_GetArrayBufferViewData(typedArray, cx);
-	buffer[0] = number >> 32;
-	buffer[1] = number & 0xffffffff;
-	return OBJECT_TO_JSVAL(typedArray);		
+	char chr[128];
+	snprintf(chr, sizeof(number)-1, "%ld", number);
+	JSString *ret_obj = JS_NewStringCopyZ(cx, chr);
+	return STRING_TO_JSVAL(ret_obj);
 #else
 	NSCAssert( sizeof(int)==4, @"Error!");
 	return INT_TO_JSVAL(number);
