@@ -554,7 +554,7 @@ jsval long_to_jsval( JSContext *cx, long number )
 	NSCAssert( sizeof(long)==8, @"Error!");
 
 	char chr[128];
-	snprintf(chr, sizeof(number)-1, "%ld", number);
+	snprintf(chr, sizeof(chr)-1, "%ld", number);
 	JSString *ret_obj = JS_NewStringCopyZ(cx, chr);
 	return STRING_TO_JSVAL(ret_obj);
 #else
