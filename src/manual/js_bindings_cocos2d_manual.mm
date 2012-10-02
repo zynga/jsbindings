@@ -829,7 +829,7 @@ JSBool JSB_CCNode_unschedule_(JSContext *cx, uint32_t argc, jsval *vp)
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
 	
 	JSB_PRECONDITION3( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
-	JSB_PRECONDITION3( argc != 1, cx, JS_FALSE, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	
 	CCNode *real = (CCNode*) [proxy realObj];
