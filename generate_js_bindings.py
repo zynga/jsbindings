@@ -1495,6 +1495,15 @@ void %s_createClass(JSContext *cx, JSObject* globalObj, const char* name )
             else:
                 instance_method_buffer += entry
 
+
+        # callback methods should be added as well, pointing to a void function.
+        # This will allow calling "this._super()" from JS
+        if class_name in self.callback_methods:
+            for m in self.callback_methods[class_name]:
+                js_name = self.convert_selector_name_to_js(class_name, m)
+                instance_method_buffer += js_fn % (js_name, PROXY_PREFIX + 'do_nothing', 0, '| JSPROP_ENUMERATE')
+
+
         # instance methods entry point
         self.fd_mm.write(functions_template_start)
         self.fd_mm.write(instance_method_buffer)

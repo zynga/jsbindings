@@ -1915,6 +1915,11 @@ void JSB_CCNode_createClass(JSContext *cx, JSObject* globalObj, const char* name
 		JS_FN("visit", JSB_CCNode_visit, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("worldToNodeTransform", JSB_CCNode_worldToNodeTransform, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("getZOrder", JSB_CCNode_zOrder, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("onExitTransitionDidStart", JSB_do_nothing, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("onEnter", JSB_do_nothing, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("update", JSB_do_nothing, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("onEnterTransitionDidFinish", JSB_do_nothing, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("onExit", JSB_do_nothing, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FS_END
 	};
 	static JSFunctionSpec st_funcs[] = {

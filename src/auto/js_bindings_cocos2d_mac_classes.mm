@@ -1786,6 +1786,9 @@ void JSB_CCLayer_createClass(JSContext *cx, JSObject* globalObj, const char* nam
 		JS_FN("ccTouchesCancelledWithEvent", JSB_CCLayer_ccTouchesCancelledWithEvent_, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("ccTouchesEndedWithEvent", JSB_CCLayer_ccTouchesEndedWithEvent_, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("ccTouchesMovedWithEvent", JSB_CCLayer_ccTouchesMovedWithEvent_, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("onMouseUp", JSB_do_nothing, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("onMouseDown", JSB_do_nothing, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("onMouseDragged", JSB_do_nothing, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FS_END
 	};
 	static JSFunctionSpec st_funcs[] = {
