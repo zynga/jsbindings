@@ -717,7 +717,7 @@ class JSBGenerate(object):
                 if optional_args != None and i >= optional_args:
                     self.fd_mm.write('\t}\n')
 
-        self.fd_mm.write('\tJSB_PRECONDITION(ok, "Error processing arguments");\n')
+        self.fd_mm.write('\tJSB_PRECONDITION3(ok, cx, JS_FALSE, "Error processing arguments");\n')
 
 
 #
@@ -1092,7 +1092,7 @@ JSBool %s_%s%s(JSContext *cx, uint32_t argc, jsval *vp) {
                     call_real = self.generate_method_call_to_real_object(properties['calls'][i], i, ret_js_type, args_declared_type, args_js_type, class_name, method_type)
                     self.fd_mm.write('\n\t%sif( argc == %d ) {\n\t%s\n\t}' % (else_str, i, call_real))
                     else_str = 'else '
-            self.fd_mm.write('\n\telse\n\t\tJSB_PRECONDITION(NO, "Error in number of arguments");\n\n')
+            self.fd_mm.write('\n\telse\n\t\tJSB_PRECONDITION3(NO, cx, JS_FALSE, "Error in number of arguments");\n\n')
 
         else:
             call_real = self.generate_method_call_to_real_object(s, num_of_args, ret_js_type, args_declared_type, args_js_type, class_name, method_type)
@@ -1494,6 +1494,15 @@ void %s_createClass(JSContext *cx, JSObject* globalObj, const char* name )
                 class_method_buffer += entry
             else:
                 instance_method_buffer += entry
+
+
+        # callback methods should be added as well, pointing to a void function.
+        # This will allow calling "this._super()" from JS
+        if class_name in self.callback_methods:
+            for m in self.callback_methods[class_name]:
+                js_name = self.convert_selector_name_to_js(class_name, m)
+                instance_method_buffer += js_fn % (js_name, PROXY_PREFIX + 'do_nothing', 0, '| JSPROP_ENUMERATE')
+
 
         # instance methods entry point
         self.fd_mm.write(functions_template_start)

@@ -743,8 +743,8 @@ JSBool JSB_CCNode_schedule_interval_repeat_delay_(JSContext *cx, uint32_t argc, 
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
 	
-	JSB_PRECONDITION( proxy && [proxy realObj], "Invalid Proxy object");
-	JSB_PRECONDITION( argc >=1 && argc <=4, "Invalid number of arguments" );
+	JSB_PRECONDITION3( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
+	JSB_PRECONDITION3( argc >=1 && argc <=4, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 
 	CCNode *real = (CCNode*) [proxy realObj];
@@ -755,8 +755,7 @@ JSBool JSB_CCNode_schedule_interval_repeat_delay_(JSContext *cx, uint32_t argc, 
 	//
 	jsval funcval = *argvp++;
 	JSFunction *func = JS_ValueToFunction(cx, funcval);
-	if(!func)
-		return JS_FALSE;
+	JSB_PRECONDITION3( func, cx, JS_FALSE, "Cannot convert Value to Function");
 
 	NSString *key = nil;
 	JSString *funcname = JS_GetFunctionId(func);
@@ -819,6 +818,44 @@ JSBool JSB_CCNode_schedule_interval_repeat_delay_(JSContext *cx, uint32_t argc, 
 	else if( argc == 4 )
 		[scheduler scheduleBlockForKey:key target:real interval:interval paused:![real isRunning] repeat:repeat delay:delay block:block];
 	
+	JS_SET_RVAL(cx, vp, JSVAL_VOID);
+	return JS_TRUE;
+}
+
+//  func,
+JSBool JSB_CCNode_unschedule_(JSContext *cx, uint32_t argc, jsval *vp)
+{
+	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
+	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
+	
+	JSB_PRECONDITION3( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
+	jsval *argvp = JS_ARGV(cx,vp);
+	
+	CCNode *real = (CCNode*) [proxy realObj];
+	CCScheduler *scheduler = [real scheduler];
+	
+	//
+	// "function"
+	//
+	jsval funcval = *argvp++;
+	JSFunction *func = JS_ValueToFunction(cx, funcval);
+	JSB_PRECONDITION3( func, cx, JS_FALSE, "Cannot convert Value to Function");
+	
+	NSString *key = nil;
+	JSString *funcname = JS_GetFunctionId(func);
+	
+	// named function
+	if( funcname ) {
+		char *key_c = JS_EncodeString(cx, funcname);
+		key = [NSString stringWithUTF8String:key_c];
+	} else {
+		// anonymous function
+		key = [NSString stringWithFormat:@"anonfunc at %p", func];
+	}
+	
+	[scheduler unscheduleBlockForKey:key target:real];
+		
 	JS_SET_RVAL(cx, vp, JSVAL_VOID);
 	return JS_TRUE;
 }
