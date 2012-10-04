@@ -8974,19 +8974,24 @@ JSBool JSB_CCSprite_setVertexRect_(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: NSString*, CGRect
 // Ret value: CCSprite* (o)
 JSBool JSB_CCSprite_spriteWithFile_rect__static(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION3( argc >= 1 && argc <= 2 , cx, JS_FALSE, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc >= 0 && argc <= 2 , cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	NSString* arg0; CGRect arg1; 
 
-	ok &= jsval_to_NSString( cx, *argvp++, &arg0 );
+	if (argc >= 1) {
+		ok &= jsval_to_NSString( cx, *argvp++, &arg0 );
+	}
 	if (argc >= 2) {
 		ok &= jsval_to_CGRect( cx, *argvp++, (CGRect*) &arg1 );
 	}
 	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error processing arguments");
 	CCSprite* ret_val;
 
-	if( argc == 1 ) {
+	if( argc == 0 ) {
+		ret_val = [CCSprite node ];
+	}
+	else if( argc == 1 ) {
 		ret_val = [CCSprite spriteWithFile:(NSString*)arg0  ];
 	}
 	else if( argc == 2 ) {
@@ -32364,19 +32369,24 @@ JSBool JSB_CCPhysicsSprite_setIgnoreBodyRotation_(JSContext *cx, uint32_t argc, 
 // Arguments: NSString*, CGRect
 // Ret value: CCPhysicsSprite* (o)
 JSBool JSB_CCPhysicsSprite_spriteWithFile_rect__static(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION3( argc >= 1 && argc <= 2 , cx, JS_FALSE, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc >= 0 && argc <= 2 , cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	NSString* arg0; CGRect arg1; 
 
-	ok &= jsval_to_NSString( cx, *argvp++, &arg0 );
+	if (argc >= 1) {
+		ok &= jsval_to_NSString( cx, *argvp++, &arg0 );
+	}
 	if (argc >= 2) {
 		ok &= jsval_to_CGRect( cx, *argvp++, (CGRect*) &arg1 );
 	}
 	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error processing arguments");
 	CCPhysicsSprite* ret_val;
 
-	if( argc == 1 ) {
+	if( argc == 0 ) {
+		ret_val = [CCPhysicsSprite node ];
+	}
+	else if( argc == 1 ) {
 		ret_val = [CCPhysicsSprite spriteWithFile:(NSString*)arg0  ];
 	}
 	else if( argc == 2 ) {
