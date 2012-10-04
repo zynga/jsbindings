@@ -26827,7 +26827,7 @@ void JSB_CCOrbitCamera_createClass(JSContext *cx, JSObject* globalObj, const cha
 		JS_FS_END
 	};
 	static JSFunctionSpec st_funcs[] = {
-		JS_FN("actionWithDurationRadiusDeltaRadiusAngleZDeltaAngleZAngleXDeltaAngleX", JSB_CCOrbitCamera_actionWithDuration_radius_deltaRadius_angleZ_deltaAngleZ_angleX_deltaAngleX__static, 7, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("create", JSB_CCOrbitCamera_actionWithDuration_radius_deltaRadius_angleZ_deltaAngleZ_angleX_deltaAngleX__static, 7, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FS_END
 	};
 
