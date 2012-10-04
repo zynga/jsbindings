@@ -1870,6 +1870,7 @@ void JSB_CCNode_createClass(JSContext *cx, JSObject* globalObj, const char* name
 		JS_FN("getScaleX", JSB_CCNode_scaleX, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("getScaleY", JSB_CCNode_scaleY, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("schedule", JSB_CCNode_schedule_interval_repeat_delay_, 4, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("scheduleOnce", JSB_CCNode_scheduleOnce_delay_, 2, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("scheduleUpdate", JSB_CCNode_scheduleUpdate, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("scheduleUpdateWithPriority", JSB_CCNode_scheduleUpdateWithPriority_, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("getScheduler", JSB_CCNode_scheduler, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
@@ -1915,11 +1916,11 @@ void JSB_CCNode_createClass(JSContext *cx, JSObject* globalObj, const char* name
 		JS_FN("visit", JSB_CCNode_visit, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("worldToNodeTransform", JSB_CCNode_worldToNodeTransform, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("getZOrder", JSB_CCNode_zOrder, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
-		JS_FN("onExitTransitionDidStart", JSB_do_nothing, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("onEnter", JSB_do_nothing, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("update", JSB_do_nothing, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
-		JS_FN("onEnterTransitionDidFinish", JSB_do_nothing, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("onExitTransitionDidStart", JSB_do_nothing, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("onExit", JSB_do_nothing, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("onEnterTransitionDidFinish", JSB_do_nothing, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FS_END
 	};
 	static JSFunctionSpec st_funcs[] = {
@@ -1956,38 +1957,22 @@ void JSB_CCNode_createClass(JSContext *cx, JSObject* globalObj, const char* name
 	if( ! CCNode_already_swizzled ) {
 		NSError *error;
 
-		if( ! [CCNode jr_swizzleMethod:@selector(onExitTransitionDidStart) withMethod:@selector(JSHook_onExitTransitionDidStart) error:&error] )
-			NSLog(@"Error swizzling %@", error);
-
 		if( ! [CCNode jr_swizzleMethod:@selector(onEnter) withMethod:@selector(JSHook_onEnter) error:&error] )
 			NSLog(@"Error swizzling %@", error);
 
 		if( ! [CCNode jr_swizzleMethod:@selector(update:) withMethod:@selector(JSHook_update:) error:&error] )
 			NSLog(@"Error swizzling %@", error);
 
-		if( ! [CCNode jr_swizzleMethod:@selector(onEnterTransitionDidFinish) withMethod:@selector(JSHook_onEnterTransitionDidFinish) error:&error] )
+		if( ! [CCNode jr_swizzleMethod:@selector(onExitTransitionDidStart) withMethod:@selector(JSHook_onExitTransitionDidStart) error:&error] )
 			NSLog(@"Error swizzling %@", error);
 
 		if( ! [CCNode jr_swizzleMethod:@selector(onExit) withMethod:@selector(JSHook_onExit) error:&error] )
 			NSLog(@"Error swizzling %@", error);
 
+		if( ! [CCNode jr_swizzleMethod:@selector(onEnterTransitionDidFinish) withMethod:@selector(JSHook_onEnterTransitionDidFinish) error:&error] )
+			NSLog(@"Error swizzling %@", error);
+
 		CCNode_already_swizzled = YES;
-	}
-}
-
--(void) onExitTransitionDidStart
-{
-	if (_jsObj) {
-		JSContext* cx = [[JSBCore sharedInstance] globalContext];
-		JSBool found;
-		JS_HasProperty(cx, _jsObj, "onExitTransitionDidStart", &found);
-		if (found == JS_TRUE) {
-			jsval rval, fval;
-			jsval *argv = NULL; unsigned argc=0;
-
-			JS_GetProperty(cx, _jsObj, "onExitTransitionDidStart", &fval);
-			JS_CallFunctionValue(cx, _jsObj, fval, argc, argv, &rval);
-		}
 	}
 }
 
@@ -2025,17 +2010,17 @@ void JSB_CCNode_createClass(JSContext *cx, JSObject* globalObj, const char* name
 	}
 }
 
--(void) onEnterTransitionDidFinish
+-(void) onExitTransitionDidStart
 {
 	if (_jsObj) {
 		JSContext* cx = [[JSBCore sharedInstance] globalContext];
 		JSBool found;
-		JS_HasProperty(cx, _jsObj, "onEnterTransitionDidFinish", &found);
+		JS_HasProperty(cx, _jsObj, "onExitTransitionDidStart", &found);
 		if (found == JS_TRUE) {
 			jsval rval, fval;
 			jsval *argv = NULL; unsigned argc=0;
 
-			JS_GetProperty(cx, _jsObj, "onEnterTransitionDidFinish", &fval);
+			JS_GetProperty(cx, _jsObj, "onExitTransitionDidStart", &fval);
 			JS_CallFunctionValue(cx, _jsObj, fval, argc, argv, &rval);
 		}
 	}
@@ -2057,17 +2042,24 @@ void JSB_CCNode_createClass(JSContext *cx, JSObject* globalObj, const char* name
 	}
 }
 
+-(void) onEnterTransitionDidFinish
+{
+	if (_jsObj) {
+		JSContext* cx = [[JSBCore sharedInstance] globalContext];
+		JSBool found;
+		JS_HasProperty(cx, _jsObj, "onEnterTransitionDidFinish", &found);
+		if (found == JS_TRUE) {
+			jsval rval, fval;
+			jsval *argv = NULL; unsigned argc=0;
+
+			JS_GetProperty(cx, _jsObj, "onEnterTransitionDidFinish", &fval);
+			JS_CallFunctionValue(cx, _jsObj, fval, argc, argv, &rval);
+		}
+	}
+}
+
 @end
 @implementation CCNode (JSBindings)
-
--(void) JSHook_onExitTransitionDidStart
-{
-	//1st call native, then JS. Order is important
-	[self JSHook_onExitTransitionDidStart];
-	JSB_CCNode *proxy = objc_getAssociatedObject(self, &JSB_association_proxy_key);
-	if( proxy )
-		[proxy onExitTransitionDidStart];
-}
 
 -(void) JSHook_onEnter
 {
@@ -2087,13 +2079,13 @@ void JSB_CCNode_createClass(JSContext *cx, JSObject* globalObj, const char* name
 		[proxy update:delta ];
 }
 
--(void) JSHook_onEnterTransitionDidFinish
+-(void) JSHook_onExitTransitionDidStart
 {
 	//1st call native, then JS. Order is important
-	[self JSHook_onEnterTransitionDidFinish];
+	[self JSHook_onExitTransitionDidStart];
 	JSB_CCNode *proxy = objc_getAssociatedObject(self, &JSB_association_proxy_key);
 	if( proxy )
-		[proxy onEnterTransitionDidFinish];
+		[proxy onExitTransitionDidStart];
 }
 
 -(void) JSHook_onExit
@@ -2103,6 +2095,15 @@ void JSB_CCNode_createClass(JSContext *cx, JSObject* globalObj, const char* name
 	JSB_CCNode *proxy = objc_getAssociatedObject(self, &JSB_association_proxy_key);
 	if( proxy )
 		[proxy onExit];
+}
+
+-(void) JSHook_onEnterTransitionDidFinish
+{
+	//1st call native, then JS. Order is important
+	[self JSHook_onEnterTransitionDidFinish];
+	JSB_CCNode *proxy = objc_getAssociatedObject(self, &JSB_association_proxy_key);
+	if( proxy )
+		[proxy onEnterTransitionDidFinish];
 }
 @end
 
