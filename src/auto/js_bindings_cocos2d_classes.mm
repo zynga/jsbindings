@@ -33163,7 +33163,7 @@ void JSB_CCAnimation_createClass(JSContext *cx, JSObject* globalObj, const char*
 	};
 	static JSFunctionSpec funcs[] = {
 		JS_FN("addSpriteFrame", JSB_CCAnimation_addSpriteFrame_, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
-		JS_FN("addSpriteFrameWithFilename", JSB_CCAnimation_addSpriteFrameWithFilename_, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("addSpriteFrameWithFile", JSB_CCAnimation_addSpriteFrameWithFilename_, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("addSpriteFrameWithTextureRect", JSB_CCAnimation_addSpriteFrameWithTexture_rect_, 2, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("getDelayPerUnit", JSB_CCAnimation_delayPerUnit, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("getDuration", JSB_CCAnimation_duration, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
