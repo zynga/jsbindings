@@ -737,7 +737,63 @@ JSBool JSB_CCDrawNode_drawPolyWithVerts_count_fillColor_borderWidth_borderColor_
 
 #pragma mark - CCNode
 
-// this, func, [interval], [repeat], [delay]
+// func, delay
+JSBool JSB_CCNode_scheduleOnce_delay_(JSContext *cx, uint32_t argc, jsval *vp)
+{
+	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
+	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
+
+	JSB_PRECONDITION3( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
+	jsval *argvp = JS_ARGV(cx,vp);
+
+	CCNode *real = (CCNode*) [proxy realObj];
+	CCScheduler *scheduler = [real scheduler];
+
+	//
+	// "function"
+	//
+	jsval funcval = *argvp++;
+	JSFunction *func = JS_ValueToFunction(cx, funcval);
+	JSB_PRECONDITION3( func, cx, JS_FALSE, "Cannot convert Value to Function");
+
+	NSString *key = nil;
+	JSString *funcname = JS_GetFunctionId(func);
+
+	// named function
+	if( funcname ) {
+		char *key_c = JS_EncodeString(cx, funcname);
+		key = [NSString stringWithUTF8String:key_c];
+	} else {
+		// anonymous function
+		key = [NSString stringWithFormat:@"anonfunc at %p", func];
+	}
+
+	void (^block)(ccTime dt) = ^(ccTime dt) {
+		
+		jsval rval;
+		jsval jsdt = DOUBLE_TO_JSVAL(dt);
+		
+		JSBool ok = JS_CallFunctionValue(cx, jsthis, funcval, 1, &jsdt, &rval);
+		JSB_PRECONDITION2(ok, cx, ,"Error calling collision callback: schedule_interval_repeat_delay");
+	};
+
+	//
+	// delay
+	//
+	double delay;
+	JSBool ok = JS_ValueToNumber(cx, *argvp++, &delay );
+	JSB_PRECONDITION3(ok, cx, JS_FALSE,"Error converting jsval to number");
+
+
+	[scheduler scheduleBlockForKey:key target:real interval:0 paused:![real isRunning] repeat:0 delay:delay block:block];
+
+
+	JS_SET_RVAL(cx, vp, JSVAL_VOID);
+	return JS_TRUE;
+}
+
+// func, [interval], [repeat], [delay]
 JSBool JSB_CCNode_schedule_interval_repeat_delay_(JSContext *cx, uint32_t argc, jsval *vp)
 {
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
@@ -778,32 +834,31 @@ JSBool JSB_CCNode_schedule_interval_repeat_delay_(JSContext *cx, uint32_t argc, 
 		JSB_PRECONDITION2(ok, cx, ,"Error calling collision callback: schedule_interval_repeat_delay");
 	};
 	
+	JSBool ok = JS_TRUE;
+
 	//
 	// Interval
 	//
 	double interval;
-	if( argc >= 2 ) {
-		if( ! JS_ValueToNumber(cx, *argvp++, &interval ) )
-		   return JS_FALSE;
-	}
+	if( argc >= 2 )
+		ok &= JS_ValueToNumber(cx, *argvp++, &interval );
 
 	//
 	// repeat
 	//
 	double repeat;
-	if( argc >= 3 ) {
-		if( ! JS_ValueToNumber(cx, *argvp++, &repeat ) )
-			return JS_FALSE;
-	}
+	if( argc >= 3 )
+		ok &= JS_ValueToNumber(cx, *argvp++, &repeat );
+
 
 	//
 	// delay
 	//
 	double delay;
-	if( argc >= 4 ) {
-		if( ! JS_ValueToNumber(cx, *argvp++, &delay ) )
-			return JS_FALSE;
-	}
+	if( argc >= 4 )
+		ok &= JS_ValueToNumber(cx, *argvp++, &delay );
+		
+	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error converting jsval to native");
 
 
 	if( argc==1)
