@@ -23,6 +23,7 @@ void JSB_CCNode_createClass(JSContext *cx, JSObject* globalObj, const char* name
 
 // Manually generated methods
 JSBool JSB_CCNode_schedule_interval_repeat_delay_(JSContext *cx, uint32_t argc, jsval *vp);
+JSBool JSB_CCNode_scheduleOnce_delay_(JSContext *cx, uint32_t argc, jsval *vp);
 JSBool JSB_CCNode_unschedule_(JSContext *cx, uint32_t argc, jsval *vp);
 
 
