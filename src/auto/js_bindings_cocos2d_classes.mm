@@ -16904,7 +16904,7 @@ void JSB_CCSpeed_createClass(JSContext *cx, JSObject* globalObj, const char* nam
 		JS_FS_END
 	};
 	static JSFunctionSpec st_funcs[] = {
-		JS_FN("actionWithActionSpeed", JSB_CCSpeed_actionWithAction_speed__static, 2, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("create", JSB_CCSpeed_actionWithAction_speed__static, 2, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FS_END
 	};
 
