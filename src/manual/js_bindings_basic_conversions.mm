@@ -452,7 +452,12 @@ jsval NSArray_to_jsval( JSContext *cx, NSArray *array)
 	JSObject *jsobj = JS_NewArrayObject(cx, 0, NULL);
 	uint32_t index = 0;
 	for( id obj in array ) {
-		jsval val = NSObject_to_jsval(cx, obj);
+        jsval val;
+        // XXX: We should do the same for NSNumber
+        if( [obj isKindOfClass:[NSString class]] )
+            val = NSString_to_jsval(cx, obj);
+        else
+            val = NSObject_to_jsval(cx, obj);
 		JS_SetElement(cx, jsobj, index++, &val);
 	}
 	
@@ -464,7 +469,13 @@ jsval NSSet_to_jsval( JSContext *cx, NSSet *set)
 	JSObject *jsobj = JS_NewArrayObject(cx, 0, NULL);
 	uint32_t index = 0;
 	for( id obj in set ) {
-		jsval val = NSObject_to_jsval(cx, obj);
+        jsval val;
+        // XXX: We should do the same for NSNumber
+        if( [obj isKindOfClass:[NSString class]] )
+            val = NSString_to_jsval(cx, obj);
+        else
+            val = NSObject_to_jsval(cx, obj);
+
 		JS_SetElement(cx, jsobj, index++, &val);
 	}
 
