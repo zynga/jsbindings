@@ -71,15 +71,15 @@
 <enum name='kCCBVersion' value='4'/>
 <class name='CCBAnimationManager'>
 <method selector='addNode:andSequences:'>
-<arg index='0' name='node' type='@' declared_type='CCNode*'/>
-<arg index='1' name='seq' type='@' declared_type='NSDictionary*'/>
+<arg name='node' type='@' index='0' declared_type='CCNode*'/>
+<arg name='seq' type='@' index='1' declared_type='NSDictionary*'/>
 <retval type='v' declared_type='void'/>
 </method>
 <method selector='autoPlaySequenceId'>
 <retval type='i' declared_type='int'/>
 </method>
 <method selector='containerSize:'>
-<arg index='0' name='node' type='@' declared_type='CCNode*'/>
+<arg name='node' type='@' index='0' declared_type='CCNode*'/>
 <retval type='{CGSize=ff}' declared_type='CGSize'/>
 </method>
 <method selector='debug'>
@@ -103,9 +103,12 @@
 <method selector='documentOutletNodes'>
 <retval type='@' declared_type='NSMutableArray*'/>
 </method>
+<method selector='lastCompletedSequenceName'>
+<retval type='@' declared_type='NSString*'/>
+</method>
 <method selector='moveAnimationsFromNode:toNode:'>
-<arg index='0' name='fromNode' type='@' declared_type='CCNode*'/>
-<arg index='1' name='toNode' type='@' declared_type='CCNode*'/>
+<arg name='fromNode' type='@' index='0' declared_type='CCNode*'/>
+<arg name='toNode' type='@' index='1' declared_type='CCNode*'/>
 <retval type='v' declared_type='void'/>
 </method>
 <method selector='rootContainerSize'>
@@ -115,17 +118,17 @@
 <retval type='@' declared_type='CCNode*'/>
 </method>
 <method selector='runAnimationsForSequenceId:tweenDuration:'>
-<arg index='0' name='seqId' type='i' declared_type='int'/>
-<arg index='1' name='tweenDuration' type='f' declared_type='float'/>
+<arg name='seqId' type='i' index='0' declared_type='int'/>
+<arg name='tweenDuration' type='f' index='1' declared_type='float'/>
 <retval type='v' declared_type='void'/>
 </method>
 <method selector='runAnimationsForSequenceNamed:'>
-<arg index='0' name='name' type='@' declared_type='NSString*'/>
+<arg name='name' type='@' index='0' declared_type='NSString*'/>
 <retval type='v' declared_type='void'/>
 </method>
 <method selector='runAnimationsForSequenceNamed:tweenDuration:'>
-<arg index='0' name='name' type='@' declared_type='NSString*'/>
-<arg index='1' name='tweenDuration' type='f' declared_type='float'/>
+<arg name='name' type='@' index='0' declared_type='NSString*'/>
+<arg name='tweenDuration' type='f' index='1' declared_type='float'/>
 <retval type='v' declared_type='void'/>
 </method>
 <method selector='runningSequenceName'>
@@ -135,29 +138,36 @@
 <retval type='@' declared_type='NSMutableArray*'/>
 </method>
 <method selector='setAutoPlaySequenceId:'>
-<arg index='0' name='autoPlaySequenceId' type='i' declared_type='int'/>
+<arg name='autoPlaySequenceId' type='i' index='0' declared_type='int'/>
 <retval type='v' declared_type='void'/>
 </method>
 <method selector='setBaseValue:forNode:propertyName:'>
-<arg index='0' name='value' type='@' declared_type='id'/>
-<arg index='1' name='node' type='@' declared_type='CCNode*'/>
-<arg index='2' name='propName' type='@' declared_type='NSString*'/>
+<arg name='value' type='@' index='0' declared_type='id'/>
+<arg name='node' type='@' index='1' declared_type='CCNode*'/>
+<arg name='propName' type='@' index='2' declared_type='NSString*'/>
+<retval type='v' declared_type='void'/>
+</method>
+<method selector='setCompletedAnimationCallbackBlock:'>
+<arg name='b' function_pointer='true' type='@?' index='0' declared_type='void (^)(id)'>
+<arg type='@' declared_type='id'/>
+<retval type='v' declared_type='void'/>
+</arg>
 <retval type='v' declared_type='void'/>
 </method>
 <method selector='setDelegate:'>
-<arg index='0' name='delegate' type='@' declared_type='NSObject*'/>
+<arg name='delegate' type='@' index='0' declared_type='NSObject*'/>
 <retval type='v' declared_type='void'/>
 </method>
 <method selector='setDocumentControllerName:'>
-<arg index='0' name='documentControllerName' type='@' declared_type='NSString*'/>
+<arg name='documentControllerName' type='@' index='0' declared_type='NSString*'/>
 <retval type='v' declared_type='void'/>
 </method>
 <method selector='setRootContainerSize:'>
-<arg index='0' name='rootContainerSize' type='{CGSize=ff}' declared_type='CGSize'/>
+<arg name='rootContainerSize' type='{CGSize=ff}' index='0' declared_type='CGSize'/>
 <retval type='v' declared_type='void'/>
 </method>
 <method selector='setRootNode:'>
-<arg index='0' name='rootNode' type='@' declared_type='CCNode*'/>
+<arg name='rootNode' type='@' index='0' declared_type='CCNode*'/>
 <retval type='v' declared_type='void'/>
 </method>
 </class>
@@ -166,7 +176,7 @@
 <retval type='@' declared_type='NSString*'/>
 </method>
 <method selector='setCcbDirectoryPath:'>
-<arg index='0' name='ccbDirectoryPath' type='@' declared_type='NSString*'/>
+<arg name='ccbDirectoryPath' type='@' index='0' declared_type='NSString*'/>
 <retval type='v' declared_type='void'/>
 </method>
 </class>
@@ -178,19 +188,19 @@
 <retval type='i' declared_type='int'/>
 </method>
 <method selector='setEasingOpt:'>
-<arg index='0' name='easingOpt' type='f' declared_type='float'/>
+<arg name='easingOpt' type='f' index='0' declared_type='float'/>
 <retval type='v' declared_type='void'/>
 </method>
 <method selector='setEasingType:'>
-<arg index='0' name='easingType' type='i' declared_type='int'/>
+<arg name='easingType' type='i' index='0' declared_type='int'/>
 <retval type='v' declared_type='void'/>
 </method>
 <method selector='setTime:'>
-<arg index='0' name='time' type='f' declared_type='float'/>
+<arg name='time' type='f' index='0' declared_type='float'/>
 <retval type='v' declared_type='void'/>
 </method>
 <method selector='setValue:'>
-<arg index='0' name='value' type='@' declared_type='id'/>
+<arg name='value' type='@' index='0' declared_type='id'/>
 <retval type='v' declared_type='void'/>
 </method>
 <method selector='time'>
@@ -207,49 +217,49 @@
 <method selector='animationManagersForNodes'>
 <retval type='@' declared_type='NSMutableArray*'/>
 </method>
-<method class_method='true' selector='ccbDirectoryPath'>
+<method selector='ccbDirectoryPath' class_method='true'>
 <retval type='@' declared_type='NSString*'/>
 </method>
-<method class_method='true' selector='nodeGraphFromData:owner:parentSize:'>
-<arg index='0' name='data' type='@' declared_type='NSData*'/>
-<arg index='1' name='owner' type='@' declared_type='id'/>
-<arg index='2' name='parentSize' type='{CGSize=ff}' declared_type='CGSize'/>
+<method selector='nodeGraphFromData:owner:parentSize:' class_method='true'>
+<arg name='data' type='@' index='0' declared_type='NSData*'/>
+<arg name='owner' type='@' index='1' declared_type='id'/>
+<arg name='parentSize' type='{CGSize=ff}' index='2' declared_type='CGSize'/>
 <retval type='@' declared_type='CCNode*'/>
 </method>
 <method selector='nodeGraphFromData:owner:parentSize:'>
-<arg index='0' name='data' type='@' declared_type='NSData*'/>
-<arg index='1' name='owner' type='@' declared_type='id'/>
-<arg index='2' name='parentSize' type='{CGSize=ff}' declared_type='CGSize'/>
+<arg name='data' type='@' index='0' declared_type='NSData*'/>
+<arg name='owner' type='@' index='1' declared_type='id'/>
+<arg name='parentSize' type='{CGSize=ff}' index='2' declared_type='CGSize'/>
 <retval type='@' declared_type='CCNode*'/>
 </method>
-<method class_method='true' selector='nodeGraphFromFile:'>
-<arg index='0' name='file' type='@' declared_type='NSString*'/>
+<method selector='nodeGraphFromFile:' class_method='true'>
+<arg name='file' type='@' index='0' declared_type='NSString*'/>
 <retval type='@' declared_type='CCNode*'/>
 </method>
 <method selector='nodeGraphFromFile:'>
-<arg index='0' name='file' type='@' declared_type='NSString*'/>
+<arg name='file' type='@' index='0' declared_type='NSString*'/>
 <retval type='@' declared_type='CCNode*'/>
 </method>
-<method class_method='true' selector='nodeGraphFromFile:owner:'>
-<arg index='0' name='file' type='@' declared_type='NSString*'/>
-<arg index='1' name='owner' type='@' declared_type='id'/>
+<method selector='nodeGraphFromFile:owner:' class_method='true'>
+<arg name='file' type='@' index='0' declared_type='NSString*'/>
+<arg name='owner' type='@' index='1' declared_type='id'/>
 <retval type='@' declared_type='CCNode*'/>
 </method>
 <method selector='nodeGraphFromFile:owner:'>
-<arg index='0' name='file' type='@' declared_type='NSString*'/>
-<arg index='1' name='owner' type='@' declared_type='id'/>
+<arg name='file' type='@' index='0' declared_type='NSString*'/>
+<arg name='owner' type='@' index='1' declared_type='id'/>
 <retval type='@' declared_type='CCNode*'/>
 </method>
-<method class_method='true' selector='nodeGraphFromFile:owner:parentSize:'>
-<arg index='0' name='file' type='@' declared_type='NSString*'/>
-<arg index='1' name='owner' type='@' declared_type='id'/>
-<arg index='2' name='parentSize' type='{CGSize=ff}' declared_type='CGSize'/>
+<method selector='nodeGraphFromFile:owner:parentSize:' class_method='true'>
+<arg name='file' type='@' index='0' declared_type='NSString*'/>
+<arg name='owner' type='@' index='1' declared_type='id'/>
+<arg name='parentSize' type='{CGSize=ff}' index='2' declared_type='CGSize'/>
 <retval type='@' declared_type='CCNode*'/>
 </method>
 <method selector='nodeGraphFromFile:owner:parentSize:'>
-<arg index='0' name='file' type='@' declared_type='NSString*'/>
-<arg index='1' name='owner' type='@' declared_type='id'/>
-<arg index='2' name='parentSize' type='{CGSize=ff}' declared_type='CGSize'/>
+<arg name='file' type='@' index='0' declared_type='NSString*'/>
+<arg name='owner' type='@' index='1' declared_type='id'/>
+<arg name='parentSize' type='{CGSize=ff}' index='2' declared_type='CGSize'/>
 <retval type='@' declared_type='CCNode*'/>
 </method>
 <method selector='nodesWithAnimationManagers'>
@@ -267,42 +277,42 @@
 <method selector='ownerOutletNodes'>
 <retval type='@' declared_type='NSMutableArray*'/>
 </method>
-<method class_method='true' selector='reader'>
+<method selector='reader' class_method='true'>
 <retval type='@' declared_type='CCBReader*'/>
 </method>
-<method class_method='true' selector='sceneWithNodeGraphFromFile:'>
-<arg index='0' name='file' type='@' declared_type='NSString*'/>
+<method selector='sceneWithNodeGraphFromFile:' class_method='true'>
+<arg name='file' type='@' index='0' declared_type='NSString*'/>
 <retval type='@' declared_type='CCScene*'/>
 </method>
-<method class_method='true' selector='sceneWithNodeGraphFromFile:owner:'>
-<arg index='0' name='file' type='@' declared_type='NSString*'/>
-<arg index='1' name='owner' type='@' declared_type='id'/>
+<method selector='sceneWithNodeGraphFromFile:owner:' class_method='true'>
+<arg name='file' type='@' index='0' declared_type='NSString*'/>
+<arg name='owner' type='@' index='1' declared_type='id'/>
 <retval type='@' declared_type='CCScene*'/>
 </method>
-<method class_method='true' selector='sceneWithNodeGraphFromFile:owner:parentSize:'>
-<arg index='0' name='file' type='@' declared_type='NSString*'/>
-<arg index='1' name='owner' type='@' declared_type='id'/>
-<arg index='2' name='parentSize' type='{CGSize=ff}' declared_type='CGSize'/>
+<method selector='sceneWithNodeGraphFromFile:owner:parentSize:' class_method='true'>
+<arg name='file' type='@' index='0' declared_type='NSString*'/>
+<arg name='owner' type='@' index='1' declared_type='id'/>
+<arg name='parentSize' type='{CGSize=ff}' index='2' declared_type='CGSize'/>
 <retval type='@' declared_type='CCScene*'/>
 </method>
 <method selector='setActionManager:'>
-<arg index='0' name='actionManager' type='@' declared_type='CCBAnimationManager*'/>
+<arg name='actionManager' type='@' index='0' declared_type='CCBAnimationManager*'/>
 <retval type='v' declared_type='void'/>
 </method>
-<method class_method='true' selector='setResolutionScale:'>
-<arg index='0' name='scale' type='f' declared_type='float'/>
+<method selector='setResolutionScale:' class_method='true'>
+<arg name='scale' type='f' index='0' declared_type='float'/>
 <retval type='v' declared_type='void'/>
 </method>
 </class>
 <class name='CCBRotateTo'>
-<method class_method='true' selector='actionWithDuration:angle:'>
-<arg index='0' name='duration' type='f' declared_type='ccTime'/>
-<arg index='1' name='angle' type='f' declared_type='float'/>
+<method selector='actionWithDuration:angle:' class_method='true'>
+<arg name='duration' type='f' index='0' declared_type='ccTime'/>
+<arg name='angle' type='f' index='1' declared_type='float'/>
 <retval type='@' declared_type='id'/>
 </method>
 <method selector='initWithDuration:angle:'>
-<arg index='0' name='duration' type='f' declared_type='ccTime'/>
-<arg index='1' name='angle' type='f' declared_type='float'/>
+<arg name='duration' type='f' index='0' declared_type='ccTime'/>
+<arg name='angle' type='f' index='1' declared_type='float'/>
 <retval type='@' declared_type='id'/>
 </method>
 </class>
@@ -320,19 +330,19 @@
 <retval type='i' declared_type='int'/>
 </method>
 <method selector='setChainedSequenceId:'>
-<arg index='0' name='chainedSequenceId' type='i' declared_type='int'/>
+<arg name='chainedSequenceId' type='i' index='0' declared_type='int'/>
 <retval type='v' declared_type='void'/>
 </method>
 <method selector='setDuration:'>
-<arg index='0' name='duration' type='f' declared_type='float'/>
+<arg name='duration' type='f' index='0' declared_type='float'/>
 <retval type='v' declared_type='void'/>
 </method>
 <method selector='setName:'>
-<arg index='0' name='name' type='@' declared_type='NSString*'/>
+<arg name='name' type='@' index='0' declared_type='NSString*'/>
 <retval type='v' declared_type='void'/>
 </method>
 <method selector='setSequenceId:'>
-<arg index='0' name='sequenceId' type='i' declared_type='int'/>
+<arg name='sequenceId' type='i' index='0' declared_type='int'/>
 <retval type='v' declared_type='void'/>
 </method>
 </class>
@@ -344,11 +354,11 @@
 <retval type='@' declared_type='NSString*'/>
 </method>
 <method selector='setName:'>
-<arg index='0' name='name' type='@' declared_type='NSString*'/>
+<arg name='name' type='@' index='0' declared_type='NSString*'/>
 <retval type='v' declared_type='void'/>
 </method>
 <method selector='setType:'>
-<arg index='0' name='type' type='i' declared_type='int'/>
+<arg name='type' type='i' index='0' declared_type='int'/>
 <retval type='v' declared_type='void'/>
 </method>
 <method selector='type'>
@@ -356,79 +366,79 @@
 </method>
 </class>
 <class name='CCBSetSpriteFrame'>
-<method class_method='true' selector='actionWithSpriteFrame:'>
-<arg index='0' name='sf' type='@' declared_type='CCSpriteFrame*'/>
+<method selector='actionWithSpriteFrame:' class_method='true'>
+<arg name='sf' type='@' index='0' declared_type='CCSpriteFrame*'/>
 <retval type='@' declared_type='id'/>
 </method>
 <method selector='initWithSpriteFrame:'>
-<arg index='0' name='sf' type='@' declared_type='CCSpriteFrame*'/>
+<arg name='sf' type='@' index='0' declared_type='CCSpriteFrame*'/>
 <retval type='@' declared_type='id'/>
 </method>
 </class>
 <class name='CCNode'>
 <method selector='absolutePositionFromRelative:type:parentSize:propertyName:'>
-<arg index='0' name='pt' type='{CGPoint=ff}' declared_type='CGPoint'/>
-<arg index='1' name='type' type='i' declared_type='int'/>
-<arg index='2' name='containerSize' type='{CGSize=ff}' declared_type='CGSize'/>
-<arg index='3' name='propertyName' type='@' declared_type='NSString*'/>
+<arg name='pt' type='{CGPoint=ff}' index='0' declared_type='CGPoint'/>
+<arg name='type' type='i' index='1' declared_type='int'/>
+<arg name='containerSize' type='{CGSize=ff}' index='2' declared_type='CGSize'/>
+<arg name='propertyName' type='@' index='3' declared_type='NSString*'/>
 <retval type='{CGPoint=ff}' declared_type='CGPoint'/>
 </method>
 <method selector='resolutionScale'>
 <retval type='f' declared_type='float'/>
 </method>
 <method selector='setRelativeFloat:type:propertyName:'>
-<arg index='0' name='f' type='f' declared_type='float'/>
-<arg index='1' name='type' type='i' declared_type='int'/>
-<arg index='2' name='propertyName' type='@' declared_type='NSString*'/>
+<arg name='f' type='f' index='0' declared_type='float'/>
+<arg name='type' type='i' index='1' declared_type='int'/>
+<arg name='propertyName' type='@' index='2' declared_type='NSString*'/>
 <retval type='v' declared_type='void'/>
 </method>
 <method selector='setRelativePosition:type:'>
-<arg index='0' name='position' type='{CGPoint=ff}' declared_type='CGPoint'/>
-<arg index='1' name='type' type='i' declared_type='int'/>
+<arg name='position' type='{CGPoint=ff}' index='0' declared_type='CGPoint'/>
+<arg name='type' type='i' index='1' declared_type='int'/>
 <retval type='v' declared_type='void'/>
 </method>
 <method selector='setRelativePosition:type:parentSize:'>
-<arg index='0' name='position' type='{CGPoint=ff}' declared_type='CGPoint'/>
-<arg index='1' name='type' type='i' declared_type='int'/>
-<arg index='2' name='parentSize' type='{CGSize=ff}' declared_type='CGSize'/>
+<arg name='position' type='{CGPoint=ff}' index='0' declared_type='CGPoint'/>
+<arg name='type' type='i' index='1' declared_type='int'/>
+<arg name='parentSize' type='{CGSize=ff}' index='2' declared_type='CGSize'/>
 <retval type='v' declared_type='void'/>
 </method>
 <method selector='setRelativePosition:type:parentSize:propertyName:'>
-<arg index='0' name='pt' type='{CGPoint=ff}' declared_type='CGPoint'/>
-<arg index='1' name='type' type='i' declared_type='int'/>
-<arg index='2' name='containerSize' type='{CGSize=ff}' declared_type='CGSize'/>
-<arg index='3' name='propertyName' type='@' declared_type='NSString*'/>
+<arg name='pt' type='{CGPoint=ff}' index='0' declared_type='CGPoint'/>
+<arg name='type' type='i' index='1' declared_type='int'/>
+<arg name='containerSize' type='{CGSize=ff}' index='2' declared_type='CGSize'/>
+<arg name='propertyName' type='@' index='3' declared_type='NSString*'/>
 <retval type='v' declared_type='void'/>
 </method>
 <method selector='setRelativeScaleX:Y:type:'>
-<arg index='0' name='x' type='f' declared_type='float'/>
-<arg index='1' name='y' type='f' declared_type='float'/>
-<arg index='2' name='type' type='i' declared_type='int'/>
+<arg name='x' type='f' index='0' declared_type='float'/>
+<arg name='y' type='f' index='1' declared_type='float'/>
+<arg name='type' type='i' index='2' declared_type='int'/>
 <retval type='v' declared_type='void'/>
 </method>
 <method selector='setRelativeScaleX:Y:type:propertyName:'>
-<arg index='0' name='x' type='f' declared_type='float'/>
-<arg index='1' name='y' type='f' declared_type='float'/>
-<arg index='2' name='type' type='i' declared_type='int'/>
-<arg index='3' name='propertyName' type='@' declared_type='NSString*'/>
+<arg name='x' type='f' index='0' declared_type='float'/>
+<arg name='y' type='f' index='1' declared_type='float'/>
+<arg name='type' type='i' index='2' declared_type='int'/>
+<arg name='propertyName' type='@' index='3' declared_type='NSString*'/>
 <retval type='v' declared_type='void'/>
 </method>
 <method selector='setRelativeSize:type:'>
-<arg index='0' name='size' type='{CGSize=ff}' declared_type='CGSize'/>
-<arg index='1' name='type' type='i' declared_type='int'/>
+<arg name='size' type='{CGSize=ff}' index='0' declared_type='CGSize'/>
+<arg name='type' type='i' index='1' declared_type='int'/>
 <retval type='v' declared_type='void'/>
 </method>
 <method selector='setRelativeSize:type:parentSize:'>
-<arg index='0' name='size' type='{CGSize=ff}' declared_type='CGSize'/>
-<arg index='1' name='type' type='i' declared_type='int'/>
-<arg index='2' name='parentSize' type='{CGSize=ff}' declared_type='CGSize'/>
+<arg name='size' type='{CGSize=ff}' index='0' declared_type='CGSize'/>
+<arg name='type' type='i' index='1' declared_type='int'/>
+<arg name='parentSize' type='{CGSize=ff}' index='2' declared_type='CGSize'/>
 <retval type='v' declared_type='void'/>
 </method>
 <method selector='setRelativeSize:type:parentSize:propertyName:'>
-<arg index='0' name='size' type='{CGSize=ff}' declared_type='CGSize'/>
-<arg index='1' name='type' type='i' declared_type='int'/>
-<arg index='2' name='containerSize' type='{CGSize=ff}' declared_type='CGSize'/>
-<arg index='3' name='propertyName' type='@' declared_type='NSString*'/>
+<arg name='size' type='{CGSize=ff}' index='0' declared_type='CGSize'/>
+<arg name='type' type='i' index='1' declared_type='int'/>
+<arg name='containerSize' type='{CGSize=ff}' index='2' declared_type='CGSize'/>
+<arg name='propertyName' type='@' index='3' declared_type='NSString*'/>
 <retval type='v' declared_type='void'/>
 </method>
 </class>
@@ -439,13 +449,13 @@
 </class>
 <class name='NSObject'>
 <method selector='completedAnimationSequenceNamed:'>
-<arg index='0' name='name' type='@' declared_type='NSString*'/>
+<arg name='name' type='@' index='0' declared_type='NSString*'/>
 <retval type='v' declared_type='void'/>
 </method>
 </class>
 <informal_protocol name='CCBAnimationManagerDelegate'>
-<method type='v12@0:4@8' selector='completedAnimationSequenceNamed:'>
-<arg index='0' name='name' type='@' declared_type='NSString*'/>
+<method selector='completedAnimationSequenceNamed:' type='v12@0:4@8'>
+<arg name='name' type='@' index='0' declared_type='NSString*'/>
 <retval type='v' declared_type='void'/>
 </method>
 </informal_protocol>
