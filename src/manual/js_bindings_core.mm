@@ -29,27 +29,9 @@
 // NS
 #import "js_bindings_NS_manual.h"
 
-// cocos2d
-#import "js_bindings_cocos2d_classes.h"
-#import "js_bindings_cocos2d_functions.h"
-#ifdef __CC_PLATFORM_IOS
-#import "js_bindings_cocos2d_ios_classes.h"
-#import "js_bindings_cocos2d_ios_functions.h"
-#elif defined(__CC_PLATFORM_MAC)
-#import "js_bindings_cocos2d_mac_classes.h"
-#import "js_bindings_cocos2d_mac_functions.h"
-#endif
-
-// chipmunk
-#import "js_bindings_chipmunk_auto_classes.h"
-#import "js_bindings_chipmunk_functions.h"
-#import "js_bindings_chipmunk_manual.h"
-
-// cocosdenshion
-#import "js_bindings_CocosDenshion_classes.h"
-
-// cocosbuilder reader
-#import "js_bindings_CocosBuilderReader_classes.h"
+// cocos2d + chipmunk registration files
+#import "js_bindings_cocos2d_registration.h"
+#import "js_bindings_chipmunk_registration.h"
 
 // Globals
 char * JSB_association_proxy_key = NULL;
@@ -293,135 +275,19 @@ JSBool JSBCore_forceGC(JSContext *cx, uint32_t argc, jsval *vp)
 		JS_DefineFunction(_cx, jsc, "executeScript", JSBCore_executeScript, 1, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 
 		//
-		// cocos2d
+		// 3rd party developer ?
+		// Add here your own classes registration
 		//
-		JSObject *cocos2d = JS_NewObject( _cx, NULL, NULL, NULL);
-		jsval cocosVal = OBJECT_TO_JSVAL(cocos2d);
-		JS_SetProperty(_cx, _object, "cc", &cocosVal);
 		
-		// Config Object
-		JSObject *ccconfig = JS_NewObject(_cx, NULL, NULL, NULL);
-		// config.os: The Operating system
-		// osx, ios, android, windows, linux, etc..
-#ifdef __CC_PLATFORM_MAC
-		JSString *str = JS_InternString(_cx, "osx");
-#elif defined(__CC_PLATFORM_IOS)
-		JSString *str = JS_InternString(_cx, "ios");
-#endif
-		JS_DefineProperty(_cx, ccconfig, "os", STRING_TO_JSVAL(str), NULL, NULL, JSPROP_ENUMERATE | JSPROP_READONLY | JSPROP_PERMANENT);
-
-		// config.deviceType: Device Type
-		// 'mobile' for any kind of mobile devices, 'desktop' for PCs, 'browser' for Web Browsers
-#ifdef __CC_PLATFORM_MAC
-		str = JS_InternString(_cx, "desktop");
-#elif defined(__CC_PLATFORM_IOS)
-		str = JS_InternString(_cx, "mobile");
-#endif
-		JS_DefineProperty(_cx, ccconfig, "deviceType", STRING_TO_JSVAL(str), NULL, NULL, JSPROP_ENUMERATE | JSPROP_READONLY | JSPROP_PERMANENT);
-
-		// config.engine: Type of renderer
-		// 'cocos2d', 'cocos2d-x', 'cocos2d-html5/canvas', 'cocos2d-html5/webgl', etc..
-		str = JS_InternString(_cx, "cocos2d");
-		JS_DefineProperty(_cx, ccconfig, "engine", STRING_TO_JSVAL(str), NULL, NULL, JSPROP_ENUMERATE | JSPROP_READONLY | JSPROP_PERMANENT);
+		// registers cocos2d, cocosdenshion and cocosbuilder reader bindings
+#if JSB_INCLUDE_COCOS2D
+		jsb_register_cocos2d(_cx, _object);
+#endif // JSB_INCLUDE_COCOS2D
 		
-		// config.arch: CPU Architecture
-		// i386, ARM, x86_64, web
-#ifdef __LP64__
-		str = JS_InternString(_cx, "x86_64");
-#elif defined(__arm__) || defined(__ARM_NEON__)
-		str = JS_InternString(_cx, "arm");
-#else
-		str = JS_InternString(_cx, "i386");
-#endif
-		JS_DefineProperty(_cx, ccconfig, "arch", STRING_TO_JSVAL(str), NULL, NULL, JSPROP_ENUMERATE | JSPROP_READONLY | JSPROP_PERMANENT);
-
-		// config.version: Version of cocos2d + renderer
-		str = JS_InternString(_cx, [cocos2dVersion() UTF8String] );
-		JS_DefineProperty(_cx, ccconfig, "version", STRING_TO_JSVAL(str), NULL, NULL, JSPROP_ENUMERATE | JSPROP_READONLY | JSPROP_PERMANENT);
-
-		// config.usesTypedArrays
-#if JSB_COMPATIBLE_WITH_COCOS2D_HTML5_BASIC_TYPES
-		JSBool b = JS_FALSE;
-#else
-		JSBool b = JS_TRUE;
-#endif
-		JS_DefineProperty(_cx, ccconfig, "usesTypedArrays", BOOLEAN_TO_JSVAL(b), NULL, NULL, JSPROP_ENUMERATE | JSPROP_READONLY | JSPROP_PERMANENT);
-		
-		// config.debug: Debug build ?
-#ifdef DEBUG
-		b = JS_TRUE;
-#else
-		b = JS_FALSE;
-#endif
-		JS_DefineProperty(_cx, ccconfig, "debug", BOOLEAN_TO_JSVAL(b), NULL, NULL, JSPROP_ENUMERATE | JSPROP_READONLY | JSPROP_PERMANENT);
-
-		
-		// Add "config" to "cc"
-		JS_DefineProperty(_cx, cocos2d, "config", OBJECT_TO_JSVAL(ccconfig), NULL, NULL, JSPROP_ENUMERATE | JSPROP_READONLY | JSPROP_PERMANENT);
-
-
-		JS_DefineFunction(_cx, cocos2d, "log", JSBCore_log, 0, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
-
-		JSB_NSObject_createClass(_cx, cocos2d, "Object");
-#ifdef __CC_PLATFORM_MAC
-		JSB_NSEvent_createClass(_cx, cocos2d, "Event");
-#elif defined(__CC_PLATFORM_IOS)
-		JSB_UITouch_createClass(_cx, cocos2d, "Touch");
-		JSB_UIAccelerometer_createClass(_cx, cocos2d, "Accelerometer");
-#endif
-
-		// Register classes: base classes should be registered first
-
-#import "js_bindings_cocos2d_classes_registration.h"
-#import "js_bindings_cocos2d_functions_registration.h"
-
-#ifdef __CC_PLATFORM_IOS
-		JSObject *cocos2d_ios = cocos2d;
-#import "js_bindings_cocos2d_ios_classes_registration.h"
-#import "js_bindings_cocos2d_ios_functions_registration.h"
-#elif defined(__CC_PLATFORM_MAC)
-		JSObject *cocos2d_mac = cocos2d;
-#import "js_bindings_cocos2d_mac_classes_registration.h"
-#import "js_bindings_cocos2d_mac_functions_registration.h"
-#endif
-		
-		//
-		// CocosDenshion
-		//
-		// Reuse "cc" namespace for CocosDenshion
-		JSObject *CocosDenshion = cocos2d;
-#import "js_bindings_CocosDenshion_classes_registration.h"
-
-		//
-		// CocosBuilderReader
-		//
-		// Reuse "cc" namespace for CocosBuilderReader
-		JSObject *CocosBuilderReader = cocos2d;
-#import "js_bindings_CocosBuilderReader_classes_registration.h"
-
-		//
-		// Chipmunk
-		//
-		JSObject *chipmunk = JS_NewObject( _cx, NULL, NULL, NULL);
-		jsval chipmunkVal = OBJECT_TO_JSVAL(chipmunk);
-		JS_SetProperty(_cx, _object, "cp", &chipmunkVal);
-		
-		JSB_cpBase_createClass(_cx, chipmunk, "Base");  // manual base class registration
-#import "js_bindings_chipmunk_auto_classes_registration.h"
-#import "js_bindings_chipmunk_functions_registration.h"
-		
-		// manual
-		JS_DefineFunction(_cx, chipmunk, "spaceAddCollisionHandler", JSB_cpSpaceAddCollisionHandler, 8, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
-		JS_DefineFunction(_cx, chipmunk, "spaceRemoveCollisionHandler", JSB_cpSpaceRemoveCollisionHandler, 3, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
-		JS_DefineFunction(_cx, chipmunk, "arbiterGetBodies", JSB_cpArbiterGetBodies, 1, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
-		JS_DefineFunction(_cx, chipmunk, "arbiterGetShapes", JSB_cpArbiterGetShapes, 1, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
-		JS_DefineFunction(_cx, chipmunk, "bodyGetUserData", JSB_cpBodyGetUserData, 1, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
-		JS_DefineFunction(_cx, chipmunk, "bodySetUserData", JSB_cpBodySetUserData, 2, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
-
-		JS_DefineFunction(_cx, chipmunk, "areaForPoly", JSB_cpAreaForPoly, 1, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
-		JS_DefineFunction(_cx, chipmunk, "momentForPoly", JSB_cpMomentForPoly, 3, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
-		JS_DefineFunction(_cx, chipmunk, "centroidForPoly", JSB_cpCentroidForPoly, 1, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
-		JS_DefineFunction(_cx, chipmunk, "recenterPoly", JSB_cpRecenterPoly, 1, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
+		// registers chipmunk bindings
+#if JSB_INCLUDE_CHIPMUNK
+		jsb_register_chipmunk(_cx, _object);
+#endif // JSB_INCLUDE_CHIPMUNK
 	}
 	
 	return self;
