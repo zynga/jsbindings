@@ -154,8 +154,13 @@ extern "C" {
 	JSBool jsb_set_reserved_slot(JSObject *obj, uint32_t idx, jsval value);
 	
 	
-	// needed for callbacks
+	// needed for callbacks. It does nothing.
 	JSBool JSB_do_nothing(JSContext *cx, uint32_t argc, jsval *vp);
+	
+
+	// logs a format string to the console
+	JSBool JSBCore_log(JSContext *cx, uint32_t argc, jsval *vp);
+
 #ifdef __cplusplus
 }
 #endif
