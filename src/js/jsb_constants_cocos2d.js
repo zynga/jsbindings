@@ -123,16 +123,6 @@ cc._p = function( x, y )
     }
 };
 
-cc._to_p = function( point )
-{
-    return point;
-};
-
-cc._from_p = function( size )
-{
-    return size;
-};
-
 //
 // Grid
 //
@@ -151,32 +141,12 @@ cc.size = function(w,h)
     return {width:w, height:h};
 };
 
-cc._to_size = function( size )
-{
-    return size;
-};
-
-cc._from_size = function( size )
-{
-    return size;
-};
-
 //
 // Rect
 //
 cc.rect = function(x,y,w,h)
 {
     return {x:x, y:y, width:w, height:h};
-};
-
-cc._to_rect = function( rect )
-{
-    return rect;
-};
-
-cc._from_rect = function( rect )
-{
-    return rect;
 };
 
 
@@ -186,6 +156,29 @@ cc.dumpConfig = function()
     if( cc.config.debug ) {
         for( var i in cc.config )
             cc.log( i + " = " + cc.config[i] );
+    }
+};
+
+//
+// MenuItemToggle
+//
+cc.MenuItemToggle.create = function( /* var args */) {
+
+    var n = arguments.length;
+
+    if (typeof arguments[n-1] === 'function') {
+        var args = Array.prototype.slice.call(arguments);
+        var func = args.pop();
+        var obj = args.pop();
+    
+        // create it with arguments,
+        var item = cc.MenuItemToggle.create.apply(this, args);
+
+        // then set the callback
+        item.setCallback(obj, func);
+        return item;
+    } else {
+        return cc.MenuItemToggle._create.apply(this, arguments);
     }
 };
 

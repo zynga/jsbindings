@@ -255,11 +255,14 @@ JSBool JSB_CCMenuItemFont_itemWithString_block__static(JSContext *cx, uint32_t a
 	
 	JSObject *jsobj = get_or_create_jsobject_from_realobj( cx, ret_val );
 	
+	// "root" object and function
+	if( argc == 3 ) {
+		jsb_set_reserved_slot(jsobj, 0, argvp[1] );
+		jsb_set_reserved_slot(jsobj, 1, argvp[2] );
+	}
+
 	JS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(jsobj));
 
-	// "root" object and function
-	jsb_set_reserved_slot(jsobj, 0, argvp[1] );
-	jsb_set_reserved_slot(jsobj, 1, argvp[2] );
 
 	return JS_TRUE;
 }
@@ -300,8 +303,10 @@ JSBool JSB_CCMenuItemFont_initWithString_block_(JSContext *cx, uint32_t argc, js
 	JS_SET_RVAL(cx, vp, JSVAL_VOID);
 	
 	// "root" object and function
-	jsb_set_reserved_slot(jsthis, 0, argvp[1] );
-	jsb_set_reserved_slot(jsthis, 1, argvp[2] );
+	if( argc == 3 ) {
+		jsb_set_reserved_slot(jsthis, 0, argvp[1] );
+		jsb_set_reserved_slot(jsthis, 1, argvp[2] );
+	}
 		
 	return JS_TRUE;
 }
@@ -339,8 +344,10 @@ JSBool JSB_CCMenuItemLabel_itemWithLabel_block__static(JSContext *cx, uint32_t a
 	JS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(jsobj));
 	
 	// "root" object and function
-	jsb_set_reserved_slot(jsobj, 0, argvp[1] );
-	jsb_set_reserved_slot(jsobj, 1, argvp[2] );
+	if( argc == 3 ) {
+		jsb_set_reserved_slot(jsobj, 0, argvp[1] );
+		jsb_set_reserved_slot(jsobj, 1, argvp[2] );
+	}
 	
 	return JS_TRUE;
 }
@@ -379,8 +386,10 @@ JSBool JSB_CCMenuItemLabel_initWithLabel_block_(JSContext *cx, uint32_t argc, js
 	JS_SET_RVAL(cx, vp, JSVAL_VOID);
 	
 	// "root" object and function
-	jsb_set_reserved_slot(jsthis, 0, argvp[1] );
-	jsb_set_reserved_slot(jsthis, 1, argvp[2] );
+	if( argc == 3 ) {
+		jsb_set_reserved_slot(jsthis, 0, argvp[1] );
+		jsb_set_reserved_slot(jsthis, 1, argvp[2] );
+	}
 	
 	return JS_TRUE;
 }
@@ -432,8 +441,10 @@ JSBool JSB_CCMenuItemImage_itemWithNormalImage_selectedImage_disabledImage_block
 	JS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(jsobj));
 	
 	// "root" object and function
-	jsb_set_reserved_slot(jsobj, 0, valthis );
-	jsb_set_reserved_slot(jsobj, 1, valfn );
+	if( argc >= 4 ) {
+		jsb_set_reserved_slot(jsobj, 0, valthis );
+		jsb_set_reserved_slot(jsobj, 1, valfn );
+	}
 	
 	return JS_TRUE;
 }
@@ -488,8 +499,10 @@ JSBool JSB_CCMenuItemImage_initWithNormalImage_selectedImage_disabledImage_block
 	JS_SET_RVAL(cx, vp, JSVAL_VOID);
 	
 	// "root" object and function
-	jsb_set_reserved_slot(jsthis, 0, valthis );
-	jsb_set_reserved_slot(jsthis, 1, valfn );
+	if( argc >= 4 ) {
+		jsb_set_reserved_slot(jsthis, 0, valthis );
+		jsb_set_reserved_slot(jsthis, 1, valfn );
+	}
 	
 	return JS_TRUE;
 }
@@ -540,8 +553,10 @@ JSBool JSB_CCMenuItemSprite_itemWithNormalSprite_selectedSprite_disabledSprite_b
 	JS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(jsobj));
 	
 	// "root" object and function
-	jsb_set_reserved_slot(jsobj, 0, valthis );
-	jsb_set_reserved_slot(jsobj, 1, valfn );
+	if( argc >= 4 ) {
+		jsb_set_reserved_slot(jsobj, 0, valthis );
+		jsb_set_reserved_slot(jsobj, 1, valfn );
+	}
 	
 	return JS_TRUE;
 }
@@ -594,8 +609,10 @@ JSBool JSB_CCMenuItemSprite_initWithNormalSprite_selectedSprite_disabledSprite_b
 	JS_SET_RVAL(cx, vp, JSVAL_VOID);
 	
 	// "root" object and function
-	jsb_set_reserved_slot(jsthis, 0, valthis );
-	jsb_set_reserved_slot(jsthis, 1, valfn );
+	if( argc >= 4 ) {
+		jsb_set_reserved_slot(jsthis, 0, valthis );
+		jsb_set_reserved_slot(jsthis, 1, valfn );
+	}
 
 	return JS_TRUE;
 }
