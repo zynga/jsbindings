@@ -27,12 +27,22 @@
 #import "js_bindings_config.h"
 
 typedef void (^js_block)(id sender);
-	
+
 /** Creates a JSObject, a ProxyObject and associates them with the real object */
 JSObject* create_jsobject_from_realobj( JSContext* context, Class klass, id realObj );
 
 /** Gets or Creates a JSObject, a ProxyObject and associates them with the real object */
 JSObject * get_or_create_jsobject_from_realobj( JSContext *cx, id realObj);
+
+/** Whether or not the jsval is an NSString. If ret is not null, it returns the converted object.
+ Like jsval_to_NSString, but if it is not an NSString it does not report error.
+ */
+JSBool jsval_is_NSString( JSContext *cx, jsval vp, NSString **ret );
+
+/** Whether or not the jsval is an NSObject. If ret is not null, it returns the converted object.
+ Like jsval_to_NSObject, but if it is not an NSObject it does not report error.
+ */
+JSBool jsval_is_NSObject( JSContext *cx, jsval vp, NSObject **ret );
 
 /** converts a jsval to a NSString */
 JSBool jsval_to_NSString( JSContext *cx , jsval vp, NSString **out );
