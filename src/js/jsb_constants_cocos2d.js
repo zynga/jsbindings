@@ -172,7 +172,7 @@ cc.MenuItemToggle.create = function( /* var args */) {
         var obj = args.pop();
     
         // create it with arguments,
-        var item = cc.MenuItemToggle.create.apply(this, args);
+        var item = cc.MenuItemToggle._create.apply(this, args);
 
         // then set the callback
         item.setCallback(obj, func);
