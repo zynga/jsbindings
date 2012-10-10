@@ -932,6 +932,34 @@ JSBool JSB_CCNode_unschedule_(JSContext *cx, uint32_t argc, jsval *vp)
 	return JS_TRUE;
 }
 
+JSBool JSB_CCNode_setPosition_(JSContext *cx, uint32_t argc, jsval *vp) {
+	
+	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
+	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
+	
+	JSB_PRECONDITION3( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
+	JSB_PRECONDITION3( argc == 1 || argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
+	jsval *argvp = JS_ARGV(cx,vp);
+	JSBool ok = JS_TRUE;
+	CGPoint arg0;
+	
+	if( argc == 1) {
+		ok &= jsval_to_CGPoint( cx, *argvp++, (CGPoint*) &arg0 );
+		JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error processing arguments");
+	} else {
+		double x, y;
+		ok = JS_ValueToNumber(cx, *argvp++, &x);
+		ok &= JS_ValueToNumber(cx, *argvp++, &y);
+		JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error processing arguments");
+		arg0 = ccp(x,y);
+	}
+	
+	CCNode *real = (CCNode*) [proxy realObj];
+	[real setPosition:(CGPoint)arg0  ];
+	JS_SET_RVAL(cx, vp, JSVAL_VOID);
+	return JS_TRUE;
+}
+
 #pragma mark - setBlendFunc friends
 // setBlendFunc
 JSBool JSB_CCParticleSystem_setBlendFunc_(JSContext *cx, uint32_t argc, jsval *vp)
@@ -988,6 +1016,26 @@ JSBool JSB_CCAtlasNode_setBlendFunc_(JSContext *cx, uint32_t argc, jsval *vp)
 JSBool JSB_CCParticleBatchNode_setBlendFunc_(JSContext *cx, uint32_t argc, jsval *vp)
 {
 	return JSB_CCParticleSystem_setBlendFunc_(cx, argc, vp);
+}
+
+JSBool JSB_CCLayerColor_setBlendFunc_(JSContext *cx, uint32_t argc, jsval *vp)
+{
+	return JSB_CCParticleSystem_setBlendFunc_(cx, argc, vp);
+}
+
+#pragma mark Effects
+
+JSBool JSB_CCLens3D_setPosition_(JSContext *cx, uint32_t argc, jsval *vp)
+{
+	return JSB_CCNode_setPosition_(cx, argc, vp);
+}
+JSBool JSB_CCRipple3D_setPosition_(JSContext *cx, uint32_t argc, jsval *vp)
+{
+	return JSB_CCNode_setPosition_(cx, argc, vp);
+}
+JSBool JSB_CCTwirl_setPosition_(JSContext *cx, uint32_t argc, jsval *vp)
+{
+	return JSB_CCNode_setPosition_(cx, argc, vp);
 }
 
 #endif // JSB_INCLUDE_COCOS2D
