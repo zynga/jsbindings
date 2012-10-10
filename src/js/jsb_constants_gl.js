@@ -21,4 +21,3 @@ gl.ONE_MINUS_DST_ALPHA          = 0x0305;
 gl.DST_COLOR                    = 0x0306;
 gl.ONE_MINUS_DST_COLOR          = 0x0307;
 gl.SRC_ALPHA_SATURATE           = 0x0308;
-

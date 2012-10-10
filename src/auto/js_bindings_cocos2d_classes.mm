@@ -1158,28 +1158,6 @@ JSBool JSB_CCNode_setParent_(JSContext *cx, uint32_t argc, jsval *vp) {
 	return JS_TRUE;
 }
 
-// Arguments: CGPoint
-// Ret value: void (None)
-JSBool JSB_CCNode_setPosition_(JSContext *cx, uint32_t argc, jsval *vp) {
-
-	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
-	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
-
-	JSB_PRECONDITION3( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
-	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
-	jsval *argvp = JS_ARGV(cx,vp);
-	JSBool ok = JS_TRUE;
-	CGPoint arg0; 
-
-	ok &= jsval_to_CGPoint( cx, *argvp++, (CGPoint*) &arg0 );
-	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error processing arguments");
-
-	CCNode *real = (CCNode*) [proxy realObj];
-	[real setPosition:(CGPoint)arg0  ];
-	JS_SET_RVAL(cx, vp, JSVAL_VOID);
-	return JS_TRUE;
-}
-
 // Arguments: float
 // Ret value: void (None)
 JSBool JSB_CCNode_setRotation_(JSContext *cx, uint32_t argc, jsval *vp) {
@@ -29729,28 +29707,6 @@ JSBool JSB_CCRipple3D_setAmplitudeRate_(JSContext *cx, uint32_t argc, jsval *vp)
 	return JS_TRUE;
 }
 
-// Arguments: CGPoint
-// Ret value: void (None)
-JSBool JSB_CCRipple3D_setPosition_(JSContext *cx, uint32_t argc, jsval *vp) {
-
-	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
-	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
-
-	JSB_PRECONDITION3( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
-	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
-	jsval *argvp = JS_ARGV(cx,vp);
-	JSBool ok = JS_TRUE;
-	CGPoint arg0; 
-
-	ok &= jsval_to_CGPoint( cx, *argvp++, (CGPoint*) &arg0 );
-	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error processing arguments");
-
-	CCRipple3D *real = (CCRipple3D*) [proxy realObj];
-	[real setPosition:(CGPoint)arg0  ];
-	JS_SET_RVAL(cx, vp, JSVAL_VOID);
-	return JS_TRUE;
-}
-
 void JSB_CCRipple3D_createClass(JSContext *cx, JSObject* globalObj, const char* name )
 {
 	JSB_CCRipple3D_class = (JSClass *)calloc(1, sizeof(JSClass));
@@ -38727,28 +38683,6 @@ JSBool JSB_CCLens3D_setLensEffect_(JSContext *cx, uint32_t argc, jsval *vp) {
 	return JS_TRUE;
 }
 
-// Arguments: CGPoint
-// Ret value: void (None)
-JSBool JSB_CCLens3D_setPosition_(JSContext *cx, uint32_t argc, jsval *vp) {
-
-	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
-	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
-
-	JSB_PRECONDITION3( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
-	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
-	jsval *argvp = JS_ARGV(cx,vp);
-	JSBool ok = JS_TRUE;
-	CGPoint arg0; 
-
-	ok &= jsval_to_CGPoint( cx, *argvp++, (CGPoint*) &arg0 );
-	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error processing arguments");
-
-	CCLens3D *real = (CCLens3D*) [proxy realObj];
-	[real setPosition:(CGPoint)arg0  ];
-	JS_SET_RVAL(cx, vp, JSVAL_VOID);
-	return JS_TRUE;
-}
-
 void JSB_CCLens3D_createClass(JSContext *cx, JSObject* globalObj, const char* name )
 {
 	JSB_CCLens3D_class = (JSClass *)calloc(1, sizeof(JSClass));
@@ -40528,28 +40462,6 @@ JSBool JSB_CCTwirl_setAmplitudeRate_(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	CCTwirl *real = (CCTwirl*) [proxy realObj];
 	[real setAmplitudeRate:(float)arg0  ];
-	JS_SET_RVAL(cx, vp, JSVAL_VOID);
-	return JS_TRUE;
-}
-
-// Arguments: CGPoint
-// Ret value: void (None)
-JSBool JSB_CCTwirl_setPosition_(JSContext *cx, uint32_t argc, jsval *vp) {
-
-	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
-	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
-
-	JSB_PRECONDITION3( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
-	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
-	jsval *argvp = JS_ARGV(cx,vp);
-	JSBool ok = JS_TRUE;
-	CGPoint arg0; 
-
-	ok &= jsval_to_CGPoint( cx, *argvp++, (CGPoint*) &arg0 );
-	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error processing arguments");
-
-	CCTwirl *real = (CCTwirl*) [proxy realObj];
-	[real setPosition:(CGPoint)arg0  ];
 	JS_SET_RVAL(cx, vp, JSVAL_VOID);
 	return JS_TRUE;
 }

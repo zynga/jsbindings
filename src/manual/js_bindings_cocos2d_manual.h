@@ -38,4 +38,9 @@ jsval ccColor3B_to_jsval( JSContext *cx, ccColor3B p );
 jsval ccColor4B_to_jsval( JSContext *cx, ccColor4B p );
 jsval ccColor4F_to_jsval( JSContext *cx, ccColor4F p );
 
+// XXX argh
+// Apparently this function has a c++ definition... why???
+
+JSBool JSB_CCLayerColor_setBlendFunc_(JSContext *cx, uint32_t argc, jsval *vp);
+
 #endif // JSB_INCLUDE_COCOS2D

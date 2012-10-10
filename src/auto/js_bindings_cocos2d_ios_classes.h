@@ -20,6 +20,7 @@ extern "C" {
 
 void JSB_CCDirector_createClass(JSContext *cx, JSObject* globalObj, const char* name );
 
+// Manually generated methods
 
 
 extern JSObject *JSB_CCDirector_object;
@@ -49,6 +50,7 @@ extern "C" {
 
 void JSB_CCDirectorIOS_createClass(JSContext *cx, JSObject* globalObj, const char* name );
 
+// Manually generated methods
 
 
 extern JSObject *JSB_CCDirectorIOS_object;
@@ -78,6 +80,7 @@ extern "C" {
 
 void JSB_CCDirectorDisplayLink_createClass(JSContext *cx, JSObject* globalObj, const char* name );
 
+// Manually generated methods
 
 
 extern JSObject *JSB_CCDirectorDisplayLink_object;
@@ -107,6 +110,7 @@ extern "C" {
 
 void JSB_CCLayer_createClass(JSContext *cx, JSObject* globalObj, const char* name );
 
+// Manually generated methods
 
 
 extern JSObject *JSB_CCLayer_object;
@@ -136,6 +140,7 @@ extern "C" {
 
 void JSB_CCLayerMultiplex_createClass(JSContext *cx, JSObject* globalObj, const char* name );
 
+// Manually generated methods
 
 
 extern JSObject *JSB_CCLayerMultiplex_object;
@@ -165,6 +170,8 @@ extern "C" {
 
 void JSB_CCLayerColor_createClass(JSContext *cx, JSObject* globalObj, const char* name );
 
+// Manually generated methods
+JSBool JSB_CCLayerColor_setBlendFunc_(JSContext *cx, uint32_t argc, jsval *vp);
 
 
 extern JSObject *JSB_CCLayerColor_object;
@@ -194,6 +201,7 @@ extern "C" {
 
 void JSB_CCLayerGradient_createClass(JSContext *cx, JSObject* globalObj, const char* name );
 
+// Manually generated methods
 
 
 extern JSObject *JSB_CCLayerGradient_object;
@@ -223,6 +231,7 @@ extern "C" {
 
 void JSB_CCMenu_createClass(JSContext *cx, JSObject* globalObj, const char* name );
 
+// Manually generated methods
 
 
 extern JSObject *JSB_CCMenu_object;
