@@ -137,7 +137,8 @@ JSBool jsval_to_NSString( JSContext *cx, jsval vp, NSString **ret )
 	
 	JSB_PRECONDITION3(ptr, cx, JS_FALSE, "Error encoding string");
 	
-	NSString *tmp = [NSString stringWithUTF8String: ptr];
+//	NSString *tmp = [NSString stringWithUTF8String: ptr];
+	NSString *tmp = [NSString stringWithCString:ptr encoding:NSUTF8StringEncoding];
 	
 	JSB_PRECONDITION3( tmp, cx, JS_FALSE, "Error creating string from UTF8");
 	

@@ -342,7 +342,10 @@ JSBool JSBCore_forceGC(JSContext *cx, uint32_t argc, jsval *vp)
 	return ok;
 }
 
--(JSBool) runScript2:(NSString*)filename
+/*
+ * Evaluates an script
+ */
+-(JSBool) runScript:(NSString*)filename
 {
 	JSBool ok = JS_FALSE;
 
@@ -364,9 +367,9 @@ JSBool JSBCore_forceGC(JSContext *cx, uint32_t argc, jsval *vp)
 }
 
 /*
- * Compile a script and execute it. It roots the script
+ * This function does not work OK with UTF8 scripts
  */
--(JSBool) runScript:(NSString*)filename
+-(JSBool) runScript_do_not_use:(NSString*)filename
 {
 	JSBool ok = JS_FALSE;
 
