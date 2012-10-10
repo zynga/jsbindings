@@ -59,28 +59,29 @@ cc.Reader.load = function(file, owner, parentSize)
     // Attach animation managers to nodes and assign root node callbacks and member variables
     for (var i = 0; i < nodesWithAnimationManagers.length; i++)
     {
-        var node = nodesWithAnimationManagers[i];
+        var innerNode = nodesWithAnimationManagers[i];
         var animationManager = animationManagersForNodes[i];
         
-        node.animationManager = animationManager;
+        innerNode.animationManager = animationManager;
         
         var documentControllerName = animationManager.getDocumentControllerName();
         if (!documentControllerName) continue;
         
         // Create a document controller
         var controller = new _ccbGlobalContext[documentControllerName]();
+        controller.controllerName = documentControllerName;
         
-        node.controller = controller;
-        controller.rootNode = node;
+        innerNode.controller = controller;
+        controller.rootNode = innerNode;
         
         // Callbacks
         var documentCallbackNames = animationManager.getDocumentCallbackNames();
         var documentCallbackNodes = animationManager.getDocumentCallbackNodes();
         
-        for (var i = 0; i < documentCallbackNames.length; i++)
+        for (var j = 0; j < documentCallbackNames.length; j++)
         {
-            var callbackName = documentCallbackNames[i];
-            var callbackNode = documentCallbackNodes[i];
+            var callbackName = documentCallbackNames[j];
+            var callbackNode = documentCallbackNodes[j];
             
             callbackNode.setCallback(controller, controller[callbackName]);
         }
@@ -90,10 +91,10 @@ cc.Reader.load = function(file, owner, parentSize)
         var documentOutletNames = animationManager.getDocumentOutletNames();
         var documentOutletNodes = animationManager.getDocumentOutletNodes();
         
-        for (var i = 0; i < documentOutletNames.length; i++)
+        for (var j = 0; j < documentOutletNames.length; j++)
         {
-            var outletName = documentOutletNames[i];
-            var outletNode = documentOutletNodes[i];
+            var outletName = documentOutletNames[j];
+            var outletNode = documentOutletNodes[j];
             
             controller[outletName] = outletNode;
         }
