@@ -22,6 +22,7 @@ extern "C" {
 void JSB_CCNode_createClass(JSContext *cx, JSObject* globalObj, const char* name );
 
 // Manually generated methods
+JSBool JSB_CCNode_setPosition_(JSContext *cx, uint32_t argc, jsval *vp);
 JSBool JSB_CCNode_schedule_interval_repeat_delay_(JSContext *cx, uint32_t argc, jsval *vp);
 JSBool JSB_CCNode_scheduleOnce_delay_(JSContext *cx, uint32_t argc, jsval *vp);
 JSBool JSB_CCNode_unschedule_(JSContext *cx, uint32_t argc, jsval *vp);
@@ -4031,6 +4032,7 @@ extern "C" {
 void JSB_CCRipple3D_createClass(JSContext *cx, JSObject* globalObj, const char* name );
 
 // Manually generated methods
+JSBool JSB_CCRipple3D_setPosition_(JSContext *cx, uint32_t argc, jsval *vp);
 
 
 extern JSObject *JSB_CCRipple3D_object;
@@ -5534,6 +5536,7 @@ extern "C" {
 void JSB_CCLens3D_createClass(JSContext *cx, JSObject* globalObj, const char* name );
 
 // Manually generated methods
+JSBool JSB_CCLens3D_setPosition_(JSContext *cx, uint32_t argc, jsval *vp);
 
 
 extern JSObject *JSB_CCLens3D_object;
@@ -5834,6 +5837,7 @@ extern "C" {
 void JSB_CCTwirl_createClass(JSContext *cx, JSObject* globalObj, const char* name );
 
 // Manually generated methods
+JSBool JSB_CCTwirl_setPosition_(JSContext *cx, uint32_t argc, jsval *vp);
 
 
 extern JSObject *JSB_CCTwirl_object;

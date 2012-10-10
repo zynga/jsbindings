@@ -1813,28 +1813,6 @@ void JSB_CCLayerColor_finalize(JSFreeOp *fop, JSObject *obj)
 	jsb_del_proxy_for_jsobject( obj );
 }
 
-// Arguments: 
-// Ret value: ccBlendFunc ({_ccBlendFunc=II})
-JSBool JSB_CCLayerColor_blendFunc(JSContext *cx, uint32_t argc, jsval *vp) {
-
-	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
-	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
-
-	JSB_PRECONDITION3( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
-	JSB_PRECONDITION3( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
-	ccBlendFunc ret_val;
-
-	CCLayerColor *real = (CCLayerColor*) [proxy realObj];
-	ret_val = [real blendFunc ];
-
-	JSObject *typedArray = JS_NewUint32Array(cx, 2 );
-	ccBlendFunc* buffer = (ccBlendFunc*)JS_GetArrayBufferViewData(typedArray, cx);
-	*buffer = ret_val;
-	JS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(typedArray));
-
-	return JS_TRUE;
-}
-
 // Arguments: GLfloat
 // Ret value: void (None)
 JSBool JSB_CCLayerColor_changeHeight_(JSContext *cx, uint32_t argc, jsval *vp) {
@@ -1976,40 +1954,33 @@ JSBool JSB_CCLayerColor_initWithColor_width_height_(JSContext *cx, uint32_t argc
 	return JS_TRUE;
 }
 
-// Arguments: ccColor4B
-// Ret value: CCLayerColor* (o)
-JSBool JSB_CCLayerColor_layerWithColor__static(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
-	jsval *argvp = JS_ARGV(cx,vp);
-	JSBool ok = JS_TRUE;
-	ccColor4B arg0; 
-
-	ok &= jsval_to_ccColor4B( cx, *argvp++, (ccColor4B*) &arg0 );
-	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error processing arguments");
-	CCLayerColor* ret_val;
-
-	ret_val = [CCLayerColor layerWithColor:(ccColor4B)arg0  ];
-
-	JS_SET_RVAL(cx, vp, NSObject_to_jsval(cx, ret_val));
-
-	return JS_TRUE;
-}
-
 // Arguments: ccColor4B, GLfloat, GLfloat
 // Ret value: CCLayerColor* (o)
 JSBool JSB_CCLayerColor_layerWithColor_width_height__static(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION3( argc == 3, cx, JS_FALSE, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc >= 1 && argc <= 3 , cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	ccColor4B arg0; double arg1; double arg2; 
 
 	ok &= jsval_to_ccColor4B( cx, *argvp++, (ccColor4B*) &arg0 );
-	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
-	ok &= JS_ValueToNumber( cx, *argvp++, &arg2 );
+	if (argc >= 2) {
+		ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
+	}
+	if (argc >= 3) {
+		ok &= JS_ValueToNumber( cx, *argvp++, &arg2 );
+	}
 	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error processing arguments");
 	CCLayerColor* ret_val;
 
-	ret_val = [CCLayerColor layerWithColor:(ccColor4B)arg0 width:(GLfloat)arg1 height:(GLfloat)arg2  ];
+	if( argc == 1 ) {
+		ret_val = [CCLayerColor layerWithColor:(ccColor4B)arg0  ];
+	}
+	else if( argc == 3 ) {
+		ret_val = [CCLayerColor layerWithColor:(ccColor4B)arg0 width:(GLfloat)arg1 height:(GLfloat)arg2  ];
+	}
+	else
+		JSB_PRECONDITION3(NO, cx, JS_FALSE, "Error in number of arguments");
+
 
 	JS_SET_RVAL(cx, vp, NSObject_to_jsval(cx, ret_val));
 
@@ -2030,31 +2001,6 @@ JSBool JSB_CCLayerColor_opacity(JSContext *cx, uint32_t argc, jsval *vp) {
 	CCLayerColor *real = (CCLayerColor*) [proxy realObj];
 	ret_val = [real opacity ];
 	JS_SET_RVAL(cx, vp, INT_TO_JSVAL(ret_val));
-	return JS_TRUE;
-}
-
-// Arguments: ccBlendFunc
-// Ret value: void (None)
-JSBool JSB_CCLayerColor_setBlendFunc_(JSContext *cx, uint32_t argc, jsval *vp) {
-
-	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
-	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
-
-	JSB_PRECONDITION3( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
-	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
-	jsval *argvp = JS_ARGV(cx,vp);
-	JSBool ok = JS_TRUE;
-	ccBlendFunc arg0; 
-
-
-	JSObject *tmp_arg0;
-	ok &= JS_ValueToObject( cx, *argvp++, &tmp_arg0 );
-	arg0 = *(ccBlendFunc*)JS_GetArrayBufferViewData( tmp_arg0, cx );
-	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error processing arguments");
-
-	CCLayerColor *real = (CCLayerColor*) [proxy realObj];
-	[real setBlendFunc:(ccBlendFunc)arg0  ];
-	JS_SET_RVAL(cx, vp, JSVAL_VOID);
 	return JS_TRUE;
 }
 
@@ -2159,7 +2105,6 @@ void JSB_CCLayerColor_createClass(JSContext *cx, JSObject* globalObj, const char
 		{0, 0, 0, 0, 0}
 	};
 	static JSFunctionSpec funcs[] = {
-		JS_FN("getBlendFunc", JSB_CCLayerColor_blendFunc, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("changeHeight", JSB_CCLayerColor_changeHeight_, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("changeWidth", JSB_CCLayerColor_changeWidth_, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("changeWidthHeight", JSB_CCLayerColor_changeWidth_height_, 2, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
@@ -2175,8 +2120,7 @@ void JSB_CCLayerColor_createClass(JSContext *cx, JSObject* globalObj, const char
 		JS_FS_END
 	};
 	static JSFunctionSpec st_funcs[] = {
-		JS_FN("create", JSB_CCLayerColor_layerWithColor__static, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
-		JS_FN("layerWithColorWidthHeight", JSB_CCLayerColor_layerWithColor_width_height__static, 3, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("create", JSB_CCLayerColor_layerWithColor_width_height__static, 3, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FS_END
 	};
 
@@ -2564,7 +2508,7 @@ void JSB_CCLayerGradient_createClass(JSContext *cx, JSObject* globalObj, const c
 		{0, 0, 0, 0, 0}
 	};
 	static JSFunctionSpec funcs[] = {
-		JS_FN("getCompressedInterpolation", JSB_CCLayerGradient_compressedInterpolation, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("isCompressedInterpolation", JSB_CCLayerGradient_compressedInterpolation, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("getEndColor", JSB_CCLayerGradient_endColor, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("getEndOpacity", JSB_CCLayerGradient_endOpacity, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("init", JSB_CCLayerGradient_initWithColor_fadingTo_alongVector_, 3, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
