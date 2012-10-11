@@ -38,9 +38,14 @@ jsval ccColor3B_to_jsval( JSContext *cx, ccColor3B p );
 jsval ccColor4B_to_jsval( JSContext *cx, ccColor4B p );
 jsval ccColor4F_to_jsval( JSContext *cx, ccColor4F p );
 
+/** returns an array (not NSArray) of CGPoint. caller should call free */
+JSBool jsval_to_array_of_CGPoint( JSContext *cx, jsval vp, CGPoint**verts, int *numVerts);
+
 // XXX argh
 // Apparently this function has a c++ definition... why???
 
 JSBool JSB_CCLayerColor_setBlendFunc_(JSContext *cx, uint32_t argc, jsval *vp);
+JSBool JSB_CCCardinalSplineBy_actionWithDuration_points_tension__static(JSContext *cx, uint32_t argc, jsval *vp);
+JSBool JSB_CCBezierTo_actionWithDuration_bezier__static(JSContext *cx, uint32_t argc, jsval *vp);
 
 #endif // JSB_INCLUDE_COCOS2D

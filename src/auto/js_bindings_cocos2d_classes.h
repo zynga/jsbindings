@@ -1411,6 +1411,7 @@ extern "C" {
 void JSB_CCCardinalSplineTo_createClass(JSContext *cx, JSObject* globalObj, const char* name );
 
 // Manually generated methods
+JSBool JSB_CCCardinalSplineTo_actionWithDuration_points_tension__static(JSContext *cx, uint32_t argc, jsval *vp);
 
 
 extern JSObject *JSB_CCCardinalSplineTo_object;
@@ -1471,6 +1472,7 @@ extern "C" {
 void JSB_CCCatmullRomBy_createClass(JSContext *cx, JSObject* globalObj, const char* name );
 
 // Manually generated methods
+JSBool JSB_CCCatmullRomBy_actionWithDuration_points__static(JSContext *cx, uint32_t argc, jsval *vp);
 
 
 extern JSObject *JSB_CCCatmullRomBy_object;
@@ -3282,6 +3284,7 @@ extern "C" {
 void JSB_CCCatmullRomTo_createClass(JSContext *cx, JSObject* globalObj, const char* name );
 
 // Manually generated methods
+JSBool JSB_CCCatmullRomTo_actionWithDuration_points__static(JSContext *cx, uint32_t argc, jsval *vp);
 
 
 extern JSObject *JSB_CCCatmullRomTo_object;
@@ -4484,6 +4487,7 @@ extern "C" {
 void JSB_CCBezierBy_createClass(JSContext *cx, JSObject* globalObj, const char* name );
 
 // Manually generated methods
+JSBool JSB_CCBezierBy_actionWithDuration_bezier__static(JSContext *cx, uint32_t argc, jsval *vp);
 
 
 extern JSObject *JSB_CCBezierBy_object;
