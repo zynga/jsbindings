@@ -191,6 +191,33 @@ jsval ccColor4F_to_jsval( JSContext *cx, ccColor4F p )
 	return OBJECT_TO_JSVAL(object);		
 }
 
+JSBool jsval_to_array_of_CGPoint( JSContext *cx, jsval vp, CGPoint**points, int *numPoints)
+{
+	// Parsing sequence
+	JSObject *jsobj;
+	JSBool ok = JS_ValueToObject( cx, vp, &jsobj );
+	JSB_PRECONDITION3( ok, cx, JS_FALSE, "Error converting value to object");
+	JSB_PRECONDITION3( jsobj && JS_IsArrayObject( cx, jsobj), cx, JS_FALSE, "Object must be an array");
+	
+	uint32_t len;
+	JS_GetArrayLength(cx, jsobj, &len);
+		
+	CGPoint *array = (CGPoint*)malloc( sizeof(CGPoint) * len);
+	
+	for( uint32_t i=0; i< len;i++ ) {
+		jsval valarg;
+		JS_GetElement(cx, jsobj, i, &valarg);
+
+		ok = jsval_to_CGPoint(cx, valarg, &array[i]);
+		JSB_PRECONDITION3( ok, cx, JS_FALSE, "Error converting value to CGPoint");
+	}
+			
+	*numPoints = len;
+	*points = array;
+	
+	return JS_TRUE;
+}
+
 
 #pragma mark - MenuItem 
 
@@ -1036,6 +1063,176 @@ JSBool JSB_CCRipple3D_setPosition_(JSContext *cx, uint32_t argc, jsval *vp)
 JSBool JSB_CCTwirl_setPosition_(JSContext *cx, uint32_t argc, jsval *vp)
 {
 	return JSB_CCNode_setPosition_(cx, argc, vp);
+}
+
+#pragma mark Actions
+
+JSBool JSB_CCBezierBy_actionWithDuration_bezier__static(JSContext *cx, uint32_t argc, jsval *vp) {
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
+	jsval *argvp = JS_ARGV(cx,vp);
+	JSBool ok = JS_TRUE;
+	double arg0;
+	CGPoint *array;
+	int numPoints;
+	
+	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
+	ok &= jsval_to_array_of_CGPoint(cx, *argvp++, &array, &numPoints);
+	
+	JSB_PRECONDITION3(ok && numPoints==3, cx, JS_FALSE, "Error processing arguments. Expending an array of 3 elements");
+	
+	CCBezierTo* ret_val;
+	
+	ccBezierConfig config;
+	config.controlPoint_1 = array[0];
+	config.controlPoint_2 = array[1];
+	config.endPosition = array[2];
+	free(array);
+	
+	ret_val = [CCBezierBy actionWithDuration:arg0 bezier:config];
+	
+	JS_SET_RVAL(cx, vp, NSObject_to_jsval(cx, ret_val));
+	
+	return JS_TRUE;
+}
+
+JSBool JSB_CCBezierTo_actionWithDuration_bezier__static(JSContext *cx, uint32_t argc, jsval *vp) {
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
+	jsval *argvp = JS_ARGV(cx,vp);
+	JSBool ok = JS_TRUE;
+	double arg0;
+	CGPoint *array;
+	int numPoints;
+	
+	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
+	ok &= jsval_to_array_of_CGPoint(cx, *argvp++, &array, &numPoints);
+	
+	JSB_PRECONDITION3(ok && numPoints==3, cx, JS_FALSE, "Error processing arguments. Expending an array of 3 elements");
+
+	CCBezierTo* ret_val;
+	
+	ccBezierConfig config;
+	config.controlPoint_1 = array[0];
+	config.controlPoint_2 = array[1];
+	config.endPosition = array[2];
+	free(array);
+	
+	ret_val = [CCBezierTo actionWithDuration:arg0 bezier:config];
+	
+	JS_SET_RVAL(cx, vp, NSObject_to_jsval(cx, ret_val));
+	
+	return JS_TRUE;
+}
+
+JSBool JSB_CCCardinalSplineBy_actionWithDuration_points_tension__static(JSContext *cx, uint32_t argc, jsval *vp) {
+	JSB_PRECONDITION3( argc == 3, cx, JS_FALSE, "Invalid number of arguments" );
+	jsval *argvp = JS_ARGV(cx,vp);
+	JSBool ok = JS_TRUE;
+	double arg0; double arg2;
+	CGPoint *array;
+	int numPoints;
+	
+	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
+	ok &= jsval_to_array_of_CGPoint(cx, *argvp++, &array, &numPoints);
+	ok &= JS_ValueToNumber( cx, *argvp++, &arg2 );
+	
+	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error processing arguments");
+	CCCardinalSplineTo* ret_val;
+	
+	CCPointArray *points = [CCPointArray arrayWithCapacity:numPoints];
+	for( int i=0; i<numPoints;i++)
+		[points addControlPoint:array[i]];
+	free(array);
+	
+	ret_val = [CCCardinalSplineBy actionWithDuration:(ccTime)arg0 points:points tension:(CGFloat)arg2  ];
+	
+	JS_SET_RVAL(cx, vp, NSObject_to_jsval(cx, ret_val));
+	
+	return JS_TRUE;
+}
+
+// Arguments: ccTime, CCPointArray*, CGFloat
+// Ret value: CCCardinalSplineTo* (o)
+JSBool JSB_CCCardinalSplineTo_actionWithDuration_points_tension__static(JSContext *cx, uint32_t argc, jsval *vp) {
+	JSB_PRECONDITION3( argc == 3, cx, JS_FALSE, "Invalid number of arguments" );
+	jsval *argvp = JS_ARGV(cx,vp);
+	JSBool ok = JS_TRUE;
+	double arg0; double arg2;
+	CGPoint *array;
+	int numPoints;
+	
+	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
+	ok &= jsval_to_array_of_CGPoint(cx, *argvp++, &array, &numPoints);
+	ok &= JS_ValueToNumber( cx, *argvp++, &arg2 );
+		
+	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error processing arguments");
+	CCCardinalSplineTo* ret_val;
+	
+	CCPointArray *points = [CCPointArray arrayWithCapacity:numPoints];
+	for( int i=0; i<numPoints;i++)
+		[points addControlPoint:array[i]];
+	free(array);
+		
+	ret_val = [CCCardinalSplineTo actionWithDuration:(ccTime)arg0 points:points tension:(CGFloat)arg2  ];
+	
+	JS_SET_RVAL(cx, vp, NSObject_to_jsval(cx, ret_val));
+	
+	return JS_TRUE;
+}
+
+// Arguments: ccTime, CCPointArray*
+// Ret value: CCCatmullRomBy* (o)
+JSBool JSB_CCCatmullRomBy_actionWithDuration_points__static(JSContext *cx, uint32_t argc, jsval *vp) {
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
+	jsval *argvp = JS_ARGV(cx,vp);
+	JSBool ok = JS_TRUE;
+	double arg0;
+	CGPoint *array;
+	int numPoints;
+	
+	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
+	ok &= jsval_to_array_of_CGPoint(cx, *argvp++, &array, &numPoints);
+	
+	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error processing arguments");
+	CCCatmullRomTo* ret_val;
+	
+	CCPointArray *points = [CCPointArray arrayWithCapacity:numPoints];
+	for( int i=0; i<numPoints;i++)
+		[points addControlPoint:array[i]];
+	free(array);
+	
+	ret_val = [CCCatmullRomBy actionWithDuration:(ccTime)arg0 points:points  ];
+	
+	JS_SET_RVAL(cx, vp, NSObject_to_jsval(cx, ret_val));
+	
+	return JS_TRUE;
+}
+
+// Arguments: ccTime, CCPointArray*
+// Ret value: CCCatmullRomTo* (o)
+JSBool JSB_CCCatmullRomTo_actionWithDuration_points__static(JSContext *cx, uint32_t argc, jsval *vp) {
+	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
+	jsval *argvp = JS_ARGV(cx,vp);
+	JSBool ok = JS_TRUE;
+	double arg0;
+	CGPoint *array;
+	int numPoints;
+	
+	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
+	ok &= jsval_to_array_of_CGPoint(cx, *argvp++, &array, &numPoints);
+
+	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error processing arguments");
+	CCCatmullRomTo* ret_val;
+	
+	CCPointArray *points = [CCPointArray arrayWithCapacity:numPoints];
+	for( int i=0; i<numPoints;i++)
+		[points addControlPoint:array[i]];
+	free(array);
+	
+	ret_val = [CCCatmullRomTo actionWithDuration:(ccTime)arg0 points:points  ];
+	
+	JS_SET_RVAL(cx, vp, NSObject_to_jsval(cx, ret_val));
+	
+	return JS_TRUE;
 }
 
 #endif // JSB_INCLUDE_COCOS2D

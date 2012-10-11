@@ -12202,27 +12202,6 @@ void JSB_CCCardinalSplineTo_finalize(JSFreeOp *fop, JSObject *obj)
 }
 
 // Arguments: ccTime, CCPointArray*, CGFloat
-// Ret value: CCCardinalSplineTo* (o)
-JSBool JSB_CCCardinalSplineTo_actionWithDuration_points_tension__static(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION3( argc == 3, cx, JS_FALSE, "Invalid number of arguments" );
-	jsval *argvp = JS_ARGV(cx,vp);
-	JSBool ok = JS_TRUE;
-	double arg0; id arg1; double arg2; 
-
-	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
-	ok &= jsval_to_NSObject( cx, *argvp++, &arg1);
-	ok &= JS_ValueToNumber( cx, *argvp++, &arg2 );
-	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error processing arguments");
-	CCCardinalSplineTo* ret_val;
-
-	ret_val = [CCCardinalSplineTo actionWithDuration:(ccTime)arg0 points:arg1 tension:(CGFloat)arg2  ];
-
-	JS_SET_RVAL(cx, vp, NSObject_to_jsval(cx, ret_val));
-
-	return JS_TRUE;
-}
-
-// Arguments: ccTime, CCPointArray*, CGFloat
 // Ret value: None (None)
 JSBool JSB_CCCardinalSplineTo_initWithDuration_points_tension_(JSContext *cx, uint32_t argc, jsval *vp) {
 
@@ -12390,27 +12369,6 @@ JSBool JSB_CCCardinalSplineBy_startWithTarget_(JSContext *cx, uint32_t argc, jsv
 	return JS_TRUE;
 }
 
-// Arguments: ccTime, CCPointArray*, CGFloat
-// Ret value: CCCardinalSplineBy* (o)
-JSBool JSB_CCCardinalSplineBy_actionWithDuration_points_tension__static(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION3( argc == 3, cx, JS_FALSE, "Invalid number of arguments" );
-	jsval *argvp = JS_ARGV(cx,vp);
-	JSBool ok = JS_TRUE;
-	double arg0; id arg1; double arg2; 
-
-	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
-	ok &= jsval_to_NSObject( cx, *argvp++, &arg1);
-	ok &= JS_ValueToNumber( cx, *argvp++, &arg2 );
-	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error processing arguments");
-	CCCardinalSplineBy* ret_val;
-
-	ret_val = [CCCardinalSplineBy actionWithDuration:(ccTime)arg0 points:arg1 tension:(CGFloat)arg2  ];
-
-	JS_SET_RVAL(cx, vp, NSObject_to_jsval(cx, ret_val));
-
-	return JS_TRUE;
-}
-
 void JSB_CCCardinalSplineBy_createClass(JSContext *cx, JSObject* globalObj, const char* name )
 {
 	JSB_CCCardinalSplineBy_class = (JSClass *)calloc(1, sizeof(JSClass));
@@ -12484,26 +12442,6 @@ void JSB_CCCatmullRomBy_finalize(JSFreeOp *fop, JSObject *obj)
 //		[[proxy realObj] release];
 //	}
 	jsb_del_proxy_for_jsobject( obj );
-}
-
-// Arguments: ccTime, CCPointArray*
-// Ret value: CCCatmullRomBy* (o)
-JSBool JSB_CCCatmullRomBy_actionWithDuration_points__static(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
-	jsval *argvp = JS_ARGV(cx,vp);
-	JSBool ok = JS_TRUE;
-	double arg0; id arg1; 
-
-	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
-	ok &= jsval_to_NSObject( cx, *argvp++, &arg1);
-	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error processing arguments");
-	CCCatmullRomBy* ret_val;
-
-	ret_val = [CCCatmullRomBy actionWithDuration:(ccTime)arg0 points:arg1  ];
-
-	JS_SET_RVAL(cx, vp, NSObject_to_jsval(cx, ret_val));
-
-	return JS_TRUE;
 }
 
 // Arguments: ccTime, CCPointArray*
@@ -24483,26 +24421,6 @@ void JSB_CCCatmullRomTo_finalize(JSFreeOp *fop, JSObject *obj)
 }
 
 // Arguments: ccTime, CCPointArray*
-// Ret value: CCCatmullRomTo* (o)
-JSBool JSB_CCCatmullRomTo_actionWithDuration_points__static(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
-	jsval *argvp = JS_ARGV(cx,vp);
-	JSBool ok = JS_TRUE;
-	double arg0; id arg1; 
-
-	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
-	ok &= jsval_to_NSObject( cx, *argvp++, &arg1);
-	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error processing arguments");
-	CCCatmullRomTo* ret_val;
-
-	ret_val = [CCCatmullRomTo actionWithDuration:(ccTime)arg0 points:arg1  ];
-
-	JS_SET_RVAL(cx, vp, NSObject_to_jsval(cx, ret_val));
-
-	return JS_TRUE;
-}
-
-// Arguments: ccTime, CCPointArray*
 // Ret value: None (None)
 JSBool JSB_CCCatmullRomTo_initWithDuration_points_(JSContext *cx, uint32_t argc, jsval *vp) {
 
@@ -32568,25 +32486,6 @@ void JSB_CCBezierBy_finalize(JSFreeOp *fop, JSObject *obj)
 	jsb_del_proxy_for_jsobject( obj );
 }
 
-// Arguments: ccTime
-// Ret value: CCBezierBy* (o)
-JSBool JSB_CCBezierBy_actionWithDuration__static(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
-	jsval *argvp = JS_ARGV(cx,vp);
-	JSBool ok = JS_TRUE;
-	double arg0; 
-
-	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
-	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error processing arguments");
-	CCBezierBy* ret_val;
-
-	ret_val = [CCBezierBy actionWithDuration:(ccTime)arg0  ];
-
-	JS_SET_RVAL(cx, vp, NSObject_to_jsval(cx, ret_val));
-
-	return JS_TRUE;
-}
-
 void JSB_CCBezierBy_createClass(JSContext *cx, JSObject* globalObj, const char* name )
 {
 	JSB_CCBezierBy_class = (JSClass *)calloc(1, sizeof(JSClass));
@@ -32608,7 +32507,7 @@ void JSB_CCBezierBy_createClass(JSContext *cx, JSObject* globalObj, const char* 
 		JS_FS_END
 	};
 	static JSFunctionSpec st_funcs[] = {
-		JS_FN("actionWithDuration", JSB_CCBezierBy_actionWithDuration__static, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("create", JSB_CCBezierBy_actionWithDuration_bezier__static, 2, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FS_END
 	};
 
@@ -38266,25 +38165,6 @@ JSBool JSB_CCBezierTo_startWithTarget_(JSContext *cx, uint32_t argc, jsval *vp) 
 	return JS_TRUE;
 }
 
-// Arguments: ccTime
-// Ret value: CCBezierTo* (o)
-JSBool JSB_CCBezierTo_actionWithDuration__static(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
-	jsval *argvp = JS_ARGV(cx,vp);
-	JSBool ok = JS_TRUE;
-	double arg0; 
-
-	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
-	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error processing arguments");
-	CCBezierTo* ret_val;
-
-	ret_val = [CCBezierTo actionWithDuration:(ccTime)arg0  ];
-
-	JS_SET_RVAL(cx, vp, NSObject_to_jsval(cx, ret_val));
-
-	return JS_TRUE;
-}
-
 void JSB_CCBezierTo_createClass(JSContext *cx, JSObject* globalObj, const char* name )
 {
 	JSB_CCBezierTo_class = (JSClass *)calloc(1, sizeof(JSClass));
@@ -38307,7 +38187,7 @@ void JSB_CCBezierTo_createClass(JSContext *cx, JSObject* globalObj, const char* 
 		JS_FS_END
 	};
 	static JSFunctionSpec st_funcs[] = {
-		JS_FN("actionWithDuration", JSB_CCBezierTo_actionWithDuration__static, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("create", JSB_CCBezierTo_actionWithDuration_bezier__static, 2, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FS_END
 	};
 
