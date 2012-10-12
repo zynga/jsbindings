@@ -90,11 +90,25 @@ extern char * JSB_association_proxy_key;
 
 /**
  * Force a cycle of GC
- * @param cx
- * @param argc
- * @param vp
  */
 +(JSBool) forceGCWithContext:(JSContext*)cx argc:(uint32_t)argc vp:(jsval*)vp;
+
+/** creates a new runtime */
+-(void) createRuntime;
+
+/** restarts the JS runtime.
+ It will call `shutdown` and then it will call `createRuntime`.
+ */
+-(void) restartRuntime;
+
+/** Shutdown the VM.
+ All created objects are going to be destroyed, including the caches
+ */
+-(void) shutdown;
+
+/** Purge the caches that mantains associations between native and JS objects
+ */
+-(void) purgeCache;
 
 /**
  * will eval the specified string

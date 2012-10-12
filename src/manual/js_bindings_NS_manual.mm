@@ -237,6 +237,11 @@ void JSB_NSObject_createClass(JSContext* cx, JSObject* globalObj, const char *na
 	return self;
 }
 
+-(void) unrootJSObject
+{
+	JS_RemoveObjectRoot( [[JSBCore sharedInstance] globalContext], &_jsObj);	
+}
+
 -(void) dealloc
 {
 	// If the compiler gives you an error, you can safely remove the following line

@@ -247,15 +247,17 @@ static void myCollisionSeparate(cpArbiter *arb, cpSpace *space, void *data)
 void JSB_cpSpace_finalize(JSFreeOp *fop, JSObject *jsthis)
 {
 	struct jsb_c_proxy_s *proxy = jsb_get_c_proxy_for_jsobject(jsthis);
-	CCLOGINFO(@"jsbindings: finalizing JS object %p (cpSpace), handle: %p", jsthis, proxy->handle);
-	
-	// Free Space Children
-	freeSpaceChildren((cpSpace*)proxy->handle);
-	
-	jsb_del_jsobject_for_proxy(proxy->handle);
-	if(proxy->flags == JSB_C_FLAG_CALL_FREE)
-		cpSpaceFree( (cpSpace*)proxy->handle);
-	jsb_del_c_proxy_for_jsobject(jsthis);
+	if( proxy ) {
+		CCLOGINFO(@"jsbindings: finalizing JS object %p (cpSpace), handle: %p", jsthis, proxy->handle);
+		
+		// Free Space Children
+		freeSpaceChildren((cpSpace*)proxy->handle);
+		
+		jsb_del_jsobject_for_proxy(proxy->handle);
+		if(proxy->flags == JSB_C_FLAG_CALL_FREE)
+			cpSpaceFree( (cpSpace*)proxy->handle);
+		jsb_del_c_proxy_for_jsobject(jsthis);
+	}
 }
 
 
