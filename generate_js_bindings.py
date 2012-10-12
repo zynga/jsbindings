@@ -2033,12 +2033,16 @@ JSBool %s_constructor(JSContext *cx, uint32_t argc, jsval *vp)
 void %s_finalize(JSFreeOp *fop, JSObject *jsthis)
 {
 \tstruct jsb_c_proxy_s *proxy = jsb_get_c_proxy_for_jsobject(jsthis);
-\tCCLOGINFO(@"jsbindings: finalizing JS object %%p (%s), handle: %%p", jsthis, proxy->handle);
+\tif( proxy ) {
+\t\tCCLOGINFO(@"jsbindings: finalizing JS object %%p (%s), handle: %%p", jsthis, proxy->handle);
 
-\tjsb_del_jsobject_for_proxy(proxy->handle);
-\tif(proxy->flags == JSB_C_FLAG_CALL_FREE)
-\t\t%s( (%s*)proxy->handle);
-\tjsb_del_c_proxy_for_jsobject(jsthis);
+\t\tjsb_del_jsobject_for_proxy(proxy->handle);
+\t\tif(proxy->flags == JSB_C_FLAG_CALL_FREE)
+\t\t\t%s( (%s*)proxy->handle);
+\t\tjsb_del_c_proxy_for_jsobject(jsthis);
+\t} else {
+\t\tCCLOGINFO(@"jsbindings: finalizing uninitialized JS object %%p (%s)", jsthis);
+\t}
 }
 '''
         destructor_suffix = self.c_object_properties['destructor_suffix'].keys()[0]
@@ -2063,7 +2067,8 @@ void %s_finalize(JSFreeOp *fop, JSObject *jsthis)
 
         self.fd_mm.write(template % (name,
                                     klass_name,
-                                    func_name, klass
+                                    func_name, klass,
+                                    klass_name
                                     ))
 
     def generate_implementation_class_method(self, klass_name, function):
