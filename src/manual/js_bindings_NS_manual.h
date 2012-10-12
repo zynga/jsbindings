@@ -41,9 +41,10 @@
 @property (nonatomic, readwrite, assign) id	realObj;
 @property (nonatomic, readonly) Class klass;
 
--(id) initWithJSObject:(JSObject*)object class:(Class)klass;
-+(JSObject*) createJSObjectWithRealObject:(id)realObj context:(JSContext*)JSContext;
 +(void) swizzleMethods;
++(JSObject*) createJSObjectWithRealObject:(id)realObj context:(JSContext*)JSContext;
+-(id) initWithJSObject:(JSObject*)object class:(Class)klass;
+-(void) unrootJSObject;
 @end
 
 
