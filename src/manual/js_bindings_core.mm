@@ -275,7 +275,7 @@ JSBool JSBCore_restartVM(JSContext *cx, uint32_t argc, jsval *vp)
 	JS_SetOptions(_cx, JSOPTION_VAROBJFIX);
 	JS_SetVersion(_cx, JSVERSION_LATEST);
 	JS_SetErrorReporter(_cx, reportError);
-	_object = JS_NewCompartmentAndGlobalObject( _cx, &global_class, NULL);
+	_object = JS_NewGlobalObject( _cx, &global_class, NULL);
 	if (!JS_InitStandardClasses( _cx, _object)) {
 		CCLOGWARN(@"js error");
 	}
