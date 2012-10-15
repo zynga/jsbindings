@@ -72,7 +72,7 @@ JSBool jsval_is_NSObject( JSContext *cx, jsval vp, NSObject **ret )
 	if( ! proxy )
 		return  JS_FALSE;
 
-	if( ret && *ret )
+	if( ret )
 		*ret = [proxy realObj];
 	
 	return JS_TRUE;
@@ -118,7 +118,7 @@ JSBool jsval_is_NSString( JSContext *cx, jsval vp, NSString **ret )
 		return JS_FALSE;
 	}
 	
-	if( ret && *ret )
+	if( ret )
 		*ret = tmp;
 
 	JS_free( cx, ptr );
@@ -210,7 +210,7 @@ JSBool jsvals_variadic_to_NSArray( JSContext *cx, jsval *vp, int argc, NSArray**
 	
 	for( int i=0; i < argc; i++ )
 	{
-		id obj;
+		id obj = NULL;
 		JSBool ok = JS_FALSE;
 		
 		// Native Object ?
@@ -233,7 +233,7 @@ JSBool jsvals_variadic_to_NSArray( JSContext *cx, jsval *vp, int argc, NSArray**
 		if( ! ok )
 			ok = jsval_is_NSString(cx, *vp, (NSString**)&obj );
 		
-		JSB_PRECONDITION3( ok, cx, JS_FALSE, "Error converting variadic arguments");
+		JSB_PRECONDITION3( ok && obj, cx, JS_FALSE, "Error converting variadic arguments");
 
 		// next
 		vp++;
