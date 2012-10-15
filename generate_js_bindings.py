@@ -1454,6 +1454,8 @@ void %s_createClass(JSContext *cx, JSObject* globalObj, const char* name )
         # 3-4: JSB_CCNode
         init_class_template = '''
 \t%s_object = JS_InitClass(cx, globalObj, %s_object, %s_class, %s_constructor,0,properties,funcs,NULL,st_funcs);
+\tJSBool found;
+\tJS_SetPropertyAttributes(cx, globalObj, name, JSPROP_ENUMERATE | JSPROP_READONLY, &found);
 }
 '''
         proxy_class_name = '%s%s' % (PROXY_PREFIX, class_name)
@@ -1495,14 +1497,12 @@ void %s_createClass(JSContext *cx, JSObject* globalObj, const char* name )
             else:
                 instance_method_buffer += entry
 
-
         # callback methods should be added as well, pointing to a void function.
         # This will allow calling "this._super()" from JS
         if class_name in self.callback_methods:
             for m in self.callback_methods[class_name]:
                 js_name = self.convert_selector_name_to_js(class_name, m)
                 instance_method_buffer += js_fn % (js_name, PROXY_PREFIX + 'do_nothing', 0, '| JSPROP_ENUMERATE')
-
 
         # instance methods entry point
         self.fd_mm.write(functions_template_start)
@@ -1657,7 +1657,7 @@ class JSBGenerateFunctions(JSBGenerate):
     # END helper functions
     #
 
-    def generate_function_mm_prefix(self):        
+    def generate_function_mm_prefix(self):
         import_template = '''
 #%s "jsfriendapi.h"
 #%s "js_bindings_config.h"
@@ -2193,6 +2193,8 @@ void %s_createClass(JSContext *cx, JSObject* globalObj, const char* name )
 
         template_end = '''
 \t%s_object = JS_InitClass(cx, globalObj, %s, %s_class, %s_constructor,0,properties,funcs,NULL,st_funcs);
+\tJSBool found;
+\tJS_SetPropertyAttributes(cx, globalObj, name, JSPROP_ENUMERATE | JSPROP_READONLY, &found);
 }
 '''
         parent = self.get_base_class(klass_name)
