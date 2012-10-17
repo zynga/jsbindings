@@ -763,6 +763,16 @@ class JSBGenerateClasses(JSBGenerate):
         # Is it a property ?
         try:
             if selector in self.complement[class_name]['properties']:
+                # Does it have a properties ?
+#                props = self.complement[class_name]['properties'][selector]
+#                print selector
+#                props = self.parse_objc_properties(props)
+#                print props
+#                if 'getter' in props:
+#                    ret = props['getter']
+#                    print ret
+#                    xxxx
+#                else
                 ret = 'get%s%s' % (selector[0].capitalize(), selector[1:])
                 return ret
         except KeyError:
@@ -777,6 +787,20 @@ class JSBGenerateClasses(JSBGenerate):
                 name += arg[0].capitalize() + arg[1:]
 
         return name
+
+    def parse_objc_properties(self, props):
+        ret = {}
+        # only get first element of array
+        p = props[0].split(',')
+        for k in p:
+            key_value = k.split('=')
+            key = key_value[0].strip()
+            if len(key_value) > 1:
+                value = key_value[1].strip()
+            else:
+                value = None
+            ret[key] = value
+        return ret
 
     def get_method(self, class_name, method_name):
         for klass in self.bs['signatures']['class']:
@@ -1199,9 +1223,14 @@ JSBool %s_%s%s(JSContext *cx, uint32_t argc, jsval *vp) {
                 fullargs, args = self.get_callback_args_for_method(real_method)
                 js_ret_val, dt_ret_val = self.validate_retval(real_method, class_name)
 
-                if not self.get_method_property(class_name, m, 'no_swizzle'):
+                no_super = self.get_method_property(class_name, m, 'no_super')
+                no_swizzle = self.get_method_property(class_name, m, 'no_swizzle')
+                if not no_swizzle:
                     swizzle_prefix = 'JSHook_'
-                    call_native = '\t//1st call native, then JS. Order is important\n\t[self JSHook_%s];' % (args)
+                    if no_super:
+                        call_native = ''
+                    else:
+                        call_native = '\t//1st call native, then JS. Order is important\n\t[self JSHook_%s];' % (args)
                 else:
                     swizzle_prefix = ''
                     call_native = ''
