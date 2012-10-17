@@ -763,6 +763,16 @@ class JSBGenerateClasses(JSBGenerate):
         # Is it a property ?
         try:
             if selector in self.complement[class_name]['properties']:
+                # Does it have a properties ?
+#                props = self.complement[class_name]['properties'][selector]
+#                print selector
+#                props = self.parse_objc_properties(props)
+#                print props
+#                if 'getter' in props:
+#                    ret = props['getter']
+#                    print ret
+#                    xxxx
+#                else
                 ret = 'get%s%s' % (selector[0].capitalize(), selector[1:])
                 return ret
         except KeyError:
@@ -777,6 +787,20 @@ class JSBGenerateClasses(JSBGenerate):
                 name += arg[0].capitalize() + arg[1:]
 
         return name
+
+    def parse_objc_properties(self, props):
+        ret = {}
+        # only get first element of array
+        p = props[0].split(',')
+        for k in p:
+            key_value = k.split('=')
+            key = key_value[0].strip()
+            if len(key_value) > 1:
+                value = key_value[1].strip()
+            else:
+                value = None
+            ret[key] = value
+        return ret
 
     def get_method(self, class_name, method_name):
         for klass in self.bs['signatures']['class']:
