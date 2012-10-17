@@ -1223,9 +1223,14 @@ JSBool %s_%s%s(JSContext *cx, uint32_t argc, jsval *vp) {
                 fullargs, args = self.get_callback_args_for_method(real_method)
                 js_ret_val, dt_ret_val = self.validate_retval(real_method, class_name)
 
-                if not self.get_method_property(class_name, m, 'no_swizzle'):
+                no_super = self.get_method_property(class_name, m, 'no_super')
+                no_swizzle = self.get_method_property(class_name, m, 'no_swizzle')
+                if not no_swizzle:
                     swizzle_prefix = 'JSHook_'
-                    call_native = '\t//1st call native, then JS. Order is important\n\t[self JSHook_%s];' % (args)
+                    if no_super:
+                        call_native = ''
+                    else:
+                        call_native = '\t//1st call native, then JS. Order is important\n\t[self JSHook_%s];' % (args)
                 else:
                     swizzle_prefix = ''
                     call_native = ''

@@ -1702,8 +1702,7 @@ void JSB_CCLayer_createClass(JSContext *cx, JSObject* globalObj, const char* nam
 
 -(BOOL) JSHook_ccTouchBegan:(UITouch*)touch withEvent:(UIEvent*)event 
 {
-	//1st call native, then JS. Order is important
-	[self JSHook_ccTouchBegan:touch withEvent:event ];
+
 	JSB_CCLayer *proxy = objc_getAssociatedObject(self, &JSB_association_proxy_key);
 	if( proxy )
 		[proxy ccTouchBegan:touch withEvent:event ];
