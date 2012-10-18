@@ -10,6 +10,7 @@ version 0.3 -
 - [NEW] SpiderMonkey: Supports SpiderMonkey v16.0 API
 - [FIX] Callbacks: if callback returns value, it is returned to native, as long it is a BOOL.
 - [FIX] Conversions: longlong and 64-bit long are represented by strings (and not an array of two elements)
+- [FIX] Xcode: Fixed all compiler warnings
 
 version 0.2 - XX-Sept-2012 
 - [FIX] config file: only include cocos2d ios on iOS and cocos2d osx on OS X
