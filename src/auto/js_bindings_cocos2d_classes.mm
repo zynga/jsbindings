@@ -571,7 +571,7 @@ JSBool JSB_CCNode_numberOfRunningActions(JSContext *cx, uint32_t argc, jsval *vp
 
 	CCNode *real = (CCNode*) [proxy realObj];
 	ret_val = [real numberOfRunningActions ];
-	JS_SET_RVAL(cx, vp, INT_TO_JSVAL((int32_t)ret_val));
+	JS_SET_RVAL(cx, vp, UINT_TO_JSVAL((uint32_t)ret_val));
 	return JS_TRUE;
 }
 
@@ -588,7 +588,7 @@ JSBool JSB_CCNode_orderOfArrival(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	CCNode *real = (CCNode*) [proxy realObj];
 	ret_val = [real orderOfArrival ];
-	JS_SET_RVAL(cx, vp, INT_TO_JSVAL((int32_t)ret_val));
+	JS_SET_RVAL(cx, vp, UINT_TO_JSVAL((uint32_t)ret_val));
 	return JS_TRUE;
 }
 
@@ -2093,7 +2093,8 @@ void JSB_CCNode_createClass(JSContext *cx, JSObject* globalObj, const char* name
 -(void) JSHook_onEnter
 {
 	//1st call native, then JS. Order is important
-	[self JSHook_onEnter];	JSB_CCNode *proxy = objc_getAssociatedObject(self, &JSB_association_proxy_key);
+	[self JSHook_onEnter];
+	JSB_CCNode *proxy = objc_getAssociatedObject(self, &JSB_association_proxy_key);
 	if( proxy )
 		[proxy onEnter];
 
@@ -2102,7 +2103,8 @@ void JSB_CCNode_createClass(JSContext *cx, JSObject* globalObj, const char* name
 -(void) JSHook_update:(ccTime)delta 
 {
 	//1st call native, then JS. Order is important
-	[self JSHook_update:delta ];	JSB_CCNode *proxy = objc_getAssociatedObject(self, &JSB_association_proxy_key);
+	[self JSHook_update:delta ];
+	JSB_CCNode *proxy = objc_getAssociatedObject(self, &JSB_association_proxy_key);
 	if( proxy )
 		[proxy update:delta ];
 
@@ -2111,7 +2113,8 @@ void JSB_CCNode_createClass(JSContext *cx, JSObject* globalObj, const char* name
 -(void) JSHook_onExitTransitionDidStart
 {
 	//1st call native, then JS. Order is important
-	[self JSHook_onExitTransitionDidStart];	JSB_CCNode *proxy = objc_getAssociatedObject(self, &JSB_association_proxy_key);
+	[self JSHook_onExitTransitionDidStart];
+	JSB_CCNode *proxy = objc_getAssociatedObject(self, &JSB_association_proxy_key);
 	if( proxy )
 		[proxy onExitTransitionDidStart];
 
@@ -2120,7 +2123,8 @@ void JSB_CCNode_createClass(JSContext *cx, JSObject* globalObj, const char* name
 -(void) JSHook_onExit
 {
 	//1st call native, then JS. Order is important
-	[self JSHook_onExit];	JSB_CCNode *proxy = objc_getAssociatedObject(self, &JSB_association_proxy_key);
+	[self JSHook_onExit];
+	JSB_CCNode *proxy = objc_getAssociatedObject(self, &JSB_association_proxy_key);
 	if( proxy )
 		[proxy onExit];
 
@@ -2129,7 +2133,8 @@ void JSB_CCNode_createClass(JSContext *cx, JSObject* globalObj, const char* name
 -(void) JSHook_onEnterTransitionDidFinish
 {
 	//1st call native, then JS. Order is important
-	[self JSHook_onEnterTransitionDidFinish];	JSB_CCNode *proxy = objc_getAssociatedObject(self, &JSB_association_proxy_key);
+	[self JSHook_onEnterTransitionDidFinish];
+	JSB_CCNode *proxy = objc_getAssociatedObject(self, &JSB_association_proxy_key);
 	if( proxy )
 		[proxy onEnterTransitionDidFinish];
 
@@ -2226,7 +2231,7 @@ JSBool JSB_CCParticleSystem_atlasIndex(JSContext *cx, uint32_t argc, jsval *vp) 
 
 	CCParticleSystem *real = (CCParticleSystem*) [proxy realObj];
 	ret_val = [real atlasIndex ];
-	JS_SET_RVAL(cx, vp, INT_TO_JSVAL((int32_t)ret_val));
+	JS_SET_RVAL(cx, vp, UINT_TO_JSVAL((uint32_t)ret_val));
 	return JS_TRUE;
 }
 
@@ -2629,7 +2634,7 @@ JSBool JSB_CCParticleSystem_particleCount(JSContext *cx, uint32_t argc, jsval *v
 
 	CCParticleSystem *real = (CCParticleSystem*) [proxy realObj];
 	ret_val = [real particleCount ];
-	JS_SET_RVAL(cx, vp, INT_TO_JSVAL((int32_t)ret_val));
+	JS_SET_RVAL(cx, vp, UINT_TO_JSVAL((uint32_t)ret_val));
 	return JS_TRUE;
 }
 
@@ -4010,7 +4015,7 @@ JSBool JSB_CCParticleSystem_totalParticles(JSContext *cx, uint32_t argc, jsval *
 
 	CCParticleSystem *real = (CCParticleSystem*) [proxy realObj];
 	ret_val = [real totalParticles ];
-	JS_SET_RVAL(cx, vp, INT_TO_JSVAL((int32_t)ret_val));
+	JS_SET_RVAL(cx, vp, UINT_TO_JSVAL((uint32_t)ret_val));
 	return JS_TRUE;
 }
 
@@ -8429,7 +8434,7 @@ JSBool JSB_CCSprite_atlasIndex(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	CCSprite *real = (CCSprite*) [proxy realObj];
 	ret_val = [real atlasIndex ];
-	JS_SET_RVAL(cx, vp, INT_TO_JSVAL((int32_t)ret_val));
+	JS_SET_RVAL(cx, vp, UINT_TO_JSVAL((uint32_t)ret_val));
 	return JS_TRUE;
 }
 
@@ -13141,7 +13146,7 @@ JSBool JSB_CCSpriteBatchNode_atlasIndexForChild_atZ_(JSContext *cx, uint32_t arg
 
 	CCSpriteBatchNode *real = (CCSpriteBatchNode*) [proxy realObj];
 	ret_val = [real atlasIndexForChild:arg0 atZ:(NSInteger)arg1  ];
-	JS_SET_RVAL(cx, vp, INT_TO_JSVAL((int32_t)ret_val));
+	JS_SET_RVAL(cx, vp, UINT_TO_JSVAL((uint32_t)ret_val));
 	return JS_TRUE;
 }
 
@@ -13338,7 +13343,7 @@ JSBool JSB_CCSpriteBatchNode_rebuildIndexInOrder_atlasIndex_(JSContext *cx, uint
 
 	CCSpriteBatchNode *real = (CCSpriteBatchNode*) [proxy realObj];
 	ret_val = [real rebuildIndexInOrder:arg0 atlasIndex:(NSUInteger)arg1  ];
-	JS_SET_RVAL(cx, vp, INT_TO_JSVAL((int32_t)ret_val));
+	JS_SET_RVAL(cx, vp, UINT_TO_JSVAL((uint32_t)ret_val));
 	return JS_TRUE;
 }
 
@@ -13705,7 +13710,7 @@ JSBool JSB_CCTMXLayer_layerOrientation(JSContext *cx, uint32_t argc, jsval *vp) 
 
 	CCTMXLayer *real = (CCTMXLayer*) [proxy realObj];
 	ret_val = [real layerOrientation ];
-	JS_SET_RVAL(cx, vp, INT_TO_JSVAL((int32_t)ret_val));
+	JS_SET_RVAL(cx, vp, UINT_TO_JSVAL((uint32_t)ret_val));
 	return JS_TRUE;
 }
 
@@ -14093,7 +14098,7 @@ JSBool JSB_CCTMXLayer_tileGIDAt_(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	CCTMXLayer *real = (CCTMXLayer*) [proxy realObj];
 	ret_val = [real tileGIDAt:(CGPoint)arg0  ];
-	JS_SET_RVAL(cx, vp, INT_TO_JSVAL((int32_t)ret_val));
+	JS_SET_RVAL(cx, vp, UINT_TO_JSVAL((uint32_t)ret_val));
 	return JS_TRUE;
 }
 
@@ -14243,7 +14248,7 @@ JSBool JSB_CCTexture2D_bitsPerPixelForFormat(JSContext *cx, uint32_t argc, jsval
 
 	CCTexture2D *real = (CCTexture2D*) [proxy realObj];
 	ret_val = [real bitsPerPixelForFormat ];
-	JS_SET_RVAL(cx, vp, INT_TO_JSVAL((int32_t)ret_val));
+	JS_SET_RVAL(cx, vp, UINT_TO_JSVAL((uint32_t)ret_val));
 	return JS_TRUE;
 }
 
@@ -14260,7 +14265,7 @@ JSBool JSB_CCTexture2D_bitsPerPixelForFormat__static(JSContext *cx, uint32_t arg
 	NSUInteger ret_val;
 
 	ret_val = [CCTexture2D bitsPerPixelForFormat:(CCTexture2DPixelFormat)arg0  ];
-	JS_SET_RVAL(cx, vp, INT_TO_JSVAL((int32_t)ret_val));
+	JS_SET_RVAL(cx, vp, UINT_TO_JSVAL((uint32_t)ret_val));
 	return JS_TRUE;
 }
 
@@ -14556,7 +14561,7 @@ JSBool JSB_CCTexture2D_name(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	CCTexture2D *real = (CCTexture2D*) [proxy realObj];
 	ret_val = [real name ];
-	JS_SET_RVAL(cx, vp, INT_TO_JSVAL((int32_t)ret_val));
+	JS_SET_RVAL(cx, vp, UINT_TO_JSVAL((uint32_t)ret_val));
 	return JS_TRUE;
 }
 
@@ -14590,7 +14595,7 @@ JSBool JSB_CCTexture2D_pixelsHigh(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	CCTexture2D *real = (CCTexture2D*) [proxy realObj];
 	ret_val = [real pixelsHigh ];
-	JS_SET_RVAL(cx, vp, INT_TO_JSVAL((int32_t)ret_val));
+	JS_SET_RVAL(cx, vp, UINT_TO_JSVAL((uint32_t)ret_val));
 	return JS_TRUE;
 }
 
@@ -14607,7 +14612,7 @@ JSBool JSB_CCTexture2D_pixelsWide(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	CCTexture2D *real = (CCTexture2D*) [proxy realObj];
 	ret_val = [real pixelsWide ];
-	JS_SET_RVAL(cx, vp, INT_TO_JSVAL((int32_t)ret_val));
+	JS_SET_RVAL(cx, vp, UINT_TO_JSVAL((uint32_t)ret_val));
 	return JS_TRUE;
 }
 
@@ -20443,7 +20448,7 @@ JSBool JSB_CCAtlasNode_quadsToDraw(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	CCAtlasNode *real = (CCAtlasNode*) [proxy realObj];
 	ret_val = [real quadsToDraw ];
-	JS_SET_RVAL(cx, vp, INT_TO_JSVAL((int32_t)ret_val));
+	JS_SET_RVAL(cx, vp, UINT_TO_JSVAL((uint32_t)ret_val));
 	return JS_TRUE;
 }
 
@@ -20950,7 +20955,7 @@ JSBool JSB_CCTMXTilesetInfo_firstGid(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	CCTMXTilesetInfo *real = (CCTMXTilesetInfo*) [proxy realObj];
 	ret_val = [real firstGid ];
-	JS_SET_RVAL(cx, vp, INT_TO_JSVAL((int32_t)ret_val));
+	JS_SET_RVAL(cx, vp, UINT_TO_JSVAL((uint32_t)ret_val));
 	return JS_TRUE;
 }
 
@@ -20987,7 +20992,7 @@ JSBool JSB_CCTMXTilesetInfo_margin(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	CCTMXTilesetInfo *real = (CCTMXTilesetInfo*) [proxy realObj];
 	ret_val = [real margin ];
-	JS_SET_RVAL(cx, vp, INT_TO_JSVAL((int32_t)ret_val));
+	JS_SET_RVAL(cx, vp, UINT_TO_JSVAL((uint32_t)ret_val));
 	return JS_TRUE;
 }
 
@@ -21224,7 +21229,7 @@ JSBool JSB_CCTMXTilesetInfo_spacing(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	CCTMXTilesetInfo *real = (CCTMXTilesetInfo*) [proxy realObj];
 	ret_val = [real spacing ];
-	JS_SET_RVAL(cx, vp, INT_TO_JSVAL((int32_t)ret_val));
+	JS_SET_RVAL(cx, vp, UINT_TO_JSVAL((uint32_t)ret_val));
 	return JS_TRUE;
 }
 
@@ -22060,7 +22065,7 @@ JSBool JSB_CCMenuItemFont_fontSize_static(JSContext *cx, uint32_t argc, jsval *v
 	NSUInteger ret_val;
 
 	ret_val = [CCMenuItemFont fontSize ];
-	JS_SET_RVAL(cx, vp, INT_TO_JSVAL((int32_t)ret_val));
+	JS_SET_RVAL(cx, vp, UINT_TO_JSVAL((uint32_t)ret_val));
 	return JS_TRUE;
 }
 
@@ -22077,7 +22082,7 @@ JSBool JSB_CCMenuItemFont_fontSize(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	CCMenuItemFont *real = (CCMenuItemFont*) [proxy realObj];
 	ret_val = [real fontSize ];
-	JS_SET_RVAL(cx, vp, INT_TO_JSVAL((int32_t)ret_val));
+	JS_SET_RVAL(cx, vp, UINT_TO_JSVAL((uint32_t)ret_val));
 	return JS_TRUE;
 }
 
@@ -26016,7 +26021,7 @@ JSBool JSB_CCMenuItemToggle_selectedIndex(JSContext *cx, uint32_t argc, jsval *v
 
 	CCMenuItemToggle *real = (CCMenuItemToggle*) [proxy realObj];
 	ret_val = [real selectedIndex ];
-	JS_SET_RVAL(cx, vp, INT_TO_JSVAL((int32_t)ret_val));
+	JS_SET_RVAL(cx, vp, UINT_TO_JSVAL((uint32_t)ret_val));
 	return JS_TRUE;
 }
 
@@ -30992,7 +30997,7 @@ JSBool JSB_CCTMXLayerInfo_maxGID(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	CCTMXLayerInfo *real = (CCTMXLayerInfo*) [proxy realObj];
 	ret_val = [real maxGID ];
-	JS_SET_RVAL(cx, vp, INT_TO_JSVAL((int32_t)ret_val));
+	JS_SET_RVAL(cx, vp, UINT_TO_JSVAL((uint32_t)ret_val));
 	return JS_TRUE;
 }
 
@@ -31009,7 +31014,7 @@ JSBool JSB_CCTMXLayerInfo_minGID(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	CCTMXLayerInfo *real = (CCTMXLayerInfo*) [proxy realObj];
 	ret_val = [real minGID ];
-	JS_SET_RVAL(cx, vp, INT_TO_JSVAL((int32_t)ret_val));
+	JS_SET_RVAL(cx, vp, UINT_TO_JSVAL((uint32_t)ret_val));
 	return JS_TRUE;
 }
 
@@ -31785,7 +31790,7 @@ JSBool JSB_CCConfiguration_OSVersion(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	CCConfiguration *real = (CCConfiguration*) [proxy realObj];
 	ret_val = [real OSVersion ];
-	JS_SET_RVAL(cx, vp, INT_TO_JSVAL((int32_t)ret_val));
+	JS_SET_RVAL(cx, vp, UINT_TO_JSVAL((uint32_t)ret_val));
 	return JS_TRUE;
 }
 
@@ -33185,7 +33190,7 @@ JSBool JSB_CCAnimation_loops(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	CCAnimation *real = (CCAnimation*) [proxy realObj];
 	ret_val = [real loops ];
-	JS_SET_RVAL(cx, vp, INT_TO_JSVAL((int32_t)ret_val));
+	JS_SET_RVAL(cx, vp, UINT_TO_JSVAL((uint32_t)ret_val));
 	return JS_TRUE;
 }
 
@@ -34632,7 +34637,7 @@ JSBool JSB_CCTextureAtlas_capacity(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	CCTextureAtlas *real = (CCTextureAtlas*) [proxy realObj];
 	ret_val = [real capacity ];
-	JS_SET_RVAL(cx, vp, INT_TO_JSVAL((int32_t)ret_val));
+	JS_SET_RVAL(cx, vp, UINT_TO_JSVAL((uint32_t)ret_val));
 	return JS_TRUE;
 }
 
@@ -35044,7 +35049,7 @@ JSBool JSB_CCTextureAtlas_totalQuads(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	CCTextureAtlas *real = (CCTextureAtlas*) [proxy realObj];
 	ret_val = [real totalQuads ];
-	JS_SET_RVAL(cx, vp, INT_TO_JSVAL((int32_t)ret_val));
+	JS_SET_RVAL(cx, vp, UINT_TO_JSVAL((uint32_t)ret_val));
 	return JS_TRUE;
 }
 
@@ -35344,7 +35349,7 @@ JSBool JSB_CCPointArray_count(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	CCPointArray *real = (CCPointArray*) [proxy realObj];
 	ret_val = [real count ];
-	JS_SET_RVAL(cx, vp, INT_TO_JSVAL((int32_t)ret_val));
+	JS_SET_RVAL(cx, vp, UINT_TO_JSVAL((uint32_t)ret_val));
 	return JS_TRUE;
 }
 
@@ -40372,7 +40377,7 @@ JSBool JSB_CCRenderTexture_clearFlags(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	CCRenderTexture *real = (CCRenderTexture*) [proxy realObj];
 	ret_val = [real clearFlags ];
-	JS_SET_RVAL(cx, vp, INT_TO_JSVAL((int32_t)ret_val));
+	JS_SET_RVAL(cx, vp, UINT_TO_JSVAL((uint32_t)ret_val));
 	return JS_TRUE;
 }
 
@@ -41091,7 +41096,7 @@ JSBool JSB_CCTexturePVR_height(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	CCTexturePVR *real = (CCTexturePVR*) [proxy realObj];
 	ret_val = [real height ];
-	JS_SET_RVAL(cx, vp, INT_TO_JSVAL((int32_t)ret_val));
+	JS_SET_RVAL(cx, vp, UINT_TO_JSVAL((uint32_t)ret_val));
 	return JS_TRUE;
 }
 
@@ -41134,7 +41139,7 @@ JSBool JSB_CCTexturePVR_name(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	CCTexturePVR *real = (CCTexturePVR*) [proxy realObj];
 	ret_val = [real name ];
-	JS_SET_RVAL(cx, vp, INT_TO_JSVAL((int32_t)ret_val));
+	JS_SET_RVAL(cx, vp, UINT_TO_JSVAL((uint32_t)ret_val));
 	return JS_TRUE;
 }
 
@@ -41151,7 +41156,7 @@ JSBool JSB_CCTexturePVR_numberOfMipmaps(JSContext *cx, uint32_t argc, jsval *vp)
 
 	CCTexturePVR *real = (CCTexturePVR*) [proxy realObj];
 	ret_val = [real numberOfMipmaps ];
-	JS_SET_RVAL(cx, vp, INT_TO_JSVAL((int32_t)ret_val));
+	JS_SET_RVAL(cx, vp, UINT_TO_JSVAL((uint32_t)ret_val));
 	return JS_TRUE;
 }
 
@@ -41226,7 +41231,7 @@ JSBool JSB_CCTexturePVR_width(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	CCTexturePVR *real = (CCTexturePVR*) [proxy realObj];
 	ret_val = [real width ];
-	JS_SET_RVAL(cx, vp, INT_TO_JSVAL((int32_t)ret_val));
+	JS_SET_RVAL(cx, vp, UINT_TO_JSVAL((uint32_t)ret_val));
 	return JS_TRUE;
 }
 
@@ -41415,7 +41420,7 @@ JSBool JSB_CCGLProgram_program(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	CCGLProgram *real = (CCGLProgram*) [proxy realObj];
 	ret_val = [real program ];
-	JS_SET_RVAL(cx, vp, INT_TO_JSVAL((int32_t)ret_val));
+	JS_SET_RVAL(cx, vp, UINT_TO_JSVAL((uint32_t)ret_val));
 	return JS_TRUE;
 }
 
@@ -41989,7 +41994,7 @@ JSBool JSB_CCActionManager_numberOfRunningActionsInTarget_(JSContext *cx, uint32
 
 	CCActionManager *real = (CCActionManager*) [proxy realObj];
 	ret_val = [real numberOfRunningActionsInTarget:arg0  ];
-	JS_SET_RVAL(cx, vp, INT_TO_JSVAL((int32_t)ret_val));
+	JS_SET_RVAL(cx, vp, UINT_TO_JSVAL((uint32_t)ret_val));
 	return JS_TRUE;
 }
 

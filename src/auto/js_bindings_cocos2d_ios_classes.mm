@@ -905,7 +905,7 @@ JSBool JSB_CCDirector_totalFrames(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	CCDirector *real = (CCDirector*) [proxy realObj];
 	ret_val = [real totalFrames ];
-	JS_SET_RVAL(cx, vp, INT_TO_JSVAL((int32_t)ret_val));
+	JS_SET_RVAL(cx, vp, UINT_TO_JSVAL((uint32_t)ret_val));
 	return JS_TRUE;
 }
 

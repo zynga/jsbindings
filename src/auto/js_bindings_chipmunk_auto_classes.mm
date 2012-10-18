@@ -2620,7 +2620,7 @@ JSBool JSB_cpSpace_getCollisionPersistence(JSContext *cx, uint32_t argc, jsval *
 	cpTimestamp ret_val;
 
 	ret_val = cpSpaceGetCollisionPersistence((cpSpace*)arg0  );
-	JS_SET_RVAL(cx, vp, INT_TO_JSVAL((int32_t)ret_val));
+	JS_SET_RVAL(cx, vp, UINT_TO_JSVAL((uint32_t)ret_val));
 	return JS_TRUE;
 }
 
@@ -2812,7 +2812,7 @@ JSBool JSB_cpSpace_pointQueryFirst(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	ok &= jsval_to_cpVect( cx, *argvp++, (cpVect*) &arg1 );
 	ok &= JS_ValueToECMAUint32( cx, *argvp++, &arg2 );
-	ok &= jsval_to_int( cx, *argvp++, (int*) &arg3 );
+	ok &= jsval_to_uint( cx, *argvp++, (uint*) &arg3 );
 	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error processing arguments");
 	cpShape* ret_val;
 
@@ -4155,7 +4155,7 @@ JSBool JSB_cpShape_getCollisionType(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	ret_val = cpShapeGetCollisionType((cpShape*)arg0  );
 
-	jsval ret_jsval = int_to_jsval( cx, (cpCollisionType)ret_val );
+	jsval ret_jsval = uint_to_jsval( cx, (cpCollisionType)ret_val );
 	JS_SET_RVAL(cx, vp, ret_jsval);
 
 	return JS_TRUE;
@@ -4203,7 +4203,7 @@ JSBool JSB_cpShape_getGroup(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	ret_val = cpShapeGetGroup((cpShape*)arg0  );
 
-	jsval ret_jsval = int_to_jsval( cx, (cpGroup)ret_val );
+	jsval ret_jsval = uint_to_jsval( cx, (cpGroup)ret_val );
 	JS_SET_RVAL(cx, vp, ret_jsval);
 
 	return JS_TRUE;
@@ -4220,7 +4220,7 @@ JSBool JSB_cpShape_getLayers(JSContext *cx, uint32_t argc, jsval *vp) {
 	cpLayers ret_val;
 
 	ret_val = cpShapeGetLayers((cpShape*)arg0  );
-	JS_SET_RVAL(cx, vp, INT_TO_JSVAL((int32_t)ret_val));
+	JS_SET_RVAL(cx, vp, UINT_TO_JSVAL((uint32_t)ret_val));
 	return JS_TRUE;
 }
 
@@ -4328,7 +4328,7 @@ JSBool JSB_cpShape_setCollisionType(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpCollisionType arg1; 
 
-	ok &= jsval_to_int( cx, *argvp++, (int*) &arg1 );
+	ok &= jsval_to_uint( cx, *argvp++, (uint*) &arg1 );
 	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error processing arguments");
 
 	cpShapeSetCollisionType((cpShape*)arg0 , (cpCollisionType)arg1  );
@@ -4388,7 +4388,7 @@ JSBool JSB_cpShape_setGroup(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	cpGroup arg1; 
 
-	ok &= jsval_to_int( cx, *argvp++, (int*) &arg1 );
+	ok &= jsval_to_uint( cx, *argvp++, (uint*) &arg1 );
 	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error processing arguments");
 
 	cpShapeSetGroup((cpShape*)arg0 , (cpGroup)arg1  );

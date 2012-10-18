@@ -355,7 +355,7 @@ class JSBGenerate(object):
     def generate_retval(self, declared_type, js_type, method=None):
         direct_convert = {
             'i': 'INT_TO_JSVAL((int32_t)ret_val)',
-            'u': 'INT_TO_JSVAL((int32_t)ret_val)',
+            'u': 'UINT_TO_JSVAL((uint32_t)ret_val)',
             'b': 'BOOLEAN_TO_JSVAL(ret_val)',
             's': 'STRING_TO_JSVAL(ret_val)',
             'd': 'DOUBLE_TO_JSVAL(ret_val)',
@@ -1243,7 +1243,7 @@ JSBool %s_%s%s(JSContext *cx, uint32_t argc, jsval *vp) {
                     if no_super:
                         call_native = ''
                     else:
-                        call_native = '\t//1st call native, then JS. Order is important\n\t[self JSHook_%s];' % (args)
+                        call_native = '\t//1st call native, then JS. Order is important\n\t[self JSHook_%s];\n' % (args)
                 else:
                     swizzle_prefix = ''
                     call_native = ''
