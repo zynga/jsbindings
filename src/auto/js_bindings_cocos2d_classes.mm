@@ -1970,6 +1970,7 @@ void JSB_CCNode_createClass(JSContext *cx, JSObject* globalObj, const char* name
 			JS_CallFunctionValue(cx, _jsObj, fval, argc, argv, &rval);
 		}
 	}
+	
 }
 
 -(void) update:(ccTime)delta 
@@ -1988,6 +1989,7 @@ void JSB_CCNode_createClass(JSContext *cx, JSObject* globalObj, const char* name
 			JS_CallFunctionValue(cx, _jsObj, fval, argc, argv, &rval);
 		}
 	}
+	
 }
 
 -(void) onExitTransitionDidStart
@@ -2004,6 +2006,7 @@ void JSB_CCNode_createClass(JSContext *cx, JSObject* globalObj, const char* name
 			JS_CallFunctionValue(cx, _jsObj, fval, argc, argv, &rval);
 		}
 	}
+	
 }
 
 -(void) onExit
@@ -2020,6 +2023,7 @@ void JSB_CCNode_createClass(JSContext *cx, JSObject* globalObj, const char* name
 			JS_CallFunctionValue(cx, _jsObj, fval, argc, argv, &rval);
 		}
 	}
+	
 }
 
 -(void) onEnterTransitionDidFinish
@@ -2036,6 +2040,7 @@ void JSB_CCNode_createClass(JSContext *cx, JSObject* globalObj, const char* name
 			JS_CallFunctionValue(cx, _jsObj, fval, argc, argv, &rval);
 		}
 	}
+	
 }
 
 @end
@@ -2044,46 +2049,46 @@ void JSB_CCNode_createClass(JSContext *cx, JSObject* globalObj, const char* name
 -(void) JSHook_onEnter
 {
 	//1st call native, then JS. Order is important
-	[self JSHook_onEnter];
-	JSB_CCNode *proxy = objc_getAssociatedObject(self, &JSB_association_proxy_key);
+	[self JSHook_onEnter];	JSB_CCNode *proxy = objc_getAssociatedObject(self, &JSB_association_proxy_key);
 	if( proxy )
 		[proxy onEnter];
+
 }
 
 -(void) JSHook_update:(ccTime)delta 
 {
 	//1st call native, then JS. Order is important
-	[self JSHook_update:delta ];
-	JSB_CCNode *proxy = objc_getAssociatedObject(self, &JSB_association_proxy_key);
+	[self JSHook_update:delta ];	JSB_CCNode *proxy = objc_getAssociatedObject(self, &JSB_association_proxy_key);
 	if( proxy )
 		[proxy update:delta ];
+
 }
 
 -(void) JSHook_onExitTransitionDidStart
 {
 	//1st call native, then JS. Order is important
-	[self JSHook_onExitTransitionDidStart];
-	JSB_CCNode *proxy = objc_getAssociatedObject(self, &JSB_association_proxy_key);
+	[self JSHook_onExitTransitionDidStart];	JSB_CCNode *proxy = objc_getAssociatedObject(self, &JSB_association_proxy_key);
 	if( proxy )
 		[proxy onExitTransitionDidStart];
+
 }
 
 -(void) JSHook_onExit
 {
 	//1st call native, then JS. Order is important
-	[self JSHook_onExit];
-	JSB_CCNode *proxy = objc_getAssociatedObject(self, &JSB_association_proxy_key);
+	[self JSHook_onExit];	JSB_CCNode *proxy = objc_getAssociatedObject(self, &JSB_association_proxy_key);
 	if( proxy )
 		[proxy onExit];
+
 }
 
 -(void) JSHook_onEnterTransitionDidFinish
 {
 	//1st call native, then JS. Order is important
-	[self JSHook_onEnterTransitionDidFinish];
-	JSB_CCNode *proxy = objc_getAssociatedObject(self, &JSB_association_proxy_key);
+	[self JSHook_onEnterTransitionDidFinish];	JSB_CCNode *proxy = objc_getAssociatedObject(self, &JSB_association_proxy_key);
 	if( proxy )
 		[proxy onEnterTransitionDidFinish];
+
 }
 @end
 

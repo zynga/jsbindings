@@ -1201,13 +1201,18 @@ JSBool %s_%s%s(JSContext *cx, uint32_t argc, jsval *vp) {
 
         # BOOL - ccMouseUp:(NSEvent*)
         # PROXYJS_CCNode
-        template = '''
+        template_header = '''
 -(%s) %s%s
 {
-%s
+%s'''
+        template_super = '%s'
+        template_body = '''\
 \t%s *proxy = objc_getAssociatedObject(self, &JSB_association_proxy_key);
 \tif( proxy )
-\t\t[proxy %s];
+\t\t%s[proxy %s];
+'''
+        template_end = '''\
+%s
 }
 '''
         template_suffix = '@end\n'
@@ -1223,6 +1228,14 @@ JSBool %s_%s%s(JSContext *cx, uint32_t argc, jsval *vp) {
                 fullargs, args = self.get_callback_args_for_method(real_method)
                 js_ret_val, dt_ret_val = self.validate_retval(real_method, class_name)
 
+                if dt_ret_val != 'void':
+                    pre_ret = '\t%s ret;\n' % dt_ret_val
+                    assign_ret = 'ret = '
+                    post_ret = '\treturn ret;\n'
+                else:
+                    pre_ret = ''
+                    assign_ret = ''
+                    post_ret = ''
                 no_super = self.get_method_property(class_name, m, 'no_super')
                 no_swizzle = self.get_method_property(class_name, m, 'no_swizzle')
                 if not no_swizzle:
@@ -1234,11 +1247,15 @@ JSBool %s_%s%s(JSContext *cx, uint32_t argc, jsval *vp) {
                 else:
                     swizzle_prefix = ''
                     call_native = ''
-                self.fd_mm.write(template % (dt_ret_val, swizzle_prefix, fullargs,
-                                                 call_native,
-                                                 proxy_class_name,
-                                                 args
-                                                 ))
+
+                self.fd_mm.write(template_header % (dt_ret_val, swizzle_prefix, fullargs,
+                                                pre_ret))
+                self.fd_mm.write(template_super % call_native)
+
+                self.fd_mm.write(template_body % (proxy_class_name,
+                                                assign_ret,
+                                                args))
+                self.fd_mm.write(template_end % post_ret)
 
             self.fd_mm.write(template_suffix)
 
@@ -1347,9 +1364,11 @@ extern JSClass *%s_class;
         # BOOL ccMouseUp NSEvent*
         # ccMouseUp
         # ccMouseUp
-        template = '''
+        template_header = '''
 -(%s) %s
 {
+%s'''
+        template_body = '''\
 \tif (_jsObj) {
 \t\tJSContext* cx = [[JSBCore sharedInstance] globalContext];
 \t\tJSBool found;
@@ -1359,8 +1378,12 @@ extern JSClass *%s_class;
 \t\t\t%s
 \t\t\tJS_GetProperty(cx, _jsObj, "%s", &fval);
 \t\t\tJS_CallFunctionValue(cx, _jsObj, fval, argc, argv, &rval);
+'''
+        template_ret = '\t\t\tJSBool jsbool; JS_ValueToBoolean(cx, rval, &jsbool);\n\t\t\tret = jsbool;\n'
+        template_end = '''\
 \t\t}
 \t}
+\t%s
 }
 '''
         if class_name in self.callback_methods:
@@ -1370,13 +1393,29 @@ extern JSClass *%s_class;
                 full_args, args = self.get_callback_args_for_method(method)
                 js_retval, dt_retval = self.validate_retval(method, class_name)
 
+                if dt_retval != 'void':
+                    pre_ret = '\t%s ret;\n' % dt_retval
+                    post_ret = 'return ret;'
+                else:
+                    pre_ret = ''
+                    post_ret = ''
+
                 converted_args = self.generate_callback_args(method)
 
                 js_name = self.convert_selector_name_to_js(class_name, m)
-                self.fd_mm.write(template % (dt_retval, full_args,
-                                                js_name,
+                self.fd_mm.write(template_header % (dt_retval, full_args,
+                                    pre_ret))
+                self.fd_mm.write(template_body % (js_name,
                                                 converted_args,
                                                 js_name))
+
+                # XXX: It should support any type of return type
+                # XXX: quick hack since most probable it is a BOOL
+                if dt_retval != 'void':
+                    if dt_retval != 'BOOL':
+                        raise Exception("IMPLEMENT ME")
+                    self.fd_mm.write(template_ret)
+                self.fd_mm.write(template_end % post_ret)
 
     def generate_implementation_swizzle(self, class_name):
         # CCNode

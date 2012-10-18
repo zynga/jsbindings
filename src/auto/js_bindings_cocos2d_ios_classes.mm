@@ -1554,10 +1554,12 @@ void JSB_CCLayer_createClass(JSContext *cx, JSObject* globalObj, const char* nam
 			JS_CallFunctionValue(cx, _jsObj, fval, argc, argv, &rval);
 		}
 	}
+	
 }
 
 -(BOOL) ccTouchBegan:(UITouch*)touch withEvent:(UIEvent*)event 
 {
+	BOOL ret;
 	if (_jsObj) {
 		JSContext* cx = [[JSBCore sharedInstance] globalContext];
 		JSBool found;
@@ -1571,8 +1573,11 @@ void JSB_CCLayer_createClass(JSContext *cx, JSObject* globalObj, const char* nam
 
 			JS_GetProperty(cx, _jsObj, "onTouchBegan", &fval);
 			JS_CallFunctionValue(cx, _jsObj, fval, argc, argv, &rval);
+			JSBool jsbool; JS_ValueToBoolean(cx, rval, &jsbool);
+			ret = jsbool;
 		}
 	}
+	return ret;
 }
 
 -(void) ccTouchMoved:(UITouch*)touch withEvent:(UIEvent*)event 
@@ -1592,6 +1597,7 @@ void JSB_CCLayer_createClass(JSContext *cx, JSObject* globalObj, const char* nam
 			JS_CallFunctionValue(cx, _jsObj, fval, argc, argv, &rval);
 		}
 	}
+	
 }
 
 -(void) ccTouchesEnded:(NSSet*)touches withEvent:(UIEvent*)event 
@@ -1611,6 +1617,7 @@ void JSB_CCLayer_createClass(JSContext *cx, JSObject* globalObj, const char* nam
 			JS_CallFunctionValue(cx, _jsObj, fval, argc, argv, &rval);
 		}
 	}
+	
 }
 
 -(void) ccTouchesCancelled:(NSSet*)touches withEvent:(UIEvent*)event 
@@ -1630,6 +1637,7 @@ void JSB_CCLayer_createClass(JSContext *cx, JSObject* globalObj, const char* nam
 			JS_CallFunctionValue(cx, _jsObj, fval, argc, argv, &rval);
 		}
 	}
+	
 }
 
 -(void) ccTouchCancelled:(UITouch*)touch withEvent:(UIEvent*)event 
@@ -1649,6 +1657,7 @@ void JSB_CCLayer_createClass(JSContext *cx, JSObject* globalObj, const char* nam
 			JS_CallFunctionValue(cx, _jsObj, fval, argc, argv, &rval);
 		}
 	}
+	
 }
 
 -(void) ccTouchesMoved:(NSSet*)touches withEvent:(UIEvent*)event 
@@ -1668,6 +1677,7 @@ void JSB_CCLayer_createClass(JSContext *cx, JSObject* globalObj, const char* nam
 			JS_CallFunctionValue(cx, _jsObj, fval, argc, argv, &rval);
 		}
 	}
+	
 }
 
 -(void) ccTouchesBegan:(NSSet*)touches withEvent:(UIEvent*)event 
@@ -1687,6 +1697,7 @@ void JSB_CCLayer_createClass(JSContext *cx, JSObject* globalObj, const char* nam
 			JS_CallFunctionValue(cx, _jsObj, fval, argc, argv, &rval);
 		}
 	}
+	
 }
 
 @end
@@ -1694,66 +1705,68 @@ void JSB_CCLayer_createClass(JSContext *cx, JSObject* globalObj, const char* nam
 
 -(void) ccTouchEnded:(UITouch*)touch withEvent:(UIEvent*)event 
 {
-
 	JSB_CCLayer *proxy = objc_getAssociatedObject(self, &JSB_association_proxy_key);
 	if( proxy )
 		[proxy ccTouchEnded:touch withEvent:event ];
+
 }
 
 -(BOOL) JSHook_ccTouchBegan:(UITouch*)touch withEvent:(UIEvent*)event 
 {
-
+	BOOL ret;
 	JSB_CCLayer *proxy = objc_getAssociatedObject(self, &JSB_association_proxy_key);
 	if( proxy )
-		[proxy ccTouchBegan:touch withEvent:event ];
+		ret = [proxy ccTouchBegan:touch withEvent:event ];
+	return ret;
+
 }
 
 -(void) ccTouchMoved:(UITouch*)touch withEvent:(UIEvent*)event 
 {
-
 	JSB_CCLayer *proxy = objc_getAssociatedObject(self, &JSB_association_proxy_key);
 	if( proxy )
 		[proxy ccTouchMoved:touch withEvent:event ];
+
 }
 
 -(void) ccTouchesEnded:(NSSet*)touches withEvent:(UIEvent*)event 
 {
-
 	JSB_CCLayer *proxy = objc_getAssociatedObject(self, &JSB_association_proxy_key);
 	if( proxy )
 		[proxy ccTouchesEnded:touches withEvent:event ];
+
 }
 
 -(void) ccTouchesCancelled:(NSSet*)touches withEvent:(UIEvent*)event 
 {
-
 	JSB_CCLayer *proxy = objc_getAssociatedObject(self, &JSB_association_proxy_key);
 	if( proxy )
 		[proxy ccTouchesCancelled:touches withEvent:event ];
+
 }
 
 -(void) ccTouchCancelled:(UITouch*)touch withEvent:(UIEvent*)event 
 {
-
 	JSB_CCLayer *proxy = objc_getAssociatedObject(self, &JSB_association_proxy_key);
 	if( proxy )
 		[proxy ccTouchCancelled:touch withEvent:event ];
+
 }
 
 -(void) ccTouchesMoved:(NSSet*)touches withEvent:(UIEvent*)event 
 {
-
 	JSB_CCLayer *proxy = objc_getAssociatedObject(self, &JSB_association_proxy_key);
 	if( proxy )
 		[proxy ccTouchesMoved:touches withEvent:event ];
+
 }
 
 -(void) ccTouchesBegan:(NSSet*)touches withEvent:(UIEvent*)event 
 {
-
 	JSB_CCLayer *proxy = objc_getAssociatedObject(self, &JSB_association_proxy_key);
 	if( proxy )
 		[proxy ccTouchesBegan:touches withEvent:event ];
+
 }
 @end
 

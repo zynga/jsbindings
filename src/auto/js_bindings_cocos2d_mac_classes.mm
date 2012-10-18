@@ -1894,6 +1894,7 @@ void JSB_CCLayer_createClass(JSContext *cx, JSObject* globalObj, const char* nam
 
 -(BOOL) ccMouseUp:(NSEvent*)event 
 {
+	BOOL ret;
 	if (_jsObj) {
 		JSContext* cx = [[JSBCore sharedInstance] globalContext];
 		JSBool found;
@@ -1906,12 +1907,16 @@ void JSB_CCLayer_createClass(JSContext *cx, JSObject* globalObj, const char* nam
 
 			JS_GetProperty(cx, _jsObj, "onMouseUp", &fval);
 			JS_CallFunctionValue(cx, _jsObj, fval, argc, argv, &rval);
+			JSBool jsbool; JS_ValueToBoolean(cx, rval, &jsbool);
+			ret = jsbool;
 		}
 	}
+	return ret;
 }
 
 -(BOOL) ccMouseDown:(NSEvent*)event 
 {
+	BOOL ret;
 	if (_jsObj) {
 		JSContext* cx = [[JSBCore sharedInstance] globalContext];
 		JSBool found;
@@ -1924,12 +1929,16 @@ void JSB_CCLayer_createClass(JSContext *cx, JSObject* globalObj, const char* nam
 
 			JS_GetProperty(cx, _jsObj, "onMouseDown", &fval);
 			JS_CallFunctionValue(cx, _jsObj, fval, argc, argv, &rval);
+			JSBool jsbool; JS_ValueToBoolean(cx, rval, &jsbool);
+			ret = jsbool;
 		}
 	}
+	return ret;
 }
 
 -(BOOL) ccMouseDragged:(NSEvent*)event 
 {
+	BOOL ret;
 	if (_jsObj) {
 		JSContext* cx = [[JSBCore sharedInstance] globalContext];
 		JSBool found;
@@ -1942,8 +1951,11 @@ void JSB_CCLayer_createClass(JSContext *cx, JSObject* globalObj, const char* nam
 
 			JS_GetProperty(cx, _jsObj, "onMouseDragged", &fval);
 			JS_CallFunctionValue(cx, _jsObj, fval, argc, argv, &rval);
+			JSBool jsbool; JS_ValueToBoolean(cx, rval, &jsbool);
+			ret = jsbool;
 		}
 	}
+	return ret;
 }
 
 @end
@@ -1951,26 +1963,32 @@ void JSB_CCLayer_createClass(JSContext *cx, JSObject* globalObj, const char* nam
 
 -(BOOL) ccMouseUp:(NSEvent*)event 
 {
-
+	BOOL ret;
 	JSB_CCLayer *proxy = objc_getAssociatedObject(self, &JSB_association_proxy_key);
 	if( proxy )
-		[proxy ccMouseUp:event ];
+		ret = [proxy ccMouseUp:event ];
+	return ret;
+
 }
 
 -(BOOL) ccMouseDown:(NSEvent*)event 
 {
-
+	BOOL ret;
 	JSB_CCLayer *proxy = objc_getAssociatedObject(self, &JSB_association_proxy_key);
 	if( proxy )
-		[proxy ccMouseDown:event ];
+		ret = [proxy ccMouseDown:event ];
+	return ret;
+
 }
 
 -(BOOL) ccMouseDragged:(NSEvent*)event 
 {
-
+	BOOL ret;
 	JSB_CCLayer *proxy = objc_getAssociatedObject(self, &JSB_association_proxy_key);
 	if( proxy )
-		[proxy ccMouseDragged:event ];
+		ret = [proxy ccMouseDragged:event ];
+	return ret;
+
 }
 @end
 
