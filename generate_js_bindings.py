@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # ----------------------------------------------------------------------------
-# Generates Javascript Bindings glue code after C / Objective-C code
+# Generates JavaScript Bindings glue code after C / Objective-C code
 #
 # Author: Ricardo Quesada
 # Copyright 2012 (C) Zynga, Inc
