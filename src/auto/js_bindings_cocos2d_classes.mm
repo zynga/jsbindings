@@ -677,16 +677,27 @@ JSBool JSB_CCNode_removeAllChildrenWithCleanup_(JSContext *cx, uint32_t argc, js
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
 
 	JSB_PRECONDITION3( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
-	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc >= 0 && argc <= 1 , cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	JSBool arg0; 
 
-	ok &= JS_ValueToBoolean( cx, *argvp++, &arg0 );
+	if (argc >= 1) {
+		ok &= JS_ValueToBoolean( cx, *argvp++, &arg0 );
+	}
 	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error processing arguments");
 
-	CCNode *real = (CCNode*) [proxy realObj];
+	if( argc == 0 ) {
+		CCNode *real = (CCNode*) [proxy realObj];
+	[real removeAllChildren ];
+	}
+	else if( argc == 1 ) {
+		CCNode *real = (CCNode*) [proxy realObj];
 	[real removeAllChildrenWithCleanup:(BOOL)arg0  ];
+	}
+	else
+		JSB_PRECONDITION3(NO, cx, JS_FALSE, "Error in number of arguments");
+
 	JS_SET_RVAL(cx, vp, JSVAL_VOID);
 	return JS_TRUE;
 }
@@ -1867,7 +1878,7 @@ void JSB_CCNode_createClass(JSContext *cx, JSObject* globalObj, const char* name
 		JS_FN("parentToNodeTransform", JSB_CCNode_parentToNodeTransform, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("pauseSchedulerAndActions", JSB_CCNode_pauseSchedulerAndActions, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("getPosition", JSB_CCNode_position, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
-		JS_FN("removeAllChildrenWithCleanup", JSB_CCNode_removeAllChildrenWithCleanup_, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("removeAllChildren", JSB_CCNode_removeAllChildrenWithCleanup_, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("removeChild", JSB_CCNode_removeChild_cleanup_, 2, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("removeChildByTag", JSB_CCNode_removeChildByTag_cleanup_, 2, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("removeFromParent", JSB_CCNode_removeFromParentAndCleanup_, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
