@@ -354,12 +354,12 @@ class JSBGenerate(object):
 
     def generate_retval(self, declared_type, js_type, method=None):
         direct_convert = {
-            'i': 'INT_TO_JSVAL(ret_val)',
-            'u': 'INT_TO_JSVAL(ret_val)',
+            'i': 'INT_TO_JSVAL((int32_t)ret_val)',
+            'u': 'INT_TO_JSVAL((int32_t)ret_val)',
             'b': 'BOOLEAN_TO_JSVAL(ret_val)',
             's': 'STRING_TO_JSVAL(ret_val)',
             'd': 'DOUBLE_TO_JSVAL(ret_val)',
-            'c': 'INT_TO_JSVAL(ret_val)',
+            'c': 'INT_TO_JSVAL((int32_t)ret_val)',
             'long': 'long_to_jsval(cx, ret_val)',                # long: not supoprted on JS 64-bit
             'longlong': 'longlong_to_jsval(cx, ret_val)',        # long long: not supported on JS
             'void': 'JSVAL_VOID',
