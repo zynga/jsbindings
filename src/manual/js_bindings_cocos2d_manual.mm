@@ -239,12 +239,12 @@ JSBool jsval_to_array_of_CGPoint( JSContext *cx, jsval vp, CGPoint**points, int 
 		JS_HasProperty(cx, _jsObj, "onKeyFlagsChanged", &found);
 		if (found == JS_TRUE) {
 			jsval rval, fval;
-			unsigned argc=1;
-			jsval argv[1];
-			argv[0] = NSObject_to_jsval( cx, event );
+			jsval argv;
+			NSUInteger flags = [event modifierFlags];
+			argv = UINT_TO_JSVAL((uint32_t)flags);
 			
 			JS_GetProperty(cx, _jsObj, "onKeyFlagsChanged", &fval);
-			JS_CallFunctionValue(cx, _jsObj, fval, argc, argv, &rval);
+			JS_CallFunctionValue(cx, _jsObj, fval, 1, &argv, &rval);
 			JSBool jsbool; JS_ValueToBoolean(cx, rval, &jsbool);
 			ret = jsbool;
 		}
@@ -261,12 +261,12 @@ JSBool jsval_to_array_of_CGPoint( JSContext *cx, jsval vp, CGPoint**points, int 
 		JS_HasProperty(cx, _jsObj, "onKeyUp", &found);
 		if (found == JS_TRUE) {
 			jsval rval, fval;
-			unsigned argc=1;
-			jsval argv[1];
-			argv[0] = NSObject_to_jsval( cx, event );
+			jsval argv;
+			unichar uchar = [[event characters] characterAtIndex:0];
+			argv = UINT_TO_JSVAL(uchar);
 			
 			JS_GetProperty(cx, _jsObj, "onKeyUp", &fval);
-			JS_CallFunctionValue(cx, _jsObj, fval, argc, argv, &rval);
+			JS_CallFunctionValue(cx, _jsObj, fval, 1, &argv, &rval);
 			JSBool jsbool; JS_ValueToBoolean(cx, rval, &jsbool);
 			ret = jsbool;
 		}
@@ -283,12 +283,12 @@ JSBool jsval_to_array_of_CGPoint( JSContext *cx, jsval vp, CGPoint**points, int 
 		JS_HasProperty(cx, _jsObj, "onKeyDown", &found);
 		if (found == JS_TRUE) {
 			jsval rval, fval;
-			unsigned argc=1;
-			jsval argv[1];
-			argv[0] = NSObject_to_jsval( cx, event );
+			jsval argv;
+			unichar uchar = [[event characters] characterAtIndex:0];
+			argv = UINT_TO_JSVAL(uchar);
 			
 			JS_GetProperty(cx, _jsObj, "onKeyDown", &fval);
-			JS_CallFunctionValue(cx, _jsObj, fval, argc, argv, &rval);
+			JS_CallFunctionValue(cx, _jsObj, fval, 1, &argv, &rval);
 			JSBool jsbool; JS_ValueToBoolean(cx, rval, &jsbool);
 			ret = jsbool;
 		}
