@@ -260,6 +260,10 @@ JSBool JSBCore_restartVM(JSContext *cx, uint32_t argc, jsval *vp)
 {
 	self = [super init];
 	if( self ) {
+		
+		// Must be called only once, and before creating a new runtime
+		JS_SetCStringsAreUTF8();
+		
 		[self createRuntime];
 	}
 	
@@ -279,7 +283,7 @@ JSBool JSBCore_restartVM(JSContext *cx, uint32_t argc, jsval *vp)
 	if (!JS_InitStandardClasses( _cx, _object)) {
 		CCLOGWARN(@"js error");
 	}
-	
+
 	
 	//
 	// globals
@@ -404,7 +408,7 @@ JSBool JSBCore_restartVM(JSContext *cx, uint32_t argc, jsval *vp)
 /*
  * Evaluates an script
  */
--(JSBool) runScript:(NSString*)filename
+-(JSBool) runScript_do_not_use:(NSString*)filename
 {
 	JSBool ok = JS_FALSE;
 
@@ -426,9 +430,9 @@ JSBool JSBCore_restartVM(JSContext *cx, uint32_t argc, jsval *vp)
 }
 
 /*
- * This function does not work OK with UTF8 scripts
+ * This function works OK if it JS_SetCStringsAreUTF8() is called.
  */
--(JSBool) runScript_do_not_use:(NSString*)filename
+-(JSBool) runScript:(NSString*)filename
 {
 	JSBool ok = JS_FALSE;
 

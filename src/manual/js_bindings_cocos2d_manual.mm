@@ -239,12 +239,12 @@ JSBool jsval_to_array_of_CGPoint( JSContext *cx, jsval vp, CGPoint**points, int 
 		JS_HasProperty(cx, _jsObj, "onKeyFlagsChanged", &found);
 		if (found == JS_TRUE) {
 			jsval rval, fval;
-			unsigned argc=1;
-			jsval argv[1];
-			argv[0] = NSObject_to_jsval( cx, event );
+			jsval argv;
+			NSUInteger flags = [event modifierFlags];
+			argv = UINT_TO_JSVAL((uint32_t)flags);
 			
 			JS_GetProperty(cx, _jsObj, "onKeyFlagsChanged", &fval);
-			JS_CallFunctionValue(cx, _jsObj, fval, argc, argv, &rval);
+			JS_CallFunctionValue(cx, _jsObj, fval, 1, &argv, &rval);
 			JSBool jsbool; JS_ValueToBoolean(cx, rval, &jsbool);
 			ret = jsbool;
 		}
@@ -261,12 +261,12 @@ JSBool jsval_to_array_of_CGPoint( JSContext *cx, jsval vp, CGPoint**points, int 
 		JS_HasProperty(cx, _jsObj, "onKeyUp", &found);
 		if (found == JS_TRUE) {
 			jsval rval, fval;
-			unsigned argc=1;
-			jsval argv[1];
-			argv[0] = NSObject_to_jsval( cx, event );
+			jsval argv;
+			unichar uchar = [[event characters] characterAtIndex:0];
+			argv = UINT_TO_JSVAL(uchar);
 			
 			JS_GetProperty(cx, _jsObj, "onKeyUp", &fval);
-			JS_CallFunctionValue(cx, _jsObj, fval, argc, argv, &rval);
+			JS_CallFunctionValue(cx, _jsObj, fval, 1, &argv, &rval);
 			JSBool jsbool; JS_ValueToBoolean(cx, rval, &jsbool);
 			ret = jsbool;
 		}
@@ -283,12 +283,12 @@ JSBool jsval_to_array_of_CGPoint( JSContext *cx, jsval vp, CGPoint**points, int 
 		JS_HasProperty(cx, _jsObj, "onKeyDown", &found);
 		if (found == JS_TRUE) {
 			jsval rval, fval;
-			unsigned argc=1;
-			jsval argv[1];
-			argv[0] = NSObject_to_jsval( cx, event );
+			jsval argv;
+			unichar uchar = [[event characters] characterAtIndex:0];
+			argv = UINT_TO_JSVAL(uchar);
 			
 			JS_GetProperty(cx, _jsObj, "onKeyDown", &fval);
-			JS_CallFunctionValue(cx, _jsObj, fval, argc, argv, &rval);
+			JS_CallFunctionValue(cx, _jsObj, fval, 1, &argv, &rval);
 			JSBool jsbool; JS_ValueToBoolean(cx, rval, &jsbool);
 			ret = jsbool;
 		}
@@ -306,21 +306,27 @@ JSBool jsval_to_array_of_CGPoint( JSContext *cx, jsval vp, CGPoint**points, int 
 		JS_HasProperty(cx, _jsObj, "onAccelerometer", &found);
 		if (found == JS_TRUE) {
 			jsval rval, fval;
-			unsigned argc=4;
-			jsval argv[4];
-			
+
 			NSTimeInterval time = acceleration.timestamp;
 			UIAccelerationValue x = acceleration.x;
 			UIAccelerationValue y = acceleration.y;
 			UIAccelerationValue z = acceleration.z;
+
+			// Create an JS object with x,y,z,timestamp as properties
+			JSObject *object = JS_NewObject(cx, NULL, NULL, NULL );
+			if( !object)
+				return;
+
+			if (!JS_DefineProperty(cx, object, "x", DOUBLE_TO_JSVAL(x), NULL, NULL, JSPROP_ENUMERATE | JSPROP_PERMANENT) ||
+				!JS_DefineProperty(cx, object, "y", DOUBLE_TO_JSVAL(y), NULL, NULL, JSPROP_ENUMERATE | JSPROP_PERMANENT) ||
+				!JS_DefineProperty(cx, object, "z", DOUBLE_TO_JSVAL(z), NULL, NULL, JSPROP_ENUMERATE | JSPROP_PERMANENT) ||
+				!JS_DefineProperty(cx, object, "timestamp", DOUBLE_TO_JSVAL(time), NULL, NULL, JSPROP_ENUMERATE | JSPROP_PERMANENT) )
+				return;
 			
-			argv[0] = DOUBLE_TO_JSVAL(x);
-			argv[1] = DOUBLE_TO_JSVAL(y);
-			argv[2] = DOUBLE_TO_JSVAL(z);
-			argv[3] = DOUBLE_TO_JSVAL(time);
+			jsval argv = OBJECT_TO_JSVAL(object);
 			
 			JS_GetProperty(cx, _jsObj, "onAccelerometer", &fval);
-			JS_CallFunctionValue(cx, _jsObj, fval, argc, argv, &rval);
+			JS_CallFunctionValue(cx, _jsObj, fval, 1, &argv, &rval);
 		}
 	}	
 }
