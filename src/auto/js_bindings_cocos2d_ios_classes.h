@@ -116,6 +116,12 @@ extern JSClass *JSB_CCLayer_class;
 }
 @end
 
+/* Manually generated callbacks */
+@interface JSB_CCLayer (Manual)
+-(void) accelerometer:(UIAccelerometer*)accelerometer didAccelerate:(UIAcceleration*)acceleration ;
+
+@end
+
 /*
  * CCLayerMultiplex
  */

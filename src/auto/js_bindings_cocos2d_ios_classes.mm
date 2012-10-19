@@ -1345,6 +1345,28 @@ JSBool JSB_CCLayer_setAccelerometerEnabled_(JSContext *cx, uint32_t argc, jsval 
 	return JS_TRUE;
 }
 
+// Arguments: float
+// Ret value: void (None)
+JSBool JSB_CCLayer_setAccelerometerInterval_(JSContext *cx, uint32_t argc, jsval *vp) {
+
+	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
+	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
+
+	JSB_PRECONDITION3( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
+	jsval *argvp = JS_ARGV(cx,vp);
+	JSBool ok = JS_TRUE;
+	double arg0; 
+
+	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
+	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error processing arguments");
+
+	CCLayer *real = (CCLayer*) [proxy realObj];
+	[real setAccelerometerInterval:(float)arg0  ];
+	JS_SET_RVAL(cx, vp, JSVAL_VOID);
+	return JS_TRUE;
+}
+
 // Arguments: BOOL
 // Ret value: void (None)
 JSBool JSB_CCLayer_setTouchEnabled_(JSContext *cx, uint32_t argc, jsval *vp) {
@@ -1479,6 +1501,7 @@ void JSB_CCLayer_createClass(JSContext *cx, JSObject* globalObj, const char* nam
 		JS_FN("isAccelerometerEnabled", JSB_CCLayer_isAccelerometerEnabled, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("isTouchEnabled", JSB_CCLayer_isTouchEnabled, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("setAccelerometerEnabled", JSB_CCLayer_setAccelerometerEnabled_, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("setAccelerometerInterval", JSB_CCLayer_setAccelerometerInterval_, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("setTouchEnabled", JSB_CCLayer_setTouchEnabled_, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("setTouchMode", JSB_CCLayer_setTouchMode_, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("setTouchPriority", JSB_CCLayer_setTouchPriority_, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
@@ -1491,6 +1514,7 @@ void JSB_CCLayer_createClass(JSContext *cx, JSObject* globalObj, const char* nam
 		JS_FN("onTouchesCancelled", JSB_do_nothing, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("onTouchCancelled", JSB_do_nothing, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("onTouchesMoved", JSB_do_nothing, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("onAccelerometer", JSB_do_nothing, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("onTouchesBegan", JSB_do_nothing, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FS_END
 	};
@@ -1758,6 +1782,14 @@ void JSB_CCLayer_createClass(JSContext *cx, JSObject* globalObj, const char* nam
 	JSB_CCLayer *proxy = objc_getAssociatedObject(self, &JSB_association_proxy_key);
 	if( proxy )
 		[proxy ccTouchesMoved:touches withEvent:event ];
+
+}
+
+-(void) accelerometer:(UIAccelerometer*)accelerometer didAccelerate:(UIAcceleration*)acceleration 
+{
+	JSB_CCLayer *proxy = objc_getAssociatedObject(self, &JSB_association_proxy_key);
+	if( proxy )
+		[proxy accelerometer:accelerometer didAccelerate:acceleration ];
 
 }
 
