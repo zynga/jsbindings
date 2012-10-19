@@ -33,6 +33,12 @@
 #import "js_bindings_basic_conversions.h"
 #import "js_bindings_cocos2d_classes.h"
 
+#if __CC_PLATFORM_MAC
+#import "js_bindings_cocos2d_mac_classes.h"
+#elif __CC_PLATFORM_IOS
+#import "js_bindings_cocos2d_ios_classes.h"
+#endif
+
 #pragma mark - convertions
 jsval ccGridSize_to_jsval( JSContext *cx, ccGridSize p)
 {
@@ -218,6 +224,109 @@ JSBool jsval_to_array_of_CGPoint( JSContext *cx, jsval vp, CGPoint**points, int 
 	return JS_TRUE;
 }
 
+#pragma mark - Layer
+
+@implementation JSB_CCLayer (Manual)
+
+#if __CC_PLATFORM_MAC
+
+-(BOOL) ccFlagsChanged:(NSEvent*)event
+{
+	BOOL ret;
+	if (_jsObj) {
+		JSContext* cx = [[JSBCore sharedInstance] globalContext];
+		JSBool found;
+		JS_HasProperty(cx, _jsObj, "onKeyFlagsChanged", &found);
+		if (found == JS_TRUE) {
+			jsval rval, fval;
+			unsigned argc=1;
+			jsval argv[1];
+			argv[0] = NSObject_to_jsval( cx, event );
+			
+			JS_GetProperty(cx, _jsObj, "onKeyFlagsChanged", &fval);
+			JS_CallFunctionValue(cx, _jsObj, fval, argc, argv, &rval);
+			JSBool jsbool; JS_ValueToBoolean(cx, rval, &jsbool);
+			ret = jsbool;
+		}
+	}
+	return ret;
+}
+
+-(BOOL) ccKeyUp:(NSEvent*)event
+{
+	BOOL ret;
+	if (_jsObj) {
+		JSContext* cx = [[JSBCore sharedInstance] globalContext];
+		JSBool found;
+		JS_HasProperty(cx, _jsObj, "onKeyUp", &found);
+		if (found == JS_TRUE) {
+			jsval rval, fval;
+			unsigned argc=1;
+			jsval argv[1];
+			argv[0] = NSObject_to_jsval( cx, event );
+			
+			JS_GetProperty(cx, _jsObj, "onKeyUp", &fval);
+			JS_CallFunctionValue(cx, _jsObj, fval, argc, argv, &rval);
+			JSBool jsbool; JS_ValueToBoolean(cx, rval, &jsbool);
+			ret = jsbool;
+		}
+	}
+	return ret;
+}
+
+-(BOOL) ccKeyDown:(NSEvent*)event
+{
+	BOOL ret;
+	if (_jsObj) {
+		JSContext* cx = [[JSBCore sharedInstance] globalContext];
+		JSBool found;
+		JS_HasProperty(cx, _jsObj, "onKeyDown", &found);
+		if (found == JS_TRUE) {
+			jsval rval, fval;
+			unsigned argc=1;
+			jsval argv[1];
+			argv[0] = NSObject_to_jsval( cx, event );
+			
+			JS_GetProperty(cx, _jsObj, "onKeyDown", &fval);
+			JS_CallFunctionValue(cx, _jsObj, fval, argc, argv, &rval);
+			JSBool jsbool; JS_ValueToBoolean(cx, rval, &jsbool);
+			ret = jsbool;
+		}
+	}
+	return ret;
+}
+
+#elif __CC_PLATFORM_IOS
+
+-(void) accelerometer:(UIAccelerometer*)accelerometer didAccelerate:(UIAcceleration*)acceleration
+{
+	if (_jsObj) {
+		JSContext* cx = [[JSBCore sharedInstance] globalContext];
+		JSBool found;
+		JS_HasProperty(cx, _jsObj, "onAccelerometer", &found);
+		if (found == JS_TRUE) {
+			jsval rval, fval;
+			unsigned argc=4;
+			jsval argv[4];
+			
+			NSTimeInterval time = acceleration.timestamp;
+			UIAccelerationValue x = acceleration.x;
+			UIAccelerationValue y = acceleration.y;
+			UIAccelerationValue z = acceleration.z;
+			
+			argv[0] = DOUBLE_TO_JSVAL(x);
+			argv[1] = DOUBLE_TO_JSVAL(y);
+			argv[2] = DOUBLE_TO_JSVAL(z);
+			argv[3] = DOUBLE_TO_JSVAL(time);
+			
+			JS_GetProperty(cx, _jsObj, "onAccelerometer", &fval);
+			JS_CallFunctionValue(cx, _jsObj, fval, argc, argv, &rval);
+		}
+	}	
+}
+#endif // __CC_PLATFORM_IOS
+
+@end
 
 #pragma mark - MenuItem 
 

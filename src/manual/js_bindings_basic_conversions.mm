@@ -411,6 +411,18 @@ JSBool jsval_to_int( JSContext *cx, jsval vp, int *ret )
 	return JS_ValueToInt32(cx, vp, (int32_t*)ret);
 }
 
+JSBool jsval_to_uint( JSContext *cx, jsval vp, unsigned int *ret )
+{
+	// Since this is called to cast uint64 to uint32,
+	// it is needed to initialize the value to 0 first
+#ifdef __LP64__
+	long *tmp = (long*)ret;
+	*tmp = 0;
+#endif
+	return JS_ValueToInt32(cx, vp, (int32_t*)ret);
+}
+
+
 // XXX: sizeof(long) == 8 in 64 bits on OS X... apparently on Windows it is 32 bits (???)
 JSBool jsval_to_long( JSContext *cx, jsval vp, long *r )
 {
@@ -606,6 +618,11 @@ jsval c_class_to_jsval( JSContext *cx, void* handle, JSObject* object, JSClass *
 jsval int_to_jsval( JSContext *cx, int number )
 {
 	return INT_TO_JSVAL(number);
+}
+
+jsval uint_to_jsval( JSContext *cx, unsigned int number )
+{
+	return UINT_TO_JSVAL(number);
 }
 
 jsval long_to_jsval( JSContext *cx, long number )
