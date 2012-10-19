@@ -1862,6 +1862,9 @@ void JSB_CCLayer_createClass(JSContext *cx, JSObject* globalObj, const char* nam
 		JS_FN("onMouseUp", JSB_do_nothing, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("onMouseDown", JSB_do_nothing, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("onMouseDragged", JSB_do_nothing, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("onKeyFlagsChanged", JSB_do_nothing, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("onKeyUp", JSB_do_nothing, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("onKeyDown", JSB_do_nothing, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FS_END
 	};
 	static JSFunctionSpec st_funcs[] = {
@@ -1958,6 +1961,72 @@ void JSB_CCLayer_createClass(JSContext *cx, JSObject* globalObj, const char* nam
 	return ret;
 }
 
+-(BOOL) ccFlagsChanged:(NSEvent*)event 
+{
+	BOOL ret;
+	if (_jsObj) {
+		JSContext* cx = [[JSBCore sharedInstance] globalContext];
+		JSBool found;
+		JS_HasProperty(cx, _jsObj, "onKeyFlagsChanged", &found);
+		if (found == JS_TRUE) {
+			jsval rval, fval;
+			unsigned argc=1;
+			jsval argv[1];
+			argv[0] = NSObject_to_jsval( cx, event );
+
+			JS_GetProperty(cx, _jsObj, "onKeyFlagsChanged", &fval);
+			JS_CallFunctionValue(cx, _jsObj, fval, argc, argv, &rval);
+			JSBool jsbool; JS_ValueToBoolean(cx, rval, &jsbool);
+			ret = jsbool;
+		}
+	}
+	return ret;
+}
+
+-(BOOL) ccKeyUp:(NSEvent*)event 
+{
+	BOOL ret;
+	if (_jsObj) {
+		JSContext* cx = [[JSBCore sharedInstance] globalContext];
+		JSBool found;
+		JS_HasProperty(cx, _jsObj, "onKeyUp", &found);
+		if (found == JS_TRUE) {
+			jsval rval, fval;
+			unsigned argc=1;
+			jsval argv[1];
+			argv[0] = NSObject_to_jsval( cx, event );
+
+			JS_GetProperty(cx, _jsObj, "onKeyUp", &fval);
+			JS_CallFunctionValue(cx, _jsObj, fval, argc, argv, &rval);
+			JSBool jsbool; JS_ValueToBoolean(cx, rval, &jsbool);
+			ret = jsbool;
+		}
+	}
+	return ret;
+}
+
+-(BOOL) ccKeyDown:(NSEvent*)event 
+{
+	BOOL ret;
+	if (_jsObj) {
+		JSContext* cx = [[JSBCore sharedInstance] globalContext];
+		JSBool found;
+		JS_HasProperty(cx, _jsObj, "onKeyDown", &found);
+		if (found == JS_TRUE) {
+			jsval rval, fval;
+			unsigned argc=1;
+			jsval argv[1];
+			argv[0] = NSObject_to_jsval( cx, event );
+
+			JS_GetProperty(cx, _jsObj, "onKeyDown", &fval);
+			JS_CallFunctionValue(cx, _jsObj, fval, argc, argv, &rval);
+			JSBool jsbool; JS_ValueToBoolean(cx, rval, &jsbool);
+			ret = jsbool;
+		}
+	}
+	return ret;
+}
+
 @end
 @implementation CCLayer (JSBindings)
 
@@ -1987,6 +2056,36 @@ void JSB_CCLayer_createClass(JSContext *cx, JSObject* globalObj, const char* nam
 	JSB_CCLayer *proxy = objc_getAssociatedObject(self, &JSB_association_proxy_key);
 	if( proxy )
 		ret = [proxy ccMouseDragged:event ];
+	return ret;
+
+}
+
+-(BOOL) ccFlagsChanged:(NSEvent*)event 
+{
+	BOOL ret;
+	JSB_CCLayer *proxy = objc_getAssociatedObject(self, &JSB_association_proxy_key);
+	if( proxy )
+		ret = [proxy ccFlagsChanged:event ];
+	return ret;
+
+}
+
+-(BOOL) ccKeyUp:(NSEvent*)event 
+{
+	BOOL ret;
+	JSB_CCLayer *proxy = objc_getAssociatedObject(self, &JSB_association_proxy_key);
+	if( proxy )
+		ret = [proxy ccKeyUp:event ];
+	return ret;
+
+}
+
+-(BOOL) ccKeyDown:(NSEvent*)event 
+{
+	BOOL ret;
+	JSB_CCLayer *proxy = objc_getAssociatedObject(self, &JSB_association_proxy_key);
+	if( proxy )
+		ret = [proxy ccKeyDown:event ];
 	return ret;
 
 }
