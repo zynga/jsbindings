@@ -173,7 +173,7 @@ cc.MenuItemToggle.create = function( /* var args */) {
         var args = Array.prototype.slice.call(arguments);
         var func = args.pop();
         var obj = args.pop();
-    
+
         // create it with arguments,
         var item = cc.MenuItemToggle._create.apply(this, args);
 
@@ -182,6 +182,20 @@ cc.MenuItemToggle.create = function( /* var args */) {
         return item;
     } else {
         return cc.MenuItemToggle._create.apply(this, arguments);
+    }
+};
+
+//
+// LabelAtlas
+//
+cc.LabelAtlas.create = function( a,b,c,d,e ) {
+
+    var n = arguments.length;
+
+    if ( n == 5) {
+        return cc.LabelAtlas._create(a,b,c,d,e.charCodeAt(0));
+    } else {
+        return cc.LabelAtlas._create.apply(this, arguments);
     }
 };
 
