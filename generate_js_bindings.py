@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # ----------------------------------------------------------------------------
-# Generates Javascript Bindings glue code after C / Objective-C code
+# Generates JavaScript Bindings glue code after C / Objective-C code
 #
 # Author: Ricardo Quesada
 # Copyright 2012 (C) Zynga, Inc
@@ -354,12 +354,12 @@ class JSBGenerate(object):
 
     def generate_retval(self, declared_type, js_type, method=None):
         direct_convert = {
-            'i': 'INT_TO_JSVAL(ret_val)',
-            'u': 'INT_TO_JSVAL(ret_val)',
+            'i': 'INT_TO_JSVAL((int32_t)ret_val)',
+            'u': 'UINT_TO_JSVAL((uint32_t)ret_val)',
             'b': 'BOOLEAN_TO_JSVAL(ret_val)',
             's': 'STRING_TO_JSVAL(ret_val)',
             'd': 'DOUBLE_TO_JSVAL(ret_val)',
-            'c': 'INT_TO_JSVAL(ret_val)',
+            'c': 'INT_TO_JSVAL((int32_t)ret_val)',
             'long': 'long_to_jsval(cx, ret_val)',                # long: not supoprted on JS 64-bit
             'longlong': 'longlong_to_jsval(cx, ret_val)',        # long long: not supported on JS
             'void': 'JSVAL_VOID',
@@ -1058,24 +1058,26 @@ JSBool %s_%s%s(JSContext *cx, uint32_t argc, jsval *vp) {
 
     def generate_method(self, class_name, method):
 
-        s = method['selector']
+        method_name = method['selector']
 
-        if self.get_method_property(class_name, s, 'manual'):
-            sys.stderr.write('Ignoring method %s # %s. It should be manually generated\n' % (class_name, s))
+        # Skip 'callback' and 'ignore' methods
+        # This should be before "manual", since "callback" and "ignore" have precedence over "manual"
+        try:
+            if 'callback' in self.method_properties[class_name][method_name]:
+                raise ParseException('Method defined as callback. Ignoring.')
+            if 'ignore' in self.method_properties[class_name][method_name]:
+                raise ParseException('Explicitly ignoring method')
+        except KeyError:
+            pass
+
+        #
+        if self.get_method_property(class_name, method_name, 'manual'):
+            sys.stderr.write('Ignoring method %s # %s. It should be manually generated\n' % (class_name, method_name))
             return True
 
         # Variadic methods are not supported
         if 'variadic' in method and method['variadic'] == 'true':
             raise ParseException('variadic arguments not supported.')
-
-        # Skip 'callback' and 'ignore' methods
-        try:
-            if 'callback' in self.method_properties[class_name][s]:
-                raise ParseException('Method defined as callback. Ignoring.')
-            if 'ignore' in self.method_properties[class_name][s]:
-                raise ParseException('Explicitly ignoring method')
-        except KeyError:
-            pass
 
         args_js_type, args_declared_type = self.validate_arguments(method)
         ret_js_type, ret_declared_type = self.validate_retval(method, class_name)
@@ -1119,7 +1121,7 @@ JSBool %s_%s%s(JSContext *cx, uint32_t argc, jsval *vp) {
             self.fd_mm.write('\n\telse\n\t\tJSB_PRECONDITION3(NO, cx, JS_FALSE, "Error in number of arguments");\n\n')
 
         else:
-            call_real = self.generate_method_call_to_real_object(s, num_of_args, ret_js_type, args_declared_type, args_js_type, class_name, method_type)
+            call_real = self.generate_method_call_to_real_object(method_name, num_of_args, ret_js_type, args_declared_type, args_js_type, class_name, method_type)
             self.fd_mm.write('\n%s\n' % call_real)
 
         ret_string = self.generate_retval(ret_declared_type, ret_js_type, method)
@@ -1201,13 +1203,18 @@ JSBool %s_%s%s(JSContext *cx, uint32_t argc, jsval *vp) {
 
         # BOOL - ccMouseUp:(NSEvent*)
         # PROXYJS_CCNode
-        template = '''
+        template_header = '''
 -(%s) %s%s
 {
-%s
+%s'''
+        template_super = '%s'
+        template_body = '''\
 \t%s *proxy = objc_getAssociatedObject(self, &JSB_association_proxy_key);
 \tif( proxy )
-\t\t[proxy %s];
+\t\t%s[proxy %s];
+'''
+        template_end = '''\
+%s
 }
 '''
         template_suffix = '@end\n'
@@ -1223,6 +1230,14 @@ JSBool %s_%s%s(JSContext *cx, uint32_t argc, jsval *vp) {
                 fullargs, args = self.get_callback_args_for_method(real_method)
                 js_ret_val, dt_ret_val = self.validate_retval(real_method, class_name)
 
+                if dt_ret_val != 'void':
+                    pre_ret = '\t%s ret;\n' % dt_ret_val
+                    assign_ret = 'ret = '
+                    post_ret = '\treturn ret;\n'
+                else:
+                    pre_ret = ''
+                    assign_ret = ''
+                    post_ret = ''
                 no_super = self.get_method_property(class_name, m, 'no_super')
                 no_swizzle = self.get_method_property(class_name, m, 'no_swizzle')
                 if not no_swizzle:
@@ -1230,15 +1245,19 @@ JSBool %s_%s%s(JSContext *cx, uint32_t argc, jsval *vp) {
                     if no_super:
                         call_native = ''
                     else:
-                        call_native = '\t//1st call native, then JS. Order is important\n\t[self JSHook_%s];' % (args)
+                        call_native = '\t//1st call native, then JS. Order is important\n\t[self JSHook_%s];\n' % (args)
                 else:
                     swizzle_prefix = ''
                     call_native = ''
-                self.fd_mm.write(template % (dt_ret_val, swizzle_prefix, fullargs,
-                                                 call_native,
-                                                 proxy_class_name,
-                                                 args
-                                                 ))
+
+                self.fd_mm.write(template_header % (dt_ret_val, swizzle_prefix, fullargs,
+                                                pre_ret))
+                self.fd_mm.write(template_super % call_native)
+
+                self.fd_mm.write(template_body % (proxy_class_name,
+                                                assign_ret,
+                                                args))
+                self.fd_mm.write(template_end % post_ret)
 
             self.fd_mm.write(template_suffix)
 
@@ -1251,7 +1270,6 @@ JSBool %s_%s%s(JSContext *cx, uint32_t argc, jsval *vp) {
         # JSPROXXY_CCNode
         # JSB_CCNode, JSB_NSObject
         header_template = '''
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -1267,41 +1285,58 @@ extern JSClass *%s_class;
 }
 #endif
 
-
 /* Proxy class */
 @interface %s : %s
 {
 }
 '''
-        header_template_end = '''
+        header_template_callbacks = '''
+/* Manually generated callbacks */
+@interface %s (Manual)
+%s
 @end
 '''
+
+        header_template_end = '@end\n'
+
         proxy_class_name = '%s%s' % (PROXY_PREFIX, class_name)
 
         self.generate_pragma_mark(class_name, self.fd_h)
 
-        manual = ''
+        manual_methods = ''
+        manual_callbacks = ''
         if class_name in self.manual_methods:
-            manual += '// Manually generated methods\n'
-            tmp = 'JSBool %s_%s%s(JSContext *cx, uint32_t argc, jsval *vp);\n'
+            manual_methods += '// Manually generated methods\n'
+            method_sig = 'JSBool %s_%s%s(JSContext *cx, uint32_t argc, jsval *vp);\n'
+            callback_sig = '-(%s) %s;\n'
 
             for method_name in self.manual_methods[class_name]:
                 try:
                     method = self.get_method(class_name, method_name)
-                    class_method = '_static' if self.is_class_method(method) else ''
-                    n = self.convert_selector_name_to_native(method_name)
-                    manual += tmp % (proxy_class_name, n, class_method)
+
+                    if class_name in self.callback_methods and method_name in self.callback_methods[class_name]:
+                        # Is this a manual callback ?
+                        full_args, args = self.get_callback_args_for_method(method)
+                        js_retval, dt_retval = self.validate_retval(method, class_name)
+                        manual_callbacks += callback_sig % (dt_retval, full_args)
+                    else:
+                        # or is this a manual method ?
+                        class_method = '_static' if self.is_class_method(method) else ''
+                        n = self.convert_selector_name_to_native(method_name)
+                        manual_methods += method_sig % (proxy_class_name, n, class_method)
                 except MethodNotFoundException, e:
                     sys.stderr.write('WARN: Ignoring regular expression rule. Method not found: %s\n' % str(e))
 
         self.fd_h.write(header_template % (proxy_class_name,
-                                                manual,
+                                                manual_methods,
                                                 proxy_class_name,
                                                 proxy_class_name,
-                                                proxy_class_name, PROXY_PREFIX + parent_name
+                                                proxy_class_name, PROXY_PREFIX + parent_name,
                                                 ))
-        # callback code should be added here
         self.fd_h.write(header_template_end)
+
+        if manual_callbacks:
+            self.fd_h.write(header_template_callbacks % (proxy_class_name, manual_callbacks))
 
     def generate_callback_args(self, method):
         no_args = 'jsval *argv = NULL; unsigned argc=0;\n'
@@ -1347,9 +1382,11 @@ extern JSClass *%s_class;
         # BOOL ccMouseUp NSEvent*
         # ccMouseUp
         # ccMouseUp
-        template = '''
+        template_header = '''
 -(%s) %s
 {
+%s'''
+        template_body = '''\
 \tif (_jsObj) {
 \t\tJSContext* cx = [[JSBCore sharedInstance] globalContext];
 \t\tJSBool found;
@@ -1359,24 +1396,48 @@ extern JSClass *%s_class;
 \t\t\t%s
 \t\t\tJS_GetProperty(cx, _jsObj, "%s", &fval);
 \t\t\tJS_CallFunctionValue(cx, _jsObj, fval, argc, argv, &rval);
+'''
+        template_ret = '\t\t\tJSBool jsbool; JS_ValueToBoolean(cx, rval, &jsbool);\n\t\t\tret = jsbool;\n'
+        template_end = '''\
 \t\t}
 \t}
+\t%s
 }
 '''
         if class_name in self.callback_methods:
             for m in self.callback_methods[class_name]:
 
+                # ignore manual
+                if m in self.manual_methods[class_name]:
+                    continue
+
                 method = self.get_method(class_name, m)
                 full_args, args = self.get_callback_args_for_method(method)
                 js_retval, dt_retval = self.validate_retval(method, class_name)
 
+                if dt_retval != 'void':
+                    pre_ret = '\t%s ret;\n' % dt_retval
+                    post_ret = 'return ret;'
+                else:
+                    pre_ret = ''
+                    post_ret = ''
+
                 converted_args = self.generate_callback_args(method)
 
                 js_name = self.convert_selector_name_to_js(class_name, m)
-                self.fd_mm.write(template % (dt_retval, full_args,
-                                                js_name,
+                self.fd_mm.write(template_header % (dt_retval, full_args,
+                                    pre_ret))
+                self.fd_mm.write(template_body % (js_name,
                                                 converted_args,
                                                 js_name))
+
+                # XXX: It should support any type of return type
+                # XXX: quick hack since most probable it is a BOOL
+                if dt_retval != 'void':
+                    if dt_retval != 'BOOL':
+                        raise Exception("IMPLEMENT ME")
+                    self.fd_mm.write(template_ret)
+                self.fd_mm.write(template_end % post_ret)
 
     def generate_implementation_swizzle(self, class_name):
         # CCNode
