@@ -1058,24 +1058,26 @@ JSBool %s_%s%s(JSContext *cx, uint32_t argc, jsval *vp) {
 
     def generate_method(self, class_name, method):
 
-        s = method['selector']
+        method_name = method['selector']
 
-        if self.get_method_property(class_name, s, 'manual'):
-            sys.stderr.write('Ignoring method %s # %s. It should be manually generated\n' % (class_name, s))
+        # Skip 'callback' and 'ignore' methods
+        # This should be before "manual", since "callback" and "ignore" have precedence over "manual"
+        try:
+            if 'callback' in self.method_properties[class_name][method_name]:
+                raise ParseException('Method defined as callback. Ignoring.')
+            if 'ignore' in self.method_properties[class_name][method_name]:
+                raise ParseException('Explicitly ignoring method')
+        except KeyError:
+            pass
+
+        #
+        if self.get_method_property(class_name, method_name, 'manual'):
+            sys.stderr.write('Ignoring method %s # %s. It should be manually generated\n' % (class_name, method_name))
             return True
 
         # Variadic methods are not supported
         if 'variadic' in method and method['variadic'] == 'true':
             raise ParseException('variadic arguments not supported.')
-
-        # Skip 'callback' and 'ignore' methods
-        try:
-            if 'callback' in self.method_properties[class_name][s]:
-                raise ParseException('Method defined as callback. Ignoring.')
-            if 'ignore' in self.method_properties[class_name][s]:
-                raise ParseException('Explicitly ignoring method')
-        except KeyError:
-            pass
 
         args_js_type, args_declared_type = self.validate_arguments(method)
         ret_js_type, ret_declared_type = self.validate_retval(method, class_name)
@@ -1119,7 +1121,7 @@ JSBool %s_%s%s(JSContext *cx, uint32_t argc, jsval *vp) {
             self.fd_mm.write('\n\telse\n\t\tJSB_PRECONDITION3(NO, cx, JS_FALSE, "Error in number of arguments");\n\n')
 
         else:
-            call_real = self.generate_method_call_to_real_object(s, num_of_args, ret_js_type, args_declared_type, args_js_type, class_name, method_type)
+            call_real = self.generate_method_call_to_real_object(method_name, num_of_args, ret_js_type, args_declared_type, args_js_type, class_name, method_type)
             self.fd_mm.write('\n%s\n' % call_real)
 
         ret_string = self.generate_retval(ret_declared_type, ret_js_type, method)
@@ -1268,7 +1270,6 @@ JSBool %s_%s%s(JSContext *cx, uint32_t argc, jsval *vp) {
         # JSPROXXY_CCNode
         # JSB_CCNode, JSB_NSObject
         header_template = '''
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -1284,41 +1285,58 @@ extern JSClass *%s_class;
 }
 #endif
 
-
 /* Proxy class */
 @interface %s : %s
 {
 }
 '''
-        header_template_end = '''
+        header_template_callbacks = '''
+/* Manually generated callbacks */
+@interface %s (Manual)
+%s
 @end
 '''
+
+        header_template_end = '@end\n'
+
         proxy_class_name = '%s%s' % (PROXY_PREFIX, class_name)
 
         self.generate_pragma_mark(class_name, self.fd_h)
 
-        manual = ''
+        manual_methods = ''
+        manual_callbacks = ''
         if class_name in self.manual_methods:
-            manual += '// Manually generated methods\n'
-            tmp = 'JSBool %s_%s%s(JSContext *cx, uint32_t argc, jsval *vp);\n'
+            manual_methods += '// Manually generated methods\n'
+            method_sig = 'JSBool %s_%s%s(JSContext *cx, uint32_t argc, jsval *vp);\n'
+            callback_sig = '-(%s) %s;\n'
 
             for method_name in self.manual_methods[class_name]:
                 try:
                     method = self.get_method(class_name, method_name)
-                    class_method = '_static' if self.is_class_method(method) else ''
-                    n = self.convert_selector_name_to_native(method_name)
-                    manual += tmp % (proxy_class_name, n, class_method)
+
+                    if class_name in self.callback_methods and method_name in self.callback_methods[class_name]:
+                        # Is this a manual callback ?
+                        full_args, args = self.get_callback_args_for_method(method)
+                        js_retval, dt_retval = self.validate_retval(method, class_name)
+                        manual_callbacks += callback_sig % (dt_retval, full_args)
+                    else:
+                        # or is this a manual method ?
+                        class_method = '_static' if self.is_class_method(method) else ''
+                        n = self.convert_selector_name_to_native(method_name)
+                        manual_methods += method_sig % (proxy_class_name, n, class_method)
                 except MethodNotFoundException, e:
                     sys.stderr.write('WARN: Ignoring regular expression rule. Method not found: %s\n' % str(e))
 
         self.fd_h.write(header_template % (proxy_class_name,
-                                                manual,
+                                                manual_methods,
                                                 proxy_class_name,
                                                 proxy_class_name,
-                                                proxy_class_name, PROXY_PREFIX + parent_name
+                                                proxy_class_name, PROXY_PREFIX + parent_name,
                                                 ))
-        # callback code should be added here
         self.fd_h.write(header_template_end)
+
+        if manual_callbacks:
+            self.fd_h.write(header_template_callbacks % (proxy_class_name, manual_callbacks))
 
     def generate_callback_args(self, method):
         no_args = 'jsval *argv = NULL; unsigned argc=0;\n'
@@ -1388,6 +1406,10 @@ extern JSClass *%s_class;
 '''
         if class_name in self.callback_methods:
             for m in self.callback_methods[class_name]:
+
+                # ignore manual
+                if m in self.manual_methods[class_name]:
+                    continue
 
                 method = self.get_method(class_name, m)
                 full_args, args = self.get_callback_args_for_method(method)

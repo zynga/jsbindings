@@ -13,7 +13,6 @@
  */
 #pragma mark - CCDirector
 
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -30,19 +29,16 @@ extern JSClass *JSB_CCDirector_class;
 }
 #endif
 
-
 /* Proxy class */
 @interface JSB_CCDirector : JSB_NSObject
 {
 }
-
 @end
 
 /*
  * CCDirectorIOS
  */
 #pragma mark - CCDirectorIOS
-
 
 #ifdef __cplusplus
 extern "C" {
@@ -60,19 +56,16 @@ extern JSClass *JSB_CCDirectorIOS_class;
 }
 #endif
 
-
 /* Proxy class */
 @interface JSB_CCDirectorIOS : JSB_CCDirector
 {
 }
-
 @end
 
 /*
  * CCDirectorDisplayLink
  */
 #pragma mark - CCDirectorDisplayLink
-
 
 #ifdef __cplusplus
 extern "C" {
@@ -90,19 +83,16 @@ extern JSClass *JSB_CCDirectorDisplayLink_class;
 }
 #endif
 
-
 /* Proxy class */
 @interface JSB_CCDirectorDisplayLink : JSB_CCDirectorIOS
 {
 }
-
 @end
 
 /*
  * CCLayer
  */
 #pragma mark - CCLayer
-
 
 #ifdef __cplusplus
 extern "C" {
@@ -120,19 +110,16 @@ extern JSClass *JSB_CCLayer_class;
 }
 #endif
 
-
 /* Proxy class */
 @interface JSB_CCLayer : JSB_CCNode
 {
 }
-
 @end
 
 /*
  * CCLayerMultiplex
  */
 #pragma mark - CCLayerMultiplex
-
 
 #ifdef __cplusplus
 extern "C" {
@@ -150,19 +137,16 @@ extern JSClass *JSB_CCLayerMultiplex_class;
 }
 #endif
 
-
 /* Proxy class */
 @interface JSB_CCLayerMultiplex : JSB_CCLayer
 {
 }
-
 @end
 
 /*
  * CCLayerColor
  */
 #pragma mark - CCLayerColor
-
 
 #ifdef __cplusplus
 extern "C" {
@@ -181,19 +165,16 @@ extern JSClass *JSB_CCLayerColor_class;
 }
 #endif
 
-
 /* Proxy class */
 @interface JSB_CCLayerColor : JSB_CCLayer
 {
 }
-
 @end
 
 /*
  * CCLayerGradient
  */
 #pragma mark - CCLayerGradient
-
 
 #ifdef __cplusplus
 extern "C" {
@@ -211,19 +192,16 @@ extern JSClass *JSB_CCLayerGradient_class;
 }
 #endif
 
-
 /* Proxy class */
 @interface JSB_CCLayerGradient : JSB_CCLayerColor
 {
 }
-
 @end
 
 /*
  * CCMenu
  */
 #pragma mark - CCMenu
-
 
 #ifdef __cplusplus
 extern "C" {
@@ -241,12 +219,10 @@ extern JSClass *JSB_CCMenu_class;
 }
 #endif
 
-
 /* Proxy class */
 @interface JSB_CCMenu : JSB_CCLayer
 {
 }
-
 @end
 
 
