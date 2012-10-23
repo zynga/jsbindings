@@ -945,7 +945,7 @@ JSBool JSB_CCNode_scheduleOnce_delay_(JSContext *cx, uint32_t argc, jsval *vp)
 	JSB_PRECONDITION3(ok, cx, JS_FALSE,"Error converting jsval to number");
 
 
-	[scheduler scheduleBlockForKey:key target:real interval:0 paused:![real isRunning] repeat:0 delay:delay block:block];
+	[scheduler scheduleBlockForKey:key target:real interval:0 repeat:0 delay:delay paused:![real isRunning] block:block];
 
 
 	JS_SET_RVAL(cx, vp, JSVAL_VOID);
@@ -1021,16 +1021,16 @@ JSBool JSB_CCNode_schedule_interval_repeat_delay_(JSContext *cx, uint32_t argc, 
 
 
 	if( argc==1)
-		[scheduler scheduleBlockForKey:key target:real interval:0 paused:![real isRunning] repeat:kCCRepeatForever delay:0 block:block];
+		[scheduler scheduleBlockForKey:key target:real interval:0 repeat:kCCRepeatForever delay:0 paused:![real isRunning] block:block];
 		
 	else if (argc == 2 )
-		[scheduler scheduleBlockForKey:key target:real interval:interval paused:![real isRunning] repeat:kCCRepeatForever delay:0 block:block];		
+		[scheduler scheduleBlockForKey:key target:real interval:interval repeat:kCCRepeatForever delay:0 paused:![real isRunning] block:block];
 
 	else if (argc == 3 )
-		[scheduler scheduleBlockForKey:key target:real interval:interval paused:![real isRunning] repeat:repeat delay:0 block:block];		
+		[scheduler scheduleBlockForKey:key target:real interval:interval repeat:repeat delay:0 paused:![real isRunning] block:block];
 
 	else if( argc == 4 )
-		[scheduler scheduleBlockForKey:key target:real interval:interval paused:![real isRunning] repeat:repeat delay:delay block:block];
+		[scheduler scheduleBlockForKey:key target:real interval:interval repeat:repeat delay:delay paused:![real isRunning] block:block];
 	
 	JS_SET_RVAL(cx, vp, JSVAL_VOID);
 	return JS_TRUE;
@@ -1102,7 +1102,100 @@ JSBool JSB_CCNode_setPosition_(JSContext *cx, uint32_t argc, jsval *vp) {
 	return JS_TRUE;
 }
 
+#pragma mark - CCScheduler
+
+// scheduler.scheduleCallbackForTarget(this, this.onSchedUpdate, interval, repeat, delay, paused);
+JSBool JSB_CCScheduler_scheduleBlockForKey_target_interval_repeat_delay_paused_block_(JSContext *cx, uint32_t argc, jsval *vp)
+{
+	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
+	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
+	
+	JSB_PRECONDITION3( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
+	JSB_PRECONDITION3( argc >=2 && argc <=6, cx, JS_FALSE, "Invalid number of arguments" );
+	jsval *argvp = JS_ARGV(cx,vp);
+	
+	CCScheduler *scheduler = (CCScheduler*) [proxy realObj];
+	
+	JSBool ok = JS_TRUE;
+	
+	//
+	// arg 0: target
+	//
+	// XXX: This must be rooted, right?
+	JSObject *jstarget = JSVAL_TO_OBJECT(*argvp);
+	id target;
+	ok &= jsval_to_NSObject(cx, *argvp++, &target);
+	
+	//
+	// arg 1: "function"
+	//
+	jsval funcval = *argvp++;
+	JSFunction *func = JS_ValueToFunction(cx, funcval);
+	JSB_PRECONDITION3( func, cx, JS_FALSE, "Cannot convert Value to Function");
+	
+	NSString *key = nil;
+	JSString *funcname = JS_GetFunctionId(func);
+	
+	// named function
+	if( funcname ) {
+		char *key_c = JS_EncodeString(cx, funcname);
+		key = [NSString stringWithUTF8String:key_c];
+	} else {
+		// anonymous function
+		key = [NSString stringWithFormat:@"anonfunc at %p", func];
+	}
+	
+	void (^block)(ccTime dt) = ^(ccTime dt) {
+		
+		jsval rval;
+		jsval jsdt = DOUBLE_TO_JSVAL(dt);
+		
+		JSBool ok = JS_CallFunctionValue(cx, jstarget, funcval, 1, &jsdt, &rval);
+		JSB_PRECONDITION2(ok, cx, ,"Error calling collision callback: schedule_interval_repeat_delay");
+	};
+
+	//
+	// arg 2: Interval
+	//
+	double interval = 0;
+	if( argc >= 3 )
+		ok &= JS_ValueToNumber(cx, *argvp++, &interval );
+	
+	//
+	// arg 3: repeat
+	//
+	int32_t repeat = -1;
+	if( argc >= 4 )
+		ok &= JS_ValueToECMAInt32(cx, *argvp++, &repeat);
+	// convert -1 to kCCRepeatForever
+	if( repeat == -1)
+		repeat = kCCRepeatForever;
+	
+	//
+	// arg 4: delay
+	//
+	double delay = 0;
+	if( argc >= 5 )
+		ok &= JS_ValueToNumber(cx, *argvp++, &delay );
+
+	//
+	// arg 5: paused
+	//
+	JSBool paused = JS_FALSE;
+	if( argc >= 6 )
+		ok &= JS_ValueToBoolean(cx, *argvp++, &paused);
+
+	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error converting jsval to native");
+	
+	
+	[scheduler scheduleBlockForKey:key target:target interval:interval repeat:repeat delay:delay paused:paused block:block];
+	
+	JS_SET_RVAL(cx, vp, JSVAL_VOID);
+	return JS_TRUE;
+}
+
 #pragma mark - setBlendFunc friends
+
 // setBlendFunc
 JSBool JSB_CCParticleSystem_setBlendFunc_(JSContext *cx, uint32_t argc, jsval *vp)
 {

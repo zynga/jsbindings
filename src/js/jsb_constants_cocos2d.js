@@ -50,6 +50,9 @@ cc.WHITE = {r:255, g:255, b:255};
 
 cc.POINT_ZERO = {x:0, y:0};
 
+// XXX: This definition is different than cocos2d-html5
+cc.REPEAT_FOREVER = - 1;
+
 cc._reuse_p0 = {x:0, y:0};
 cc._reuse_p1 = {x:0, y:0};
 cc._reuse_p_index = 0;
