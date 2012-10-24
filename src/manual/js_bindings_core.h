@@ -175,6 +175,7 @@ extern "C" {
 	// logs a format string to the console
 	JSBool JSBCore_log(JSContext *cx, uint32_t argc, jsval *vp);
 
+	extern char* JSB_version;
 #ifdef __cplusplus
 }
 #endif
