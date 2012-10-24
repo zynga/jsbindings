@@ -48,6 +48,8 @@ static tHashJSObject *reverse_hash = NULL;
 // Globals
 char * JSB_association_proxy_key = NULL;
 
+char * JSB_version = "0.3-beta";
+
 
 static void its_finalize(JSFreeOp *fop, JSObject *obj)
 {
@@ -260,6 +262,10 @@ JSBool JSBCore_restartVM(JSContext *cx, uint32_t argc, jsval *vp)
 {
 	self = [super init];
 	if( self ) {
+		
+#if DEBUG
+		printf("JSB: JavaScript Bindings v%s\n", JSB_version);
+#endif
 		
 		// Must be called only once, and before creating a new runtime
 		JS_SetCStringsAreUTF8();
