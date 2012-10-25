@@ -53,9 +53,11 @@ cc.POINT_ZERO = {x:0, y:0};
 // XXX: This definition is different than cocos2d-html5
 cc.REPEAT_FOREVER = - 1;
 
-cc._reuse_p0 = {x:0, y:0};
-cc._reuse_p1 = {x:0, y:0};
+// reusable objects
+cc._reuse_p = [ {x:0, y:0}, {x:0,y:0}, {x:0,y:0}, {x:0,y:0} ];
 cc._reuse_p_index = 0;
+cc._reuse_size = cc.size(0,0);
+cc._reuse_rect = cc.rect(0,0,0,0);
 cc._reuse_color3b = {r:255, g:255, b:255 };
 cc._reuse_color4b = {r:255, g:255, b:255, a:255 };
 cc._reuse_grid = cc.g(0,0);
@@ -74,9 +76,6 @@ cc._c3b = function( r, g, b )
     cc._reuse_color3b.b = b;
     return cc._reuse_color3b;
 };
-// compatibility
-cc.c3 = cc.c3b;
-cc._c3 = cc._c3b;
 
 //
 // Color 4B
@@ -93,11 +92,6 @@ cc._c4b = function( r, g, b, a )
     cc._reuse_color4b.a = a;
     return cc._reuse_color4b;
 };
-// compatibility
-cc.c4 = cc.c4b;
-cc._c4 = cc._c4b;
-
-
 
 //
 // Color 4F
@@ -116,17 +110,14 @@ cc.p = function( x, y )
 };
 cc._p = function( x, y )
 {
-    if( cc._reuse_p_index === 0 ) {
-        cc._reuse_p0.x = x;
-        cc._reuse_p0.y = y;
-        cc._reuse_p_index = 1;
-        return cc._reuse_p0;
-    } else {
-        cc._reuse_p1.x = x;
-        cc._reuse_p1.y = y;
+    if( cc._reuse_p_index == cc._reuse_p.length )
         cc._reuse_p_index = 0;
-        return cc._reuse_p1;
-    }
+
+    var p = cc._reuse_p[ cc._reuse_p_index];
+    cc._reuse_p_index++;
+    p.x = x;
+    p.y = y;
+    return p;
 };
 
 cc.pointEqualToPoint = function (point1, point2) {
@@ -150,6 +141,12 @@ cc.size = function(w,h)
 {
     return {width:w, height:h};
 };
+cc._size = function(w,h)
+{
+    cc._reuse_size.width = w;
+    cc._reuse_size.height = h;
+    return cc._reuse_size;
+};
 cc.sizeEqualToSize = function (size1, size2)
 {
     return ((size1.width == size2.width) && (size1.height == size2.height));
@@ -161,6 +158,14 @@ cc.sizeEqualToSize = function (size1, size2)
 cc.rect = function(x,y,w,h)
 {
     return {x:x, y:y, width:w, height:h};
+};
+cc._rect = function(x,y,w,h)
+{
+    cc._reuse_rect.x = x;
+    cc._reuse_rect.y = y;
+    cc._reuse_rect.width = w;
+    cc._reuse_rect.height = h;
+    return cc._reuse_rect;
 };
 cc.rectEqualToRect = function (rect1, rect2) {
     return ( rect1.x==rect2.x && rect1.y==rect2.y && rect1.width==rect2.width && rect1.height==rect2.height);
@@ -237,6 +242,16 @@ cc.rectIntersection = function (rectA, rectB) {
     return intersection;
 };
 
+//
+// Array: for cocos2d-html5 compatibility
+//
+cc.ArrayRemoveObject = function (arr, delObj) {
+    for (var i = 0; i < arr.length; i++) {
+        if (arr[i] == delObj) {
+            arr.splice(i, 1);
+        }
+    }
+};
 
 //
 // Helpers
@@ -255,9 +270,8 @@ cc.dumpConfig = function()
 };
 
 //
-// Overrides
+// Bindings Overrides
 //
-
 // MenuItemToggle
 cc.MenuItemToggle.create = function( /* var args */) {
 
@@ -308,19 +322,6 @@ cc.associateWithNative = function( jsobj, superclass_or_instance ) {
        __associateObjWithNative( jsobj, superclass_or_instance );
    }
 };
-
-
-//
-// Array: for cocos2d-html5 compatibility
-//
-cc.ArrayRemoveObject = function (arr, delObj) {
-    for (var i = 0; i < arr.length; i++) {
-        if (arr[i] == delObj) {
-            arr.splice(i, 1);
-        }
-    }
-};
-
 
 //
 // JSB supports 2 official ways to create subclasses
