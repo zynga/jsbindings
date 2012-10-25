@@ -56,8 +56,8 @@ cc.REPEAT_FOREVER = - 1;
 // reusable objects
 cc._reuse_p = [ {x:0, y:0}, {x:0,y:0}, {x:0,y:0}, {x:0,y:0} ];
 cc._reuse_p_index = 0;
-cc._reuse_size = cc.size(0,0);
-cc._reuse_rect = cc.rect(0,0,0,0);
+cc._reuse_size = {width:0, height:0};
+cc._reuse_rect = {x:0, y:0, width:0, height:0};
 cc._reuse_color3b = {r:255, g:255, b:255 };
 cc._reuse_color4b = {r:255, g:255, b:255, a:255 };
 cc._reuse_grid = cc.g(0,0);
