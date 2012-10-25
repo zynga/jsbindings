@@ -155,6 +155,11 @@ cc.rect = function(x,y,w,h)
     return {x:x, y:y, width:w, height:h};
 };
 
+cc.dump = function(obj)
+{
+    for( var i in obj )
+        cc.log( i + " = " + obj[i] );
+};
 
 // dump config info, but only in debug mode
 cc.dumpConfig = function()
@@ -208,13 +213,67 @@ cc.LabelAtlas.create = function( a,b,c,d,e ) {
  * @param {object} jsobj subclass
  * @param {object} klass superclass
  */
-cc.associateWithNative = function( jsobj, superclass ) {
-    var native = new superclass();
-    __associateObjWithNative( jsobj, native );
+cc.associateWithNative = function( jsobj, superclass_or_instance ) {
+
+    try {
+        // Used when subclassing using the "extend" method
+        var native = new superclass_or_instance();
+        __associateObjWithNative( jsobj, native );
+    } catch(err) {
+        // Used when subclassing using the goog.inherits method
+       __associateObjWithNative( jsobj, superclass_or_instance );
+   }
 };
 
 
-// XXX Should be done in native
+//
+// Rect API
+//
+cc.rectEqualToRect = function (rect1, rect2) {
+    return ( rect1.x==rect2.x && rect1.y==rect2.y && rect1.width==rect2.width && rect1.height==rect2.height);
+};
+
+cc.rectContainsRect = function (rect1, rect2) {
+    if ((rect1.x >= rect2.x) || (rect1.y >= rect2.y) ||
+        ( rect1.x + rect1.width <= rect2.x + rect2.width) ||
+        ( rect1.y + rect1.height <= rect2.y + rect2.height))
+        return false;
+    return true;
+};
+
+cc.rectGetMaxX = function (rect) {
+    return (rect.x + rect.width);
+};
+
+cc.rectGetMidX = function (rect) {
+    return (rect.x + rect.width / 2.0);
+};
+
+cc.rectGetMinX = function (rect) {
+    return rect.x;
+};
+
+cc.rectGetMaxY = function (rect) {
+    return(rect.y + rect.height);
+};
+
+cc.rectGetMidY = function (rect) {
+    return rect.y + rect.height / 2.0;
+};
+
+cc.rectGetMinY = function (rect) {
+    return rect.y;
+};
+
+cc.rectContainsPoint = function (rect, point) {
+    var ret = false;
+    if (point.x >= rect.x && point.x <= rect.x + rect.width &&
+        point.y >= rect.y && point.y <= rect.y + rect.height) {
+        ret = true;
+    }
+    return ret;
+};
+
 cc.rectIntersectsRect = function( rectA, rectB )
 {
     var bool = ! (  rectA.x > rectB.x + rectB.width ||
@@ -224,6 +283,27 @@ cc.rectIntersectsRect = function( rectA, rectB )
 
     return bool;
 };
+
+cc.rectUnion = function (rectA, rectB) {
+    var rect = cc.rect(0, 0, 0, 0);
+    rect.x = Math.min(rectA.x, rectB.x);
+    rect.y = Math.min(rectA.y, rectB.y);
+    rect.width = Math.max(rectA.x + rectA.width, rectB.x + rectB.width) - rect.x;
+    rect.height = Math.max(rectA.y + rectA.height, rectB.y + rectB.height) - rect.y;
+    return rect;
+};
+
+cc.rectIntersection = function (rectA, rectB) {
+    var intersection = cc.rect(
+        Math.max(rectA.x, rectB.x),
+        Math.max(rectA.y, rectB.y),
+        0, 0);
+
+    intersection.width = Math.min(rectA.x+rectA.width, rectB.x+rectB.width) - intersection.x;
+    intersection.height = Math.min(rectA.y+rectA.height, rectB.y+rectB.height) - intersection.y;
+    return intersection;
+};
+
 
 //
 // Array: for cocos2d-html5 compatibility
@@ -238,11 +318,12 @@ cc.ArrayRemoveObject = function (arr, delObj) {
 
 
 //
-// Google "subclasses"
-// borrowed from closure library
+// JSB supports 2 official ways to create subclasses
 //
-var goog = goog || {}; // Check to see if already defined in current scope
-goog.inherits = function (childCtor, parentCtor) {
+// 1) Google "subclasses" borrowed from closure library
+// This is the recommended way to do it
+//
+cc.inherits = function (childCtor, parentCtor) {
 	/** @constructor */
 	function tempCtor() {};
 	tempCtor.prototype = parentCtor.prototype;
@@ -250,19 +331,16 @@ goog.inherits = function (childCtor, parentCtor) {
 	childCtor.prototype = new tempCtor();
 	childCtor.prototype.constructor = childCtor;
 
-	// Copy "static" method, but doesn't generate subclasses.
+    // Copy "static" method, but doesn't generate subclasses.
 //	for( var i in parentCtor ) {
 //		childCtor[ i ] = parentCtor[ i ];
 //	}
 };
-goog.base = function(me, opt_methodName, var_args) {
+cc.base = function(me, opt_methodName, var_args) {
 	var caller = arguments.callee.caller;
 	if (caller.superClass_) {
 		// This is a constructor. Call the superclass constructor.
 		ret =  caller.superClass_.constructor.apply( me, Array.prototype.slice.call(arguments, 1));
-
-		// XXX: SpiderMonkey bindings extensions
-//		__associateObjWithNative( me, ret );
 		return ret;
 	}
 
@@ -285,18 +363,17 @@ goog.base = function(me, opt_methodName, var_args) {
 		return me.constructor.prototype[opt_methodName].apply(me, args);
 	} else {
 		throw Error(
-					'goog.base called from a method of one name ' +
+					'cc.base called from a method of one name ' +
 					'to a method of a different name');
 	}
 };
 
 
 //
-// Simple subclass
+// 2) Using "extend" subclassing
+// Simple JavaScript Inheritance By John Resig http://ejohn.org/
 //
-
 cc.Class = function(){};
-
 cc.Class.extend = function (prop) {
     var _super = this.prototype;
 
