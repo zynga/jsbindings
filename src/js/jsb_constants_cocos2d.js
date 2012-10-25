@@ -129,6 +129,10 @@ cc._p = function( x, y )
     }
 };
 
+cc.pointEqualToPoint = function (point1, point2) {
+    return ((point1.x == point2.x) && (point1.y == point2.y));
+};
+
 //
 // Grid
 //
@@ -146,6 +150,10 @@ cc.size = function(w,h)
 {
     return {width:w, height:h};
 };
+cc.sizeEqualToSize = function (size1, size2)
+{
+    return ((size1.width == size2.width) && (size1.height == size2.height));
+};
 
 //
 // Rect
@@ -154,81 +162,6 @@ cc.rect = function(x,y,w,h)
 {
     return {x:x, y:y, width:w, height:h};
 };
-
-cc.dump = function(obj)
-{
-    for( var i in obj )
-        cc.log( i + " = " + obj[i] );
-};
-
-// dump config info, but only in debug mode
-cc.dumpConfig = function()
-{
-    if( cc.config.debug ) {
-        for( var i in cc.config )
-            cc.log( i + " = " + cc.config[i] );
-    }
-};
-
-//
-// MenuItemToggle
-//
-cc.MenuItemToggle.create = function( /* var args */) {
-
-    var n = arguments.length;
-
-    if (typeof arguments[n-1] === 'function') {
-        var args = Array.prototype.slice.call(arguments);
-        var func = args.pop();
-        var obj = args.pop();
-
-        // create it with arguments,
-        var item = cc.MenuItemToggle._create.apply(this, args);
-
-        // then set the callback
-        item.setCallback(obj, func);
-        return item;
-    } else {
-        return cc.MenuItemToggle._create.apply(this, arguments);
-    }
-};
-
-//
-// LabelAtlas
-//
-cc.LabelAtlas.create = function( a,b,c,d,e ) {
-
-    var n = arguments.length;
-
-    if ( n == 5) {
-        return cc.LabelAtlas._create(a,b,c,d,e.charCodeAt(0));
-    } else {
-        return cc.LabelAtlas._create.apply(this, arguments);
-    }
-};
-
-/**
- * Associates a base class with a native superclass
- * @function
- * @param {object} jsobj subclass
- * @param {object} klass superclass
- */
-cc.associateWithNative = function( jsobj, superclass_or_instance ) {
-
-    try {
-        // Used when subclassing using the "extend" method
-        var native = new superclass_or_instance();
-        __associateObjWithNative( jsobj, native );
-    } catch(err) {
-        // Used when subclassing using the goog.inherits method
-       __associateObjWithNative( jsobj, superclass_or_instance );
-   }
-};
-
-
-//
-// Rect API
-//
 cc.rectEqualToRect = function (rect1, rect2) {
     return ( rect1.x==rect2.x && rect1.y==rect2.y && rect1.width==rect2.width && rect1.height==rect2.height);
 };
@@ -302,6 +235,78 @@ cc.rectIntersection = function (rectA, rectB) {
     intersection.width = Math.min(rectA.x+rectA.width, rectB.x+rectB.width) - intersection.x;
     intersection.height = Math.min(rectA.y+rectA.height, rectB.y+rectB.height) - intersection.y;
     return intersection;
+};
+
+
+//
+// Helpers
+//
+cc.dump = function(obj)
+{
+    for( var i in obj )
+        cc.log( i + " = " + obj[i] );
+};
+
+// dump config info, but only in debug mode
+cc.dumpConfig = function()
+{
+    if( cc.config.debug )
+        cc.dump(cc.config);
+};
+
+//
+// Overrides
+//
+
+// MenuItemToggle
+cc.MenuItemToggle.create = function( /* var args */) {
+
+    var n = arguments.length;
+
+    if (typeof arguments[n-1] === 'function') {
+        var args = Array.prototype.slice.call(arguments);
+        var func = args.pop();
+        var obj = args.pop();
+
+        // create it with arguments,
+        var item = cc.MenuItemToggle._create.apply(this, args);
+
+        // then set the callback
+        item.setCallback(obj, func);
+        return item;
+    } else {
+        return cc.MenuItemToggle._create.apply(this, arguments);
+    }
+};
+
+// LabelAtlas
+cc.LabelAtlas.create = function( a,b,c,d,e ) {
+
+    var n = arguments.length;
+
+    if ( n == 5) {
+        return cc.LabelAtlas._create(a,b,c,d,e.charCodeAt(0));
+    } else {
+        return cc.LabelAtlas._create.apply(this, arguments);
+    }
+};
+
+/**
+ * Associates a base class with a native superclass
+ * @function
+ * @param {object} jsobj subclass
+ * @param {object} klass superclass
+ */
+cc.associateWithNative = function( jsobj, superclass_or_instance ) {
+
+    try {
+        // Used when subclassing using the "extend" method
+        var native = new superclass_or_instance();
+        __associateObjWithNative( jsobj, native );
+    } catch(err) {
+        // Used when subclassing using the goog.inherits method
+       __associateObjWithNative( jsobj, superclass_or_instance );
+   }
 };
 
 
