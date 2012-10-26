@@ -83,7 +83,7 @@ JSBool JSBCore_log(JSContext *cx, uint32_t argc, jsval *vp)
 		JS_ConvertArguments(cx, argc, JS_ARGV(cx, vp), "S", &string);
 		if (string) {
 			char *cstr = JS_EncodeString(cx, string);
-			printf("%s\n", cstr);
+			fprintf(stderr, "%s\n", cstr);
 		}
 		
 		return JS_TRUE;
