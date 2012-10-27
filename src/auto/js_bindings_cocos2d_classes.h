@@ -1464,6 +1464,7 @@ extern "C" {
 void JSB_CCTMXLayer_createClass(JSContext *cx, JSObject* globalObj, const char* name );
 
 // Manually generated methods
+JSBool JSB_CCTMXLayer_getTileFlagsAt(JSContext *cx, uint32_t argc, jsval *vp);
 
 
 extern JSObject *JSB_CCTMXLayer_object;
