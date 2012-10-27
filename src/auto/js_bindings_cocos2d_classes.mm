@@ -13993,29 +13993,6 @@ JSBool JSB_CCTMXLayer_setProperties_(JSContext *cx, uint32_t argc, jsval *vp) {
 	return JS_TRUE;
 }
 
-// Arguments: uint32_t, CGPoint
-// Ret value: void (None)
-JSBool JSB_CCTMXLayer_setTileGID_at_(JSContext *cx, uint32_t argc, jsval *vp) {
-
-	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
-	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
-
-	JSB_PRECONDITION3( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
-	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
-	jsval *argvp = JS_ARGV(cx,vp);
-	JSBool ok = JS_TRUE;
-	uint32_t arg0; CGPoint arg1; 
-
-	ok &= JS_ValueToECMAUint32( cx, *argvp++, &arg0 );
-	ok &= jsval_to_CGPoint( cx, *argvp++, (CGPoint*) &arg1 );
-	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error processing arguments");
-
-	CCTMXLayer *real = (CCTMXLayer*) [proxy realObj];
-	[real setTileGID:(uint32_t)arg0 at:(CGPoint)arg1  ];
-	JS_SET_RVAL(cx, vp, JSVAL_VOID);
-	return JS_TRUE;
-}
-
 // Arguments: uint32_t, CGPoint, ccTMXTileFlags
 // Ret value: void (None)
 JSBool JSB_CCTMXLayer_setTileGID_at_withFlags_(JSContext *cx, uint32_t argc, jsval *vp) {
@@ -14024,18 +14001,29 @@ JSBool JSB_CCTMXLayer_setTileGID_at_withFlags_(JSContext *cx, uint32_t argc, jsv
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
 
 	JSB_PRECONDITION3( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
-	JSB_PRECONDITION3( argc == 3, cx, JS_FALSE, "Invalid number of arguments" );
+	JSB_PRECONDITION3( argc >= 2 && argc <= 3 , cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	uint32_t arg0; CGPoint arg1; int32_t arg2; 
 
 	ok &= JS_ValueToECMAUint32( cx, *argvp++, &arg0 );
 	ok &= jsval_to_CGPoint( cx, *argvp++, (CGPoint*) &arg1 );
-	ok &= JS_ValueToECMAInt32( cx, *argvp++, &arg2 );
+	if (argc >= 3) {
+		ok &= JS_ValueToECMAInt32( cx, *argvp++, &arg2 );
+	}
 	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error processing arguments");
 
-	CCTMXLayer *real = (CCTMXLayer*) [proxy realObj];
+	if( argc == 2 ) {
+		CCTMXLayer *real = (CCTMXLayer*) [proxy realObj];
+	[real setTileGID:(uint32_t)arg0 at:(CGPoint)arg1  ];
+	}
+	else if( argc == 3 ) {
+		CCTMXLayer *real = (CCTMXLayer*) [proxy realObj];
 	[real setTileGID:(uint32_t)arg0 at:(CGPoint)arg1 withFlags:(ccTMXTileFlags)arg2  ];
+	}
+	else
+		JSB_PRECONDITION3(NO, cx, JS_FALSE, "Error in number of arguments");
+
 	JS_SET_RVAL(cx, vp, JSVAL_VOID);
 	return JS_TRUE;
 }
@@ -14178,13 +14166,13 @@ void JSB_CCTMXLayer_createClass(JSContext *cx, JSObject* globalObj, const char* 
 		JS_FN("setLayerSize", JSB_CCTMXLayer_setLayerSize_, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("setMapTileSize", JSB_CCTMXLayer_setMapTileSize_, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("setProperties", JSB_CCTMXLayer_setProperties_, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
-		JS_FN("setTileGID", JSB_CCTMXLayer_setTileGID_at_, 2, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
-		JS_FN("setTileGIDAtWithFlags", JSB_CCTMXLayer_setTileGID_at_withFlags_, 3, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("setTileGID", JSB_CCTMXLayer_setTileGID_at_withFlags_, 3, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("setTileset", JSB_CCTMXLayer_setTileset_, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("setupTiles", JSB_CCTMXLayer_setupTiles, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
-		JS_FN("tileAt", JSB_CCTMXLayer_tileAt_, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
-		JS_FN("tileGIDAt", JSB_CCTMXLayer_tileGIDAt_, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("getTileAt", JSB_CCTMXLayer_tileAt_, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("getTileGIDAt", JSB_CCTMXLayer_tileGIDAt_, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("getTileset", JSB_CCTMXLayer_tileset, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("getTileFlagsAt", JSB_CCTMXLayer_getTileFlagsAt, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FS_END
 	};
 	static JSFunctionSpec st_funcs[] = {
@@ -23225,10 +23213,10 @@ void JSB_CCTMXTiledMap_createClass(JSContext *cx, JSObject* globalObj, const cha
 	static JSFunctionSpec funcs[] = {
 		JS_FN("initWithTMXFile", JSB_CCTMXTiledMap_initWithTMXFile_, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("initWithXMLResourcePath", JSB_CCTMXTiledMap_initWithXML_resourcePath_, 2, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
-		JS_FN("layerNamed", JSB_CCTMXTiledMap_layerNamed_, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("getLayer", JSB_CCTMXTiledMap_layerNamed_, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("getMapOrientation", JSB_CCTMXTiledMap_mapOrientation, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("getMapSize", JSB_CCTMXTiledMap_mapSize, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
-		JS_FN("objectGroupNamed", JSB_CCTMXTiledMap_objectGroupNamed_, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("getObjectGroup", JSB_CCTMXTiledMap_objectGroupNamed_, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("getObjectGroups", JSB_CCTMXTiledMap_objectGroups, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("setObjectGroups", JSB_CCTMXTiledMap_setObjectGroups_, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("getTileSize", JSB_CCTMXTiledMap_tileSize, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
