@@ -1194,6 +1194,29 @@ JSBool JSB_CCScheduler_scheduleBlockForKey_target_interval_repeat_delay_paused_b
 	return JS_TRUE;
 }
 
+#pragma mark - CCTMXLayer
+JSBool JSB_CCTMXLayer_getTileFlagsAt(JSContext *cx, uint32_t argc, jsval *vp)
+{
+	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
+	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
+	
+	JSB_PRECONDITION3( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
+	jsval *argvp = JS_ARGV(cx,vp);
+	JSBool ok = JS_TRUE;
+	CGPoint arg0;
+	
+	ok &= jsval_to_CGPoint( cx, *argvp++, (CGPoint*) &arg0 );
+	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error processing arguments");
+	
+	CCTMXLayer *real = (CCTMXLayer*) [proxy realObj];
+	ccTMXTileFlags flags;
+	[real tileGIDAt:(CGPoint)arg0  withFlags:&flags];
+	
+	JS_SET_RVAL(cx, vp, UINT_TO_JSVAL((uint32_t)flags));
+	return JS_TRUE;
+}
+
 #pragma mark - setBlendFunc friends
 
 // setBlendFunc
@@ -1258,7 +1281,7 @@ JSBool JSB_CCLayerColor_setBlendFunc_(JSContext *cx, uint32_t argc, jsval *vp)
 	return JSB_CCParticleSystem_setBlendFunc_(cx, argc, vp);
 }
 
-#pragma mark Effects
+#pragma mark - Effects
 
 JSBool JSB_CCLens3D_setPosition_(JSContext *cx, uint32_t argc, jsval *vp)
 {
@@ -1273,7 +1296,7 @@ JSBool JSB_CCTwirl_setPosition_(JSContext *cx, uint32_t argc, jsval *vp)
 	return JSB_CCNode_setPosition_(cx, argc, vp);
 }
 
-#pragma mark Actions
+#pragma mark - Actions
 
 JSBool JSB_CCBezierBy_actionWithDuration_bezier__static(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
