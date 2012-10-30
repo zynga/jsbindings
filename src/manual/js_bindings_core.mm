@@ -25,7 +25,6 @@
 #import "js_bindings_config.h"
 #import "js_bindings_core.h"
 
-
 // NS
 #import "js_bindings_NS_manual.h"
 
@@ -33,6 +32,14 @@
 #import "js_bindings_cocos2d_registration.h"
 #import "js_bindings_chipmunk_registration.h"
 #import "js_bindings_system_registration.h"
+
+#import "jsdbgapi.h"
+
+#include <sys/socket.h>
+#include <netdb.h>
+
+static NSMutableDictionary* __globals = NULL;
+static NSMutableDictionary* __scripts = NULL;
 
 #pragma mark - Hash
 
@@ -287,60 +294,6 @@ JSBool JSBCore_restartVM(JSContext *cx, uint32_t argc, jsval *vp)
 	JS_SetVersion(_cx, JSVERSION_LATEST);
 	JS_SetErrorReporter(_cx, reportError);
 	_object = JSB_NewGlobalObject(_cx);//JS_NewGlobalObject( _cx, &global_class, NULL);
-
-	//
-	// globals
-	//
-	JS_DefineFunction(_cx, _object, "require", JSBCore_executeScript, 1, JSPROP_READONLY | JSPROP_PERMANENT);
-	JS_DefineFunction(_cx, _object, "__associateObjWithNative", JSBCore_associateObjectWithNative, 2, JSPROP_READONLY | JSPROP_PERMANENT);
-	JS_DefineFunction(_cx, _object, "__getAssociatedNative", JSBCore_getAssociatedNative, 2, JSPROP_READONLY | JSPROP_PERMANENT);
-	JS_DefineFunction(_cx, _object, "__getPlatform", JSBCore_platform, 0, JSPROP_READONLY | JSPROP_PERMANENT);
-
-	//
-	// Javascript controller (__jsc__)
-	//
-	JSObject *jsc = JS_NewObject( _cx, NULL, NULL, NULL);
-	jsval jscVal = OBJECT_TO_JSVAL(jsc);
-	JS_SetProperty(_cx, _object, "__jsc__", &jscVal);
-
-	JS_DefineFunction(_cx, jsc, "garbageCollect", JSBCore_forceGC, 0, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
-	JS_DefineFunction(_cx, jsc, "dumpRoot", JSBCore_dumpRoot, 0, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
-	JS_DefineFunction(_cx, jsc, "addGCRootObject", JSBCore_addRootJS, 1, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
-	JS_DefineFunction(_cx, jsc, "removeGCRootObject", JSBCore_removeRootJS, 1, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
-	JS_DefineFunction(_cx, jsc, "executeScript", JSBCore_executeScript, 1, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
-	JS_DefineFunction(_cx, jsc, "restart", JSBCore_restartVM, 0, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
-
-	//
-	// debugger
-	//
-    JS_DefineFunction(_cx, _object, "newGlobal", jsNewGlobal, 1, JSPROP_READONLY | JSPROP_PERMANENT);
-    JS_DefineFunction(_cx, _object, "_getScript", jsGetScript, 1, JSPROP_READONLY | JSPROP_PERMANENT);
-    JS_DefineFunction(_cx, _object, "_socketOpen", jsSocketOpen, 1, JSPROP_READONLY | JSPROP_PERMANENT);
-    JS_DefineFunction(_cx, _object, "_socketWrite", jsSocketWrite, 1, JSPROP_READONLY | JSPROP_PERMANENT);
-    JS_DefineFunction(_cx, _object, "_socketRead", jsSocketRead, 1, JSPROP_READONLY | JSPROP_PERMANENT);
-    JS_DefineFunction(_cx, _object, "_socketClose", jsSocketClose, 1, JSPROP_READONLY | JSPROP_PERMANENT);
-
-
-	//
-	// 3rd party developer ?
-	// Add here your own classes registration
-	//
-
-	// registers cocos2d, cocosdenshion and cocosbuilder reader bindings
-#if JSB_INCLUDE_COCOS2D
-	jsb_register_cocos2d(_cx, _object);
-#endif // JSB_INCLUDE_COCOS2D
-
-	// registers chipmunk bindings
-#if JSB_INCLUDE_CHIPMUNK
-	jsb_register_chipmunk(_cx, _object);
-#endif // JSB_INCLUDE_CHIPMUNK
-
-	// registers sys bindings
-#if JSB_INCLUDE_SYSTEM
-	jsb_register_system(_cx, _object);
-#endif // JSB_INCLUDE_CHIPMUNK
-
 }
 
 +(void) reportErrorWithContext:(JSContext*)cx message:(NSString*)message report:(JSErrorReport*)report
@@ -466,6 +419,7 @@ JSBool JSBCore_restartVM(JSContext *cx, uint32_t argc, jsval *vp)
 		JSB_PRECONDITION(fullpath, tmp);
 	}
 
+	JSAutoCompartment ac(_cx, _object);
 	script = JS_CompileUTF8File(_cx, _object, [fullpath UTF8String] );
 
 	JSB_PRECONDITION(script, "Error compiling script");
@@ -625,6 +579,227 @@ void jsb_set_c_proxy_for_jsobject( JSObject *jsobj, void *handle, unsigned long 
 	JS_SetPrivate(jsobj, proxy);
 }
 
+#pragma mark - Debug
+
+JSObject* JSB_NewGlobalObject(JSContext* cx)
+{
+	JSObject* glob = JS_NewGlobalObject(cx, &global_class, NULL);
+	if (!glob) {
+		return NULL;
+	}
+	JSAutoCompartment ac(cx, glob);
+	JSBool ok = JS_TRUE;
+	ok = JS_InitStandardClasses(cx, glob);
+	if (ok)
+		JS_InitReflect(cx, glob);
+	if (ok)
+		ok = JS_DefineDebuggerObject(cx, glob);
+	if (!ok)
+		return NULL;
+
+	//
+	// globals
+	//
+	JS_DefineFunction(cx, glob, "require", JSBCore_executeScript, 1, JSPROP_READONLY | JSPROP_PERMANENT);
+	JS_DefineFunction(cx, glob, "__associateObjWithNative", JSBCore_associateObjectWithNative, 2, JSPROP_READONLY | JSPROP_PERMANENT);
+	JS_DefineFunction(cx, glob, "__getAssociatedNative", JSBCore_getAssociatedNative, 2, JSPROP_READONLY | JSPROP_PERMANENT);
+	JS_DefineFunction(cx, glob, "__getPlatform", JSBCore_platform, 0, JSPROP_READONLY | JSPROP_PERMANENT);
+	
+	//
+	// Javascript controller (__jsc__)
+	//
+	JSObject *jsc = JS_NewObject(cx, NULL, NULL, NULL);
+	jsval jscVal = OBJECT_TO_JSVAL(jsc);
+	JS_SetProperty(cx, glob, "__jsc__", &jscVal);
+	
+	JS_DefineFunction(cx, jsc, "garbageCollect", JSBCore_forceGC, 0, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
+	JS_DefineFunction(cx, jsc, "dumpRoot", JSBCore_dumpRoot, 0, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
+	JS_DefineFunction(cx, jsc, "addGCRootObject", JSBCore_addRootJS, 1, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
+	JS_DefineFunction(cx, jsc, "removeGCRootObject", JSBCore_removeRootJS, 1, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
+	JS_DefineFunction(cx, jsc, "executeScript", JSBCore_executeScript, 1, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
+	JS_DefineFunction(cx, jsc, "restart", JSBCore_restartVM, 0, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
+	
+	//
+	// debugger
+	//
+    JS_DefineFunction(cx, glob, "newGlobal", JSBCore_NewGlobal, 1, JSPROP_READONLY | JSPROP_PERMANENT);
+    JS_DefineFunction(cx, glob, "_getScript", JSBDebug_GetScript, 1, JSPROP_READONLY | JSPROP_PERMANENT);
+    JS_DefineFunction(cx, glob, "_socketOpen", JSBDebug_SocketOpen, 1, JSPROP_READONLY | JSPROP_PERMANENT);
+    JS_DefineFunction(cx, glob, "_socketWrite", JSBDebug_SocketWrite, 1, JSPROP_READONLY | JSPROP_PERMANENT);
+    JS_DefineFunction(cx, glob, "_socketRead", JSBDebug_SocketRead, 1, JSPROP_READONLY | JSPROP_PERMANENT);
+    JS_DefineFunction(cx, glob, "_socketClose", JSBDebug_SocketClose, 1, JSPROP_READONLY | JSPROP_PERMANENT);
+
+	//
+	// 3rd party developer ?
+	// Add here your own classes registration
+	//
+	
+	// registers cocos2d, cocosdenshion and cocosbuilder reader bindings
+#if JSB_INCLUDE_COCOS2D
+	jsb_register_cocos2d(cx, glob);
+#endif // JSB_INCLUDE_COCOS2D
+	
+	// registers chipmunk bindings
+#if JSB_INCLUDE_CHIPMUNK
+	jsb_register_chipmunk(cx, glob);
+#endif // JSB_INCLUDE_CHIPMUNK
+	
+    return glob;
+}
+
+JSBool JSBCore_NewGlobal(JSContext* cx, unsigned argc, jsval* vp)
+{
+	if (__globals == NULL) {
+		__globals = [[NSMutableDictionary alloc] init];
+	}
+    if (argc == 1) {
+        jsval *argv = JS_ARGV(cx, vp);
+        JSString *jsstr = JS_ValueToString(cx, argv[0]);
+        const char* key = JS_EncodeString(cx, jsstr);
+		NSValue* val = [__globals objectForKey:[NSString stringWithUTF8String:key]];
+		js::RootedObject *global;
+        if (!val) {
+            JSObject* g = JSB_NewGlobalObject(cx);
+            global = new js::RootedObject(cx, g);
+            JS_WrapObject(cx, global->address());
+			NSValue *val = [NSValue valueWithPointer:global];
+			[__globals setObject:val forKey:[NSString stringWithUTF8String:key]];
+        } else {
+			global = (js::RootedObject *)[val pointerValue];
+		}
+		JS_free(cx, (void*)key);
+        JS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(*global));
+        return JS_TRUE;
+    }
+    return JS_FALSE;
+}
+
+JSBool JSBDebug_GetScript(JSContext* cx, unsigned argc, jsval* vp)
+{
+	jsval* argv = JS_ARGV(cx, vp);
+	if (argc == 1 && argv[0].isString()) {
+		JSString* str = JSVAL_TO_STRING(argv[0]);
+		const char* cstr = JS_EncodeString(cx, str);
+		NSValue *val = [__scripts objectForKey:[NSString stringWithUTF8String:cstr]];
+		if (val) {
+			JSScript* script = (JSScript *)[val pointerValue];
+			jsval out = OBJECT_TO_JSVAL((JSObject*)script);
+			JS_SET_RVAL(cx, vp, out);
+		} else {
+			JS_SET_RVAL(cx, vp, JSVAL_NULL);
+		}
+		JS_free(cx, (void*)cstr);
+	}
+	return JS_TRUE;
+}
+
+// open a socket, bind it to a port and start listening, all at once :)
+JSBool JSBDebug_SocketOpen(JSContext* cx, unsigned argc, jsval* vp)
+{
+    if (argc == 2) {
+        jsval* argv = JS_ARGV(cx, vp);
+        int port = JSVAL_TO_INT(argv[0]);
+        JSObject* callback = JSVAL_TO_OBJECT(argv[1]);
+		
+		// FIX
+		// in the c++ version, there's a map for port-number -> socket
+		// I just removed this since for now I'm assuming we're only using this for the debugger
+        int s = 0;
+        if (!s) {
+            char myname[256];
+            struct sockaddr_in sa;
+            struct hostent *hp;
+            memset(&sa, 0, sizeof(struct sockaddr_in));
+            gethostname(myname, 256);
+            hp = gethostbyname(myname);
+            sa.sin_family = hp->h_addrtype;
+            sa.sin_port = htons(port);
+            if ((s = socket(PF_INET, SOCK_STREAM, 0)) < 0) {
+                JS_ReportError(cx, "error opening socket");
+                return JS_FALSE;
+            }
+            int optval = 1;
+            if ((setsockopt(s, SOL_SOCKET, SO_REUSEADDR, (char*)&optval, sizeof(optval))) < 0) {
+                close(s);
+                JS_ReportError(cx, "error setting socket options");
+                return JS_FALSE;
+            }
+            if ((bind(s, (const struct sockaddr *)&sa, sizeof(struct sockaddr_in))) < 0) {
+                close(s);
+                JS_ReportError(cx, "error binding socket");
+                return JS_FALSE;
+            }
+            listen(s, 1);
+            int clientSocket;
+            if ((clientSocket = accept(s, NULL, NULL)) > 0) {
+                jsval fval = OBJECT_TO_JSVAL(callback);
+                jsval jsSocket = INT_TO_JSVAL(clientSocket);
+                jsval outVal;
+                JS_CallFunctionValue(cx, NULL, fval, 1, &jsSocket, &outVal);
+            }
+        } else {
+            // just call the callback with the client socket
+            jsval fval = OBJECT_TO_JSVAL(callback);
+            jsval jsSocket = INT_TO_JSVAL(s);
+            jsval outVal;
+            JS_CallFunctionValue(cx, NULL, fval, 1, &jsSocket, &outVal);
+        }
+        JS_SET_RVAL(cx, vp, INT_TO_JSVAL(s));
+    }
+    return JS_TRUE;
+}
+
+JSBool JSBDebug_SocketRead(JSContext* cx, unsigned argc, jsval* vp)
+{
+    if (argc == 1) {
+        jsval* argv = JS_ARGV(cx, vp);
+        int s = JSVAL_TO_INT(argv[0]);
+        char buff[1024];
+        JSString* outStr = JS_NewStringCopyZ(cx, "");
+		
+        size_t bytesRead;
+        while ((bytesRead = read(s, buff, 1024)) > 0) {
+            JSString* newStr = JS_NewStringCopyN(cx, buff, bytesRead);
+            outStr = JS_ConcatStrings(cx, outStr, newStr);
+            // break on new line
+            if (buff[bytesRead-1] == '\n') {
+                break;
+            }
+        }
+        JS_SET_RVAL(cx, vp, STRING_TO_JSVAL(outStr));
+    } else {
+        JS_SET_RVAL(cx, vp, JSVAL_NULL);
+    }
+    return JS_TRUE;
+}
+
+JSBool JSBDebug_SocketWrite(JSContext* cx, unsigned argc, jsval* vp)
+{
+    if (argc == 2) {
+        jsval* argv = JS_ARGV(cx, vp);
+        int s;
+        const char* str;
+		
+        s = JSVAL_TO_INT(argv[0]);
+        JSString* jsstr = JS_ValueToString(cx, argv[1]);
+        str = JS_EncodeString(cx, jsstr);
+		
+        write(s, str, strlen(str));
+		
+        JS_free(cx, (void*)str);
+    }
+    return JS_TRUE;
+}
+
+JSBool JSBDebug_SocketClose(JSContext* cx, unsigned argc, jsval* vp)
+{
+    if (argc == 1) {
+        jsval* argv = JS_ARGV(cx, vp);
+        int s = JSVAL_TO_INT(argv[0]);
+        close(s);
+    }
+    return JS_TRUE;
+}
 
 #pragma mark Do Nothing - Callbacks
 

@@ -175,6 +175,15 @@ extern "C" {
 	// logs a format string to the console
 	JSBool JSBCore_log(JSContext *cx, uint32_t argc, jsval *vp);
 
+	JSObject* JSB_NewGlobalObject(JSContext* cx);
+	JSBool JSBCore_NewGlobal(JSContext* cx, unsigned argc, jsval* vp);
+	JSBool JSBDebug_GetScript(JSContext* cx, unsigned argc, jsval* vp);
+	
+	JSBool JSBDebug_SocketOpen(JSContext* cx, unsigned argc, jsval* vp);
+	JSBool JSBDebug_SocketRead(JSContext* cx, unsigned argc, jsval* vp);
+	JSBool JSBDebug_SocketWrite(JSContext* cx, unsigned argc, jsval* vp);
+	JSBool JSBDebug_SocketClose(JSContext* cx, unsigned argc, jsval* vp);
+
 	extern const char* JSB_version;
 #ifdef __cplusplus
 }

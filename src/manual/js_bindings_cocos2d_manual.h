@@ -46,16 +46,4 @@ JSBool JSB_CCLayerColor_setBlendFunc_(JSContext *cx, uint32_t argc, jsval *vp);
 JSBool JSB_CCCardinalSplineBy_actionWithDuration_points_tension__static(JSContext *cx, uint32_t argc, jsval *vp);
 JSBool JSB_CCBezierTo_actionWithDuration_bezier__static(JSContext *cx, uint32_t argc, jsval *vp);
 
-// debugger added functions
-JSObject* JSB_NewGlobalObject(JSContext* cx);
-
-JSBool jsNewGlobal(JSContext* cx, unsigned argc, jsval* vp);
-JSBool jsGetScript(JSContext* cx, unsigned argc, jsval* vp);
-
-JSBool jsSocketOpen(JSContext* cx, unsigned argc, jsval* vp);
-JSBool jsSocketRead(JSContext* cx, unsigned argc, jsval* vp);
-JSBool jsSocketWrite(JSContext* cx, unsigned argc, jsval* vp);
-JSBool jsSocketClose(JSContext* cx, unsigned argc, jsval* vp);
-
-
 #endif // JSB_INCLUDE_COCOS2D
