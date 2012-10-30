@@ -281,16 +281,22 @@ cc.MenuItemToggle.create = function( /* var args */) {
 
     var n = arguments.length;
 
-    if (typeof arguments[n-1] === 'function') {
+    if (typeof arguments[n-2] === 'function' || typeof arguments[n-1] === 'function') {
         var args = Array.prototype.slice.call(arguments);
+        var obj = null;
+        if( typeof arguments[n-2] === 'function' )
+            obj = args.pop();
+
         var func = args.pop();
-        var obj = args.pop();
 
         // create it with arguments,
         var item = cc.MenuItemToggle._create.apply(this, args);
 
         // then set the callback
-        item.setCallback(obj, func);
+        if( obj !== null )
+            item.setCallback(func, obj);
+        else
+            item.setCallback(func);
         return item;
     } else {
         return cc.MenuItemToggle._create.apply(this, arguments);
