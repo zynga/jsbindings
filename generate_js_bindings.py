@@ -2820,6 +2820,8 @@ class JSBindings(object):
                         # '*' is needed for opaque structs
                         self.supported_classes.add(key)
                         self.class_manual.append(key)
+                    elif o_key == 'ignore':
+                        self.class_manual.append(key)
 
                 self.class_properties[key] = opts
 
