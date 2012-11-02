@@ -447,7 +447,7 @@ JSBool JSB_CCMenuItemFont_initWithString_block_(JSContext *cx, uint32_t argc, js
 	
 	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error parsing arguments");
 	
-	CCMenuItemFont *real;
+	CCMenuItemFont *real = nil;
 	
 	if( argc == 1 )
 		real = [(CCMenuItemFont*)[proxy.klass alloc] initWithString:normal target:nil selector:nil];
@@ -486,7 +486,7 @@ JSBool JSB_CCMenuItemLabel_itemWithLabel_block__static(JSContext *cx, uint32_t a
 	
 	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error parsing arguments");
 
-	CCMenuItemLabel *ret_val;
+	CCMenuItemLabel *ret_val = nil;
 	
 	if( argc == 1 )
 		ret_val = [CCMenuItemLabel itemWithLabel:label];
@@ -590,7 +590,7 @@ JSBool JSB_CCMenuItemImage_itemWithNormalImage_selectedImage_disabledImage_block
 
 	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error parsing arguments");
 
-	CCMenuItemImage *ret_val;
+	CCMenuItemImage *ret_val=nil;
 		
 	if( argc == 2 )
 		ret_val = [CCMenuItemImage itemWithNormalImage:normal selectedImage:selected];
@@ -729,7 +729,7 @@ JSBool JSB_CCMenuItemSprite_itemWithNormalSprite_selectedSprite_disabledSprite_b
 	
 	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error parsing arguments");
 
-	CCMenuItemSprite *ret_val;
+	CCMenuItemSprite *ret_val=nil;
 
 	if( argc == 2 )
 		ret_val = [CCMenuItemSprite itemWithNormalSprite:normal selectedSprite:selected];
