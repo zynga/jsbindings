@@ -101,7 +101,7 @@ class ObjC(object):
                     # 1: attributes
                     # 2: type
                     # 3: type protocol (optional)
-                    # 4: type 2nd word like int, long, char (optinal)
+                    # 4: type 2nd word like int, long, char (optional)
                     # 5: type pointer '*' (optional)
                     # 6: property name
                     l.append(property_attribs.group(1))
@@ -115,7 +115,12 @@ class ObjC(object):
                         sys.stderr.write('Error. Could not add property. File:%s line:%s\n' % (filename, line))
                         print property_attribs.groups()
                     else:
-                        self.entries[current_class]['properties'][property_attribs.group(6)] = l
+
+                        attrib_name = property_attribs.group(6)
+                        # XXX HACK XXX. I should fix the regexp instead of doing this hack
+                        # strip possible '*' from it
+                        attrib_name = attrib_name.replace('*', '')
+                        self.entries[current_class]['properties'][attrib_name] = l
 
                 elif end:
                     self.log('<-- %s (%s)' % (current_class, filename))

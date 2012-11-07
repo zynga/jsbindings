@@ -15253,10 +15253,10 @@ void JSB_CCMenuItemSprite_createClass(JSContext *cx, JSObject* globalObj, const 
 		{0, 0, 0, 0, 0}
 	};
 	static JSFunctionSpec funcs[] = {
-		JS_FN("disabledImage", JSB_CCMenuItemSprite_disabledImage, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("getDisabledImage", JSB_CCMenuItemSprite_disabledImage, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("init", JSB_CCMenuItemSprite_initWithNormalSprite_selectedSprite_disabledSprite_block_, 4, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
-		JS_FN("normalImage", JSB_CCMenuItemSprite_normalImage, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
-		JS_FN("selectedImage", JSB_CCMenuItemSprite_selectedImage, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("getNormalImage", JSB_CCMenuItemSprite_normalImage, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("getSelectedImage", JSB_CCMenuItemSprite_selectedImage, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("setDisabledImage", JSB_CCMenuItemSprite_setDisabledImage_, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("setNormalImage", JSB_CCMenuItemSprite_setNormalImage_, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("setSelectedImage", JSB_CCMenuItemSprite_setSelectedImage_, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
