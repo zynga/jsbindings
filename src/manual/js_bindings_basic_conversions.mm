@@ -486,6 +486,26 @@ JSBool jsval_to_longlong( JSContext *cx, jsval vp, long long *r )
 
 #pragma mark - native to jsval
 
+jsval unknown_to_jsval( JSContext *cx, id obj)
+{
+	if( [obj isKindOfClass:[NSString class]] )
+		return NSString_to_jsval(cx, obj);
+
+	if( [obj isKindOfClass:[NSNumber class]] )
+		return NSNumber_to_jsval(cx, obj);
+
+	if( [obj isKindOfClass:[NSArray class]] )
+		return NSArray_to_jsval(cx, obj);
+
+	if( [obj isKindOfClass:[NSDictionary class]] )
+		return NSDictionary_to_jsval(cx, obj);
+
+	if( [obj isKindOfClass:[NSSet class]] )
+		return NSSet_to_jsval(cx, obj);
+
+	return NSObject_to_jsval(cx, obj);
+}
+
 jsval NSObject_to_jsval( JSContext *cx, id obj )
 {
 	jsval ret;
@@ -502,6 +522,12 @@ jsval NSObject_to_jsval( JSContext *cx, id obj )
 	return ret;
 }
 
+jsval NSNumber_to_jsval( JSContext *cx, NSNumber *number)
+{
+	double ret_obj = [number floatValue];
+	return DOUBLE_TO_JSVAL(ret_obj);
+}
+
 jsval NSString_to_jsval( JSContext *cx, NSString *str)
 {
 	JSString *ret_obj = JS_NewStringCopyZ(cx, [str UTF8String]);
@@ -513,30 +539,36 @@ jsval NSArray_to_jsval( JSContext *cx, NSArray *array)
 	JSObject *jsobj = JS_NewArrayObject(cx, 0, NULL);
 	uint32_t index = 0;
 	for( id obj in array ) {
-        jsval val;
-        // XXX: We should do the same for NSNumber
-        if( [obj isKindOfClass:[NSString class]] )
-            val = NSString_to_jsval(cx, obj);
-        else
-            val = NSObject_to_jsval(cx, obj);
+        jsval val = unknown_to_jsval(cx, obj);
 		JS_SetElement(cx, jsobj, index++, &val);
 	}
 	
 	return OBJECT_TO_JSVAL(jsobj);
 }
 
+jsval NSDictionary_to_jsval( JSContext *cx, NSDictionary *dict)
+{
+	__block JSObject *jsobj = JS_NewArrayObject(cx, 0, NULL);
+	__block int index=0;
+	
+	[dict enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+		NSString *k = (NSString*)key;
+		jsval val = unknown_to_jsval(cx, obj);
+		JS_DefineProperty(cx, jsobj, [k UTF8String], val, NULL, NULL, JSPROP_ENUMERATE | JSPROP_PERMANENT) ||
+		JS_SetElement(cx, jsobj, index++, &val);
+		*stop = NO;
+	}];
+
+	return OBJECT_TO_JSVAL(jsobj);
+}
+
+
 jsval NSSet_to_jsval( JSContext *cx, NSSet *set)
 {
 	JSObject *jsobj = JS_NewArrayObject(cx, 0, NULL);
 	uint32_t index = 0;
 	for( id obj in set ) {
-        jsval val;
-        // XXX: We should do the same for NSNumber
-        if( [obj isKindOfClass:[NSString class]] )
-            val = NSString_to_jsval(cx, obj);
-        else
-            val = NSObject_to_jsval(cx, obj);
-
+        jsval val = unknown_to_jsval(cx, obj);
 		JS_SetElement(cx, jsobj, index++, &val);
 	}
 

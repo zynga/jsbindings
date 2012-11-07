@@ -22555,6 +22555,32 @@ JSBool JSB_CCTMXTiledMap_objectGroups(JSContext *cx, uint32_t argc, jsval *vp) {
 	return JS_TRUE;
 }
 
+// Arguments: unsigned int
+// Ret value: NSDictionary* (dict)
+JSBool JSB_CCTMXTiledMap_propertiesForGID_(JSContext *cx, uint32_t argc, jsval *vp) {
+
+	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
+	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
+
+	JSB_PRECONDITION3( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
+	jsval *argvp = JS_ARGV(cx,vp);
+	JSBool ok = JS_TRUE;
+	uint32_t arg0; 
+
+	ok &= JS_ValueToECMAUint32( cx, *argvp++, &arg0 );
+	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error processing arguments");
+	NSDictionary* ret_val;
+
+	CCTMXTiledMap *real = (CCTMXTiledMap*) [proxy realObj];
+	ret_val = [real propertiesForGID:(unsigned int)arg0  ];
+
+	jsval ret_jsval = NSDictionary_to_jsval( cx, (NSDictionary*) ret_val );
+	JS_SET_RVAL(cx, vp, ret_jsval );
+
+	return JS_TRUE;
+}
+
 // Arguments: NSMutableArray*
 // Ret value: void (None)
 JSBool JSB_CCTMXTiledMap_setObjectGroups_(JSContext *cx, uint32_t argc, jsval *vp) {
@@ -22661,6 +22687,7 @@ void JSB_CCTMXTiledMap_createClass(JSContext *cx, JSObject* globalObj, const cha
 		JS_FN("getMapSize", JSB_CCTMXTiledMap_mapSize, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("getObjectGroup", JSB_CCTMXTiledMap_objectGroupNamed_, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("getObjectGroups", JSB_CCTMXTiledMap_objectGroups, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("propertiesForGID", JSB_CCTMXTiledMap_propertiesForGID_, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("setObjectGroups", JSB_CCTMXTiledMap_setObjectGroups_, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("getTileSize", JSB_CCTMXTiledMap_tileSize, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FS_END
@@ -26395,6 +26422,26 @@ JSBool JSB_CCAnimationFrame_spriteFrame(JSContext *cx, uint32_t argc, jsval *vp)
 	return JS_TRUE;
 }
 
+// Arguments: 
+// Ret value: NSDictionary* (dict)
+JSBool JSB_CCAnimationFrame_userInfo(JSContext *cx, uint32_t argc, jsval *vp) {
+
+	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
+	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
+
+	JSB_PRECONDITION3( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
+	JSB_PRECONDITION3( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
+	NSDictionary* ret_val;
+
+	CCAnimationFrame *real = (CCAnimationFrame*) [proxy realObj];
+	ret_val = [real userInfo ];
+
+	jsval ret_jsval = NSDictionary_to_jsval( cx, (NSDictionary*) ret_val );
+	JS_SET_RVAL(cx, vp, ret_jsval );
+
+	return JS_TRUE;
+}
+
 void JSB_CCAnimationFrame_createClass(JSContext *cx, JSObject* globalObj, const char* name )
 {
 	JSB_CCAnimationFrame_class = (JSClass *)calloc(1, sizeof(JSClass));
@@ -26417,6 +26464,7 @@ void JSB_CCAnimationFrame_createClass(JSContext *cx, JSObject* globalObj, const 
 		JS_FN("setDelayUnits", JSB_CCAnimationFrame_setDelayUnits_, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("setSpriteFrame", JSB_CCAnimationFrame_setSpriteFrame_, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("getSpriteFrame", JSB_CCAnimationFrame_spriteFrame, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("getUserInfo", JSB_CCAnimationFrame_userInfo, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FS_END
 	};
 	static JSFunctionSpec st_funcs[] = {

@@ -309,6 +309,14 @@ class JSBGenerate(object):
 '''
         return template
 
+    def generate_retval_dict(self, declared_type, js_type):
+        template = '''
+\tjsval ret_jsval = NSDictionary_to_jsval( cx, (NSDictionary*) ret_val );
+\tJS_SET_RVAL(cx, vp, ret_jsval );
+'''
+        return template
+
+
     #
     # special case: manual bindings for these structs
     #  eg: CGRect, CGSize, CGPoint, cpVect
@@ -373,6 +381,7 @@ class JSBGenerate(object):
             'S': self.generate_retval_string,
             'array': self.generate_retval_array,
             'set': self.generate_retval_set,
+            'dict': self.generate_retval_dict,
         }
 
         if method and self.is_method_initializer(method):
@@ -406,6 +415,7 @@ class JSBGenerate(object):
             'NSMutableArray*': 'array',
             'CCArray*': 'array',
             'NSSet*': 'set',
+            'NSDictionary*': 'dict',
         }
 
         supported_types = {
