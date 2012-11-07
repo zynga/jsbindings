@@ -75,9 +75,12 @@ JSBool jsval_to_block_1( JSContext *cx, jsval vp, JSObject *jsthis, js_block *ou
 /** converts a jsval to a block (2 == receives 2 argument (sender + custom) ) */
 JSBool jsval_to_block_2( JSContext *cx, jsval vp, JSObject *jsthis, jsval arg, js_block *out  );
 
-/** Converts an NSObject into a jsval. It does not creates a new object it the NSObject has already been converted */
+jsval unknown_to_jsval( JSContext *cx, id obj);
+/** Converts an NSObject into a jsval. It does not creates a new object if the NSObject has already been converted */
 jsval NSObject_to_jsval( JSContext *cx, id object);
 jsval NSString_to_jsval( JSContext *cx, NSString *str);
+jsval NSNumber_to_jsval( JSContext *cx, NSNumber *number);
+jsval NSDictionary_to_jsval( JSContext *cx, NSDictionary *dict);
 jsval NSArray_to_jsval( JSContext *cx, NSArray *array);
 jsval NSSet_to_jsval( JSContext *cx, NSSet *set);
 jsval int_to_jsval( JSContext *cx, int l);
