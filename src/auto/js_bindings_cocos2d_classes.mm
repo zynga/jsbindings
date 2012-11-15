@@ -19545,7 +19545,7 @@ void JSB_CCFileUtils_finalize(JSFreeOp *fop, JSObject *obj)
 
 // Arguments: 
 // Ret value: void (None)
-JSBool JSB_CCFileUtils_buildSearchChain(JSContext *cx, uint32_t argc, jsval *vp) {
+JSBool JSB_CCFileUtils_buildSearchDevicesOrder(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
@@ -19554,29 +19554,7 @@ JSBool JSB_CCFileUtils_buildSearchChain(JSContext *cx, uint32_t argc, jsval *vp)
 	JSB_PRECONDITION3( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
 
 	CCFileUtils *real = (CCFileUtils*) [proxy realObj];
-	[real buildSearchChain ];
-	JS_SET_RVAL(cx, vp, JSVAL_VOID);
-	return JS_TRUE;
-}
-
-// Arguments: BOOL
-// Ret value: void (None)
-JSBool JSB_CCFileUtils_buildSearchChainWithFallbacks_(JSContext *cx, uint32_t argc, jsval *vp) {
-
-	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
-	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
-
-	JSB_PRECONDITION3( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
-	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
-	jsval *argvp = JS_ARGV(cx,vp);
-	JSBool ok = JS_TRUE;
-	JSBool arg0; 
-
-	ok &= JS_ValueToBoolean( cx, *argvp++, &arg0 );
-	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error processing arguments");
-
-	CCFileUtils *real = (CCFileUtils*) [proxy realObj];
-	[real buildSearchChainWithFallbacks:(BOOL)arg0  ];
+	[real buildSearchDevicesOrder ];
 	JS_SET_RVAL(cx, vp, JSVAL_VOID);
 	return JS_TRUE;
 }
@@ -19635,7 +19613,7 @@ JSBool JSB_CCFileUtils_fullPathIgnoringResolutionsFromRelativePath_(JSContext *c
 
 // Arguments: 
 // Ret value: BOOL (b)
-JSBool JSB_CCFileUtils_isEnabledFallbackChain(JSContext *cx, uint32_t argc, jsval *vp) {
+JSBool JSB_CCFileUtils_isEnablediPhoneResourcesOniPad(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
@@ -19645,7 +19623,7 @@ JSBool JSB_CCFileUtils_isEnabledFallbackChain(JSContext *cx, uint32_t argc, jsva
 	BOOL ret_val;
 
 	CCFileUtils *real = (CCFileUtils*) [proxy realObj];
-	ret_val = [real isEnabledFallbackChain ];
+	ret_val = [real isEnablediPhoneResourcesOniPad ];
 	JS_SET_RVAL(cx, vp, BOOLEAN_TO_JSVAL(ret_val));
 	return JS_TRUE;
 }
@@ -19668,7 +19646,7 @@ JSBool JSB_CCFileUtils_purgeCachedEntries(JSContext *cx, uint32_t argc, jsval *v
 
 // Arguments: 
 // Ret value: NSArray* (array)
-JSBool JSB_CCFileUtils_searchChain(JSContext *cx, uint32_t argc, jsval *vp) {
+JSBool JSB_CCFileUtils_searchDevicesOrder(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
@@ -19678,7 +19656,7 @@ JSBool JSB_CCFileUtils_searchChain(JSContext *cx, uint32_t argc, jsval *vp) {
 	NSArray* ret_val;
 
 	CCFileUtils *real = (CCFileUtils*) [proxy realObj];
-	ret_val = [real searchChain ];
+	ret_val = [real searchDevicesOrder ];
 
 	jsval ret_jsval = NSArray_to_jsval( cx, (NSArray*) ret_val );
 	JS_SET_RVAL(cx, vp, ret_jsval );
@@ -19686,25 +19664,23 @@ JSBool JSB_CCFileUtils_searchChain(JSContext *cx, uint32_t argc, jsval *vp) {
 	return JS_TRUE;
 }
 
-// Arguments: BOOL
-// Ret value: void (None)
-JSBool JSB_CCFileUtils_setEnableFallbackChain_(JSContext *cx, uint32_t argc, jsval *vp) {
+// Arguments: 
+// Ret value: NSArray* (array)
+JSBool JSB_CCFileUtils_searchPathForThemes(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
 
 	JSB_PRECONDITION3( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
-	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
-	jsval *argvp = JS_ARGV(cx,vp);
-	JSBool ok = JS_TRUE;
-	JSBool arg0; 
-
-	ok &= JS_ValueToBoolean( cx, *argvp++, &arg0 );
-	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error processing arguments");
+	JSB_PRECONDITION3( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
+	NSArray* ret_val;
 
 	CCFileUtils *real = (CCFileUtils*) [proxy realObj];
-	[real setEnableFallbackChain:(BOOL)arg0  ];
-	JS_SET_RVAL(cx, vp, JSVAL_VOID);
+	ret_val = [real searchPathForThemes ];
+
+	jsval ret_jsval = NSArray_to_jsval( cx, (NSArray*) ret_val );
+	JS_SET_RVAL(cx, vp, ret_jsval );
+
 	return JS_TRUE;
 }
 
@@ -19730,9 +19706,31 @@ JSBool JSB_CCFileUtils_setEnableFallbackSuffixes_(JSContext *cx, uint32_t argc, 
 	return JS_TRUE;
 }
 
+// Arguments: BOOL
+// Ret value: void (None)
+JSBool JSB_CCFileUtils_setEnableiPhoneResourcesOniPad_(JSContext *cx, uint32_t argc, jsval *vp) {
+
+	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
+	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
+
+	JSB_PRECONDITION3( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
+	jsval *argvp = JS_ARGV(cx,vp);
+	JSBool ok = JS_TRUE;
+	JSBool arg0; 
+
+	ok &= JS_ValueToBoolean( cx, *argvp++, &arg0 );
+	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error processing arguments");
+
+	CCFileUtils *real = (CCFileUtils*) [proxy realObj];
+	[real setEnableiPhoneResourcesOniPad:(BOOL)arg0  ];
+	JS_SET_RVAL(cx, vp, JSVAL_VOID);
+	return JS_TRUE;
+}
+
 // Arguments: NSArray*
 // Ret value: void (None)
-JSBool JSB_CCFileUtils_setSearchChain_(JSContext *cx, uint32_t argc, jsval *vp) {
+JSBool JSB_CCFileUtils_setSearchDevicesOrder_(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
@@ -19747,7 +19745,29 @@ JSBool JSB_CCFileUtils_setSearchChain_(JSContext *cx, uint32_t argc, jsval *vp) 
 	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCFileUtils *real = (CCFileUtils*) [proxy realObj];
-	[real setSearchChain:(NSArray*)arg0  ];
+	[real setSearchDevicesOrder:(NSArray*)arg0  ];
+	JS_SET_RVAL(cx, vp, JSVAL_VOID);
+	return JS_TRUE;
+}
+
+// Arguments: NSArray*
+// Ret value: void (None)
+JSBool JSB_CCFileUtils_setSearchPathForThemes_(JSContext *cx, uint32_t argc, jsval *vp) {
+
+	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
+	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
+
+	JSB_PRECONDITION3( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
+	jsval *argvp = JS_ARGV(cx,vp);
+	JSBool ok = JS_TRUE;
+	NSArray* arg0; 
+
+	ok &= jsval_to_NSArray( cx, *argvp++, &arg0 );
+	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error processing arguments");
+
+	CCFileUtils *real = (CCFileUtils*) [proxy realObj];
+	[real setSearchPathForThemes:(NSArray*)arg0  ];
 	JS_SET_RVAL(cx, vp, JSVAL_VOID);
 	return JS_TRUE;
 }
@@ -19783,16 +19803,17 @@ void JSB_CCFileUtils_createClass(JSContext *cx, JSObject* globalObj, const char*
 		{0, 0, 0, 0, 0}
 	};
 	static JSFunctionSpec funcs[] = {
-		JS_FN("buildSearchChain", JSB_CCFileUtils_buildSearchChain, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
-		JS_FN("buildSearchChainWithFallbacks", JSB_CCFileUtils_buildSearchChainWithFallbacks_, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("buildSearchDevicesOrder", JSB_CCFileUtils_buildSearchDevicesOrder, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("fullPathFromRelativePath", JSB_CCFileUtils_fullPathFromRelativePath_, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("fullPathIgnoringResolutionsFromRelativePath", JSB_CCFileUtils_fullPathIgnoringResolutionsFromRelativePath_, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
-		JS_FN("isEnabledFallbackChain", JSB_CCFileUtils_isEnabledFallbackChain, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("isEnablediPhoneResourcesOniPad", JSB_CCFileUtils_isEnablediPhoneResourcesOniPad, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("purgeCachedEntries", JSB_CCFileUtils_purgeCachedEntries, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
-		JS_FN("searchChain", JSB_CCFileUtils_searchChain, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
-		JS_FN("setEnableFallbackChain", JSB_CCFileUtils_setEnableFallbackChain_, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("searchDevicesOrder", JSB_CCFileUtils_searchDevicesOrder, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("searchPathForThemes", JSB_CCFileUtils_searchPathForThemes, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("setEnableFallbackSuffixes", JSB_CCFileUtils_setEnableFallbackSuffixes_, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
-		JS_FN("setSearchChain", JSB_CCFileUtils_setSearchChain_, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("setEnableiPhoneResourcesOniPad", JSB_CCFileUtils_setEnableiPhoneResourcesOniPad_, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("setSearchDevicesOrder", JSB_CCFileUtils_setSearchDevicesOrder_, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("setSearchPathForThemes", JSB_CCFileUtils_setSearchPathForThemes_, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FS_END
 	};
 	static JSFunctionSpec st_funcs[] = {
