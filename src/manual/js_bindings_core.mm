@@ -419,7 +419,7 @@ JSBool JSBCore_restartVM(JSContext *cx, uint32_t argc, jsval *vp)
 	JSBool ok = JS_FALSE;
 
 	CCFileUtils *fileUtils = [CCFileUtils sharedFileUtils];
-	NSString *fullpath = [fileUtils fullPathFromRelativePath:filename];
+	NSString *fullpath = [fileUtils fullPathIgnoringResolutionsFromRelativePath:filename];
 
 	unsigned char *content = NULL;
 	size_t contentSize = ccLoadFileIntoMemory([fullpath UTF8String], &content);
@@ -445,7 +445,7 @@ JSBool JSBCore_restartVM(JSContext *cx, uint32_t argc, jsval *vp)
 	static JSScript *script;
 	
 	CCFileUtils *fileUtils = [CCFileUtils sharedFileUtils];
-	NSString *fullpath = [fileUtils fullPathFromRelativePath:filename];
+	NSString *fullpath = [fileUtils fullPathIgnoringResolutionsFromRelativePath:filename];
 
 	script = JS_CompileUTF8File(_cx, _object, [fullpath UTF8String] );
 
