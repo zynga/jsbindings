@@ -77,6 +77,8 @@ cp.bb = function(l, b, r, t) {
 	return new cp.BB(l, b, r, t);
 };
 
+// XXX: renaming functions should be supported in JSB
+cp.clamp01 = cp.fclamp01;
 
 //
 // Some properties
@@ -268,6 +270,46 @@ Object.defineProperties(cp.Shape.prototype,
 					"collision_type" : {
 						get : function(){
                             return this.getCollisionType();
+                        },
+						enumerable : true,
+						configurable : true
+					}
+				});
+
+// Constraint properties
+Object.defineProperties(cp.Constraint.prototype,
+				{
+					"maxForce" : {
+						get : function(){
+                            return this.getMaxForce();
+                        },
+						set : function(newValue){
+                            this.setMaxForce(newValue);
+                        },
+						enumerable : true,
+						configurable : true
+					}
+				});
+
+// PinJoint properties
+Object.defineProperties(cp.PinJoint.prototype,
+				{
+					"anchr1" : {
+						get : function(){
+                            return this.getAnchr1();
+                        },
+						set : function(newValue){
+                            this.setAnchr1(newValue);
+                        },
+						enumerable : true,
+						configurable : true
+					},
+					"anchr2" : {
+						get : function(){
+                            return this.getAnchr2();
+                        },
+						set : function(newValue){
+                            this.setAnchr2(newValue);
                         },
 						enumerable : true,
 						configurable : true
