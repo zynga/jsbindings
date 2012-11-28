@@ -2000,6 +2000,7 @@ void JSB_CCLayer_createClass(JSContext *cx, JSObject* globalObj, const char* nam
 	if (_jsObj) {
 		JSContext* cx = [[JSBCore sharedInstance] globalContext];
 		JSBool found;
+		JSB_ENSURE_AUTOCOMPARTMENT(cx, _jsObj);
 		JS_HasProperty(cx, _jsObj, "onMouseUp", &found);
 		if (found == JS_TRUE) {
 			jsval rval, fval;
@@ -2022,6 +2023,7 @@ void JSB_CCLayer_createClass(JSContext *cx, JSObject* globalObj, const char* nam
 	if (_jsObj) {
 		JSContext* cx = [[JSBCore sharedInstance] globalContext];
 		JSBool found;
+		JSB_ENSURE_AUTOCOMPARTMENT(cx, _jsObj);
 		JS_HasProperty(cx, _jsObj, "onMouseDown", &found);
 		if (found == JS_TRUE) {
 			jsval rval, fval;
@@ -2044,6 +2046,7 @@ void JSB_CCLayer_createClass(JSContext *cx, JSObject* globalObj, const char* nam
 	if (_jsObj) {
 		JSContext* cx = [[JSBCore sharedInstance] globalContext];
 		JSBool found;
+		JSB_ENSURE_AUTOCOMPARTMENT(cx, _jsObj);
 		JS_HasProperty(cx, _jsObj, "onMouseDragged", &found);
 		if (found == JS_TRUE) {
 			jsval rval, fval;
