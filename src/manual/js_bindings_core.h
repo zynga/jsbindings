@@ -41,6 +41,7 @@ extern char * JSB_association_proxy_key;
 	JSRuntime	*_rt;
 	JSContext	*_cx;
 	JSObject	*_object;
+	JSObject    *_debugObject;
 }
 
 /** return the global context */
@@ -49,9 +50,11 @@ extern char * JSB_association_proxy_key;
 /** return the global context */
 @property (nonatomic, readonly) JSContext* globalContext;
 
-/** return the global context */
+/** return the global container */
 @property (nonatomic, readonly) JSObject* globalObject;
 
+/** return the debug container */
+@property (nonatomic, readonly) JSObject* debugObject;
 
 /** returns the shared instance */
 +(JSBCore*) sharedInstance;
@@ -119,11 +122,20 @@ extern char * JSB_association_proxy_key;
 -(BOOL) evalString:(NSString*)string outVal:(jsval*)outVal;
 
 /**
- * will run the specified string
- * @param string The path of the script to be run
+ * will run the specified script using the default container
+ * @param filename The path of the script to be run
  */
 -(JSBool) runScript:(NSString*)filename;
 
+/**
+ * will run the specified script
+ * @param filename The path of the script to be run
+ * @param global The path of the script to be run
+ */
+-(JSBool) runScript:(NSString*)filename withContainer:(JSObject *)global;
+
+
+-(void) enableDebugger;
 @end
 
 #ifdef __cplusplus
@@ -175,9 +187,9 @@ extern "C" {
 	// logs a format string to the console
 	JSBool JSBCore_log(JSContext *cx, uint32_t argc, jsval *vp);
 
-	JSObject* JSB_NewGlobalObject(JSContext* cx);
+	JSObject* JSB_NewGlobalObject(JSContext* cx, bool empty);
 	JSBool JSBCore_NewGlobal(JSContext* cx, unsigned argc, jsval* vp);
-	JSBool JSBDebug_GetScript(JSContext* cx, unsigned argc, jsval* vp);
+	JSBool JSBDebug_StartDebugger(JSContext* cx, unsigned argc, jsval* vp);
 	
 	JSBool JSBDebug_SocketOpen(JSContext* cx, unsigned argc, jsval* vp);
 	JSBool JSBDebug_SocketRead(JSContext* cx, unsigned argc, jsval* vp);

@@ -279,6 +279,7 @@ JSBool jsval_to_array_of_CGPoint( JSContext *cx, jsval vp, CGPoint**points, int 
 	if (_jsObj) {
 		JSContext* cx = [[JSBCore sharedInstance] globalContext];
 		JSBool found;
+		JSB_ENSURE_AUTOCOMPARTMENT(cx, _jsObj);
 		JS_HasProperty(cx, _jsObj, "onAccelerometer", &found);
 		if (found == JS_TRUE) {
 			jsval rval, fval;
@@ -967,6 +968,7 @@ JSBool JSB_CCNode_scheduleOnce_delay_(JSContext *cx, uint32_t argc, jsval *vp)
 		jsval rval;
 		jsval jsdt = DOUBLE_TO_JSVAL(dt);
 
+		JSB_ENSURE_AUTOCOMPARTMENT(cx, jsthis);
 		JSBool ok = JS_CallFunctionValue(cx, jsthis, funcval, 1, &jsdt, &rval);
 		JSB_PRECONDITION2(ok, cx, ,"Error calling collision callback: schedule_interval_repeat_delay");
 	};
@@ -1023,6 +1025,7 @@ JSBool JSB_CCNode_schedule_interval_repeat_delay_(JSContext *cx, uint32_t argc, 
 		jsval rval;
 		jsval jsdt = DOUBLE_TO_JSVAL(dt);
 
+		JSB_ENSURE_AUTOCOMPARTMENT(cx, jsthis);
 		JSBool ok = JS_CallFunctionValue(cx, jsthis, funcval, 1, &jsdt, &rval);
 		JSB_PRECONDITION2(ok, cx, ,"Error calling collision callback: schedule_interval_repeat_delay");
 	};
@@ -1184,6 +1187,7 @@ JSBool JSB_CCScheduler_scheduleBlockForKey_target_interval_repeat_delay_paused_b
 		jsval rval;
 		jsval jsdt = DOUBLE_TO_JSVAL(dt);
 
+		JSB_ENSURE_AUTOCOMPARTMENT(cx, jstarget);
 		JSBool ok = JS_CallFunctionValue(cx, jstarget, funcval, 1, &jsdt, &rval);
 		JSB_PRECONDITION2(ok, cx, ,"Error calling collision callback: schedule_interval_repeat_delay");
 	};

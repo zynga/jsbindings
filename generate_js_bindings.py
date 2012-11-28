@@ -1437,6 +1437,7 @@ extern JSClass *%s_class;
 \tif (_jsObj) {
 \t\tJSContext* cx = [[JSBCore sharedInstance] globalContext];
 \t\tJSBool found;
+\t\tJSB_ENSURE_AUTOCOMPARTMENT(cx, _jsObj);
 \t\tJS_HasProperty(cx, _jsObj, "%s", &found);
 \t\tif (found == JS_TRUE) {
 \t\t\tjsval rval, fval;
