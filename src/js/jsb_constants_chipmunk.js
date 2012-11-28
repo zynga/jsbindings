@@ -250,7 +250,17 @@ Object.defineProperties(cp.Body.prototype,
                         },
 						enumerable : true,
 						configurable : true
-					}
+					},
+                    "userData" : {
+						get : function(){
+                            return this.getUserData();
+                        },
+						set : function(newValue){
+                            this.setUserData(newValue);
+                        },
+						enumerable : true,
+						configurable : true
+                    }
 
 				});
 
@@ -267,6 +277,16 @@ Object.defineProperties(cp.Shape.prototype,
 						enumerable : true,
 						configurable : true
 					},
+                    "group" : {
+						get : function(){
+                            return this.getGroup();
+                        },
+						set : function(newValue){
+                            this.setGroup(newValue);
+                        },
+						enumerable : true,
+						configurable : true
+                    },
 					"collision_type" : {
 						get : function(){
                             return this.getCollisionType();
