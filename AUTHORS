@@ -1,0 +1,15 @@
+
+JS Bindings authors
+-------------------
+
+Lead Developer
+    Ricardo Quesada (http://zynga.com)
+
+Contributors (alphabetically ordered):
+
+* Sergej Tatarincev (https://github.com/SevInf)
+    Added conversion for NSNull
+
+* Wu-Hao (https://github.com/Wu-Hao)
+    Added missing properties for the Chipmunk JS Bindings
+

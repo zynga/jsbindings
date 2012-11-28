@@ -34,6 +34,8 @@ cp.v.sub = cp.vsub;
 cp.v.toangle = cp.vtoangle;
 cp.v.unrotate = cp.vunrotate;
 
+// XXX: renaming functions should be supported in JSB
+cp.clamp01 = cp.fclamp01;
 
 
 /// Initialize an offset box shaped polygon shape.
@@ -76,9 +78,6 @@ cp.BB = function(l, b, r, t)
 cp.bb = function(l, b, r, t) {
 	return new cp.BB(l, b, r, t);
 };
-
-// XXX: renaming functions should be supported in JSB
-cp.clamp01 = cp.fclamp01;
 
 //
 // Some properties

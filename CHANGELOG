@@ -1,3 +1,8 @@
+version 0.4 -
+- [FIX] JSB Chipmunk: Added missing properties
+- [FIX] JSB CocosBuilder: Uses new API
+- [FIX] JSBCore: Added conversion for NSNull to JS
+
 version 0.3 - 7-Nov-2012
 - [NEW] Chipmunk bindings: Added Object Oriented JS API
 	- JSB Chipmunk API is compatible with Chipmunk-JS API
