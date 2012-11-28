@@ -503,6 +503,9 @@ jsval unknown_to_jsval( JSContext *cx, id obj)
 	if( [obj isKindOfClass:[NSSet class]] )
 		return NSSet_to_jsval(cx, obj);
 
+    if ( [obj isKindOfClass:[NSNull class]] )
+        return JSVAL_NULL;
+
 	return NSObject_to_jsval(cx, obj);
 }
 
