@@ -130,13 +130,18 @@ JSBool jsval_to_array_of_cpvect( JSContext *cx, jsval vp, cpVect**verts, int *nu
 struct collision_handler {
 	cpCollisionType		typeA;
 	cpCollisionType		typeB;
-	jsval				begin;
-	jsval				pre;
-	jsval				post;
-	jsval				separate;
+	
+	JSObject			*begin;
+	JSObject			*pre;
+	JSObject			*post;
+	JSObject			*separate;
 	JSObject			*jsthis;
 	JSContext			*cx;
 
+	// "owner" of the collision handler
+	// Needed when the space goes out of scope, it will remove all the allocated collision handlers for him.
+	cpSpace				*space;
+	
 	unsigned long		hash_key;
 
 	unsigned int		is_oo; // Objected oriented API ?
@@ -170,7 +175,7 @@ static cpBool myCollisionBegin(cpArbiter *arb, cpSpace *space, void *data)
 	}
 	
 	jsval rval;
-	JSBool ok = JS_CallFunctionValue( handler->cx, handler->jsthis, handler->begin, 2, args, &rval);
+	JSBool ok = JS_CallFunctionValue( handler->cx, handler->jsthis, OBJECT_TO_JSVAL(handler->begin), 2, args, &rval);
 	JSB_PRECONDITION2(ok, handler->cx, cpFalse, "Error calling collision callback: begin");
 
 	if( JSVAL_IS_BOOLEAN(rval) ) {
@@ -194,7 +199,7 @@ static cpBool myCollisionPre(cpArbiter *arb, cpSpace *space, void *data)
 	}
 	
 	jsval rval;
-	JSBool ok = JS_CallFunctionValue( handler->cx, handler->jsthis, handler->pre, 2, args, &rval);
+	JSBool ok = JS_CallFunctionValue( handler->cx, handler->jsthis, OBJECT_TO_JSVAL(handler->pre), 2, args, &rval);
 	JSB_PRECONDITION2(ok, handler->cx, JS_FALSE, "Error calling collision callback: pre");
 	
 	if( JSVAL_IS_BOOLEAN(rval) ) {
@@ -219,7 +224,7 @@ static void myCollisionPost(cpArbiter *arb, cpSpace *space, void *data)
 	}
 	
 	jsval ignore;
-	JSBool ok = JS_CallFunctionValue( handler->cx, handler->jsthis, handler->post, 2, args, &ignore);
+	JSBool ok = JS_CallFunctionValue( handler->cx, handler->jsthis, OBJECT_TO_JSVAL(handler->post), 2, args, &ignore);
 	JSB_PRECONDITION2(ok, handler->cx, , "Error calling collision callback: Post");
 }
 
@@ -237,7 +242,7 @@ static void myCollisionSeparate(cpArbiter *arb, cpSpace *space, void *data)
 	}
 	
 	jsval ignore;
-	JSBool ok = JS_CallFunctionValue( handler->cx, handler->jsthis, handler->separate, 2, args, &ignore);
+	JSBool ok = JS_CallFunctionValue( handler->cx, handler->jsthis, OBJECT_TO_JSVAL(handler->separate), 2, args, &ignore);
 	JSB_PRECONDITION2(ok, handler->cx, , "Error calling collision callback: Separate");}
 
 #pragma mark - cpSpace
@@ -250,12 +255,38 @@ void JSB_cpSpace_finalize(JSFreeOp *fop, JSObject *jsthis)
 	if( proxy ) {
 		CCLOGINFO(@"jsbindings: finalizing JS object %p (cpSpace), handle: %p", jsthis, proxy->handle);
 		
-		// Free Space Children
-		freeSpaceChildren((cpSpace*)proxy->handle);
+		// space
+		cpSpace *space = (cpSpace*) proxy->handle;
 		
-		jsb_del_jsobject_for_proxy(proxy->handle);
+		
+		// Remove collision handlers, since the user might have forgotten to manually remove them
+		struct collision_handler *current, *tmp;
+		HASH_ITER(hh, collision_handler_hash, current, tmp) {
+			if( current->space == space ) {
+
+				JSContext *cx = current->cx;
+
+				// unroot it
+				if( current->begin )
+					JS_RemoveObjectRoot(cx, &current->begin);
+				if( current->pre )
+					JS_RemoveObjectRoot(cx, &current->pre);
+				if( current->post )
+					JS_RemoveObjectRoot(cx, &current->post);
+				if( current->separate )
+					JS_RemoveObjectRoot(cx, &current->separate);
+				
+				HASH_DEL(collision_handler_hash,current);  /* delete; users advances to next */
+				free(current);            /* optional- if you want to free  */
+			}
+		}
+		
+		// Free Space Children
+		freeSpaceChildren(space);
+		
+		jsb_del_jsobject_for_proxy(space);
 		if(proxy->flags == JSB_C_FLAG_CALL_FREE)
-			cpSpaceFree( (cpSpace*)proxy->handle);
+			cpSpaceFree(space);
 		jsb_del_c_proxy_for_jsobject(jsthis);
 	}
 }
@@ -280,32 +311,36 @@ JSBool __jsb_cpSpace_addCollisionHandler(JSContext *cx, jsval *vp, jsval *argvp,
 //	ok &= JS_ValueToObject(cx, *argvp++, &handler->jsthis );
 	handler->jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	
-	handler->begin = *argvp++;
-	handler->pre = *argvp++;
-	handler->post = *argvp++;
-	handler->separate = *argvp++;
+	handler->begin = !JSVAL_IS_NULL(*argvp++) ? JSVAL_TO_OBJECT(*argvp) : NULL;
+	handler->pre = !JSVAL_IS_NULL(*argvp++) ? JSVAL_TO_OBJECT(*argvp) : NULL;
+	handler->post = !JSVAL_IS_NULL(*argvp++) ? JSVAL_TO_OBJECT(*argvp) : NULL;
+	handler->separate = !JSVAL_IS_NULL(*argvp++) ? JSVAL_TO_OBJECT(*argvp) : NULL;
 	
 	JSB_PRECONDITION(ok, "Error parsing arguments");
 	
 	// Object Oriented API ?
 	handler->is_oo = is_oo;
 	
-//	if( ! JSVAL_IS_NULL(handler->begin) )
-//		JS_AddNamedValueRoot(cx, &handler->begin, "begin collision_handler");
-//	if( ! JSVAL_IS_NULL(handler->pre) )
-//		JS_AddNamedValueRoot(cx, &handler->pre, "pre collision_handler");
-//	if( ! JSVAL_IS_NULL(handler->post) )
-//		JS_AddNamedValueRoot(cx, &handler->post, "post collision_handler");
-//	if( ! JSVAL_IS_NULL(handler->separate) )
-//		JS_AddNamedValueRoot(cx, &handler->separate, "separate collision_handler");
+	// owner of the collision handler
+	handler->space = space;
+	
+	// Root it
+	if( handler->begin )
+		JS_AddNamedObjectRoot(cx, &handler->begin, "begin collision_handler");
+	if( handler->pre )
+		JS_AddNamedObjectRoot(cx, &handler->pre, "pre collision_handler");
+	if( handler->post )
+		JS_AddNamedObjectRoot(cx, &handler->post, "post collision_handler");
+	if( handler->separate )
+		JS_AddNamedObjectRoot(cx, &handler->separate, "separate collision_handler");
 	
 	handler->cx = cx;
 	
 	cpSpaceAddCollisionHandler(space, handler->typeA, handler->typeB,
-							   JSVAL_IS_NULL(handler->begin) ? NULL : &myCollisionBegin,
-							   JSVAL_IS_NULL(handler->pre) ? NULL : &myCollisionPre,
-							   JSVAL_IS_NULL(handler->post) ? NULL : &myCollisionPost,
-							   JSVAL_IS_NULL(handler->separate) ? NULL : &myCollisionSeparate,
+							   !handler->begin ? NULL : &myCollisionBegin,
+							   !handler->pre ? NULL : &myCollisionPre,
+							   !handler->post ? NULL : &myCollisionPost,
+							   !handler->separate ? NULL : &myCollisionSeparate,
 							   handler );
 	
 	
@@ -380,14 +415,14 @@ JSBool __jsb_cpSpace_removeCollisionHandler(JSContext *cx, jsval *vp, jsval *arg
     if( hashElement ) {
 		
 		// unroot it
-//		if( ! JSVAL_IS_NULL(hashElement->begin) )
-//			JS_RemoveValueRoot(cx, &hashElement->begin);
-//		if( ! JSVAL_IS_NULL(hashElement->pre) )
-//			JS_RemoveValueRoot(cx, &hashElement->pre);
-//		if( ! JSVAL_IS_NULL(hashElement->post) )
-//			JS_RemoveValueRoot(cx, &hashElement->post);
-//		if( ! JSVAL_IS_NULL(hashElement->separate) )
-//			JS_RemoveValueRoot(cx, &hashElement->separate);
+		if( hashElement->begin )
+			JS_RemoveObjectRoot(cx, &hashElement->begin);
+		if( hashElement->pre )
+			JS_RemoveObjectRoot(cx, &hashElement->pre);
+		if( hashElement->post )
+			JS_RemoveObjectRoot(cx, &hashElement->post);
+		if( hashElement->separate )
+			JS_RemoveObjectRoot(cx, &hashElement->separate);
 		
 		HASH_DEL( collision_handler_hash, hashElement );
 		free( hashElement );
