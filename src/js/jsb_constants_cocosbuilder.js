@@ -6,7 +6,10 @@ cc.BuilderReader = {};
 
 var _ccbGlobalContext = this;
 
-cc.BuilderReader.setResourcePath = function(){};
+// Added for CCB HTML5 compatibility
+cc.BuilderReader.setResourcePath = function(){
+    cc.log("NOT IMPLEMENTED!!!");
+};
 
 cc.BuilderReader.load = function(file, owner, parentSize)
 {
