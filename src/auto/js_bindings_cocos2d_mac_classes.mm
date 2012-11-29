@@ -2133,6 +2133,51 @@ void JSB_CCLayerMultiplex_finalize(JSFreeOp *fop, JSObject *obj)
 	jsb_del_proxy_for_jsobject( obj );
 }
 
+// Arguments: NSArray*
+// Ret value: None (None)
+JSBool JSB_CCLayerMultiplex_initWithArray_(JSContext *cx, uint32_t argc, jsval *vp) {
+
+	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
+	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
+
+	JSB_PRECONDITION3( proxy && ![proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
+	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
+	jsval *argvp = JS_ARGV(cx,vp);
+	JSBool ok = JS_TRUE;
+	NSArray* arg0; 
+
+	ok &= jsval_to_NSArray( cx, *argvp++, &arg0 );
+	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error processing arguments");
+
+	CCLayerMultiplex *real = [(CCLayerMultiplex*)[proxy.klass alloc] initWithArray:(NSArray*)arg0  ];
+	[proxy setRealObj: real];
+	[real autorelease];
+
+	objc_setAssociatedObject(real, &JSB_association_proxy_key, proxy, OBJC_ASSOCIATION_RETAIN);
+	[proxy release];
+	JS_SET_RVAL(cx, vp, JSVAL_TRUE);
+	return JS_TRUE;
+}
+
+// Arguments: NSArray*
+// Ret value: CCLayerMultiplex* (o)
+JSBool JSB_CCLayerMultiplex_layerWithArray__static(JSContext *cx, uint32_t argc, jsval *vp) {
+	JSB_PRECONDITION3( argc >= 0, cx, JS_FALSE, "Invalid number of arguments" );
+	jsval *argvp = JS_ARGV(cx,vp);
+	JSBool ok = JS_TRUE;
+	NSArray* arg0; 
+
+	ok &= jsvals_variadic_to_NSArray( cx, argvp, argc, &arg0 );
+	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error processing arguments");
+	CCLayerMultiplex* ret_val;
+
+	ret_val = [CCLayerMultiplex layerWithArray:(NSArray*)arg0  ];
+
+	JS_SET_RVAL(cx, vp, NSObject_to_jsval(cx, ret_val));
+
+	return JS_TRUE;
+}
+
 // Arguments: unsigned int
 // Ret value: void (None)
 JSBool JSB_CCLayerMultiplex_switchTo_(JSContext *cx, uint32_t argc, jsval *vp) {
@@ -2177,19 +2222,6 @@ JSBool JSB_CCLayerMultiplex_switchToAndReleaseMe_(JSContext *cx, uint32_t argc, 
 	return JS_TRUE;
 }
 
-// Arguments: 
-// Ret value: CCLayerMultiplex* (o)
-JSBool JSB_CCLayerMultiplex_node_static(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION3( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
-	CCLayerMultiplex* ret_val;
-
-	ret_val = [CCLayerMultiplex node ];
-
-	JS_SET_RVAL(cx, vp, NSObject_to_jsval(cx, ret_val));
-
-	return JS_TRUE;
-}
-
 void JSB_CCLayerMultiplex_createClass(JSContext *cx, JSObject* globalObj, const char* name )
 {
 	JSB_CCLayerMultiplex_class = (JSClass *)calloc(1, sizeof(JSClass));
@@ -2208,12 +2240,13 @@ void JSB_CCLayerMultiplex_createClass(JSContext *cx, JSObject* globalObj, const 
 		{0, 0, 0, 0, 0}
 	};
 	static JSFunctionSpec funcs[] = {
+		JS_FN("initWithArray", JSB_CCLayerMultiplex_initWithArray_, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("switchTo", JSB_CCLayerMultiplex_switchTo_, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("switchToAndReleaseMe", JSB_CCLayerMultiplex_switchToAndReleaseMe_, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FS_END
 	};
 	static JSFunctionSpec st_funcs[] = {
-		JS_FN("create", JSB_CCLayerMultiplex_node_static, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("create", JSB_CCLayerMultiplex_layerWithArray__static, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FS_END
 	};
 
