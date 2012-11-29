@@ -6,6 +6,8 @@ cc.BuilderReader = {};
 
 var _ccbGlobalContext = this;
 
+cc.BuilderReader.setResourcePath = function(){};
+
 cc.BuilderReader.load = function(file, owner, parentSize)
 {
     // Load the node graph using the correct function
