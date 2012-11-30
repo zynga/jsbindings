@@ -1,6 +1,7 @@
 version 0.4 -
 - [FIX] JSB Chipmunk: Added missing properties
 		The collision callback handlers are rooted/unrooted. Prevents posible crash
+		body.setUserData()/getUserData() were removed. Instead use body.userData
 - [FIX] JSB CocosBuilder: Uses new API
 - [FIX] JSBCore: Added conversion for NSNull to JS
 
