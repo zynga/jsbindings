@@ -50,8 +50,6 @@ void jsb_register_chipmunk( JSContext *_cx, JSObject *object)
 	JS_DefineFunction(_cx, chipmunk, "spaceRemoveCollisionHandler", JSB_cpSpaceRemoveCollisionHandler, 3, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 	JS_DefineFunction(_cx, chipmunk, "arbiterGetBodies", JSB_cpArbiterGetBodies, 1, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 	JS_DefineFunction(_cx, chipmunk, "arbiterGetShapes", JSB_cpArbiterGetShapes, 1, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
-	JS_DefineFunction(_cx, chipmunk, "bodyGetUserData", JSB_cpBodyGetUserData, 1, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
-	JS_DefineFunction(_cx, chipmunk, "bodySetUserData", JSB_cpBodySetUserData, 2, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 
 	JS_DefineFunction(_cx, chipmunk, "areaForPoly", JSB_cpAreaForPoly, 1, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 	JS_DefineFunction(_cx, chipmunk, "momentForPoly", JSB_cpMomentForPoly, 3, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );

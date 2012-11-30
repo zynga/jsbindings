@@ -249,17 +249,7 @@ Object.defineProperties(cp.Body.prototype,
                         },
 						enumerable : true,
 						configurable : true
-					},
-                    "userData" : {
-						get : function(){
-                            return this.getUserData();
-                        },
-						set : function(newValue){
-                            this.setUserData(newValue);
-                        },
-						enumerable : true,
-						configurable : true
-                    }
+					}
 
 				});
 

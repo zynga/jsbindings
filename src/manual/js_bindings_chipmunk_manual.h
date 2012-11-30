@@ -41,9 +41,6 @@ JSBool JSB_cpSpaceRemoveCollisionHandler(JSContext *cx, uint32_t argc, jsval *vp
 JSBool JSB_cpArbiterGetBodies(JSContext *cx, uint32_t argc, jsval *vp);
 JSBool JSB_cpArbiterGetShapes(JSContext *cx, uint32_t argc, jsval *vp);
 
-JSBool JSB_cpBodyGetUserData(JSContext *cx, uint32_t argc, jsval *vp);
-JSBool JSB_cpBodySetUserData(JSContext *cx, uint32_t argc, jsval *vp);
-
 // poly related
 JSBool JSB_cpAreaForPoly(JSContext *cx, uint32_t argc, jsval *vp);
 JSBool JSB_cpMomentForPoly(JSContext *cx, uint32_t argc, jsval *vp);
