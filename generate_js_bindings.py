@@ -730,7 +730,7 @@ class JSBGenerate(object):
                 if optional_args != None and i >= optional_args:
                     self.fd_mm.write('\t}\n')
 
-        self.fd_mm.write('\tJSB_PRECONDITION3(ok, cx, JS_FALSE, "Error processing arguments");\n')
+        self.fd_mm.write('\tJSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");\n')
 
 
 #
@@ -1030,7 +1030,7 @@ JSBool %s_%s%s(JSContext *cx, uint32_t argc, jsval *vp) {
 \tJSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 \tJSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
 
-\tJSB_PRECONDITION3( proxy && %s[proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
+\tJSB_PRECONDITION2( proxy && %s[proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
 '''
 
         selector = method['selector']
@@ -1051,15 +1051,15 @@ JSBool %s_%s%s(JSContext *cx, uint32_t argc, jsval *vp) {
             min_args = properties.get('min_args', None)
             max_args = properties.get('max_args', None)
             if min_args != max_args:
-                method_assert_on_arguments = '\tJSB_PRECONDITION3( argc >= %d && argc <= %d , cx, JS_FALSE, "Invalid number of arguments" );\n' % (min_args, max_args)
+                method_assert_on_arguments = '\tJSB_PRECONDITION2( argc >= %d && argc <= %d , cx, JS_FALSE, "Invalid number of arguments" );\n' % (min_args, max_args)
             elif 'variadic_2_array' in properties:
-                method_assert_on_arguments = '\tJSB_PRECONDITION3( argc >= 0, cx, JS_FALSE, "Invalid number of arguments" );\n'
+                method_assert_on_arguments = '\tJSB_PRECONDITION2( argc >= 0, cx, JS_FALSE, "Invalid number of arguments" );\n'
             else:
                 # default
-                method_assert_on_arguments = '\tJSB_PRECONDITION3( argc == %d, cx, JS_FALSE, "Invalid number of arguments" );\n' % num_of_args
+                method_assert_on_arguments = '\tJSB_PRECONDITION2( argc == %d, cx, JS_FALSE, "Invalid number of arguments" );\n' % num_of_args
         except KeyError:
             # No, it only has required arguments
-            method_assert_on_arguments = '\tJSB_PRECONDITION3( argc == %d, cx, JS_FALSE, "Invalid number of arguments" );\n' % num_of_args
+            method_assert_on_arguments = '\tJSB_PRECONDITION2( argc == %d, cx, JS_FALSE, "Invalid number of arguments" );\n' % num_of_args
         self.fd_mm.write(method_assert_on_arguments)
 
     def generate_method_suffix(self):
@@ -1131,7 +1131,7 @@ JSBool %s_%s%s(JSContext *cx, uint32_t argc, jsval *vp) {
                     call_real = self.generate_method_call_to_real_object(properties['calls'][i], i, ret_js_type, args_declared_type, args_js_type, class_name, method_type)
                     self.fd_mm.write('\n\t%sif( argc == %d ) {\n\t%s\n\t}' % (else_str, i, call_real))
                     else_str = 'else '
-            self.fd_mm.write('\n\telse\n\t\tJSB_PRECONDITION3(NO, cx, JS_FALSE, "Error in number of arguments");\n\n')
+            self.fd_mm.write('\n\telse\n\t\tJSB_PRECONDITION2(NO, cx, JS_FALSE, "Error in number of arguments");\n\n')
 
         else:
             call_real = self.generate_method_call_to_real_object(method_name, num_of_args, ret_js_type, args_declared_type, args_js_type, class_name, method_type)
@@ -1844,7 +1844,7 @@ JSBool %s%s(JSContext *cx, uint32_t argc, jsval *vp) {
         self.fd_mm.write(template_funcname % (PROXY_PREFIX, func_name))
 
         # Number of arguments
-        self.fd_mm.write('\tJSB_PRECONDITION3( argc == %d, cx, JS_FALSE, "Invalid number of arguments" );\n' % num_of_args)
+        self.fd_mm.write('\tJSB_PRECONDITION2( argc == %d, cx, JS_FALSE, "Invalid number of arguments" );\n' % num_of_args)
 
     def generate_function_suffix(self):
         end_template = '''
@@ -2088,7 +2088,7 @@ JSObject* %s_object = NULL;
 // Constructor
 JSBool %s_constructor(JSContext *cx, uint32_t argc, jsval *vp)
 {
-\tJSB_PRECONDITION3(argc==%d, cx, JS_FALSE, "Invalid number of arguments");
+\tJSB_PRECONDITION2(argc==%d, cx, JS_FALSE, "Invalid number of arguments");
 '''
         template_0_post = '''
 \treturn JS_TRUE;
@@ -2143,11 +2143,11 @@ JSBool %s_constructor(JSContext *cx, uint32_t argc, jsval *vp)
 
         except ParseException, e:
             self.fd_mm.write(template_0_pre % (name, num_of_args))
-            self.fd_mm.write('\tJSB_PRECONDITION3(NO, cx, JS_TRUE, "Not possible to generate constructor: %s");\n' % str(e))
+            self.fd_mm.write('\tJSB_PRECONDITION2(NO, cx, JS_TRUE, "Not possible to generate constructor: %s");\n' % str(e))
 
         if klass is None:
             self.fd_mm.write(template_0_pre % (name, num_of_args))
-            self.fd_mm.write('\tJSB_PRECONDITION3(NO, cx, JS_TRUE, "No constructor");\n')
+            self.fd_mm.write('\tJSB_PRECONDITION2(NO, cx, JS_TRUE, "No constructor");\n')
 
         self.fd_mm.write(template_0_post)
 

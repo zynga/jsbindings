@@ -54,8 +54,8 @@ JSBool JSB_CCBAnimationManager_autoPlaySequenceId(JSContext *cx, uint32_t argc, 
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
 
-	JSB_PRECONDITION3( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
-	JSB_PRECONDITION3( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
+	JSB_PRECONDITION2( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
+	JSB_PRECONDITION2( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
 	int ret_val;
 
 	CCBAnimationManager *real = (CCBAnimationManager*) [proxy realObj];
@@ -71,14 +71,14 @@ JSBool JSB_CCBAnimationManager_containerSize_(JSContext *cx, uint32_t argc, jsva
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
 
-	JSB_PRECONDITION3( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
-	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
+	JSB_PRECONDITION2( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
+	JSB_PRECONDITION2( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
 	ok &= jsval_to_NSObject( cx, *argvp++, &arg0);
-	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error processing arguments");
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CGSize ret_val;
 
 	CCBAnimationManager *real = (CCBAnimationManager*) [proxy realObj];
@@ -97,8 +97,8 @@ JSBool JSB_CCBAnimationManager_debug(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
 
-	JSB_PRECONDITION3( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
-	JSB_PRECONDITION3( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
+	JSB_PRECONDITION2( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
+	JSB_PRECONDITION2( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
 
 	CCBAnimationManager *real = (CCBAnimationManager*) [proxy realObj];
 	[real debug ];
@@ -113,8 +113,8 @@ JSBool JSB_CCBAnimationManager_delegate(JSContext *cx, uint32_t argc, jsval *vp)
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
 
-	JSB_PRECONDITION3( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
-	JSB_PRECONDITION3( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
+	JSB_PRECONDITION2( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
+	JSB_PRECONDITION2( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
 	NSObject* ret_val;
 
 	CCBAnimationManager *real = (CCBAnimationManager*) [proxy realObj];
@@ -132,8 +132,8 @@ JSBool JSB_CCBAnimationManager_documentCallbackNames(JSContext *cx, uint32_t arg
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
 
-	JSB_PRECONDITION3( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
-	JSB_PRECONDITION3( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
+	JSB_PRECONDITION2( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
+	JSB_PRECONDITION2( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
 	NSMutableArray* ret_val;
 
 	CCBAnimationManager *real = (CCBAnimationManager*) [proxy realObj];
@@ -152,8 +152,8 @@ JSBool JSB_CCBAnimationManager_documentCallbackNodes(JSContext *cx, uint32_t arg
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
 
-	JSB_PRECONDITION3( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
-	JSB_PRECONDITION3( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
+	JSB_PRECONDITION2( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
+	JSB_PRECONDITION2( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
 	NSMutableArray* ret_val;
 
 	CCBAnimationManager *real = (CCBAnimationManager*) [proxy realObj];
@@ -172,8 +172,8 @@ JSBool JSB_CCBAnimationManager_documentControllerName(JSContext *cx, uint32_t ar
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
 
-	JSB_PRECONDITION3( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
-	JSB_PRECONDITION3( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
+	JSB_PRECONDITION2( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
+	JSB_PRECONDITION2( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
 	NSString* ret_val;
 
 	CCBAnimationManager *real = (CCBAnimationManager*) [proxy realObj];
@@ -192,8 +192,8 @@ JSBool JSB_CCBAnimationManager_documentOutletNames(JSContext *cx, uint32_t argc,
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
 
-	JSB_PRECONDITION3( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
-	JSB_PRECONDITION3( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
+	JSB_PRECONDITION2( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
+	JSB_PRECONDITION2( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
 	NSMutableArray* ret_val;
 
 	CCBAnimationManager *real = (CCBAnimationManager*) [proxy realObj];
@@ -212,8 +212,8 @@ JSBool JSB_CCBAnimationManager_documentOutletNodes(JSContext *cx, uint32_t argc,
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
 
-	JSB_PRECONDITION3( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
-	JSB_PRECONDITION3( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
+	JSB_PRECONDITION2( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
+	JSB_PRECONDITION2( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
 	NSMutableArray* ret_val;
 
 	CCBAnimationManager *real = (CCBAnimationManager*) [proxy realObj];
@@ -232,8 +232,8 @@ JSBool JSB_CCBAnimationManager_lastCompletedSequenceName(JSContext *cx, uint32_t
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
 
-	JSB_PRECONDITION3( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
-	JSB_PRECONDITION3( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
+	JSB_PRECONDITION2( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
+	JSB_PRECONDITION2( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
 	NSString* ret_val;
 
 	CCBAnimationManager *real = (CCBAnimationManager*) [proxy realObj];
@@ -252,15 +252,15 @@ JSBool JSB_CCBAnimationManager_moveAnimationsFromNode_toNode_(JSContext *cx, uin
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
 
-	JSB_PRECONDITION3( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
-	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
+	JSB_PRECONDITION2( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
+	JSB_PRECONDITION2( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	id arg0; id arg1; 
 
 	ok &= jsval_to_NSObject( cx, *argvp++, &arg0);
 	ok &= jsval_to_NSObject( cx, *argvp++, &arg1);
-	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error processing arguments");
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCBAnimationManager *real = (CCBAnimationManager*) [proxy realObj];
 	[real moveAnimationsFromNode:arg0 toNode:arg1  ];
@@ -275,8 +275,8 @@ JSBool JSB_CCBAnimationManager_rootContainerSize(JSContext *cx, uint32_t argc, j
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
 
-	JSB_PRECONDITION3( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
-	JSB_PRECONDITION3( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
+	JSB_PRECONDITION2( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
+	JSB_PRECONDITION2( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
 	CGSize ret_val;
 
 	CCBAnimationManager *real = (CCBAnimationManager*) [proxy realObj];
@@ -295,8 +295,8 @@ JSBool JSB_CCBAnimationManager_rootNode(JSContext *cx, uint32_t argc, jsval *vp)
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
 
-	JSB_PRECONDITION3( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
-	JSB_PRECONDITION3( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
+	JSB_PRECONDITION2( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
+	JSB_PRECONDITION2( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
 	CCNode* ret_val;
 
 	CCBAnimationManager *real = (CCBAnimationManager*) [proxy realObj];
@@ -314,15 +314,15 @@ JSBool JSB_CCBAnimationManager_runAnimationsForSequenceId_tweenDuration_(JSConte
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
 
-	JSB_PRECONDITION3( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
-	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
+	JSB_PRECONDITION2( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
+	JSB_PRECONDITION2( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	int32_t arg0; double arg1; 
 
 	ok &= JS_ValueToECMAInt32( cx, *argvp++, &arg0 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
-	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error processing arguments");
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCBAnimationManager *real = (CCBAnimationManager*) [proxy realObj];
 	[real runAnimationsForSequenceId:(int)arg0 tweenDuration:(float)arg1  ];
@@ -337,14 +337,14 @@ JSBool JSB_CCBAnimationManager_runAnimationsForSequenceNamed_(JSContext *cx, uin
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
 
-	JSB_PRECONDITION3( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
-	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
+	JSB_PRECONDITION2( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
+	JSB_PRECONDITION2( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	NSString* arg0; 
 
 	ok &= jsval_to_NSString( cx, *argvp++, &arg0 );
-	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error processing arguments");
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCBAnimationManager *real = (CCBAnimationManager*) [proxy realObj];
 	[real runAnimationsForSequenceNamed:(NSString*)arg0  ];
@@ -359,15 +359,15 @@ JSBool JSB_CCBAnimationManager_runAnimationsForSequenceNamed_tweenDuration_(JSCo
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
 
-	JSB_PRECONDITION3( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
-	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
+	JSB_PRECONDITION2( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
+	JSB_PRECONDITION2( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	NSString* arg0; double arg1; 
 
 	ok &= jsval_to_NSString( cx, *argvp++, &arg0 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
-	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error processing arguments");
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCBAnimationManager *real = (CCBAnimationManager*) [proxy realObj];
 	[real runAnimationsForSequenceNamed:(NSString*)arg0 tweenDuration:(float)arg1  ];
@@ -382,8 +382,8 @@ JSBool JSB_CCBAnimationManager_runningSequenceName(JSContext *cx, uint32_t argc,
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
 
-	JSB_PRECONDITION3( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
-	JSB_PRECONDITION3( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
+	JSB_PRECONDITION2( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
+	JSB_PRECONDITION2( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
 	NSString* ret_val;
 
 	CCBAnimationManager *real = (CCBAnimationManager*) [proxy realObj];
@@ -402,8 +402,8 @@ JSBool JSB_CCBAnimationManager_sequences(JSContext *cx, uint32_t argc, jsval *vp
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
 
-	JSB_PRECONDITION3( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
-	JSB_PRECONDITION3( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
+	JSB_PRECONDITION2( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
+	JSB_PRECONDITION2( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
 	NSMutableArray* ret_val;
 
 	CCBAnimationManager *real = (CCBAnimationManager*) [proxy realObj];
@@ -422,14 +422,14 @@ JSBool JSB_CCBAnimationManager_setAutoPlaySequenceId_(JSContext *cx, uint32_t ar
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
 
-	JSB_PRECONDITION3( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
-	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
+	JSB_PRECONDITION2( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
+	JSB_PRECONDITION2( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	int32_t arg0; 
 
 	ok &= JS_ValueToECMAInt32( cx, *argvp++, &arg0 );
-	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error processing arguments");
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCBAnimationManager *real = (CCBAnimationManager*) [proxy realObj];
 	[real setAutoPlaySequenceId:(int)arg0  ];
@@ -444,8 +444,8 @@ JSBool JSB_CCBAnimationManager_setBaseValue_forNode_propertyName_(JSContext *cx,
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
 
-	JSB_PRECONDITION3( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
-	JSB_PRECONDITION3( argc == 3, cx, JS_FALSE, "Invalid number of arguments" );
+	JSB_PRECONDITION2( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
+	JSB_PRECONDITION2( argc == 3, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	id arg0; id arg1; NSString* arg2; 
@@ -453,7 +453,7 @@ JSBool JSB_CCBAnimationManager_setBaseValue_forNode_propertyName_(JSContext *cx,
 	ok &= jsval_to_NSObject( cx, *argvp++, &arg0);
 	ok &= jsval_to_NSObject( cx, *argvp++, &arg1);
 	ok &= jsval_to_NSString( cx, *argvp++, &arg2 );
-	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error processing arguments");
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCBAnimationManager *real = (CCBAnimationManager*) [proxy realObj];
 	[real setBaseValue:arg0 forNode:arg1 propertyName:(NSString*)arg2  ];
@@ -468,14 +468,14 @@ JSBool JSB_CCBAnimationManager_setDelegate_(JSContext *cx, uint32_t argc, jsval 
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
 
-	JSB_PRECONDITION3( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
-	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
+	JSB_PRECONDITION2( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
+	JSB_PRECONDITION2( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
 	ok &= jsval_to_NSObject( cx, *argvp++, &arg0);
-	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error processing arguments");
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCBAnimationManager *real = (CCBAnimationManager*) [proxy realObj];
 	[real setDelegate:arg0  ];
@@ -490,14 +490,14 @@ JSBool JSB_CCBAnimationManager_setDocumentControllerName_(JSContext *cx, uint32_
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
 
-	JSB_PRECONDITION3( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
-	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
+	JSB_PRECONDITION2( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
+	JSB_PRECONDITION2( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	NSString* arg0; 
 
 	ok &= jsval_to_NSString( cx, *argvp++, &arg0 );
-	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error processing arguments");
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCBAnimationManager *real = (CCBAnimationManager*) [proxy realObj];
 	[real setDocumentControllerName:(NSString*)arg0  ];
@@ -512,14 +512,14 @@ JSBool JSB_CCBAnimationManager_setRootContainerSize_(JSContext *cx, uint32_t arg
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
 
-	JSB_PRECONDITION3( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
-	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
+	JSB_PRECONDITION2( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
+	JSB_PRECONDITION2( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	CGSize arg0; 
 
 	ok &= jsval_to_CGSize( cx, *argvp++, (CGSize*) &arg0 );
-	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error processing arguments");
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCBAnimationManager *real = (CCBAnimationManager*) [proxy realObj];
 	[real setRootContainerSize:(CGSize)arg0  ];
@@ -534,14 +534,14 @@ JSBool JSB_CCBAnimationManager_setRootNode_(JSContext *cx, uint32_t argc, jsval 
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
 
-	JSB_PRECONDITION3( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
-	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
+	JSB_PRECONDITION2( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
+	JSB_PRECONDITION2( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
 	ok &= jsval_to_NSObject( cx, *argvp++, &arg0);
-	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error processing arguments");
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCBAnimationManager *real = (CCBAnimationManager*) [proxy realObj];
 	[real setRootNode:arg0  ];
@@ -656,8 +656,8 @@ JSBool JSB_CCBReader_actionManager(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
 
-	JSB_PRECONDITION3( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
-	JSB_PRECONDITION3( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
+	JSB_PRECONDITION2( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
+	JSB_PRECONDITION2( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
 	CCBAnimationManager* ret_val;
 
 	CCBReader *real = (CCBReader*) [proxy realObj];
@@ -675,8 +675,8 @@ JSBool JSB_CCBReader_animationManagersForNodes(JSContext *cx, uint32_t argc, jsv
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
 
-	JSB_PRECONDITION3( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
-	JSB_PRECONDITION3( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
+	JSB_PRECONDITION2( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
+	JSB_PRECONDITION2( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
 	NSMutableArray* ret_val;
 
 	CCBReader *real = (CCBReader*) [proxy realObj];
@@ -691,7 +691,7 @@ JSBool JSB_CCBReader_animationManagersForNodes(JSContext *cx, uint32_t argc, jsv
 // Arguments: 
 // Ret value: NSString* (S)
 JSBool JSB_CCBReader_ccbDirectoryPath_static(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION3( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
+	JSB_PRECONDITION2( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
 	NSString* ret_val;
 
 	ret_val = [CCBReader ccbDirectoryPath ];
@@ -705,7 +705,7 @@ JSBool JSB_CCBReader_ccbDirectoryPath_static(JSContext *cx, uint32_t argc, jsval
 // Arguments: NSString*, NSObject*, CGSize
 // Ret value: CCNode* (o)
 JSBool JSB_CCBReader_nodeGraphFromFile_owner_parentSize__static(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION3( argc >= 1 && argc <= 3 , cx, JS_FALSE, "Invalid number of arguments" );
+	JSB_PRECONDITION2( argc >= 1 && argc <= 3 , cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	NSString* arg0; id arg1; CGSize arg2; 
@@ -717,7 +717,7 @@ JSBool JSB_CCBReader_nodeGraphFromFile_owner_parentSize__static(JSContext *cx, u
 	if (argc >= 3) {
 		ok &= jsval_to_CGSize( cx, *argvp++, (CGSize*) &arg2 );
 	}
-	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error processing arguments");
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCNode* ret_val;
 
 	if( argc == 1 ) {
@@ -730,7 +730,7 @@ JSBool JSB_CCBReader_nodeGraphFromFile_owner_parentSize__static(JSContext *cx, u
 		ret_val = [CCBReader nodeGraphFromFile:(NSString*)arg0 owner:arg1 parentSize:(CGSize)arg2  ];
 	}
 	else
-		JSB_PRECONDITION3(NO, cx, JS_FALSE, "Error in number of arguments");
+		JSB_PRECONDITION2(NO, cx, JS_FALSE, "Error in number of arguments");
 
 
 	JS_SET_RVAL(cx, vp, NSObject_to_jsval(cx, ret_val));
@@ -745,8 +745,8 @@ JSBool JSB_CCBReader_nodeGraphFromFile_owner_parentSize_(JSContext *cx, uint32_t
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
 
-	JSB_PRECONDITION3( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
-	JSB_PRECONDITION3( argc >= 1 && argc <= 3 , cx, JS_FALSE, "Invalid number of arguments" );
+	JSB_PRECONDITION2( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
+	JSB_PRECONDITION2( argc >= 1 && argc <= 3 , cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	NSString* arg0; id arg1; CGSize arg2; 
@@ -758,7 +758,7 @@ JSBool JSB_CCBReader_nodeGraphFromFile_owner_parentSize_(JSContext *cx, uint32_t
 	if (argc >= 3) {
 		ok &= jsval_to_CGSize( cx, *argvp++, (CGSize*) &arg2 );
 	}
-	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error processing arguments");
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCNode* ret_val;
 
 	if( argc == 1 ) {
@@ -774,7 +774,7 @@ JSBool JSB_CCBReader_nodeGraphFromFile_owner_parentSize_(JSContext *cx, uint32_t
 	ret_val = [real nodeGraphFromFile:(NSString*)arg0 owner:arg1 parentSize:(CGSize)arg2  ];
 	}
 	else
-		JSB_PRECONDITION3(NO, cx, JS_FALSE, "Error in number of arguments");
+		JSB_PRECONDITION2(NO, cx, JS_FALSE, "Error in number of arguments");
 
 
 	JS_SET_RVAL(cx, vp, NSObject_to_jsval(cx, ret_val));
@@ -789,8 +789,8 @@ JSBool JSB_CCBReader_nodesWithAnimationManagers(JSContext *cx, uint32_t argc, js
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
 
-	JSB_PRECONDITION3( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
-	JSB_PRECONDITION3( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
+	JSB_PRECONDITION2( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
+	JSB_PRECONDITION2( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
 	NSMutableArray* ret_val;
 
 	CCBReader *real = (CCBReader*) [proxy realObj];
@@ -809,8 +809,8 @@ JSBool JSB_CCBReader_ownerCallbackNames(JSContext *cx, uint32_t argc, jsval *vp)
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
 
-	JSB_PRECONDITION3( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
-	JSB_PRECONDITION3( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
+	JSB_PRECONDITION2( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
+	JSB_PRECONDITION2( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
 	NSMutableArray* ret_val;
 
 	CCBReader *real = (CCBReader*) [proxy realObj];
@@ -829,8 +829,8 @@ JSBool JSB_CCBReader_ownerCallbackNodes(JSContext *cx, uint32_t argc, jsval *vp)
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
 
-	JSB_PRECONDITION3( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
-	JSB_PRECONDITION3( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
+	JSB_PRECONDITION2( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
+	JSB_PRECONDITION2( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
 	NSMutableArray* ret_val;
 
 	CCBReader *real = (CCBReader*) [proxy realObj];
@@ -849,8 +849,8 @@ JSBool JSB_CCBReader_ownerOutletNames(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
 
-	JSB_PRECONDITION3( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
-	JSB_PRECONDITION3( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
+	JSB_PRECONDITION2( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
+	JSB_PRECONDITION2( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
 	NSMutableArray* ret_val;
 
 	CCBReader *real = (CCBReader*) [proxy realObj];
@@ -869,8 +869,8 @@ JSBool JSB_CCBReader_ownerOutletNodes(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
 
-	JSB_PRECONDITION3( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
-	JSB_PRECONDITION3( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
+	JSB_PRECONDITION2( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
+	JSB_PRECONDITION2( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
 	NSMutableArray* ret_val;
 
 	CCBReader *real = (CCBReader*) [proxy realObj];
@@ -885,7 +885,7 @@ JSBool JSB_CCBReader_ownerOutletNodes(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: 
 // Ret value: CCBReader* (o)
 JSBool JSB_CCBReader_reader_static(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION3( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
+	JSB_PRECONDITION2( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
 	CCBReader* ret_val;
 
 	ret_val = [CCBReader reader ];
@@ -898,7 +898,7 @@ JSBool JSB_CCBReader_reader_static(JSContext *cx, uint32_t argc, jsval *vp) {
 // Arguments: NSString*, NSObject*, CGSize
 // Ret value: CCScene* (o)
 JSBool JSB_CCBReader_sceneWithNodeGraphFromFile_owner_parentSize__static(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION3( argc >= 1 && argc <= 3 , cx, JS_FALSE, "Invalid number of arguments" );
+	JSB_PRECONDITION2( argc >= 1 && argc <= 3 , cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	NSString* arg0; id arg1; CGSize arg2; 
@@ -910,7 +910,7 @@ JSBool JSB_CCBReader_sceneWithNodeGraphFromFile_owner_parentSize__static(JSConte
 	if (argc >= 3) {
 		ok &= jsval_to_CGSize( cx, *argvp++, (CGSize*) &arg2 );
 	}
-	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error processing arguments");
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCScene* ret_val;
 
 	if( argc == 1 ) {
@@ -923,7 +923,7 @@ JSBool JSB_CCBReader_sceneWithNodeGraphFromFile_owner_parentSize__static(JSConte
 		ret_val = [CCBReader sceneWithNodeGraphFromFile:(NSString*)arg0 owner:arg1 parentSize:(CGSize)arg2  ];
 	}
 	else
-		JSB_PRECONDITION3(NO, cx, JS_FALSE, "Error in number of arguments");
+		JSB_PRECONDITION2(NO, cx, JS_FALSE, "Error in number of arguments");
 
 
 	JS_SET_RVAL(cx, vp, NSObject_to_jsval(cx, ret_val));
@@ -938,14 +938,14 @@ JSBool JSB_CCBReader_setActionManager_(JSContext *cx, uint32_t argc, jsval *vp) 
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
 
-	JSB_PRECONDITION3( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
-	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
+	JSB_PRECONDITION2( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
+	JSB_PRECONDITION2( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
 	ok &= jsval_to_NSObject( cx, *argvp++, &arg0);
-	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error processing arguments");
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCBReader *real = (CCBReader*) [proxy realObj];
 	[real setActionManager:arg0  ];
@@ -956,13 +956,13 @@ JSBool JSB_CCBReader_setActionManager_(JSContext *cx, uint32_t argc, jsval *vp) 
 // Arguments: float
 // Ret value: void (None)
 JSBool JSB_CCBReader_setResolutionScale__static(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
+	JSB_PRECONDITION2( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	double arg0; 
 
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
-	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error processing arguments");
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	[CCBReader setResolutionScale:(float)arg0  ];
 	JS_SET_RVAL(cx, vp, JSVAL_VOID);
@@ -972,13 +972,13 @@ JSBool JSB_CCBReader_setResolutionScale__static(JSContext *cx, uint32_t argc, js
 // Arguments: NSString*
 // Ret value: void (None)
 JSBool JSB_CCBReader_setResourcePath__static(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
+	JSB_PRECONDITION2( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	NSString* arg0; 
 
 	ok &= jsval_to_NSString( cx, *argvp++, &arg0 );
-	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error processing arguments");
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	[CCBReader setResourcePath:(NSString*)arg0  ];
 	JS_SET_RVAL(cx, vp, JSVAL_VOID);

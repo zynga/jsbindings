@@ -93,7 +93,7 @@ JSBool JSBCore_log(JSContext *cx, uint32_t argc, jsval *vp)
 
 JSBool JSBCore_executeScript(JSContext *cx, uint32_t argc, jsval *vp)
 {
-	JSB_PRECONDITION3(argc==1, cx, JS_FALSE, "Invalid number of arguments in executeScript");
+	JSB_PRECONDITION2(argc==1, cx, JS_FALSE, "Invalid number of arguments in executeScript");
 
 	JSBool ok = JS_FALSE;
 	JSString *string;
@@ -101,7 +101,7 @@ JSBool JSBCore_executeScript(JSContext *cx, uint32_t argc, jsval *vp)
 		ok = [[JSBCore sharedInstance] runScript: [NSString stringWithCString:JS_EncodeString(cx, string) encoding:NSUTF8StringEncoding] ];
 	}
 
-	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error executing script");
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error executing script");
 
 	return ok;
 };
@@ -118,7 +118,7 @@ JSBool JSBCore_associateObjectWithNative(JSContext *cx, uint32_t argc, jsval *vp
 	ok &= JS_ValueToObject( cx, *argvp++, &pureJSObj );
 	ok &= JS_ValueToObject( cx, *argvp++, &nativeJSObj );
 
-	JSB_PRECONDITION3(ok && pureJSObj && nativeJSObj, cx, JS_FALSE, "Error parsing parameters");
+	JSB_PRECONDITION2(ok && pureJSObj && nativeJSObj, cx, JS_FALSE, "Error parsing parameters");
 
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject( nativeJSObj );
 	jsb_set_proxy_for_jsobject( proxy, pureJSObj );
@@ -129,7 +129,7 @@ JSBool JSBCore_associateObjectWithNative(JSContext *cx, uint32_t argc, jsval *vp
 
 JSBool JSBCore_getAssociatedNative(JSContext *cx, uint32_t argc, jsval *vp)
 {
-	JSB_PRECONDITION3(argc==1, cx, JS_FALSE, "Invalid number of arguments in getAssociatedNative");
+	JSB_PRECONDITION2(argc==1, cx, JS_FALSE, "Invalid number of arguments in getAssociatedNative");
 
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSObject *pureJSObj;
@@ -147,7 +147,7 @@ JSBool JSBCore_getAssociatedNative(JSContext *cx, uint32_t argc, jsval *vp)
 
 JSBool JSBCore_platform(JSContext *cx, uint32_t argc, jsval *vp)
 {
-	JSB_PRECONDITION3(argc==0, cx, JS_FALSE, "Invalid number of arguments in getPlatform");
+	JSB_PRECONDITION2(argc==0, cx, JS_FALSE, "Invalid number of arguments in getPlatform");
 
 	JSString * platform;
 
@@ -179,7 +179,7 @@ JSBool JSBCore_platform(JSContext *cx, uint32_t argc, jsval *vp)
 /* Register an object as a member of the GC's root set, preventing them from being GC'ed */
 JSBool JSBCore_addRootJS(JSContext *cx, uint32_t argc, jsval *vp)
 {
-	JSB_PRECONDITION3(argc==1, cx, JS_FALSE, "Invalid number of arguments in addRootJS");
+	JSB_PRECONDITION2(argc==1, cx, JS_FALSE, "Invalid number of arguments in addRootJS");
 
 	JSObject *o = NULL;
 	if (JS_ConvertArguments(cx, argc, JS_ARGV(cx, vp), "o", &o) == JS_TRUE) {
@@ -197,7 +197,7 @@ JSBool JSBCore_addRootJS(JSContext *cx, uint32_t argc, jsval *vp)
  */
 JSBool JSBCore_removeRootJS(JSContext *cx, uint32_t argc, jsval *vp)
 {
-	JSB_PRECONDITION3(argc==1, cx, JS_FALSE, "Invalid number of arguments in removeRootJS");
+	JSB_PRECONDITION2(argc==1, cx, JS_FALSE, "Invalid number of arguments in removeRootJS");
 
 	JSObject *o = NULL;
 	if (JS_ConvertArguments(cx, argc, JS_ARGV(cx, vp), "o", &o) == JS_TRUE) {
@@ -235,7 +235,7 @@ JSBool JSBCore_forceGC(JSContext *cx, uint32_t argc, jsval *vp)
 
 JSBool JSBCore_restartVM(JSContext *cx, uint32_t argc, jsval *vp)
 {
-	JSB_PRECONDITION3(argc==0, cx, JS_FALSE, "Invalid number of arguments in executeScript");
+	JSB_PRECONDITION2(argc==0, cx, JS_FALSE, "Invalid number of arguments in executeScript");
 	
 	[[JSBCore sharedInstance] restartRuntime];
 	return JS_FALSE;

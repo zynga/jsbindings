@@ -52,8 +52,8 @@ JSBool JSB_SimpleAudioEngine_backgroundMusicVolume(JSContext *cx, uint32_t argc,
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
 
-	JSB_PRECONDITION3( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
-	JSB_PRECONDITION3( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
+	JSB_PRECONDITION2( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
+	JSB_PRECONDITION2( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
 	float ret_val;
 
 	SimpleAudioEngine *real = (SimpleAudioEngine*) [proxy realObj];
@@ -69,8 +69,8 @@ JSBool JSB_SimpleAudioEngine_effectsVolume(JSContext *cx, uint32_t argc, jsval *
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
 
-	JSB_PRECONDITION3( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
-	JSB_PRECONDITION3( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
+	JSB_PRECONDITION2( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
+	JSB_PRECONDITION2( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
 	float ret_val;
 
 	SimpleAudioEngine *real = (SimpleAudioEngine*) [proxy realObj];
@@ -82,7 +82,7 @@ JSBool JSB_SimpleAudioEngine_effectsVolume(JSContext *cx, uint32_t argc, jsval *
 // Arguments: 
 // Ret value: void (None)
 JSBool JSB_SimpleAudioEngine_end_static(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION3( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
+	JSB_PRECONDITION2( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
 
 	[SimpleAudioEngine end ];
 	JS_SET_RVAL(cx, vp, JSVAL_VOID);
@@ -96,8 +96,8 @@ JSBool JSB_SimpleAudioEngine_isBackgroundMusicPlaying(JSContext *cx, uint32_t ar
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
 
-	JSB_PRECONDITION3( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
-	JSB_PRECONDITION3( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
+	JSB_PRECONDITION2( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
+	JSB_PRECONDITION2( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
 	BOOL ret_val;
 
 	SimpleAudioEngine *real = (SimpleAudioEngine*) [proxy realObj];
@@ -113,8 +113,8 @@ JSBool JSB_SimpleAudioEngine_pauseBackgroundMusic(JSContext *cx, uint32_t argc, 
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
 
-	JSB_PRECONDITION3( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
-	JSB_PRECONDITION3( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
+	JSB_PRECONDITION2( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
+	JSB_PRECONDITION2( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
 
 	SimpleAudioEngine *real = (SimpleAudioEngine*) [proxy realObj];
 	[real pauseBackgroundMusic ];
@@ -129,8 +129,8 @@ JSBool JSB_SimpleAudioEngine_playBackgroundMusic_loop_(JSContext *cx, uint32_t a
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
 
-	JSB_PRECONDITION3( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
-	JSB_PRECONDITION3( argc >= 1 && argc <= 2 , cx, JS_FALSE, "Invalid number of arguments" );
+	JSB_PRECONDITION2( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
+	JSB_PRECONDITION2( argc >= 1 && argc <= 2 , cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	NSString* arg0; JSBool arg1; 
@@ -139,7 +139,7 @@ JSBool JSB_SimpleAudioEngine_playBackgroundMusic_loop_(JSContext *cx, uint32_t a
 	if (argc >= 2) {
 		ok &= JS_ValueToBoolean( cx, *argvp++, &arg1 );
 	}
-	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error processing arguments");
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	if( argc == 1 ) {
 		SimpleAudioEngine *real = (SimpleAudioEngine*) [proxy realObj];
@@ -150,7 +150,7 @@ JSBool JSB_SimpleAudioEngine_playBackgroundMusic_loop_(JSContext *cx, uint32_t a
 	[real playBackgroundMusic:(NSString*)arg0 loop:(BOOL)arg1  ];
 	}
 	else
-		JSB_PRECONDITION3(NO, cx, JS_FALSE, "Error in number of arguments");
+		JSB_PRECONDITION2(NO, cx, JS_FALSE, "Error in number of arguments");
 
 	JS_SET_RVAL(cx, vp, JSVAL_VOID);
 	return JS_TRUE;
@@ -163,8 +163,8 @@ JSBool JSB_SimpleAudioEngine_playEffect_pitch_pan_gain_(JSContext *cx, uint32_t 
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
 
-	JSB_PRECONDITION3( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
-	JSB_PRECONDITION3( argc >= 1 && argc <= 4 , cx, JS_FALSE, "Invalid number of arguments" );
+	JSB_PRECONDITION2( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
+	JSB_PRECONDITION2( argc >= 1 && argc <= 4 , cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	NSString* arg0; double arg1; double arg2; double arg3; 
@@ -179,7 +179,7 @@ JSBool JSB_SimpleAudioEngine_playEffect_pitch_pan_gain_(JSContext *cx, uint32_t 
 	if (argc >= 4) {
 		ok &= JS_ValueToNumber( cx, *argvp++, &arg3 );
 	}
-	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error processing arguments");
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	ALuint ret_val;
 
 	if( argc == 1 ) {
@@ -191,7 +191,7 @@ JSBool JSB_SimpleAudioEngine_playEffect_pitch_pan_gain_(JSContext *cx, uint32_t 
 	ret_val = [real playEffect:(NSString*)arg0 pitch:(Float32)arg1 pan:(Float32)arg2 gain:(Float32)arg3  ];
 	}
 	else
-		JSB_PRECONDITION3(NO, cx, JS_FALSE, "Error in number of arguments");
+		JSB_PRECONDITION2(NO, cx, JS_FALSE, "Error in number of arguments");
 
 	JS_SET_RVAL(cx, vp, UINT_TO_JSVAL((uint32_t)ret_val));
 	return JS_TRUE;
@@ -204,14 +204,14 @@ JSBool JSB_SimpleAudioEngine_preloadBackgroundMusic_(JSContext *cx, uint32_t arg
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
 
-	JSB_PRECONDITION3( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
-	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
+	JSB_PRECONDITION2( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
+	JSB_PRECONDITION2( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	NSString* arg0; 
 
 	ok &= jsval_to_NSString( cx, *argvp++, &arg0 );
-	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error processing arguments");
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	SimpleAudioEngine *real = (SimpleAudioEngine*) [proxy realObj];
 	[real preloadBackgroundMusic:(NSString*)arg0  ];
@@ -226,14 +226,14 @@ JSBool JSB_SimpleAudioEngine_preloadEffect_(JSContext *cx, uint32_t argc, jsval 
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
 
-	JSB_PRECONDITION3( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
-	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
+	JSB_PRECONDITION2( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
+	JSB_PRECONDITION2( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	NSString* arg0; 
 
 	ok &= jsval_to_NSString( cx, *argvp++, &arg0 );
-	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error processing arguments");
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	SimpleAudioEngine *real = (SimpleAudioEngine*) [proxy realObj];
 	[real preloadEffect:(NSString*)arg0  ];
@@ -248,8 +248,8 @@ JSBool JSB_SimpleAudioEngine_resumeBackgroundMusic(JSContext *cx, uint32_t argc,
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
 
-	JSB_PRECONDITION3( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
-	JSB_PRECONDITION3( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
+	JSB_PRECONDITION2( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
+	JSB_PRECONDITION2( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
 
 	SimpleAudioEngine *real = (SimpleAudioEngine*) [proxy realObj];
 	[real resumeBackgroundMusic ];
@@ -264,8 +264,8 @@ JSBool JSB_SimpleAudioEngine_rewindBackgroundMusic(JSContext *cx, uint32_t argc,
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
 
-	JSB_PRECONDITION3( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
-	JSB_PRECONDITION3( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
+	JSB_PRECONDITION2( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
+	JSB_PRECONDITION2( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
 
 	SimpleAudioEngine *real = (SimpleAudioEngine*) [proxy realObj];
 	[real rewindBackgroundMusic ];
@@ -280,14 +280,14 @@ JSBool JSB_SimpleAudioEngine_setBackgroundMusicVolume_(JSContext *cx, uint32_t a
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
 
-	JSB_PRECONDITION3( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
-	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
+	JSB_PRECONDITION2( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
+	JSB_PRECONDITION2( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	double arg0; 
 
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
-	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error processing arguments");
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	SimpleAudioEngine *real = (SimpleAudioEngine*) [proxy realObj];
 	[real setBackgroundMusicVolume:(float)arg0  ];
@@ -302,14 +302,14 @@ JSBool JSB_SimpleAudioEngine_setEffectsVolume_(JSContext *cx, uint32_t argc, jsv
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
 
-	JSB_PRECONDITION3( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
-	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
+	JSB_PRECONDITION2( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
+	JSB_PRECONDITION2( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	double arg0; 
 
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
-	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error processing arguments");
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	SimpleAudioEngine *real = (SimpleAudioEngine*) [proxy realObj];
 	[real setEffectsVolume:(float)arg0  ];
@@ -320,7 +320,7 @@ JSBool JSB_SimpleAudioEngine_setEffectsVolume_(JSContext *cx, uint32_t argc, jsv
 // Arguments: 
 // Ret value: SimpleAudioEngine* (o)
 JSBool JSB_SimpleAudioEngine_sharedEngine_static(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION3( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
+	JSB_PRECONDITION2( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
 	SimpleAudioEngine* ret_val;
 
 	ret_val = [SimpleAudioEngine sharedEngine ];
@@ -337,8 +337,8 @@ JSBool JSB_SimpleAudioEngine_stopBackgroundMusic(JSContext *cx, uint32_t argc, j
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
 
-	JSB_PRECONDITION3( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
-	JSB_PRECONDITION3( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
+	JSB_PRECONDITION2( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
+	JSB_PRECONDITION2( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
 
 	SimpleAudioEngine *real = (SimpleAudioEngine*) [proxy realObj];
 	[real stopBackgroundMusic ];
@@ -353,14 +353,14 @@ JSBool JSB_SimpleAudioEngine_stopEffect_(JSContext *cx, uint32_t argc, jsval *vp
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
 
-	JSB_PRECONDITION3( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
-	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
+	JSB_PRECONDITION2( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
+	JSB_PRECONDITION2( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	uint32_t arg0; 
 
 	ok &= JS_ValueToECMAUint32( cx, *argvp++, &arg0 );
-	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error processing arguments");
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	SimpleAudioEngine *real = (SimpleAudioEngine*) [proxy realObj];
 	[real stopEffect:(ALuint)arg0  ];
@@ -375,14 +375,14 @@ JSBool JSB_SimpleAudioEngine_unloadEffect_(JSContext *cx, uint32_t argc, jsval *
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
 
-	JSB_PRECONDITION3( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
-	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
+	JSB_PRECONDITION2( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
+	JSB_PRECONDITION2( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	NSString* arg0; 
 
 	ok &= jsval_to_NSString( cx, *argvp++, &arg0 );
-	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error processing arguments");
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	SimpleAudioEngine *real = (SimpleAudioEngine*) [proxy realObj];
 	[real unloadEffect:(NSString*)arg0  ];
@@ -397,8 +397,8 @@ JSBool JSB_SimpleAudioEngine_willPlayBackgroundMusic(JSContext *cx, uint32_t arg
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
 
-	JSB_PRECONDITION3( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
-	JSB_PRECONDITION3( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
+	JSB_PRECONDITION2( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
+	JSB_PRECONDITION2( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
 	BOOL ret_val;
 
 	SimpleAudioEngine *real = (SimpleAudioEngine*) [proxy realObj];
@@ -414,8 +414,8 @@ JSBool JSB_SimpleAudioEngine_enabled(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
 
-	JSB_PRECONDITION3( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
-	JSB_PRECONDITION3( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
+	JSB_PRECONDITION2( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
+	JSB_PRECONDITION2( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
 	BOOL ret_val;
 
 	SimpleAudioEngine *real = (SimpleAudioEngine*) [proxy realObj];
@@ -431,8 +431,8 @@ JSBool JSB_SimpleAudioEngine_mute(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
 
-	JSB_PRECONDITION3( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
-	JSB_PRECONDITION3( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
+	JSB_PRECONDITION2( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
+	JSB_PRECONDITION2( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
 	BOOL ret_val;
 
 	SimpleAudioEngine *real = (SimpleAudioEngine*) [proxy realObj];
@@ -448,14 +448,14 @@ JSBool JSB_SimpleAudioEngine_setEnabled_(JSContext *cx, uint32_t argc, jsval *vp
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
 
-	JSB_PRECONDITION3( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
-	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
+	JSB_PRECONDITION2( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
+	JSB_PRECONDITION2( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	JSBool arg0; 
 
 	ok &= JS_ValueToBoolean( cx, *argvp++, &arg0 );
-	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error processing arguments");
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	SimpleAudioEngine *real = (SimpleAudioEngine*) [proxy realObj];
 	[real setEnabled:(BOOL)arg0  ];
@@ -470,14 +470,14 @@ JSBool JSB_SimpleAudioEngine_setMute_(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
 
-	JSB_PRECONDITION3( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
-	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
+	JSB_PRECONDITION2( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
+	JSB_PRECONDITION2( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	JSBool arg0; 
 
 	ok &= JS_ValueToBoolean( cx, *argvp++, &arg0 );
-	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error processing arguments");
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	SimpleAudioEngine *real = (SimpleAudioEngine*) [proxy realObj];
 	[real setMute:(BOOL)arg0  ];

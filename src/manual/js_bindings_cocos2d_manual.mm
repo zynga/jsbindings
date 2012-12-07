@@ -202,8 +202,8 @@ JSBool jsval_to_array_of_CGPoint( JSContext *cx, jsval vp, CGPoint**points, int 
 	// Parsing sequence
 	JSObject *jsobj;
 	JSBool ok = JS_ValueToObject( cx, vp, &jsobj );
-	JSB_PRECONDITION3( ok, cx, JS_FALSE, "Error converting value to object");
-	JSB_PRECONDITION3( jsobj && JS_IsArrayObject( cx, jsobj), cx, JS_FALSE, "Object must be an array");
+	JSB_PRECONDITION2( ok, cx, JS_FALSE, "Error converting value to object");
+	JSB_PRECONDITION2( jsobj && JS_IsArrayObject( cx, jsobj), cx, JS_FALSE, "Object must be an array");
 	
 	uint32_t len;
 	JS_GetArrayLength(cx, jsobj, &len);
@@ -215,7 +215,7 @@ JSBool jsval_to_array_of_CGPoint( JSContext *cx, jsval vp, CGPoint**points, int 
 		JS_GetElement(cx, jsobj, i, &valarg);
 
 		ok = jsval_to_CGPoint(cx, valarg, &array[i]);
-		JSB_PRECONDITION3( ok, cx, JS_FALSE, "Error converting value to CGPoint");
+		JSB_PRECONDITION2( ok, cx, JS_FALSE, "Error converting value to CGPoint");
 	}
 			
 	*numPoints = len;
@@ -358,7 +358,7 @@ JSBool JSB_CCMenuItem_setBlock_( JSContext *cx, uint32_t argc, jsval *vp ) {
 	ok &= jsval_to_block_1( cx, argvp[0], js_this, &js_func );
 	ok &= jsb_set_reserved_slot(jsthis, 0, argvp[0] );
 
-	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error parsing arguments");
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error parsing arguments");
 	
 	CCMenuItem *real = (CCMenuItem*) [proxy realObj];
 
@@ -391,7 +391,7 @@ JSBool JSB_CCMenuItemFont_itemWithString_block__static(JSContext *cx, uint32_t a
 		// function
 		ok &= jsval_to_block_1( cx, argvp[1], js_this, &js_func );
 	}
-	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error parsing arguments");
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error parsing arguments");
 	
 	CCMenuItemFont *ret_val;
 	
@@ -445,7 +445,7 @@ JSBool JSB_CCMenuItemFont_initWithString_block_(JSContext *cx, uint32_t argc, js
 		jsb_set_reserved_slot(jsthis, 0, argvp[1] );
 	}
 	
-	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error parsing arguments");
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error parsing arguments");
 	
 	CCMenuItemFont *real = nil;
 	
@@ -484,7 +484,7 @@ JSBool JSB_CCMenuItemLabel_itemWithLabel_block__static(JSContext *cx, uint32_t a
 		ok &= jsval_to_block_1( cx, argvp[1], js_this, &js_func );
 	}
 	
-	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error parsing arguments");
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error parsing arguments");
 
 	CCMenuItemLabel *ret_val = nil;
 	
@@ -533,7 +533,7 @@ JSBool JSB_CCMenuItemLabel_initWithLabel_block_(JSContext *cx, uint32_t argc, js
 		jsb_set_reserved_slot(jsthis, 0, argvp[1] );
 	}
 	
-	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error parsing arguments");
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error parsing arguments");
 	
 	CCMenuItemLabel *real = nil;
 	if( argc == 1 )
@@ -588,7 +588,7 @@ JSBool JSB_CCMenuItemImage_itemWithNormalImage_selectedImage_disabledImage_block
 		ok &= jsval_to_block_1( cx, *argvp++, js_this, &js_func );
 	}
 
-	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error parsing arguments");
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error parsing arguments");
 
 	CCMenuItemImage *ret_val=nil;
 		
@@ -663,7 +663,7 @@ JSBool JSB_CCMenuItemImage_initWithNormalImage_selectedImage_disabledImage_block
 			jsb_set_reserved_slot(jsthis, 1, valthis );
 	}
 	
-	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error parsing arguments");
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error parsing arguments");
 	
 	CCMenuItemImage *real = nil;
 	
@@ -727,7 +727,7 @@ JSBool JSB_CCMenuItemSprite_itemWithNormalSprite_selectedSprite_disabledSprite_b
 		ok &= jsval_to_block_1( cx, *argvp++, js_this, &js_func );
 	}
 	
-	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error parsing arguments");
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error parsing arguments");
 
 	CCMenuItemSprite *ret_val=nil;
 
@@ -798,7 +798,7 @@ JSBool JSB_CCMenuItemSprite_initWithNormalSprite_selectedSprite_disabledSprite_b
 			jsb_set_reserved_slot(jsthis, 1, valthis );
 	}
 	
-	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error parsing arguments");
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error parsing arguments");
 
 	CCMenuItemSprite *real = nil;
 	
@@ -850,7 +850,7 @@ JSBool JSB_CCCallBlockN_actionWithBlock__static(JSContext *cx, uint32_t argc, js
 		ret_val = [CCCallBlockN actionWithBlock:js_func];
 	}
 
-	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error parsing arguments");
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error parsing arguments");
 
 	JSObject *jsobj = get_or_create_jsobject_from_realobj( cx, ret_val );
 	JS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(jsobj));
@@ -961,8 +961,8 @@ JSBool JSB_CCNode_scheduleOnce_delay_(JSContext *cx, uint32_t argc, jsval *vp)
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
 
-	JSB_PRECONDITION3( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
-	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
+	JSB_PRECONDITION2( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
+	JSB_PRECONDITION2( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 
 	CCNode *real = (CCNode*) [proxy realObj];
@@ -973,7 +973,7 @@ JSBool JSB_CCNode_scheduleOnce_delay_(JSContext *cx, uint32_t argc, jsval *vp)
 	//
 	jsval funcval = *argvp++;
 	JSFunction *func = JS_ValueToFunction(cx, funcval);
-	JSB_PRECONDITION3( func, cx, JS_FALSE, "Cannot convert Value to Function");
+	JSB_PRECONDITION2( func, cx, JS_FALSE, "Cannot convert Value to Function");
 
 	NSString *key = nil;
 	JSString *funcname = JS_GetFunctionId(func);
@@ -1001,7 +1001,7 @@ JSBool JSB_CCNode_scheduleOnce_delay_(JSContext *cx, uint32_t argc, jsval *vp)
 	//
 	double delay;
 	JSBool ok = JS_ValueToNumber(cx, *argvp++, &delay );
-	JSB_PRECONDITION3(ok, cx, JS_FALSE,"Error converting jsval to number");
+	JSB_PRECONDITION2(ok, cx, JS_FALSE,"Error converting jsval to number");
 
 
 	[scheduler scheduleBlockForKey:key target:real interval:0 repeat:0 delay:delay paused:![real isRunning] block:block];
@@ -1017,8 +1017,8 @@ JSBool JSB_CCNode_schedule_interval_repeat_delay_(JSContext *cx, uint32_t argc, 
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
 	
-	JSB_PRECONDITION3( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
-	JSB_PRECONDITION3( argc >=1 && argc <=4, cx, JS_FALSE, "Invalid number of arguments" );
+	JSB_PRECONDITION2( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
+	JSB_PRECONDITION2( argc >=1 && argc <=4, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 
 	CCNode *real = (CCNode*) [proxy realObj];
@@ -1029,7 +1029,7 @@ JSBool JSB_CCNode_schedule_interval_repeat_delay_(JSContext *cx, uint32_t argc, 
 	//
 	jsval funcval = *argvp++;
 	JSFunction *func = JS_ValueToFunction(cx, funcval);
-	JSB_PRECONDITION3( func, cx, JS_FALSE, "Cannot convert Value to Function");
+	JSB_PRECONDITION2( func, cx, JS_FALSE, "Cannot convert Value to Function");
 
 	NSString *key = nil;
 	JSString *funcname = JS_GetFunctionId(func);
@@ -1076,7 +1076,7 @@ JSBool JSB_CCNode_schedule_interval_repeat_delay_(JSContext *cx, uint32_t argc, 
 	if( argc >= 4 )
 		ok &= JS_ValueToNumber(cx, *argvp++, &delay );
 		
-	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error converting jsval to native");
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error converting jsval to native");
 
 
 	if( argc==1)
@@ -1101,8 +1101,8 @@ JSBool JSB_CCNode_unschedule_(JSContext *cx, uint32_t argc, jsval *vp)
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
 	
-	JSB_PRECONDITION3( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
-	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
+	JSB_PRECONDITION2( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
+	JSB_PRECONDITION2( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	
 	CCNode *real = (CCNode*) [proxy realObj];
@@ -1113,7 +1113,7 @@ JSBool JSB_CCNode_unschedule_(JSContext *cx, uint32_t argc, jsval *vp)
 	//
 	jsval funcval = *argvp++;
 	JSFunction *func = JS_ValueToFunction(cx, funcval);
-	JSB_PRECONDITION3( func, cx, JS_FALSE, "Cannot convert Value to Function");
+	JSB_PRECONDITION2( func, cx, JS_FALSE, "Cannot convert Value to Function");
 	
 	NSString *key = nil;
 	JSString *funcname = JS_GetFunctionId(func);
@@ -1138,20 +1138,20 @@ JSBool JSB_CCNode_setPosition_(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
 	
-	JSB_PRECONDITION3( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
-	JSB_PRECONDITION3( argc == 1 || argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
+	JSB_PRECONDITION2( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
+	JSB_PRECONDITION2( argc == 1 || argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	CGPoint arg0;
 	
 	if( argc == 1) {
 		ok &= jsval_to_CGPoint( cx, *argvp++, (CGPoint*) &arg0 );
-		JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error processing arguments");
+		JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	} else {
 		double x, y;
 		ok = JS_ValueToNumber(cx, *argvp++, &x);
 		ok &= JS_ValueToNumber(cx, *argvp++, &y);
-		JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error processing arguments");
+		JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 		arg0 = ccp(x,y);
 	}
 	
@@ -1169,8 +1169,8 @@ JSBool JSB_CCScheduler_scheduleBlockForKey_target_interval_repeat_delay_paused_b
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
 	
-	JSB_PRECONDITION3( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
-	JSB_PRECONDITION3( argc >=2 && argc <=6, cx, JS_FALSE, "Invalid number of arguments" );
+	JSB_PRECONDITION2( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
+	JSB_PRECONDITION2( argc >=2 && argc <=6, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	
 	CCScheduler *scheduler = (CCScheduler*) [proxy realObj];
@@ -1190,7 +1190,7 @@ JSBool JSB_CCScheduler_scheduleBlockForKey_target_interval_repeat_delay_paused_b
 	//
 	jsval funcval = *argvp++;
 	JSFunction *func = JS_ValueToFunction(cx, funcval);
-	JSB_PRECONDITION3( func, cx, JS_FALSE, "Cannot convert Value to Function");
+	JSB_PRECONDITION2( func, cx, JS_FALSE, "Cannot convert Value to Function");
 	
 	NSString *key = nil;
 	JSString *funcname = JS_GetFunctionId(func);
@@ -1244,7 +1244,7 @@ JSBool JSB_CCScheduler_scheduleBlockForKey_target_interval_repeat_delay_paused_b
 	if( argc >= 6 )
 		ok &= JS_ValueToBoolean(cx, *argvp++, &paused);
 
-	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error converting jsval to native");
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error converting jsval to native");
 	
 	
 	[scheduler scheduleBlockForKey:key target:target interval:interval repeat:repeat delay:delay paused:paused block:block];
@@ -1259,14 +1259,14 @@ JSBool JSB_CCTMXLayer_getTileFlagsAt(JSContext *cx, uint32_t argc, jsval *vp)
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
 	
-	JSB_PRECONDITION3( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
-	JSB_PRECONDITION3( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
+	JSB_PRECONDITION2( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
+	JSB_PRECONDITION2( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	CGPoint arg0;
 	
 	ok &= jsval_to_CGPoint( cx, *argvp++, (CGPoint*) &arg0 );
-	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error processing arguments");
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	
 	CCTMXLayer *real = (CCTMXLayer*) [proxy realObj];
 	ccTMXTileFlags flags;
@@ -1358,7 +1358,7 @@ JSBool JSB_CCTwirl_setPosition_(JSContext *cx, uint32_t argc, jsval *vp)
 #pragma mark - Actions
 
 JSBool JSB_CCBezierBy_actionWithDuration_bezier__static(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
+	JSB_PRECONDITION2( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	double arg0;
@@ -1368,7 +1368,7 @@ JSBool JSB_CCBezierBy_actionWithDuration_bezier__static(JSContext *cx, uint32_t 
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
 	ok &= jsval_to_array_of_CGPoint(cx, *argvp++, &array, &numPoints);
 	
-	JSB_PRECONDITION3(ok && numPoints==3, cx, JS_FALSE, "Error processing arguments. Expending an array of 3 elements");
+	JSB_PRECONDITION2(ok && numPoints==3, cx, JS_FALSE, "Error processing arguments. Expending an array of 3 elements");
 	
 	CCBezierTo* ret_val;
 	
@@ -1386,7 +1386,7 @@ JSBool JSB_CCBezierBy_actionWithDuration_bezier__static(JSContext *cx, uint32_t 
 }
 
 JSBool JSB_CCBezierTo_actionWithDuration_bezier__static(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
+	JSB_PRECONDITION2( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	double arg0;
@@ -1396,7 +1396,7 @@ JSBool JSB_CCBezierTo_actionWithDuration_bezier__static(JSContext *cx, uint32_t 
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
 	ok &= jsval_to_array_of_CGPoint(cx, *argvp++, &array, &numPoints);
 	
-	JSB_PRECONDITION3(ok && numPoints==3, cx, JS_FALSE, "Error processing arguments. Expending an array of 3 elements");
+	JSB_PRECONDITION2(ok && numPoints==3, cx, JS_FALSE, "Error processing arguments. Expending an array of 3 elements");
 
 	CCBezierTo* ret_val;
 	
@@ -1414,7 +1414,7 @@ JSBool JSB_CCBezierTo_actionWithDuration_bezier__static(JSContext *cx, uint32_t 
 }
 
 JSBool JSB_CCCardinalSplineBy_actionWithDuration_points_tension__static(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION3( argc == 3, cx, JS_FALSE, "Invalid number of arguments" );
+	JSB_PRECONDITION2( argc == 3, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	double arg0; double arg2;
@@ -1425,7 +1425,7 @@ JSBool JSB_CCCardinalSplineBy_actionWithDuration_points_tension__static(JSContex
 	ok &= jsval_to_array_of_CGPoint(cx, *argvp++, &array, &numPoints);
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg2 );
 	
-	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error processing arguments");
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCCardinalSplineTo* ret_val;
 	
 	CCPointArray *points = [CCPointArray arrayWithCapacity:numPoints];
@@ -1443,7 +1443,7 @@ JSBool JSB_CCCardinalSplineBy_actionWithDuration_points_tension__static(JSContex
 // Arguments: ccTime, CCPointArray*, CGFloat
 // Ret value: CCCardinalSplineTo* (o)
 JSBool JSB_CCCardinalSplineTo_actionWithDuration_points_tension__static(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION3( argc == 3, cx, JS_FALSE, "Invalid number of arguments" );
+	JSB_PRECONDITION2( argc == 3, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	double arg0; double arg2;
@@ -1454,7 +1454,7 @@ JSBool JSB_CCCardinalSplineTo_actionWithDuration_points_tension__static(JSContex
 	ok &= jsval_to_array_of_CGPoint(cx, *argvp++, &array, &numPoints);
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg2 );
 		
-	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error processing arguments");
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCCardinalSplineTo* ret_val;
 	
 	CCPointArray *points = [CCPointArray arrayWithCapacity:numPoints];
@@ -1472,7 +1472,7 @@ JSBool JSB_CCCardinalSplineTo_actionWithDuration_points_tension__static(JSContex
 // Arguments: ccTime, CCPointArray*
 // Ret value: CCCatmullRomBy* (o)
 JSBool JSB_CCCatmullRomBy_actionWithDuration_points__static(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
+	JSB_PRECONDITION2( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	double arg0;
@@ -1482,7 +1482,7 @@ JSBool JSB_CCCatmullRomBy_actionWithDuration_points__static(JSContext *cx, uint3
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
 	ok &= jsval_to_array_of_CGPoint(cx, *argvp++, &array, &numPoints);
 	
-	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error processing arguments");
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCCatmullRomTo* ret_val;
 	
 	CCPointArray *points = [CCPointArray arrayWithCapacity:numPoints];
@@ -1500,7 +1500,7 @@ JSBool JSB_CCCatmullRomBy_actionWithDuration_points__static(JSContext *cx, uint3
 // Arguments: ccTime, CCPointArray*
 // Ret value: CCCatmullRomTo* (o)
 JSBool JSB_CCCatmullRomTo_actionWithDuration_points__static(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION3( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
+	JSB_PRECONDITION2( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	double arg0;
@@ -1510,7 +1510,7 @@ JSBool JSB_CCCatmullRomTo_actionWithDuration_points__static(JSContext *cx, uint3
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
 	ok &= jsval_to_array_of_CGPoint(cx, *argvp++, &array, &numPoints);
 
-	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error processing arguments");
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCCatmullRomTo* ret_val;
 	
 	CCPointArray *points = [CCPointArray arrayWithCapacity:numPoints];

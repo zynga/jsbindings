@@ -11,7 +11,7 @@ version 0.3 - 7-Nov-2012
 	- Added missing functions to bindings:
 		- cpAreaForPoly, cpCentroidForPoly, cpMomentForPoly, cpPolysShapeNew
 - [NEW] JSBCore: registration code for chipmunk/cocos2d moved to its own files
-		Better macros to report errors: JSB_PRECONDITION2() & JSB_PRECONDITION3()
+		Better macros to report errors: JSB_PRECONDITION2() & JSB_PRECONDITION2()
 		Possibility to generate files compatible with cpp
 		Added support for NSDictionary to jsval
 		Converts recusive data-structures to jsval

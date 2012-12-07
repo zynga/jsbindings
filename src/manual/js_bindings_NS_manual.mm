@@ -75,7 +75,7 @@ JSBool JSB_NSObject_init(JSContext *cx, uint32_t argc, jsval *vp) {
 	
 	JSObject* obj = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(obj);
-	JSB_PRECONDITION3( proxy && ![proxy realObj], cx, JS_FALSE, "Object already initialzied. error" );
+	JSB_PRECONDITION2( proxy && ![proxy realObj], cx, JS_FALSE, "Object already initialzied. error" );
 	
 	
 	NSObject* real = [[NSObject alloc] init];
@@ -84,8 +84,8 @@ JSBool JSB_NSObject_init(JSContext *cx, uint32_t argc, jsval *vp) {
 	[proxy release];
 	[real autorelease];
 	
-	JSB_PRECONDITION3( real, cx, JS_FALSE, "Invalid JS object");
-	JSB_PRECONDITION3( argc == 0, cx, JS_FALSE, "Invalid number of arguments. Expecting 0");
+	JSB_PRECONDITION2( real, cx, JS_FALSE, "Invalid JS object");
+	JSB_PRECONDITION2( argc == 0, cx, JS_FALSE, "Invalid number of arguments. Expecting 0");
 		
 	JS_SET_RVAL(cx, vp, JSVAL_TRUE);
 	

@@ -83,14 +83,14 @@ JSBool jsval_to_NSObject( JSContext *cx, jsval vp, NSObject **ret )
 {
 	JSObject *jsobj;
 	JSBool ok = JS_ValueToObject( cx, vp, &jsobj );
-	JSB_PRECONDITION3( ok, cx, JS_FALSE, "Error converting value to object");
+	JSB_PRECONDITION2( ok, cx, JS_FALSE, "Error converting value to object");
 	
 	// root it
 	vp = OBJECT_TO_JSVAL(jsobj);
 	
 	JSB_NSObject* proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsobj);
 	
-	JSB_PRECONDITION3( proxy, cx, JS_FALSE, "Error obtaining proxy");
+	JSB_PRECONDITION2( proxy, cx, JS_FALSE, "Error obtaining proxy");
 
 	*ret = [proxy realObj];
 	
@@ -128,19 +128,19 @@ JSBool jsval_is_NSString( JSContext *cx, jsval vp, NSString **ret )
 JSBool jsval_to_NSString( JSContext *cx, jsval vp, NSString **ret )
 {
 	JSString *jsstr = JS_ValueToString( cx, vp );
-	JSB_PRECONDITION3( jsstr, cx, JS_FALSE, "invalid string" );
+	JSB_PRECONDITION2( jsstr, cx, JS_FALSE, "invalid string" );
 	
 	// root it
 	vp = STRING_TO_JSVAL(jsstr);
 	
 	char *ptr = JS_EncodeString(cx, jsstr);
 	
-	JSB_PRECONDITION3(ptr, cx, JS_FALSE, "Error encoding string");
+	JSB_PRECONDITION2(ptr, cx, JS_FALSE, "Error encoding string");
 	
 //	NSString *tmp = [NSString stringWithUTF8String: ptr];
 	NSString *tmp = [NSString stringWithCString:ptr encoding:NSUTF8StringEncoding];
 	
-	JSB_PRECONDITION3( tmp, cx, JS_FALSE, "Error creating string from UTF8");
+	JSB_PRECONDITION2( tmp, cx, JS_FALSE, "Error creating string from UTF8");
 	
 	*ret = tmp;
 	JS_free( cx, ptr );
@@ -153,9 +153,9 @@ JSBool jsval_to_NSArray( JSContext *cx, jsval vp, NSArray**ret )
 	// Parsing sequence
 	JSObject *jsobj;
 	JSBool ok = JS_ValueToObject( cx, vp, &jsobj );
-	JSB_PRECONDITION3( ok, cx, JS_FALSE, "Error converting value to object");
+	JSB_PRECONDITION2( ok, cx, JS_FALSE, "Error converting value to object");
 	
-	JSB_PRECONDITION3( jsobj && JS_IsArrayObject( cx, jsobj),  cx, JS_FALSE, "Object must be an array");
+	JSB_PRECONDITION2( jsobj && JS_IsArrayObject( cx, jsobj),  cx, JS_FALSE, "Object must be an array");
 
 	
 	uint32_t len;
@@ -168,7 +168,7 @@ JSBool jsval_to_NSArray( JSContext *cx, jsval vp, NSArray**ret )
 		// XXX: forcing them to be objects, but they could also be NSString, NSDictionary or NSArray
 		id real_obj;
 		ok = jsval_is_NSObject( cx, valarg, &real_obj );
-		JSB_PRECONDITION3( ok, cx, JS_FALSE, "Error converting value to nsobject");
+		JSB_PRECONDITION2( ok, cx, JS_FALSE, "Error converting value to nsobject");
 		
 		[array addObject:real_obj];
 	}
@@ -182,9 +182,9 @@ JSBool jsval_to_NSSet( JSContext *cx, jsval vp, NSSet** ret)
 	// Parsing sequence
 	JSObject *jsobj;
 	JSBool ok = JS_ValueToObject( cx, vp, &jsobj );
-	JSB_PRECONDITION3( ok, cx, JS_FALSE, "Error converting value to object");
+	JSB_PRECONDITION2( ok, cx, JS_FALSE, "Error converting value to object");
 	
-	JSB_PRECONDITION3( jsobj && JS_IsArrayObject( cx, jsobj), cx, JS_FALSE, "Object must be an array");
+	JSB_PRECONDITION2( jsobj && JS_IsArrayObject( cx, jsobj), cx, JS_FALSE, "Object must be an array");
 
 	uint32_t len;
 	JS_GetArrayLength(cx, jsobj,&len);
@@ -196,7 +196,7 @@ JSBool jsval_to_NSSet( JSContext *cx, jsval vp, NSSet** ret)
 		// XXX: forcing them to be objects, but they could also be NSString, NSDictionary or NSArray
 		id real_obj;
 		ok = jsval_is_NSObject( cx, valarg, &real_obj );
-		JSB_PRECONDITION3( ok, cx, JS_FALSE, "Error converting value to nsobject");
+		JSB_PRECONDITION2( ok, cx, JS_FALSE, "Error converting value to nsobject");
 		
 		[set addObject:real_obj];
 	}
@@ -233,7 +233,7 @@ JSBool jsvals_variadic_to_NSArray( JSContext *cx, jsval *vp, int argc, NSArray**
 		if( ! ok )
 			ok = jsval_is_NSString(cx, *vp, (NSString**)&obj );
 		
-		JSB_PRECONDITION3( ok && obj, cx, JS_FALSE, "Error converting variadic arguments");
+		JSB_PRECONDITION2( ok && obj, cx, JS_FALSE, "Error converting variadic arguments");
 
 		// next
 		vp++;
@@ -289,19 +289,19 @@ JSBool jsval_to_CGPoint( JSContext *cx, jsval vp, CGPoint *ret )
 {
 	JSObject *jsobj;
 	JSBool ok = JS_ValueToObject( cx, vp, &jsobj );
-	JSB_PRECONDITION3( ok, cx, JS_FALSE, "Error converting value to object");
-	JSB_PRECONDITION3( jsobj, cx, JS_FALSE, "Not a valid JS object");
+	JSB_PRECONDITION2( ok, cx, JS_FALSE, "Error converting value to object");
+	JSB_PRECONDITION2( jsobj, cx, JS_FALSE, "Not a valid JS object");
 
 	jsval valx, valy;
 	ok = JS_TRUE;
 	ok &= JS_GetProperty(cx, jsobj, "x", &valx);
 	ok &= JS_GetProperty(cx, jsobj, "y", &valy);
-	JSB_PRECONDITION3( ok, cx, JS_FALSE, "Error obtaining point properties");
+	JSB_PRECONDITION2( ok, cx, JS_FALSE, "Error obtaining point properties");
 	
 	double x, y;
 	ok &= JS_ValueToNumber(cx, valx, &x);
 	ok &= JS_ValueToNumber(cx, valy, &y);
-	JSB_PRECONDITION3( ok, cx, JS_FALSE, "Error converting value to numbers");
+	JSB_PRECONDITION2( ok, cx, JS_FALSE, "Error converting value to numbers");
 
 	ret->x = x;
 	ret->y = y;
@@ -313,19 +313,19 @@ JSBool jsval_to_CGSize( JSContext *cx, jsval vp, CGSize *ret )
 {
 	JSObject *jsobj;
 	JSBool ok = JS_ValueToObject( cx, vp, &jsobj );
-	JSB_PRECONDITION3( ok, cx, JS_FALSE, "Error converting value to object");
-	JSB_PRECONDITION3( jsobj, cx, JS_FALSE, "Not a valid JS object");
+	JSB_PRECONDITION2( ok, cx, JS_FALSE, "Error converting value to object");
+	JSB_PRECONDITION2( jsobj, cx, JS_FALSE, "Not a valid JS object");
 	
 	jsval valw, valh;
 	ok = JS_TRUE;
 	ok &= JS_GetProperty(cx, jsobj, "width", &valw);
 	ok &= JS_GetProperty(cx, jsobj, "height", &valh);	
-	JSB_PRECONDITION3( ok, cx, JS_FALSE, "Error obtaining point properties");
+	JSB_PRECONDITION2( ok, cx, JS_FALSE, "Error obtaining point properties");
 	
 	double w, h;
 	ok &= JS_ValueToNumber(cx, valw, &w);
 	ok &= JS_ValueToNumber(cx, valh, &h);	
-	JSB_PRECONDITION3( ok, cx, JS_FALSE, "Error converting value to numbers");
+	JSB_PRECONDITION2( ok, cx, JS_FALSE, "Error converting value to numbers");
 	
 	ret->width = w;
 	ret->height = h;
@@ -337,8 +337,8 @@ JSBool jsval_to_CGRect( JSContext *cx, jsval vp, CGRect *ret )
 {	
 	JSObject *jsobj;
 	JSBool ok = JS_ValueToObject( cx, vp, &jsobj );
-	JSB_PRECONDITION3( ok, cx, JS_FALSE, "Error converting value to object");
-	JSB_PRECONDITION3( jsobj, cx, JS_FALSE, "Not a valid JS object");
+	JSB_PRECONDITION2( ok, cx, JS_FALSE, "Error converting value to object");
+	JSB_PRECONDITION2( jsobj, cx, JS_FALSE, "Not a valid JS object");
 	
 	jsval valx, valy, valw, valh;
 	ok = JS_TRUE;
@@ -346,14 +346,14 @@ JSBool jsval_to_CGRect( JSContext *cx, jsval vp, CGRect *ret )
 	ok &= JS_GetProperty(cx, jsobj, "y", &valy);
 	ok &= JS_GetProperty(cx, jsobj, "width", &valw);
 	ok &= JS_GetProperty(cx, jsobj, "height", &valh);
-	JSB_PRECONDITION3( ok, cx, JS_FALSE, "Error obtaining point properties");
+	JSB_PRECONDITION2( ok, cx, JS_FALSE, "Error obtaining point properties");
 	
 	double x, y, w, h;
 	ok &= JS_ValueToNumber(cx, valx, &x);
 	ok &= JS_ValueToNumber(cx, valy, &y);
 	ok &= JS_ValueToNumber(cx, valw, &w);
 	ok &= JS_ValueToNumber(cx, valh, &h);
-	JSB_PRECONDITION3( ok, cx, JS_FALSE, "Error converting value to numbers");
+	JSB_PRECONDITION2( ok, cx, JS_FALSE, "Error converting value to numbers");
 	
 	ret->origin.x = x;
 	ret->origin.y = y;
@@ -368,9 +368,9 @@ JSBool jsval_to_opaque( JSContext *cx, jsval vp, void **r)
 #ifdef __LP64__
 	JSObject *tmp_arg;
 	JSBool ok = JS_ValueToObject( cx, vp, &tmp_arg );
-	JSB_PRECONDITION3( ok, cx, JS_FALSE, "Error converting value to object");
-	JSB_PRECONDITION3( tmp_arg && JS_IsTypedArrayObject( tmp_arg, cx ), cx, JS_FALSE, "Not a TypedArray object");
-	JSB_PRECONDITION3( JS_GetTypedArrayByteLength( tmp_arg, cx ) == sizeof(void*), cx, JS_FALSE, "Invalid Typed Array lenght");
+	JSB_PRECONDITION2( ok, cx, JS_FALSE, "Error converting value to object");
+	JSB_PRECONDITION2( tmp_arg && JS_IsTypedArrayObject( tmp_arg, cx ), cx, JS_FALSE, "Not a TypedArray object");
+	JSB_PRECONDITION2( JS_GetTypedArrayByteLength( tmp_arg, cx ) == sizeof(void*), cx, JS_FALSE, "Invalid Typed Array lenght");
 	
 	uint32_t* arg_array = (uint32_t*)JS_GetArrayBufferViewData( tmp_arg, cx );
 	uint64 ret =  arg_array[0];
@@ -381,7 +381,7 @@ JSBool jsval_to_opaque( JSContext *cx, jsval vp, void **r)
 	NSCAssert( sizeof(int)==4, @"fatal!");
 	int32_t ret;
 	JSBool ok = JS_ValueToInt32(cx, vp, &ret );
-	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error converting value to int32");
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error converting value to int32");
 #endif
 	*r = (void*)ret;
 	return JS_TRUE;
@@ -391,7 +391,7 @@ JSBool jsval_to_c_class( JSContext *cx, jsval vp, void **out_native, struct jsb_
 {
 	JSObject *jsobj;
 	JSBool ok = JS_ValueToObject(cx, vp, &jsobj);
-	JSB_PRECONDITION3(ok, cx, JS_FALSE, "Error converting jsval to object");
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error converting jsval to object");
 	
 	struct jsb_c_proxy_s *proxy = jsb_get_c_proxy_for_jsobject(jsobj);
 	*out_native = proxy->handle;
@@ -430,10 +430,10 @@ JSBool jsval_to_long( JSContext *cx, jsval vp, long *r )
 	// compatibility check
 	NSCAssert( sizeof(long)==8, @"fatal! Compiler error ?");
 	JSString *jsstr = JS_ValueToString(cx, vp);
-	JSB_PRECONDITION3(jsstr, cx, JS_FALSE, "Error converting value to string");
+	JSB_PRECONDITION2(jsstr, cx, JS_FALSE, "Error converting value to string");
 	
 	char *str = JS_EncodeString(cx, jsstr);
-	JSB_PRECONDITION3(str, cx, JS_FALSE, "Error encoding string");
+	JSB_PRECONDITION2(str, cx, JS_FALSE, "Error encoding string");
 	
 	char *endptr;
 	long ret = strtol(str, &endptr, 10);
@@ -454,10 +454,10 @@ JSBool jsval_to_longlong( JSContext *cx, jsval vp, long long *r )
 {
 #if JSB_REPRESENT_LONGLONG_AS_STR
 	JSString *jsstr = JS_ValueToString(cx, vp);
-	JSB_PRECONDITION3(jsstr, cx, JS_FALSE, "Error converting value to string");
+	JSB_PRECONDITION2(jsstr, cx, JS_FALSE, "Error converting value to string");
 
 	char *str = JS_EncodeString(cx, jsstr);
-	JSB_PRECONDITION3(str, cx, JS_FALSE, "Error encoding string");
+	JSB_PRECONDITION2(str, cx, JS_FALSE, "Error encoding string");
 
 	char *endptr;
 	long long ret = strtoll(str, &endptr, 10);
@@ -469,9 +469,9 @@ JSBool jsval_to_longlong( JSContext *cx, jsval vp, long long *r )
 
 	JSObject *tmp_arg;
 	JSBool ok = JS_ValueToObject( cx, vp, &tmp_arg );
-	JSB_PRECONDITION3( ok, cx, JS_FALSE, "Error converting value to object");
-	JSB_PRECONDITION3( tmp_arg && JS_IsTypedArrayObject( tmp_arg, cx ), cx, JS_FALSE, "Not a TypedArray object");
-	JSB_PRECONDITION3( JS_GetTypedArrayByteLength( tmp_arg, cx ) == sizeof(long long), cx, JS_FALSE, "Invalid Typed Array lenght");
+	JSB_PRECONDITION2( ok, cx, JS_FALSE, "Error converting value to object");
+	JSB_PRECONDITION2( tmp_arg && JS_IsTypedArrayObject( tmp_arg, cx ), cx, JS_FALSE, "Not a TypedArray object");
+	JSB_PRECONDITION2( JS_GetTypedArrayByteLength( tmp_arg, cx ) == sizeof(long long), cx, JS_FALSE, "Invalid Typed Array lenght");
 	
 	uint32_t* arg_array = (uint32_t*)JS_GetArrayBufferViewData( tmp_arg, cx );
 	long long ret =  arg_array[0];
