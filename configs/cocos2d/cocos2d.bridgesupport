@@ -865,7 +865,7 @@
 <arg declared_type='unsigned char*' name='in' type='*'/>
 <arg declared_type='unsigned int' name='inLength' type='I'/>
 <arg declared_type='unsigned char**' name='out' type='^*'/>
-<arg declared_type='unsigned int' name='outLenghtHint' type='I'/>
+<arg declared_type='unsigned int' name='outlengthHint' type='I'/>
 <retval declared_type='int' type='i'/>
 </function>
 <function name='ccLoadFileIntoMemory'>

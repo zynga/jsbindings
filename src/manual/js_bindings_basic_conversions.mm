@@ -370,7 +370,7 @@ JSBool jsval_to_opaque( JSContext *cx, jsval vp, void **r)
 	JSBool ok = JS_ValueToObject( cx, vp, &tmp_arg );
 	JSB_PRECONDITION2( ok, cx, JS_FALSE, "Error converting value to object");
 	JSB_PRECONDITION2( tmp_arg && JS_IsTypedArrayObject( tmp_arg, cx ), cx, JS_FALSE, "Not a TypedArray object");
-	JSB_PRECONDITION2( JS_GetTypedArrayByteLength( tmp_arg, cx ) == sizeof(void*), cx, JS_FALSE, "Invalid Typed Array lenght");
+	JSB_PRECONDITION2( JS_GetTypedArrayByteLength( tmp_arg, cx ) == sizeof(void*), cx, JS_FALSE, "Invalid Typed Array length");
 	
 	uint32_t* arg_array = (uint32_t*)JS_GetArrayBufferViewData( tmp_arg, cx );
 	uint64 ret =  arg_array[0];
@@ -471,7 +471,7 @@ JSBool jsval_to_longlong( JSContext *cx, jsval vp, long long *r )
 	JSBool ok = JS_ValueToObject( cx, vp, &tmp_arg );
 	JSB_PRECONDITION2( ok, cx, JS_FALSE, "Error converting value to object");
 	JSB_PRECONDITION2( tmp_arg && JS_IsTypedArrayObject( tmp_arg, cx ), cx, JS_FALSE, "Not a TypedArray object");
-	JSB_PRECONDITION2( JS_GetTypedArrayByteLength( tmp_arg, cx ) == sizeof(long long), cx, JS_FALSE, "Invalid Typed Array lenght");
+	JSB_PRECONDITION2( JS_GetTypedArrayByteLength( tmp_arg, cx ) == sizeof(long long), cx, JS_FALSE, "Invalid Typed Array length");
 	
 	uint32_t* arg_array = (uint32_t*)JS_GetArrayBufferViewData( tmp_arg, cx );
 	long long ret =  arg_array[0];
