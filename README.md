@@ -333,15 +333,16 @@ JSB has been used successfully in the following open source projects:
 - [CocosBuilder Reader](http://cocosbuilder.com/): World editor for cocos2d
 - [Chipmunk Physics v6.1.1] (http://www.chipmunk-physics.net): 2D rigid body physics engine
 
-cocos2d-iphone v2.1 comes with 3 demo projects that uses it: 
+cocos2d-iphone v2.1 comes with 4 demo projects that uses it. 
 
-- [JS Tests](https://github.com/cocos2d/cocos2d-html5-tests/): cocos2d JS tests
-- [JS Watermelon With Me](https://github.com/cocos2d/cocos2d-iphone/tree/develop-v2/tests/WatermelonWithMe): a simple physics game that uses JS bindings for cocos2d, Chipmunk, CocosDenshion and CocosBuilder Reader.
-- [JS MoonWarriors](https://github.com/ricardoquesada/MoonWarriors): A top-down shooter that uses JS bindings for cocos2d
+Demo projects:
 
-It is noteworthy that thanks to the powerful set of rules, the JS API generated for cocos2d-iphone and the cocos2d-html5 API **ARE THE SAME**.
+- cocos2d JS Tests: [Play Web version](http://www.cocos2d-iphone.org/t/js-tests/tests/) - [Source code](https://github.com/cocos2d/cocos2d-js-tests/tree/master/tests)
+- Watermelon With Me, a simple physics game: [Play Web version](http://www.cocos2d-iphone.org/t/js-tests/games/WatermelonWithMe/) - [Source code](https://github.com/cocos2d/cocos2d-js-tests/tree/master/games/WatermelonWithMe)
+- MoonWarriors, a simple top-down shooter: [Play Web version](http://www.cocos2d-iphone.org/t/js-tests/games/MoonWarriors/) - [Source code](https://github.com/cocos2d/cocos2d-js-tests/tree/master/games/MoonWarriors)
+- CocosDragon, a simple platformer game: [Play Web version](http://www.cocos2d-iphone.org/t/js-tests/games/CocosDragonJS/Published%20files%20HTML5/) - [Source code](https://github.com/cocos2d/cocos2d-js-tests/tree/master/games/CocosDragonJS)
 
-_Moon Warriors can run on top of cocos2d-iphone + JSB or on top of cocos2d-html5 without changing a single line of code. Try the Web version from here: [Moon Warriors Web] (http://www.cocos2d-iphone.org/downloads/MoonWarriors/)_
+It is noteworthy that thanks to the powerful set of rules, the JS API generated for cocos2d-iphone + Chipmunk is exactly the same as the [cocos2d-html5](www.cocos2d-html5.org) + [ChipmunkJS](https://github.com/josephg/Chipmunk-js) API.
 
 
 ## Bugs / Limitations
