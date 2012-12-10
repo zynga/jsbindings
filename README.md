@@ -25,6 +25,7 @@ Highlights of JSB:
 - Automatically converts JS objects/types into Objective-C objects/structs/ types and vice-versa
 - Supports "subclassing" native objects in JS
 - Supports callbacks
+- Automatically generates object oriented JS API from C libraries (provided that the C API is OO, like Chipmunk)
 
 ## Creating your own bindings
 
@@ -349,7 +350,7 @@ As of this writing, these are the current bugs and/or limitations. For an update
 
 - No JS debugger. Remote debugging capabilities will be added soon.
 - No JS profiler for performance analysis.
-- Native objects control the life of JS objects
+- Native objects control the life of JS objects (only on bindings generated after Objective-C code)
 	- It means that native objects might get released while their JS counterpart is still live
 	- This logic is flawed since a JS object might point to an already released native object under certain not-so-common situations
 	- The proper solution is to control the life of native objects from JS objects. Fix in progress
