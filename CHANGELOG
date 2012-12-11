@@ -3,6 +3,7 @@ version 0.5 - XX-Jan-2013
 		Improved errors in Chipmunk and cocos2d manual functions
 		Removed JSB_PRECONDITION3(). Merged in JSB_PRECONDITION2()
 		ParticleBatchNode is bound with the official API, like SpriteBatchNode
+		cc.DrawNode.drawPoly works.
 
 version 0.4 - 4-Dec-2012
 - [FIX] JSB Chipmunk: Added missing properties
