@@ -906,27 +906,26 @@ JSBool JSB_CCDrawNode_drawPolyWithVerts_count_fillColor_borderWidth_borderColor_
 	JSObject* obj = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(obj);
 	
-	JSB_PRECONDITION( proxy && [proxy realObj], "Invalid Proxy object");
-	JSB_PRECONDITION( argc == 4, "Invalid number of arguments" );
+	JSB_PRECONDITION2( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
+	JSB_PRECONDITION2( argc == 4, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	JSObject *argArray; ccColor4F argFillColor; double argWidth; ccColor4F argBorderColor; 
 	
+	// Points
 	ok &= JS_ValueToObject(cx, *argvp++, &argArray);
-	if( ! (argArray && JS_IsArrayObject(cx, argArray) ) )
-	   return JS_FALSE;
+	JSB_PRECONDITION2( (argArray && JS_IsArrayObject(cx, argArray)) , cx, JS_FALSE, "Vertex should be anArray object");
 	
-	JSObject *tmp_arg;
-	ok &= JS_ValueToObject( cx, *argvp++, &tmp_arg );
-	argFillColor = *(ccColor4F*)JS_GetArrayBufferViewData( tmp_arg, cx );
+	// Color 4F
+	ok &= jsval_to_ccColor4F(cx, *argvp++, &argFillColor);
 
+	// Width
 	ok &= JS_ValueToNumber( cx, *argvp++, &argWidth );
 	
-	ok &= JS_ValueToObject( cx, *argvp++, &tmp_arg );
-	argBorderColor = *(ccColor4F*)JS_GetArrayBufferViewData( tmp_arg, cx );
+	// Color Border (4F)
+	ok &= jsval_to_ccColor4F(cx, *argvp++, &argBorderColor);
 
-	if( ! ok )
-		return JS_FALSE;
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error parsing arguments");
 	
 	{
 		uint32_t l;
