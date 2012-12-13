@@ -29,8 +29,6 @@
 #ifdef JSB_INCLUDE_COCOS2D
 #import "cocos2d.h"
 
-JSBool jsval_to_ccGridSize( JSContext *cx, jsval vp, ccGridSize *ret );
-jsval ccGridSize_to_jsval( JSContext *cx, ccGridSize p );
 JSBool jsval_to_ccColor3B( JSContext *cx, jsval vp, ccColor3B *ret );
 JSBool jsval_to_ccColor4B( JSContext *cx, jsval vp, ccColor4B *ret );
 JSBool jsval_to_ccColor4F( JSContext *cx, jsval vp, ccColor4F *ret );

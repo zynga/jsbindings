@@ -40,31 +40,6 @@
 #endif
 
 #pragma mark - convertions
-jsval ccGridSize_to_jsval( JSContext *cx, ccGridSize p)
-{
-	JSObject *typedArray = JS_NewInt32Array( cx, 2 );
-	int32_t *buffer = (int32_t*)JS_GetArrayBufferViewData(typedArray, cx);
-	buffer[0] = (int32_t)p.x;
-	buffer[1] = (int32_t)p.y;
-	return OBJECT_TO_JSVAL(typedArray);
-}
-
-JSBool jsval_to_ccGridSize( JSContext *cx, jsval vp, ccGridSize *ret )
-{
-	JSObject *tmp_arg;
-	JSBool ok = JS_ValueToObject( cx, vp, &tmp_arg );
-	JSB_PRECONDITION( ok, "Error converting value to object");
-	JSB_PRECONDITION( JS_IsTypedArrayObject( tmp_arg, cx ), "Not a TypedArray object");
-	JSB_PRECONDITION( JS_GetTypedArrayByteLength( tmp_arg, cx ) == sizeof(int32_t)*2, "Invalid length");
-	
-#ifdef __LP64__
-	int32_t* arg_array = (int32_t*)JS_GetArrayBufferViewData( tmp_arg, cx );
-	*ret = ccg(arg_array[0], arg_array[1] );	
-#else
-	*ret = *(ccGridSize*)JS_GetArrayBufferViewData( tmp_arg, cx);
-#endif
-	return JS_TRUE;
-}
 
 JSBool jsval_to_ccColor3B( JSContext *cx, jsval vp, ccColor3B *ret )
 {
