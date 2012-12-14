@@ -1314,6 +1314,87 @@ extern JSClass *JSB_CCHide_class;
 @end
 
 /*
+ * CCFadeOutTRTiles
+ */
+#pragma mark - CCFadeOutTRTiles
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+void JSB_CCFadeOutTRTiles_createClass(JSContext *cx, JSObject* globalObj, const char* name );
+
+// Manually generated methods
+
+
+extern JSObject *JSB_CCFadeOutTRTiles_object;
+extern JSClass *JSB_CCFadeOutTRTiles_class;
+
+#ifdef __cplusplus
+}
+#endif
+
+/* Proxy class */
+@interface JSB_CCFadeOutTRTiles : JSB_CCTiledGrid3DAction
+{
+}
+@end
+
+/*
+ * CCFadeOutUpTiles
+ */
+#pragma mark - CCFadeOutUpTiles
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+void JSB_CCFadeOutUpTiles_createClass(JSContext *cx, JSObject* globalObj, const char* name );
+
+// Manually generated methods
+
+
+extern JSObject *JSB_CCFadeOutUpTiles_object;
+extern JSClass *JSB_CCFadeOutUpTiles_class;
+
+#ifdef __cplusplus
+}
+#endif
+
+/* Proxy class */
+@interface JSB_CCFadeOutUpTiles : JSB_CCFadeOutTRTiles
+{
+}
+@end
+
+/*
+ * CCFadeOutDownTiles
+ */
+#pragma mark - CCFadeOutDownTiles
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+void JSB_CCFadeOutDownTiles_createClass(JSContext *cx, JSObject* globalObj, const char* name );
+
+// Manually generated methods
+
+
+extern JSObject *JSB_CCFadeOutDownTiles_object;
+extern JSClass *JSB_CCFadeOutDownTiles_class;
+
+#ifdef __cplusplus
+}
+#endif
+
+/* Proxy class */
+@interface JSB_CCFadeOutDownTiles : JSB_CCFadeOutUpTiles
+{
+}
+@end
+
+/*
  * CCEaseBackIn
  */
 #pragma mark - CCEaseBackIn
@@ -1642,6 +1723,33 @@ extern JSClass *JSB_CCTransitionCrossFade_class;
 
 /* Proxy class */
 @interface JSB_CCTransitionCrossFade : JSB_CCTransitionScene
+{
+}
+@end
+
+/*
+ * CCPageTurn3D
+ */
+#pragma mark - CCPageTurn3D
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+void JSB_CCPageTurn3D_createClass(JSContext *cx, JSObject* globalObj, const char* name );
+
+// Manually generated methods
+
+
+extern JSObject *JSB_CCPageTurn3D_object;
+extern JSClass *JSB_CCPageTurn3D_class;
+
+#ifdef __cplusplus
+}
+#endif
+
+/* Proxy class */
+@interface JSB_CCPageTurn3D : JSB_CCGrid3DAction
 {
 }
 @end
@@ -2080,28 +2188,28 @@ extern JSClass *JSB_CCRepeatForever_class;
 @end
 
 /*
- * CCFadeIn
+ * CCFadeOutBLTiles
  */
-#pragma mark - CCFadeIn
+#pragma mark - CCFadeOutBLTiles
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-void JSB_CCFadeIn_createClass(JSContext *cx, JSObject* globalObj, const char* name );
+void JSB_CCFadeOutBLTiles_createClass(JSContext *cx, JSObject* globalObj, const char* name );
 
 // Manually generated methods
 
 
-extern JSObject *JSB_CCFadeIn_object;
-extern JSClass *JSB_CCFadeIn_class;
+extern JSObject *JSB_CCFadeOutBLTiles_object;
+extern JSClass *JSB_CCFadeOutBLTiles_class;
 
 #ifdef __cplusplus
 }
 #endif
 
 /* Proxy class */
-@interface JSB_CCFadeIn : JSB_CCActionInterval
+@interface JSB_CCFadeOutBLTiles : JSB_CCFadeOutTRTiles
 {
 }
 @end
@@ -3595,6 +3703,33 @@ extern JSClass *JSB_CCRotateBy_class;
 
 /* Proxy class */
 @interface JSB_CCRotateBy : JSB_CCActionInterval
+{
+}
+@end
+
+/*
+ * CCFadeIn
+ */
+#pragma mark - CCFadeIn
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+void JSB_CCFadeIn_createClass(JSContext *cx, JSObject* globalObj, const char* name );
+
+// Manually generated methods
+
+
+extern JSObject *JSB_CCFadeIn_object;
+extern JSClass *JSB_CCFadeIn_class;
+
+#ifdef __cplusplus
+}
+#endif
+
+/* Proxy class */
+@interface JSB_CCFadeIn : JSB_CCActionInterval
 {
 }
 @end

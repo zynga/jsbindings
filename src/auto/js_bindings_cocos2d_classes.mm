@@ -7475,7 +7475,7 @@ void JSB_CCShakyTiles3D_createClass(JSContext *cx, JSObject* globalObj, const ch
 		JS_FS_END
 	};
 	static JSFunctionSpec st_funcs[] = {
-		JS_FN("actionWithDurationSizeRangeShakeZ", JSB_CCShakyTiles3D_actionWithDuration_size_range_shakeZ__static, 4, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("create", JSB_CCShakyTiles3D_actionWithDuration_size_range_shakeZ__static, 4, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FS_END
 	};
 
@@ -12175,6 +12175,369 @@ void JSB_CCHide_createClass(JSContext *cx, JSObject* globalObj, const char* name
 @end
 
 /*
+ * CCFadeOutTRTiles
+ */
+#pragma mark - CCFadeOutTRTiles
+
+JSClass* JSB_CCFadeOutTRTiles_class = NULL;
+JSObject* JSB_CCFadeOutTRTiles_object = NULL;
+// Constructor
+JSBool JSB_CCFadeOutTRTiles_constructor(JSContext *cx, uint32_t argc, jsval *vp)
+{
+	JSObject *jsobj = [JSB_CCFadeOutTRTiles createJSObjectWithRealObject:nil context:cx];
+	JS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(jsobj));
+	return JS_TRUE;
+}
+
+// Destructor
+void JSB_CCFadeOutTRTiles_finalize(JSFreeOp *fop, JSObject *obj)
+{
+	CCLOGINFO(@"jsbindings: finalizing JS object %p (CCFadeOutTRTiles)", obj);
+//	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(obj);
+//	if (proxy) {
+//		[[proxy realObj] release];
+//	}
+	jsb_del_proxy_for_jsobject( obj );
+}
+
+// Arguments: CGSize, ccTime
+// Ret value: float (d)
+JSBool JSB_CCFadeOutTRTiles_testFunc_time_(JSContext *cx, uint32_t argc, jsval *vp) {
+
+	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
+	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
+
+	JSB_PRECONDITION2( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
+	JSB_PRECONDITION2( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
+	jsval *argvp = JS_ARGV(cx,vp);
+	JSBool ok = JS_TRUE;
+	CGSize arg0; double arg1; 
+
+	ok &= jsval_to_CGSize( cx, *argvp++, (CGSize*) &arg0 );
+	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
+	float ret_val;
+
+	CCFadeOutTRTiles *real = (CCFadeOutTRTiles*) [proxy realObj];
+	ret_val = [real testFunc:(CGSize)arg0 time:(ccTime)arg1  ];
+	JS_SET_RVAL(cx, vp, DOUBLE_TO_JSVAL(ret_val));
+	return JS_TRUE;
+}
+
+// Arguments: ccTime, CGSize
+// Ret value: CCFadeOutTRTiles* (o)
+JSBool JSB_CCFadeOutTRTiles_actionWithDuration_size__static(JSContext *cx, uint32_t argc, jsval *vp) {
+	JSB_PRECONDITION2( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
+	jsval *argvp = JS_ARGV(cx,vp);
+	JSBool ok = JS_TRUE;
+	double arg0; CGSize arg1; 
+
+	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
+	ok &= jsval_to_CGSize( cx, *argvp++, (CGSize*) &arg1 );
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
+	CCFadeOutTRTiles* ret_val;
+
+	ret_val = [CCFadeOutTRTiles actionWithDuration:(ccTime)arg0 size:(CGSize)arg1  ];
+
+	JS_SET_RVAL(cx, vp, NSObject_to_jsval(cx, ret_val));
+
+	return JS_TRUE;
+}
+
+void JSB_CCFadeOutTRTiles_createClass(JSContext *cx, JSObject* globalObj, const char* name )
+{
+	JSB_CCFadeOutTRTiles_class = (JSClass *)calloc(1, sizeof(JSClass));
+	JSB_CCFadeOutTRTiles_class->name = name;
+	JSB_CCFadeOutTRTiles_class->addProperty = JS_PropertyStub;
+	JSB_CCFadeOutTRTiles_class->delProperty = JS_PropertyStub;
+	JSB_CCFadeOutTRTiles_class->getProperty = JS_PropertyStub;
+	JSB_CCFadeOutTRTiles_class->setProperty = JS_StrictPropertyStub;
+	JSB_CCFadeOutTRTiles_class->enumerate = JS_EnumerateStub;
+	JSB_CCFadeOutTRTiles_class->resolve = JS_ResolveStub;
+	JSB_CCFadeOutTRTiles_class->convert = JS_ConvertStub;
+	JSB_CCFadeOutTRTiles_class->finalize = JSB_CCFadeOutTRTiles_finalize;
+	JSB_CCFadeOutTRTiles_class->flags = 0;
+
+	static JSPropertySpec properties[] = {
+		{0, 0, 0, 0, 0}
+	};
+	static JSFunctionSpec funcs[] = {
+		JS_FN("testFuncTime", JSB_CCFadeOutTRTiles_testFunc_time_, 2, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FS_END
+	};
+	static JSFunctionSpec st_funcs[] = {
+		JS_FN("create", JSB_CCFadeOutTRTiles_actionWithDuration_size__static, 2, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FS_END
+	};
+
+	JSB_CCFadeOutTRTiles_object = JS_InitClass(cx, globalObj, JSB_CCTiledGrid3DAction_object, JSB_CCFadeOutTRTiles_class, JSB_CCFadeOutTRTiles_constructor,0,properties,funcs,NULL,st_funcs);
+	JSBool found;
+	JS_SetPropertyAttributes(cx, globalObj, name, JSPROP_ENUMERATE | JSPROP_READONLY, &found);
+}
+
+@implementation JSB_CCFadeOutTRTiles
+
++(JSObject*) createJSObjectWithRealObject:(id)realObj context:(JSContext*)cx
+{
+	JSObject *jsobj = JS_NewObject(cx, JSB_CCFadeOutTRTiles_class, JSB_CCFadeOutTRTiles_object, NULL);
+	JSB_CCFadeOutTRTiles *proxy = [[JSB_CCFadeOutTRTiles alloc] initWithJSObject:jsobj class:[CCFadeOutTRTiles class]];
+	[proxy setRealObj:realObj];
+
+	if( realObj ) {
+		objc_setAssociatedObject(realObj, &JSB_association_proxy_key, proxy, OBJC_ASSOCIATION_RETAIN);
+		[proxy release];
+	}
+
+	[self swizzleMethods];
+
+	return jsobj;
+}
+
+@end
+
+/*
+ * CCFadeOutUpTiles
+ */
+#pragma mark - CCFadeOutUpTiles
+
+JSClass* JSB_CCFadeOutUpTiles_class = NULL;
+JSObject* JSB_CCFadeOutUpTiles_object = NULL;
+// Constructor
+JSBool JSB_CCFadeOutUpTiles_constructor(JSContext *cx, uint32_t argc, jsval *vp)
+{
+	JSObject *jsobj = [JSB_CCFadeOutUpTiles createJSObjectWithRealObject:nil context:cx];
+	JS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(jsobj));
+	return JS_TRUE;
+}
+
+// Destructor
+void JSB_CCFadeOutUpTiles_finalize(JSFreeOp *fop, JSObject *obj)
+{
+	CCLOGINFO(@"jsbindings: finalizing JS object %p (CCFadeOutUpTiles)", obj);
+//	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(obj);
+//	if (proxy) {
+//		[[proxy realObj] release];
+//	}
+	jsb_del_proxy_for_jsobject( obj );
+}
+
+// Arguments: CGSize, ccTime
+// Ret value: float (d)
+JSBool JSB_CCFadeOutUpTiles_testFunc_time_(JSContext *cx, uint32_t argc, jsval *vp) {
+
+	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
+	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
+
+	JSB_PRECONDITION2( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
+	JSB_PRECONDITION2( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
+	jsval *argvp = JS_ARGV(cx,vp);
+	JSBool ok = JS_TRUE;
+	CGSize arg0; double arg1; 
+
+	ok &= jsval_to_CGSize( cx, *argvp++, (CGSize*) &arg0 );
+	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
+	float ret_val;
+
+	CCFadeOutUpTiles *real = (CCFadeOutUpTiles*) [proxy realObj];
+	ret_val = [real testFunc:(CGSize)arg0 time:(ccTime)arg1  ];
+	JS_SET_RVAL(cx, vp, DOUBLE_TO_JSVAL(ret_val));
+	return JS_TRUE;
+}
+
+// Arguments: ccTime, CGSize
+// Ret value: CCFadeOutUpTiles* (o)
+JSBool JSB_CCFadeOutUpTiles_actionWithDuration_size__static(JSContext *cx, uint32_t argc, jsval *vp) {
+	JSB_PRECONDITION2( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
+	jsval *argvp = JS_ARGV(cx,vp);
+	JSBool ok = JS_TRUE;
+	double arg0; CGSize arg1; 
+
+	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
+	ok &= jsval_to_CGSize( cx, *argvp++, (CGSize*) &arg1 );
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
+	CCFadeOutUpTiles* ret_val;
+
+	ret_val = [CCFadeOutUpTiles actionWithDuration:(ccTime)arg0 size:(CGSize)arg1  ];
+
+	JS_SET_RVAL(cx, vp, NSObject_to_jsval(cx, ret_val));
+
+	return JS_TRUE;
+}
+
+void JSB_CCFadeOutUpTiles_createClass(JSContext *cx, JSObject* globalObj, const char* name )
+{
+	JSB_CCFadeOutUpTiles_class = (JSClass *)calloc(1, sizeof(JSClass));
+	JSB_CCFadeOutUpTiles_class->name = name;
+	JSB_CCFadeOutUpTiles_class->addProperty = JS_PropertyStub;
+	JSB_CCFadeOutUpTiles_class->delProperty = JS_PropertyStub;
+	JSB_CCFadeOutUpTiles_class->getProperty = JS_PropertyStub;
+	JSB_CCFadeOutUpTiles_class->setProperty = JS_StrictPropertyStub;
+	JSB_CCFadeOutUpTiles_class->enumerate = JS_EnumerateStub;
+	JSB_CCFadeOutUpTiles_class->resolve = JS_ResolveStub;
+	JSB_CCFadeOutUpTiles_class->convert = JS_ConvertStub;
+	JSB_CCFadeOutUpTiles_class->finalize = JSB_CCFadeOutUpTiles_finalize;
+	JSB_CCFadeOutUpTiles_class->flags = 0;
+
+	static JSPropertySpec properties[] = {
+		{0, 0, 0, 0, 0}
+	};
+	static JSFunctionSpec funcs[] = {
+		JS_FN("testFuncTime", JSB_CCFadeOutUpTiles_testFunc_time_, 2, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FS_END
+	};
+	static JSFunctionSpec st_funcs[] = {
+		JS_FN("create", JSB_CCFadeOutUpTiles_actionWithDuration_size__static, 2, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FS_END
+	};
+
+	JSB_CCFadeOutUpTiles_object = JS_InitClass(cx, globalObj, JSB_CCFadeOutTRTiles_object, JSB_CCFadeOutUpTiles_class, JSB_CCFadeOutUpTiles_constructor,0,properties,funcs,NULL,st_funcs);
+	JSBool found;
+	JS_SetPropertyAttributes(cx, globalObj, name, JSPROP_ENUMERATE | JSPROP_READONLY, &found);
+}
+
+@implementation JSB_CCFadeOutUpTiles
+
++(JSObject*) createJSObjectWithRealObject:(id)realObj context:(JSContext*)cx
+{
+	JSObject *jsobj = JS_NewObject(cx, JSB_CCFadeOutUpTiles_class, JSB_CCFadeOutUpTiles_object, NULL);
+	JSB_CCFadeOutUpTiles *proxy = [[JSB_CCFadeOutUpTiles alloc] initWithJSObject:jsobj class:[CCFadeOutUpTiles class]];
+	[proxy setRealObj:realObj];
+
+	if( realObj ) {
+		objc_setAssociatedObject(realObj, &JSB_association_proxy_key, proxy, OBJC_ASSOCIATION_RETAIN);
+		[proxy release];
+	}
+
+	[self swizzleMethods];
+
+	return jsobj;
+}
+
+@end
+
+/*
+ * CCFadeOutDownTiles
+ */
+#pragma mark - CCFadeOutDownTiles
+
+JSClass* JSB_CCFadeOutDownTiles_class = NULL;
+JSObject* JSB_CCFadeOutDownTiles_object = NULL;
+// Constructor
+JSBool JSB_CCFadeOutDownTiles_constructor(JSContext *cx, uint32_t argc, jsval *vp)
+{
+	JSObject *jsobj = [JSB_CCFadeOutDownTiles createJSObjectWithRealObject:nil context:cx];
+	JS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(jsobj));
+	return JS_TRUE;
+}
+
+// Destructor
+void JSB_CCFadeOutDownTiles_finalize(JSFreeOp *fop, JSObject *obj)
+{
+	CCLOGINFO(@"jsbindings: finalizing JS object %p (CCFadeOutDownTiles)", obj);
+//	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(obj);
+//	if (proxy) {
+//		[[proxy realObj] release];
+//	}
+	jsb_del_proxy_for_jsobject( obj );
+}
+
+// Arguments: CGSize, ccTime
+// Ret value: float (d)
+JSBool JSB_CCFadeOutDownTiles_testFunc_time_(JSContext *cx, uint32_t argc, jsval *vp) {
+
+	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
+	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
+
+	JSB_PRECONDITION2( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
+	JSB_PRECONDITION2( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
+	jsval *argvp = JS_ARGV(cx,vp);
+	JSBool ok = JS_TRUE;
+	CGSize arg0; double arg1; 
+
+	ok &= jsval_to_CGSize( cx, *argvp++, (CGSize*) &arg0 );
+	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
+	float ret_val;
+
+	CCFadeOutDownTiles *real = (CCFadeOutDownTiles*) [proxy realObj];
+	ret_val = [real testFunc:(CGSize)arg0 time:(ccTime)arg1  ];
+	JS_SET_RVAL(cx, vp, DOUBLE_TO_JSVAL(ret_val));
+	return JS_TRUE;
+}
+
+// Arguments: ccTime, CGSize
+// Ret value: CCFadeOutDownTiles* (o)
+JSBool JSB_CCFadeOutDownTiles_actionWithDuration_size__static(JSContext *cx, uint32_t argc, jsval *vp) {
+	JSB_PRECONDITION2( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
+	jsval *argvp = JS_ARGV(cx,vp);
+	JSBool ok = JS_TRUE;
+	double arg0; CGSize arg1; 
+
+	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
+	ok &= jsval_to_CGSize( cx, *argvp++, (CGSize*) &arg1 );
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
+	CCFadeOutDownTiles* ret_val;
+
+	ret_val = [CCFadeOutDownTiles actionWithDuration:(ccTime)arg0 size:(CGSize)arg1  ];
+
+	JS_SET_RVAL(cx, vp, NSObject_to_jsval(cx, ret_val));
+
+	return JS_TRUE;
+}
+
+void JSB_CCFadeOutDownTiles_createClass(JSContext *cx, JSObject* globalObj, const char* name )
+{
+	JSB_CCFadeOutDownTiles_class = (JSClass *)calloc(1, sizeof(JSClass));
+	JSB_CCFadeOutDownTiles_class->name = name;
+	JSB_CCFadeOutDownTiles_class->addProperty = JS_PropertyStub;
+	JSB_CCFadeOutDownTiles_class->delProperty = JS_PropertyStub;
+	JSB_CCFadeOutDownTiles_class->getProperty = JS_PropertyStub;
+	JSB_CCFadeOutDownTiles_class->setProperty = JS_StrictPropertyStub;
+	JSB_CCFadeOutDownTiles_class->enumerate = JS_EnumerateStub;
+	JSB_CCFadeOutDownTiles_class->resolve = JS_ResolveStub;
+	JSB_CCFadeOutDownTiles_class->convert = JS_ConvertStub;
+	JSB_CCFadeOutDownTiles_class->finalize = JSB_CCFadeOutDownTiles_finalize;
+	JSB_CCFadeOutDownTiles_class->flags = 0;
+
+	static JSPropertySpec properties[] = {
+		{0, 0, 0, 0, 0}
+	};
+	static JSFunctionSpec funcs[] = {
+		JS_FN("testFuncTime", JSB_CCFadeOutDownTiles_testFunc_time_, 2, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FS_END
+	};
+	static JSFunctionSpec st_funcs[] = {
+		JS_FN("create", JSB_CCFadeOutDownTiles_actionWithDuration_size__static, 2, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FS_END
+	};
+
+	JSB_CCFadeOutDownTiles_object = JS_InitClass(cx, globalObj, JSB_CCFadeOutUpTiles_object, JSB_CCFadeOutDownTiles_class, JSB_CCFadeOutDownTiles_constructor,0,properties,funcs,NULL,st_funcs);
+	JSBool found;
+	JS_SetPropertyAttributes(cx, globalObj, name, JSPROP_ENUMERATE | JSPROP_READONLY, &found);
+}
+
+@implementation JSB_CCFadeOutDownTiles
+
++(JSObject*) createJSObjectWithRealObject:(id)realObj context:(JSContext*)cx
+{
+	JSObject *jsobj = JS_NewObject(cx, JSB_CCFadeOutDownTiles_class, JSB_CCFadeOutDownTiles_object, NULL);
+	JSB_CCFadeOutDownTiles *proxy = [[JSB_CCFadeOutDownTiles alloc] initWithJSObject:jsobj class:[CCFadeOutDownTiles class]];
+	[proxy setRealObj:realObj];
+
+	if( realObj ) {
+		objc_setAssociatedObject(realObj, &JSB_association_proxy_key, proxy, OBJC_ASSOCIATION_RETAIN);
+		[proxy release];
+	}
+
+	[self swizzleMethods];
+
+	return jsobj;
+}
+
+@end
+
+/*
  * CCEaseBackIn
  */
 #pragma mark - CCEaseBackIn
@@ -14465,7 +14828,7 @@ void JSB_CCJumpTiles3D_createClass(JSContext *cx, JSObject* globalObj, const cha
 		JS_FS_END
 	};
 	static JSFunctionSpec st_funcs[] = {
-		JS_FN("actionWithDurationSizeJumpsAmplitude", JSB_CCJumpTiles3D_actionWithDuration_size_jumps_amplitude__static, 4, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("create", JSB_CCJumpTiles3D_actionWithDuration_size_jumps_amplitude__static, 4, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FS_END
 	};
 
@@ -16047,6 +16410,125 @@ void JSB_CCTransitionCrossFade_createClass(JSContext *cx, JSObject* globalObj, c
 {
 	JSObject *jsobj = JS_NewObject(cx, JSB_CCTransitionCrossFade_class, JSB_CCTransitionCrossFade_object, NULL);
 	JSB_CCTransitionCrossFade *proxy = [[JSB_CCTransitionCrossFade alloc] initWithJSObject:jsobj class:[CCTransitionCrossFade class]];
+	[proxy setRealObj:realObj];
+
+	if( realObj ) {
+		objc_setAssociatedObject(realObj, &JSB_association_proxy_key, proxy, OBJC_ASSOCIATION_RETAIN);
+		[proxy release];
+	}
+
+	[self swizzleMethods];
+
+	return jsobj;
+}
+
+@end
+
+/*
+ * CCPageTurn3D
+ */
+#pragma mark - CCPageTurn3D
+
+JSClass* JSB_CCPageTurn3D_class = NULL;
+JSObject* JSB_CCPageTurn3D_object = NULL;
+// Constructor
+JSBool JSB_CCPageTurn3D_constructor(JSContext *cx, uint32_t argc, jsval *vp)
+{
+	JSObject *jsobj = [JSB_CCPageTurn3D createJSObjectWithRealObject:nil context:cx];
+	JS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(jsobj));
+	return JS_TRUE;
+}
+
+// Destructor
+void JSB_CCPageTurn3D_finalize(JSFreeOp *fop, JSObject *obj)
+{
+	CCLOGINFO(@"jsbindings: finalizing JS object %p (CCPageTurn3D)", obj);
+//	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(obj);
+//	if (proxy) {
+//		[[proxy realObj] release];
+//	}
+	jsb_del_proxy_for_jsobject( obj );
+}
+
+// Arguments: ccTime
+// Ret value: void (None)
+JSBool JSB_CCPageTurn3D_update_(JSContext *cx, uint32_t argc, jsval *vp) {
+
+	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
+	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
+
+	JSB_PRECONDITION2( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
+	JSB_PRECONDITION2( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
+	jsval *argvp = JS_ARGV(cx,vp);
+	JSBool ok = JS_TRUE;
+	double arg0; 
+
+	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
+
+	CCPageTurn3D *real = (CCPageTurn3D*) [proxy realObj];
+	[real update:(ccTime)arg0  ];
+	JS_SET_RVAL(cx, vp, JSVAL_VOID);
+	return JS_TRUE;
+}
+
+// Arguments: ccTime, CGSize
+// Ret value: CCPageTurn3D* (o)
+JSBool JSB_CCPageTurn3D_actionWithDuration_size__static(JSContext *cx, uint32_t argc, jsval *vp) {
+	JSB_PRECONDITION2( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
+	jsval *argvp = JS_ARGV(cx,vp);
+	JSBool ok = JS_TRUE;
+	double arg0; CGSize arg1; 
+
+	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
+	ok &= jsval_to_CGSize( cx, *argvp++, (CGSize*) &arg1 );
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
+	CCPageTurn3D* ret_val;
+
+	ret_val = [CCPageTurn3D actionWithDuration:(ccTime)arg0 size:(CGSize)arg1  ];
+
+	JS_SET_RVAL(cx, vp, NSObject_to_jsval(cx, ret_val));
+
+	return JS_TRUE;
+}
+
+void JSB_CCPageTurn3D_createClass(JSContext *cx, JSObject* globalObj, const char* name )
+{
+	JSB_CCPageTurn3D_class = (JSClass *)calloc(1, sizeof(JSClass));
+	JSB_CCPageTurn3D_class->name = name;
+	JSB_CCPageTurn3D_class->addProperty = JS_PropertyStub;
+	JSB_CCPageTurn3D_class->delProperty = JS_PropertyStub;
+	JSB_CCPageTurn3D_class->getProperty = JS_PropertyStub;
+	JSB_CCPageTurn3D_class->setProperty = JS_StrictPropertyStub;
+	JSB_CCPageTurn3D_class->enumerate = JS_EnumerateStub;
+	JSB_CCPageTurn3D_class->resolve = JS_ResolveStub;
+	JSB_CCPageTurn3D_class->convert = JS_ConvertStub;
+	JSB_CCPageTurn3D_class->finalize = JSB_CCPageTurn3D_finalize;
+	JSB_CCPageTurn3D_class->flags = 0;
+
+	static JSPropertySpec properties[] = {
+		{0, 0, 0, 0, 0}
+	};
+	static JSFunctionSpec funcs[] = {
+		JS_FN("update", JSB_CCPageTurn3D_update_, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FS_END
+	};
+	static JSFunctionSpec st_funcs[] = {
+		JS_FN("create", JSB_CCPageTurn3D_actionWithDuration_size__static, 2, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FS_END
+	};
+
+	JSB_CCPageTurn3D_object = JS_InitClass(cx, globalObj, JSB_CCGrid3DAction_object, JSB_CCPageTurn3D_class, JSB_CCPageTurn3D_constructor,0,properties,funcs,NULL,st_funcs);
+	JSBool found;
+	JS_SetPropertyAttributes(cx, globalObj, name, JSPROP_ENUMERATE | JSPROP_READONLY, &found);
+}
+
+@implementation JSB_CCPageTurn3D
+
++(JSObject*) createJSObjectWithRealObject:(id)realObj context:(JSContext*)cx
+{
+	JSObject *jsobj = JS_NewObject(cx, JSB_CCPageTurn3D_class, JSB_CCPageTurn3D_object, NULL);
+	JSB_CCPageTurn3D *proxy = [[JSB_CCPageTurn3D alloc] initWithJSObject:jsobj class:[CCPageTurn3D class]];
 	[proxy setRealObj:realObj];
 
 	if( realObj ) {
@@ -19135,24 +19617,24 @@ void JSB_CCRepeatForever_createClass(JSContext *cx, JSObject* globalObj, const c
 @end
 
 /*
- * CCFadeIn
+ * CCFadeOutBLTiles
  */
-#pragma mark - CCFadeIn
+#pragma mark - CCFadeOutBLTiles
 
-JSClass* JSB_CCFadeIn_class = NULL;
-JSObject* JSB_CCFadeIn_object = NULL;
+JSClass* JSB_CCFadeOutBLTiles_class = NULL;
+JSObject* JSB_CCFadeOutBLTiles_object = NULL;
 // Constructor
-JSBool JSB_CCFadeIn_constructor(JSContext *cx, uint32_t argc, jsval *vp)
+JSBool JSB_CCFadeOutBLTiles_constructor(JSContext *cx, uint32_t argc, jsval *vp)
 {
-	JSObject *jsobj = [JSB_CCFadeIn createJSObjectWithRealObject:nil context:cx];
+	JSObject *jsobj = [JSB_CCFadeOutBLTiles createJSObjectWithRealObject:nil context:cx];
 	JS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(jsobj));
 	return JS_TRUE;
 }
 
 // Destructor
-void JSB_CCFadeIn_finalize(JSFreeOp *fop, JSObject *obj)
+void JSB_CCFadeOutBLTiles_finalize(JSFreeOp *fop, JSObject *obj)
 {
-	CCLOGINFO(@"jsbindings: finalizing JS object %p (CCFadeIn)", obj);
+	CCLOGINFO(@"jsbindings: finalizing JS object %p (CCFadeOutBLTiles)", obj);
 //	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(obj);
 //	if (proxy) {
 //		[[proxy realObj] release];
@@ -19160,84 +19642,87 @@ void JSB_CCFadeIn_finalize(JSFreeOp *fop, JSObject *obj)
 	jsb_del_proxy_for_jsobject( obj );
 }
 
-// Arguments: ccTime
-// Ret value: void (None)
-JSBool JSB_CCFadeIn_update_(JSContext *cx, uint32_t argc, jsval *vp) {
+// Arguments: CGSize, ccTime
+// Ret value: float (d)
+JSBool JSB_CCFadeOutBLTiles_testFunc_time_(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
 
 	JSB_PRECONDITION2( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
-	JSB_PRECONDITION2( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
+	JSB_PRECONDITION2( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
-	double arg0; 
+	CGSize arg0; double arg1; 
 
-	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
+	ok &= jsval_to_CGSize( cx, *argvp++, (CGSize*) &arg0 );
+	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
+	float ret_val;
 
-	CCFadeIn *real = (CCFadeIn*) [proxy realObj];
-	[real update:(ccTime)arg0  ];
-	JS_SET_RVAL(cx, vp, JSVAL_VOID);
+	CCFadeOutBLTiles *real = (CCFadeOutBLTiles*) [proxy realObj];
+	ret_val = [real testFunc:(CGSize)arg0 time:(ccTime)arg1  ];
+	JS_SET_RVAL(cx, vp, DOUBLE_TO_JSVAL(ret_val));
 	return JS_TRUE;
 }
 
-// Arguments: ccTime
-// Ret value: CCFadeIn* (o)
-JSBool JSB_CCFadeIn_actionWithDuration__static(JSContext *cx, uint32_t argc, jsval *vp) {
-	JSB_PRECONDITION2( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
+// Arguments: ccTime, CGSize
+// Ret value: CCFadeOutBLTiles* (o)
+JSBool JSB_CCFadeOutBLTiles_actionWithDuration_size__static(JSContext *cx, uint32_t argc, jsval *vp) {
+	JSB_PRECONDITION2( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
-	double arg0; 
+	double arg0; CGSize arg1; 
 
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
+	ok &= jsval_to_CGSize( cx, *argvp++, (CGSize*) &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
-	CCFadeIn* ret_val;
+	CCFadeOutBLTiles* ret_val;
 
-	ret_val = [CCFadeIn actionWithDuration:(ccTime)arg0  ];
+	ret_val = [CCFadeOutBLTiles actionWithDuration:(ccTime)arg0 size:(CGSize)arg1  ];
 
 	JS_SET_RVAL(cx, vp, NSObject_to_jsval(cx, ret_val));
 
 	return JS_TRUE;
 }
 
-void JSB_CCFadeIn_createClass(JSContext *cx, JSObject* globalObj, const char* name )
+void JSB_CCFadeOutBLTiles_createClass(JSContext *cx, JSObject* globalObj, const char* name )
 {
-	JSB_CCFadeIn_class = (JSClass *)calloc(1, sizeof(JSClass));
-	JSB_CCFadeIn_class->name = name;
-	JSB_CCFadeIn_class->addProperty = JS_PropertyStub;
-	JSB_CCFadeIn_class->delProperty = JS_PropertyStub;
-	JSB_CCFadeIn_class->getProperty = JS_PropertyStub;
-	JSB_CCFadeIn_class->setProperty = JS_StrictPropertyStub;
-	JSB_CCFadeIn_class->enumerate = JS_EnumerateStub;
-	JSB_CCFadeIn_class->resolve = JS_ResolveStub;
-	JSB_CCFadeIn_class->convert = JS_ConvertStub;
-	JSB_CCFadeIn_class->finalize = JSB_CCFadeIn_finalize;
-	JSB_CCFadeIn_class->flags = 0;
+	JSB_CCFadeOutBLTiles_class = (JSClass *)calloc(1, sizeof(JSClass));
+	JSB_CCFadeOutBLTiles_class->name = name;
+	JSB_CCFadeOutBLTiles_class->addProperty = JS_PropertyStub;
+	JSB_CCFadeOutBLTiles_class->delProperty = JS_PropertyStub;
+	JSB_CCFadeOutBLTiles_class->getProperty = JS_PropertyStub;
+	JSB_CCFadeOutBLTiles_class->setProperty = JS_StrictPropertyStub;
+	JSB_CCFadeOutBLTiles_class->enumerate = JS_EnumerateStub;
+	JSB_CCFadeOutBLTiles_class->resolve = JS_ResolveStub;
+	JSB_CCFadeOutBLTiles_class->convert = JS_ConvertStub;
+	JSB_CCFadeOutBLTiles_class->finalize = JSB_CCFadeOutBLTiles_finalize;
+	JSB_CCFadeOutBLTiles_class->flags = 0;
 
 	static JSPropertySpec properties[] = {
 		{0, 0, 0, 0, 0}
 	};
 	static JSFunctionSpec funcs[] = {
-		JS_FN("update", JSB_CCFadeIn_update_, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("testFuncTime", JSB_CCFadeOutBLTiles_testFunc_time_, 2, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FS_END
 	};
 	static JSFunctionSpec st_funcs[] = {
-		JS_FN("create", JSB_CCFadeIn_actionWithDuration__static, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("create", JSB_CCFadeOutBLTiles_actionWithDuration_size__static, 2, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FS_END
 	};
 
-	JSB_CCFadeIn_object = JS_InitClass(cx, globalObj, JSB_CCActionInterval_object, JSB_CCFadeIn_class, JSB_CCFadeIn_constructor,0,properties,funcs,NULL,st_funcs);
+	JSB_CCFadeOutBLTiles_object = JS_InitClass(cx, globalObj, JSB_CCFadeOutTRTiles_object, JSB_CCFadeOutBLTiles_class, JSB_CCFadeOutBLTiles_constructor,0,properties,funcs,NULL,st_funcs);
 	JSBool found;
 	JS_SetPropertyAttributes(cx, globalObj, name, JSPROP_ENUMERATE | JSPROP_READONLY, &found);
 }
 
-@implementation JSB_CCFadeIn
+@implementation JSB_CCFadeOutBLTiles
 
 +(JSObject*) createJSObjectWithRealObject:(id)realObj context:(JSContext*)cx
 {
-	JSObject *jsobj = JS_NewObject(cx, JSB_CCFadeIn_class, JSB_CCFadeIn_object, NULL);
-	JSB_CCFadeIn *proxy = [[JSB_CCFadeIn alloc] initWithJSObject:jsobj class:[CCFadeIn class]];
+	JSObject *jsobj = JS_NewObject(cx, JSB_CCFadeOutBLTiles_class, JSB_CCFadeOutBLTiles_object, NULL);
+	JSB_CCFadeOutBLTiles *proxy = [[JSB_CCFadeOutBLTiles alloc] initWithJSObject:jsobj class:[CCFadeOutBLTiles class]];
 	[proxy setRealObj:realObj];
 
 	if( realObj ) {
@@ -27976,7 +28461,7 @@ void JSB_CCShatteredTiles3D_createClass(JSContext *cx, JSObject* globalObj, cons
 		JS_FS_END
 	};
 	static JSFunctionSpec st_funcs[] = {
-		JS_FN("actionWithDurationSizeRangeShatterZ", JSB_CCShatteredTiles3D_actionWithDuration_size_range_shatterZ__static, 4, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("create", JSB_CCShatteredTiles3D_actionWithDuration_size_range_shatterZ__static, 4, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FS_END
 	};
 
@@ -29044,7 +29529,7 @@ void JSB_CCSplitRows_createClass(JSContext *cx, JSObject* globalObj, const char*
 		JS_FS_END
 	};
 	static JSFunctionSpec st_funcs[] = {
-		JS_FN("actionWithDurationRows", JSB_CCSplitRows_actionWithDuration_rows__static, 2, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("create", JSB_CCSplitRows_actionWithDuration_rows__static, 2, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FS_END
 	};
 
@@ -29555,7 +30040,7 @@ void JSB_CCRipple3D_createClass(JSContext *cx, JSObject* globalObj, const char* 
 		JS_FS_END
 	};
 	static JSFunctionSpec st_funcs[] = {
-		JS_FN("actionWithDurationSizePositionRadiusWavesAmplitude", JSB_CCRipple3D_actionWithDuration_size_position_radius_waves_amplitude__static, 6, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("create", JSB_CCRipple3D_actionWithDuration_size_position_radius_waves_amplitude__static, 6, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FS_END
 	};
 
@@ -29745,6 +30230,124 @@ void JSB_CCRotateBy_createClass(JSContext *cx, JSObject* globalObj, const char* 
 {
 	JSObject *jsobj = JS_NewObject(cx, JSB_CCRotateBy_class, JSB_CCRotateBy_object, NULL);
 	JSB_CCRotateBy *proxy = [[JSB_CCRotateBy alloc] initWithJSObject:jsobj class:[CCRotateBy class]];
+	[proxy setRealObj:realObj];
+
+	if( realObj ) {
+		objc_setAssociatedObject(realObj, &JSB_association_proxy_key, proxy, OBJC_ASSOCIATION_RETAIN);
+		[proxy release];
+	}
+
+	[self swizzleMethods];
+
+	return jsobj;
+}
+
+@end
+
+/*
+ * CCFadeIn
+ */
+#pragma mark - CCFadeIn
+
+JSClass* JSB_CCFadeIn_class = NULL;
+JSObject* JSB_CCFadeIn_object = NULL;
+// Constructor
+JSBool JSB_CCFadeIn_constructor(JSContext *cx, uint32_t argc, jsval *vp)
+{
+	JSObject *jsobj = [JSB_CCFadeIn createJSObjectWithRealObject:nil context:cx];
+	JS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(jsobj));
+	return JS_TRUE;
+}
+
+// Destructor
+void JSB_CCFadeIn_finalize(JSFreeOp *fop, JSObject *obj)
+{
+	CCLOGINFO(@"jsbindings: finalizing JS object %p (CCFadeIn)", obj);
+//	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(obj);
+//	if (proxy) {
+//		[[proxy realObj] release];
+//	}
+	jsb_del_proxy_for_jsobject( obj );
+}
+
+// Arguments: ccTime
+// Ret value: void (None)
+JSBool JSB_CCFadeIn_update_(JSContext *cx, uint32_t argc, jsval *vp) {
+
+	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
+	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
+
+	JSB_PRECONDITION2( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
+	JSB_PRECONDITION2( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
+	jsval *argvp = JS_ARGV(cx,vp);
+	JSBool ok = JS_TRUE;
+	double arg0; 
+
+	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
+
+	CCFadeIn *real = (CCFadeIn*) [proxy realObj];
+	[real update:(ccTime)arg0  ];
+	JS_SET_RVAL(cx, vp, JSVAL_VOID);
+	return JS_TRUE;
+}
+
+// Arguments: ccTime
+// Ret value: CCFadeIn* (o)
+JSBool JSB_CCFadeIn_actionWithDuration__static(JSContext *cx, uint32_t argc, jsval *vp) {
+	JSB_PRECONDITION2( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
+	jsval *argvp = JS_ARGV(cx,vp);
+	JSBool ok = JS_TRUE;
+	double arg0; 
+
+	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
+	CCFadeIn* ret_val;
+
+	ret_val = [CCFadeIn actionWithDuration:(ccTime)arg0  ];
+
+	JS_SET_RVAL(cx, vp, NSObject_to_jsval(cx, ret_val));
+
+	return JS_TRUE;
+}
+
+void JSB_CCFadeIn_createClass(JSContext *cx, JSObject* globalObj, const char* name )
+{
+	JSB_CCFadeIn_class = (JSClass *)calloc(1, sizeof(JSClass));
+	JSB_CCFadeIn_class->name = name;
+	JSB_CCFadeIn_class->addProperty = JS_PropertyStub;
+	JSB_CCFadeIn_class->delProperty = JS_PropertyStub;
+	JSB_CCFadeIn_class->getProperty = JS_PropertyStub;
+	JSB_CCFadeIn_class->setProperty = JS_StrictPropertyStub;
+	JSB_CCFadeIn_class->enumerate = JS_EnumerateStub;
+	JSB_CCFadeIn_class->resolve = JS_ResolveStub;
+	JSB_CCFadeIn_class->convert = JS_ConvertStub;
+	JSB_CCFadeIn_class->finalize = JSB_CCFadeIn_finalize;
+	JSB_CCFadeIn_class->flags = 0;
+
+	static JSPropertySpec properties[] = {
+		{0, 0, 0, 0, 0}
+	};
+	static JSFunctionSpec funcs[] = {
+		JS_FN("update", JSB_CCFadeIn_update_, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FS_END
+	};
+	static JSFunctionSpec st_funcs[] = {
+		JS_FN("create", JSB_CCFadeIn_actionWithDuration__static, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FS_END
+	};
+
+	JSB_CCFadeIn_object = JS_InitClass(cx, globalObj, JSB_CCActionInterval_object, JSB_CCFadeIn_class, JSB_CCFadeIn_constructor,0,properties,funcs,NULL,st_funcs);
+	JSBool found;
+	JS_SetPropertyAttributes(cx, globalObj, name, JSPROP_ENUMERATE | JSPROP_READONLY, &found);
+}
+
+@implementation JSB_CCFadeIn
+
++(JSObject*) createJSObjectWithRealObject:(id)realObj context:(JSContext*)cx
+{
+	JSObject *jsobj = JS_NewObject(cx, JSB_CCFadeIn_class, JSB_CCFadeIn_object, NULL);
+	JSB_CCFadeIn *proxy = [[JSB_CCFadeIn alloc] initWithJSObject:jsobj class:[CCFadeIn class]];
 	[proxy setRealObj:realObj];
 
 	if( realObj ) {
@@ -31332,7 +31935,7 @@ void JSB_CCShuffleTiles_createClass(JSContext *cx, JSObject* globalObj, const ch
 		JS_FS_END
 	};
 	static JSFunctionSpec st_funcs[] = {
-		JS_FN("actionWithDurationSizeSeed", JSB_CCShuffleTiles_actionWithDuration_size_seed__static, 3, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("create", JSB_CCShuffleTiles_actionWithDuration_size_seed__static, 3, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FS_END
 	};
 
@@ -33227,7 +33830,7 @@ void JSB_CCShaky3D_createClass(JSContext *cx, JSObject* globalObj, const char* n
 		JS_FS_END
 	};
 	static JSFunctionSpec st_funcs[] = {
-		JS_FN("actionWithDurationSizeRangeShakeZ", JSB_CCShaky3D_actionWithDuration_size_range_shakeZ__static, 4, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("create", JSB_CCShaky3D_actionWithDuration_size_range_shakeZ__static, 4, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FS_END
 	};
 
@@ -35312,7 +35915,7 @@ void JSB_CCLiquid_createClass(JSContext *cx, JSObject* globalObj, const char* na
 		JS_FS_END
 	};
 	static JSFunctionSpec st_funcs[] = {
-		JS_FN("actionWithDurationSizeWavesAmplitude", JSB_CCLiquid_actionWithDuration_size_waves_amplitude__static, 4, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("create", JSB_CCLiquid_actionWithDuration_size_waves_amplitude__static, 4, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FS_END
 	};
 
@@ -37531,7 +38134,7 @@ void JSB_CCWaves_createClass(JSContext *cx, JSObject* globalObj, const char* nam
 		JS_FS_END
 	};
 	static JSFunctionSpec st_funcs[] = {
-		JS_FN("actionWithDurationSizeWavesAmplitudeHorizontalVertical", JSB_CCWaves_actionWithDuration_size_waves_amplitude_horizontal_vertical__static, 6, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("create", JSB_CCWaves_actionWithDuration_size_waves_amplitude_horizontal_vertical__static, 6, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FS_END
 	};
 
@@ -38549,7 +39152,7 @@ void JSB_CCLens3D_createClass(JSContext *cx, JSObject* globalObj, const char* na
 		JS_FS_END
 	};
 	static JSFunctionSpec st_funcs[] = {
-		JS_FN("actionWithDurationSizePositionRadius", JSB_CCLens3D_actionWithDuration_size_position_radius__static, 4, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("create", JSB_CCLens3D_actionWithDuration_size_position_radius__static, 4, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FS_END
 	};
 
@@ -38759,7 +39362,7 @@ void JSB_CCWaves3D_createClass(JSContext *cx, JSObject* globalObj, const char* n
 		JS_FS_END
 	};
 	static JSFunctionSpec st_funcs[] = {
-		JS_FN("actionWithDurationSizeWavesAmplitude", JSB_CCWaves3D_actionWithDuration_size_waves_amplitude__static, 4, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("create", JSB_CCWaves3D_actionWithDuration_size_waves_amplitude__static, 4, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FS_END
 	};
 
@@ -39090,7 +39693,7 @@ void JSB_CCWavesTiles3D_createClass(JSContext *cx, JSObject* globalObj, const ch
 		JS_FS_END
 	};
 	static JSFunctionSpec st_funcs[] = {
-		JS_FN("actionWithDurationSizeWavesAmplitude", JSB_CCWavesTiles3D_actionWithDuration_size_waves_amplitude__static, 4, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("create", JSB_CCWavesTiles3D_actionWithDuration_size_waves_amplitude__static, 4, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FS_END
 	};
 
@@ -39216,7 +39819,7 @@ void JSB_CCTurnOffTiles_createClass(JSContext *cx, JSObject* globalObj, const ch
 		JS_FS_END
 	};
 	static JSFunctionSpec st_funcs[] = {
-		JS_FN("actionWithDurationSizeSeed", JSB_CCTurnOffTiles_actionWithDuration_size_seed__static, 3, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("create", JSB_CCTurnOffTiles_actionWithDuration_size_seed__static, 3, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FS_END
 	};
 
@@ -39471,7 +40074,7 @@ void JSB_CCSplitCols_createClass(JSContext *cx, JSObject* globalObj, const char*
 		JS_FS_END
 	};
 	static JSFunctionSpec st_funcs[] = {
-		JS_FN("actionWithDurationCols", JSB_CCSplitCols_actionWithDuration_cols__static, 2, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("create", JSB_CCSplitCols_actionWithDuration_cols__static, 2, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FS_END
 	};
 
@@ -40562,7 +41165,7 @@ void JSB_CCTwirl_createClass(JSContext *cx, JSObject* globalObj, const char* nam
 		JS_FS_END
 	};
 	static JSFunctionSpec st_funcs[] = {
-		JS_FN("actionWithDurationSizePositionTwirlsAmplitude", JSB_CCTwirl_actionWithDuration_size_position_twirls_amplitude__static, 5, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("create", JSB_CCTwirl_actionWithDuration_size_position_twirls_amplitude__static, 5, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FS_END
 	};
 
