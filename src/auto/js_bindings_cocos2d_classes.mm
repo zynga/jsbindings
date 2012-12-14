@@ -7118,20 +7118,20 @@ void JSB_CCGridAction_finalize(JSFreeOp *fop, JSObject *obj)
 	jsb_del_proxy_for_jsobject( obj );
 }
 
-// Arguments: CGSize, ccTime
+// Arguments: ccTime, CGSize
 // Ret value: CCGridAction* (o)
-JSBool JSB_CCGridAction_actionWithSize_duration__static(JSContext *cx, uint32_t argc, jsval *vp) {
+JSBool JSB_CCGridAction_actionWithDuration_size__static(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSB_PRECONDITION2( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
-	CGSize arg0; double arg1; 
+	double arg0; CGSize arg1; 
 
-	ok &= jsval_to_CGSize( cx, *argvp++, (CGSize*) &arg0 );
-	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
+	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
+	ok &= jsval_to_CGSize( cx, *argvp++, (CGSize*) &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCGridAction* ret_val;
 
-	ret_val = [CCGridAction actionWithSize:(CGSize)arg0 duration:(ccTime)arg1  ];
+	ret_val = [CCGridAction actionWithDuration:(ccTime)arg0 size:(CGSize)arg1  ];
 
 	JS_SET_RVAL(cx, vp, NSObject_to_jsval(cx, ret_val));
 
@@ -7177,9 +7177,9 @@ JSBool JSB_CCGridAction_gridSize(JSContext *cx, uint32_t argc, jsval *vp) {
 	return JS_TRUE;
 }
 
-// Arguments: CGSize, ccTime
+// Arguments: ccTime, CGSize
 // Ret value: None (None)
-JSBool JSB_CCGridAction_initWithSize_duration_(JSContext *cx, uint32_t argc, jsval *vp) {
+JSBool JSB_CCGridAction_initWithDuration_size_(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
@@ -7188,13 +7188,13 @@ JSBool JSB_CCGridAction_initWithSize_duration_(JSContext *cx, uint32_t argc, jsv
 	JSB_PRECONDITION2( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
-	CGSize arg0; double arg1; 
+	double arg0; CGSize arg1; 
 
-	ok &= jsval_to_CGSize( cx, *argvp++, (CGSize*) &arg0 );
-	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
+	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
+	ok &= jsval_to_CGSize( cx, *argvp++, (CGSize*) &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
-	CCGridAction *real = [(CCGridAction*)[proxy.klass alloc] initWithSize:(CGSize)arg0 duration:(ccTime)arg1  ];
+	CCGridAction *real = [(CCGridAction*)[proxy.klass alloc] initWithDuration:(ccTime)arg0 size:(CGSize)arg1  ];
 	[proxy setRealObj: real];
 	[real autorelease];
 
@@ -7246,12 +7246,12 @@ void JSB_CCGridAction_createClass(JSContext *cx, JSObject* globalObj, const char
 	static JSFunctionSpec funcs[] = {
 		JS_FN("grid", JSB_CCGridAction_grid, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("getGridSize", JSB_CCGridAction_gridSize, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
-		JS_FN("initWithSizeDuration", JSB_CCGridAction_initWithSize_duration_, 2, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("initWithDurationSize", JSB_CCGridAction_initWithDuration_size_, 2, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("setGridSize", JSB_CCGridAction_setGridSize_, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FS_END
 	};
 	static JSFunctionSpec st_funcs[] = {
-		JS_FN("actionWithSizeDuration", JSB_CCGridAction_actionWithSize_duration__static, 2, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("actionWithDurationSize", JSB_CCGridAction_actionWithDuration_size__static, 2, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FS_END
 	};
 
@@ -7306,20 +7306,20 @@ void JSB_CCTiledGrid3DAction_finalize(JSFreeOp *fop, JSObject *obj)
 	jsb_del_proxy_for_jsobject( obj );
 }
 
-// Arguments: CGSize, ccTime
+// Arguments: ccTime, CGSize
 // Ret value: CCTiledGrid3DAction* (o)
-JSBool JSB_CCTiledGrid3DAction_actionWithSize_duration__static(JSContext *cx, uint32_t argc, jsval *vp) {
+JSBool JSB_CCTiledGrid3DAction_actionWithDuration_size__static(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSB_PRECONDITION2( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
-	CGSize arg0; double arg1; 
+	double arg0; CGSize arg1; 
 
-	ok &= jsval_to_CGSize( cx, *argvp++, (CGSize*) &arg0 );
-	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
+	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
+	ok &= jsval_to_CGSize( cx, *argvp++, (CGSize*) &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCTiledGrid3DAction* ret_val;
 
-	ret_val = [CCTiledGrid3DAction actionWithSize:(CGSize)arg0 duration:(ccTime)arg1  ];
+	ret_val = [CCTiledGrid3DAction actionWithDuration:(ccTime)arg0 size:(CGSize)arg1  ];
 
 	JS_SET_RVAL(cx, vp, NSObject_to_jsval(cx, ret_val));
 
@@ -7347,7 +7347,7 @@ void JSB_CCTiledGrid3DAction_createClass(JSContext *cx, JSObject* globalObj, con
 		JS_FS_END
 	};
 	static JSFunctionSpec st_funcs[] = {
-		JS_FN("actionWithSizeDuration", JSB_CCTiledGrid3DAction_actionWithSize_duration__static, 2, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("actionWithDurationSize", JSB_CCTiledGrid3DAction_actionWithDuration_size__static, 2, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FS_END
 	};
 
@@ -7402,31 +7402,31 @@ void JSB_CCShakyTiles3D_finalize(JSFreeOp *fop, JSObject *obj)
 	jsb_del_proxy_for_jsobject( obj );
 }
 
-// Arguments: int, BOOL, CGSize, ccTime
+// Arguments: ccTime, CGSize, int, BOOL
 // Ret value: CCShakyTiles3D* (o)
-JSBool JSB_CCShakyTiles3D_actionWithRange_shakeZ_grid_duration__static(JSContext *cx, uint32_t argc, jsval *vp) {
+JSBool JSB_CCShakyTiles3D_actionWithDuration_size_range_shakeZ__static(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSB_PRECONDITION2( argc == 4, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
-	int32_t arg0; JSBool arg1; CGSize arg2; double arg3; 
+	double arg0; CGSize arg1; int32_t arg2; JSBool arg3; 
 
-	ok &= JS_ValueToECMAInt32( cx, *argvp++, &arg0 );
-	ok &= JS_ValueToBoolean( cx, *argvp++, &arg1 );
-	ok &= jsval_to_CGSize( cx, *argvp++, (CGSize*) &arg2 );
-	ok &= JS_ValueToNumber( cx, *argvp++, &arg3 );
+	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
+	ok &= jsval_to_CGSize( cx, *argvp++, (CGSize*) &arg1 );
+	ok &= JS_ValueToECMAInt32( cx, *argvp++, &arg2 );
+	ok &= JS_ValueToBoolean( cx, *argvp++, &arg3 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCShakyTiles3D* ret_val;
 
-	ret_val = [CCShakyTiles3D actionWithRange:(int)arg0 shakeZ:(BOOL)arg1 grid:(CGSize)arg2 duration:(ccTime)arg3  ];
+	ret_val = [CCShakyTiles3D actionWithDuration:(ccTime)arg0 size:(CGSize)arg1 range:(int)arg2 shakeZ:(BOOL)arg3  ];
 
 	JS_SET_RVAL(cx, vp, NSObject_to_jsval(cx, ret_val));
 
 	return JS_TRUE;
 }
 
-// Arguments: int, BOOL, CGSize, ccTime
+// Arguments: ccTime, CGSize, int, BOOL
 // Ret value: None (None)
-JSBool JSB_CCShakyTiles3D_initWithRange_shakeZ_grid_duration_(JSContext *cx, uint32_t argc, jsval *vp) {
+JSBool JSB_CCShakyTiles3D_initWithDuration_size_range_shakeZ_(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
@@ -7435,15 +7435,15 @@ JSBool JSB_CCShakyTiles3D_initWithRange_shakeZ_grid_duration_(JSContext *cx, uin
 	JSB_PRECONDITION2( argc == 4, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
-	int32_t arg0; JSBool arg1; CGSize arg2; double arg3; 
+	double arg0; CGSize arg1; int32_t arg2; JSBool arg3; 
 
-	ok &= JS_ValueToECMAInt32( cx, *argvp++, &arg0 );
-	ok &= JS_ValueToBoolean( cx, *argvp++, &arg1 );
-	ok &= jsval_to_CGSize( cx, *argvp++, (CGSize*) &arg2 );
-	ok &= JS_ValueToNumber( cx, *argvp++, &arg3 );
+	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
+	ok &= jsval_to_CGSize( cx, *argvp++, (CGSize*) &arg1 );
+	ok &= JS_ValueToECMAInt32( cx, *argvp++, &arg2 );
+	ok &= JS_ValueToBoolean( cx, *argvp++, &arg3 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
-	CCShakyTiles3D *real = [(CCShakyTiles3D*)[proxy.klass alloc] initWithRange:(int)arg0 shakeZ:(BOOL)arg1 grid:(CGSize)arg2 duration:(ccTime)arg3  ];
+	CCShakyTiles3D *real = [(CCShakyTiles3D*)[proxy.klass alloc] initWithDuration:(ccTime)arg0 size:(CGSize)arg1 range:(int)arg2 shakeZ:(BOOL)arg3  ];
 	[proxy setRealObj: real];
 	[real autorelease];
 
@@ -7471,11 +7471,11 @@ void JSB_CCShakyTiles3D_createClass(JSContext *cx, JSObject* globalObj, const ch
 		{0, 0, 0, 0, 0}
 	};
 	static JSFunctionSpec funcs[] = {
-		JS_FN("initWithRangeShakeZGridDuration", JSB_CCShakyTiles3D_initWithRange_shakeZ_grid_duration_, 4, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("initWithDurationSizeRangeShakeZ", JSB_CCShakyTiles3D_initWithDuration_size_range_shakeZ_, 4, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FS_END
 	};
 	static JSFunctionSpec st_funcs[] = {
-		JS_FN("actionWithRangeShakeZGridDuration", JSB_CCShakyTiles3D_actionWithRange_shakeZ_grid_duration__static, 4, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("actionWithDurationSizeRangeShakeZ", JSB_CCShakyTiles3D_actionWithDuration_size_range_shakeZ__static, 4, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FS_END
 	};
 
@@ -14310,22 +14310,22 @@ void JSB_CCJumpTiles3D_finalize(JSFreeOp *fop, JSObject *obj)
 	jsb_del_proxy_for_jsobject( obj );
 }
 
-// Arguments: int, float, CGSize, ccTime
+// Arguments: ccTime, CGSize, NSUInteger, float
 // Ret value: CCJumpTiles3D* (o)
-JSBool JSB_CCJumpTiles3D_actionWithJumps_amplitude_grid_duration__static(JSContext *cx, uint32_t argc, jsval *vp) {
+JSBool JSB_CCJumpTiles3D_actionWithDuration_size_jumps_amplitude__static(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSB_PRECONDITION2( argc == 4, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
-	int32_t arg0; double arg1; CGSize arg2; double arg3; 
+	double arg0; CGSize arg1; uint32_t arg2; double arg3; 
 
-	ok &= JS_ValueToECMAInt32( cx, *argvp++, &arg0 );
-	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
-	ok &= jsval_to_CGSize( cx, *argvp++, (CGSize*) &arg2 );
+	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
+	ok &= jsval_to_CGSize( cx, *argvp++, (CGSize*) &arg1 );
+	ok &= JS_ValueToECMAUint32( cx, *argvp++, &arg2 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg3 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCJumpTiles3D* ret_val;
 
-	ret_val = [CCJumpTiles3D actionWithJumps:(int)arg0 amplitude:(float)arg1 grid:(CGSize)arg2 duration:(ccTime)arg3  ];
+	ret_val = [CCJumpTiles3D actionWithDuration:(ccTime)arg0 size:(CGSize)arg1 jumps:(NSUInteger)arg2 amplitude:(float)arg3  ];
 
 	JS_SET_RVAL(cx, vp, NSObject_to_jsval(cx, ret_val));
 
@@ -14366,9 +14366,9 @@ JSBool JSB_CCJumpTiles3D_amplitudeRate(JSContext *cx, uint32_t argc, jsval *vp) 
 	return JS_TRUE;
 }
 
-// Arguments: int, float, CGSize, ccTime
+// Arguments: ccTime, CGSize, NSUInteger, float
 // Ret value: None (None)
-JSBool JSB_CCJumpTiles3D_initWithJumps_amplitude_grid_duration_(JSContext *cx, uint32_t argc, jsval *vp) {
+JSBool JSB_CCJumpTiles3D_initWithDuration_size_jumps_amplitude_(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
@@ -14377,15 +14377,15 @@ JSBool JSB_CCJumpTiles3D_initWithJumps_amplitude_grid_duration_(JSContext *cx, u
 	JSB_PRECONDITION2( argc == 4, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
-	int32_t arg0; double arg1; CGSize arg2; double arg3; 
+	double arg0; CGSize arg1; uint32_t arg2; double arg3; 
 
-	ok &= JS_ValueToECMAInt32( cx, *argvp++, &arg0 );
-	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
-	ok &= jsval_to_CGSize( cx, *argvp++, (CGSize*) &arg2 );
+	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
+	ok &= jsval_to_CGSize( cx, *argvp++, (CGSize*) &arg1 );
+	ok &= JS_ValueToECMAUint32( cx, *argvp++, &arg2 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg3 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
-	CCJumpTiles3D *real = [(CCJumpTiles3D*)[proxy.klass alloc] initWithJumps:(int)arg0 amplitude:(float)arg1 grid:(CGSize)arg2 duration:(ccTime)arg3  ];
+	CCJumpTiles3D *real = [(CCJumpTiles3D*)[proxy.klass alloc] initWithDuration:(ccTime)arg0 size:(CGSize)arg1 jumps:(NSUInteger)arg2 amplitude:(float)arg3  ];
 	[proxy setRealObj: real];
 	[real autorelease];
 
@@ -14459,13 +14459,13 @@ void JSB_CCJumpTiles3D_createClass(JSContext *cx, JSObject* globalObj, const cha
 	static JSFunctionSpec funcs[] = {
 		JS_FN("getAmplitude", JSB_CCJumpTiles3D_amplitude, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("getAmplitudeRate", JSB_CCJumpTiles3D_amplitudeRate, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
-		JS_FN("initWithJumpsAmplitudeGridDuration", JSB_CCJumpTiles3D_initWithJumps_amplitude_grid_duration_, 4, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("initWithDurationSizeJumpsAmplitude", JSB_CCJumpTiles3D_initWithDuration_size_jumps_amplitude_, 4, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("setAmplitude", JSB_CCJumpTiles3D_setAmplitude_, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("setAmplitudeRate", JSB_CCJumpTiles3D_setAmplitudeRate_, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FS_END
 	};
 	static JSFunctionSpec st_funcs[] = {
-		JS_FN("actionWithJumpsAmplitudeGridDuration", JSB_CCJumpTiles3D_actionWithJumps_amplitude_grid_duration__static, 4, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("actionWithDurationSizeJumpsAmplitude", JSB_CCJumpTiles3D_actionWithDuration_size_jumps_amplitude__static, 4, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FS_END
 	};
 
@@ -14602,20 +14602,20 @@ JSBool JSB_CCGrid3DAction_vertex_(JSContext *cx, uint32_t argc, jsval *vp) {
 	return JS_TRUE;
 }
 
-// Arguments: CGSize, ccTime
+// Arguments: ccTime, CGSize
 // Ret value: CCGrid3DAction* (o)
-JSBool JSB_CCGrid3DAction_actionWithSize_duration__static(JSContext *cx, uint32_t argc, jsval *vp) {
+JSBool JSB_CCGrid3DAction_actionWithDuration_size__static(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSB_PRECONDITION2( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
-	CGSize arg0; double arg1; 
+	double arg0; CGSize arg1; 
 
-	ok &= jsval_to_CGSize( cx, *argvp++, (CGSize*) &arg0 );
-	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
+	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
+	ok &= jsval_to_CGSize( cx, *argvp++, (CGSize*) &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCGrid3DAction* ret_val;
 
-	ret_val = [CCGrid3DAction actionWithSize:(CGSize)arg0 duration:(ccTime)arg1  ];
+	ret_val = [CCGrid3DAction actionWithDuration:(ccTime)arg0 size:(CGSize)arg1  ];
 
 	JS_SET_RVAL(cx, vp, NSObject_to_jsval(cx, ret_val));
 
@@ -14646,7 +14646,7 @@ void JSB_CCGrid3DAction_createClass(JSContext *cx, JSObject* globalObj, const ch
 		JS_FS_END
 	};
 	static JSFunctionSpec st_funcs[] = {
-		JS_FN("actionWithSizeDuration", JSB_CCGrid3DAction_actionWithSize_duration__static, 2, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("actionWithDurationSize", JSB_CCGrid3DAction_actionWithDuration_size__static, 2, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FS_END
 	};
 
@@ -27903,31 +27903,31 @@ void JSB_CCShatteredTiles3D_finalize(JSFreeOp *fop, JSObject *obj)
 	jsb_del_proxy_for_jsobject( obj );
 }
 
-// Arguments: int, BOOL, CGSize, ccTime
+// Arguments: ccTime, CGSize, int, BOOL
 // Ret value: CCShatteredTiles3D* (o)
-JSBool JSB_CCShatteredTiles3D_actionWithRange_shatterZ_grid_duration__static(JSContext *cx, uint32_t argc, jsval *vp) {
+JSBool JSB_CCShatteredTiles3D_actionWithDuration_size_range_shatterZ__static(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSB_PRECONDITION2( argc == 4, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
-	int32_t arg0; JSBool arg1; CGSize arg2; double arg3; 
+	double arg0; CGSize arg1; int32_t arg2; JSBool arg3; 
 
-	ok &= JS_ValueToECMAInt32( cx, *argvp++, &arg0 );
-	ok &= JS_ValueToBoolean( cx, *argvp++, &arg1 );
-	ok &= jsval_to_CGSize( cx, *argvp++, (CGSize*) &arg2 );
-	ok &= JS_ValueToNumber( cx, *argvp++, &arg3 );
+	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
+	ok &= jsval_to_CGSize( cx, *argvp++, (CGSize*) &arg1 );
+	ok &= JS_ValueToECMAInt32( cx, *argvp++, &arg2 );
+	ok &= JS_ValueToBoolean( cx, *argvp++, &arg3 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCShatteredTiles3D* ret_val;
 
-	ret_val = [CCShatteredTiles3D actionWithRange:(int)arg0 shatterZ:(BOOL)arg1 grid:(CGSize)arg2 duration:(ccTime)arg3  ];
+	ret_val = [CCShatteredTiles3D actionWithDuration:(ccTime)arg0 size:(CGSize)arg1 range:(int)arg2 shatterZ:(BOOL)arg3  ];
 
 	JS_SET_RVAL(cx, vp, NSObject_to_jsval(cx, ret_val));
 
 	return JS_TRUE;
 }
 
-// Arguments: int, BOOL, CGSize, ccTime
+// Arguments: ccTime, CGSize, int, BOOL
 // Ret value: None (None)
-JSBool JSB_CCShatteredTiles3D_initWithRange_shatterZ_grid_duration_(JSContext *cx, uint32_t argc, jsval *vp) {
+JSBool JSB_CCShatteredTiles3D_initWithDuration_size_range_shatterZ_(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
@@ -27936,15 +27936,15 @@ JSBool JSB_CCShatteredTiles3D_initWithRange_shatterZ_grid_duration_(JSContext *c
 	JSB_PRECONDITION2( argc == 4, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
-	int32_t arg0; JSBool arg1; CGSize arg2; double arg3; 
+	double arg0; CGSize arg1; int32_t arg2; JSBool arg3; 
 
-	ok &= JS_ValueToECMAInt32( cx, *argvp++, &arg0 );
-	ok &= JS_ValueToBoolean( cx, *argvp++, &arg1 );
-	ok &= jsval_to_CGSize( cx, *argvp++, (CGSize*) &arg2 );
-	ok &= JS_ValueToNumber( cx, *argvp++, &arg3 );
+	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
+	ok &= jsval_to_CGSize( cx, *argvp++, (CGSize*) &arg1 );
+	ok &= JS_ValueToECMAInt32( cx, *argvp++, &arg2 );
+	ok &= JS_ValueToBoolean( cx, *argvp++, &arg3 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
-	CCShatteredTiles3D *real = [(CCShatteredTiles3D*)[proxy.klass alloc] initWithRange:(int)arg0 shatterZ:(BOOL)arg1 grid:(CGSize)arg2 duration:(ccTime)arg3  ];
+	CCShatteredTiles3D *real = [(CCShatteredTiles3D*)[proxy.klass alloc] initWithDuration:(ccTime)arg0 size:(CGSize)arg1 range:(int)arg2 shatterZ:(BOOL)arg3  ];
 	[proxy setRealObj: real];
 	[real autorelease];
 
@@ -27972,11 +27972,11 @@ void JSB_CCShatteredTiles3D_createClass(JSContext *cx, JSObject* globalObj, cons
 		{0, 0, 0, 0, 0}
 	};
 	static JSFunctionSpec funcs[] = {
-		JS_FN("initWithRangeShatterZGridDuration", JSB_CCShatteredTiles3D_initWithRange_shatterZ_grid_duration_, 4, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("initWithDurationSizeRangeShatterZ", JSB_CCShatteredTiles3D_initWithDuration_size_range_shatterZ_, 4, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FS_END
 	};
 	static JSFunctionSpec st_funcs[] = {
-		JS_FN("actionWithRangeShatterZGridDuration", JSB_CCShatteredTiles3D_actionWithRange_shatterZ_grid_duration__static, 4, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("actionWithDurationSizeRangeShatterZ", JSB_CCShatteredTiles3D_actionWithDuration_size_range_shatterZ__static, 4, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FS_END
 	};
 
@@ -28975,29 +28975,29 @@ void JSB_CCSplitRows_finalize(JSFreeOp *fop, JSObject *obj)
 	jsb_del_proxy_for_jsobject( obj );
 }
 
-// Arguments: int, ccTime
+// Arguments: ccTime, NSUInteger
 // Ret value: CCSplitRows* (o)
-JSBool JSB_CCSplitRows_actionWithRows_duration__static(JSContext *cx, uint32_t argc, jsval *vp) {
+JSBool JSB_CCSplitRows_actionWithDuration_rows__static(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSB_PRECONDITION2( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
-	int32_t arg0; double arg1; 
+	double arg0; uint32_t arg1; 
 
-	ok &= JS_ValueToECMAInt32( cx, *argvp++, &arg0 );
-	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
+	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
+	ok &= JS_ValueToECMAUint32( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCSplitRows* ret_val;
 
-	ret_val = [CCSplitRows actionWithRows:(int)arg0 duration:(ccTime)arg1  ];
+	ret_val = [CCSplitRows actionWithDuration:(ccTime)arg0 rows:(NSUInteger)arg1  ];
 
 	JS_SET_RVAL(cx, vp, NSObject_to_jsval(cx, ret_val));
 
 	return JS_TRUE;
 }
 
-// Arguments: int, ccTime
+// Arguments: ccTime, NSUInteger
 // Ret value: None (None)
-JSBool JSB_CCSplitRows_initWithRows_duration_(JSContext *cx, uint32_t argc, jsval *vp) {
+JSBool JSB_CCSplitRows_initWithDuration_rows_(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
@@ -29006,13 +29006,13 @@ JSBool JSB_CCSplitRows_initWithRows_duration_(JSContext *cx, uint32_t argc, jsva
 	JSB_PRECONDITION2( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
-	int32_t arg0; double arg1; 
+	double arg0; uint32_t arg1; 
 
-	ok &= JS_ValueToECMAInt32( cx, *argvp++, &arg0 );
-	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
+	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
+	ok &= JS_ValueToECMAUint32( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
-	CCSplitRows *real = [(CCSplitRows*)[proxy.klass alloc] initWithRows:(int)arg0 duration:(ccTime)arg1  ];
+	CCSplitRows *real = [(CCSplitRows*)[proxy.klass alloc] initWithDuration:(ccTime)arg0 rows:(NSUInteger)arg1  ];
 	[proxy setRealObj: real];
 	[real autorelease];
 
@@ -29040,11 +29040,11 @@ void JSB_CCSplitRows_createClass(JSContext *cx, JSObject* globalObj, const char*
 		{0, 0, 0, 0, 0}
 	};
 	static JSFunctionSpec funcs[] = {
-		JS_FN("initWithRowsDuration", JSB_CCSplitRows_initWithRows_duration_, 2, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("initWithDurationRows", JSB_CCSplitRows_initWithDuration_rows_, 2, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FS_END
 	};
 	static JSFunctionSpec st_funcs[] = {
-		JS_FN("actionWithRowsDuration", JSB_CCSplitRows_actionWithRows_duration__static, 2, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("actionWithDurationRows", JSB_CCSplitRows_actionWithDuration_rows__static, 2, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FS_END
 	};
 
@@ -29374,24 +29374,24 @@ void JSB_CCRipple3D_finalize(JSFreeOp *fop, JSObject *obj)
 	jsb_del_proxy_for_jsobject( obj );
 }
 
-// Arguments: CGPoint, float, int, float, CGSize, ccTime
+// Arguments: ccTime, CGSize, CGPoint, float, NSInteger, float
 // Ret value: CCRipple3D* (o)
-JSBool JSB_CCRipple3D_actionWithPosition_radius_waves_amplitude_grid_duration__static(JSContext *cx, uint32_t argc, jsval *vp) {
+JSBool JSB_CCRipple3D_actionWithDuration_size_position_radius_waves_amplitude__static(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSB_PRECONDITION2( argc == 6, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
-	CGPoint arg0; double arg1; int32_t arg2; double arg3; CGSize arg4; double arg5; 
+	double arg0; CGSize arg1; CGPoint arg2; double arg3; int32_t arg4; double arg5; 
 
-	ok &= jsval_to_CGPoint( cx, *argvp++, (CGPoint*) &arg0 );
-	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
-	ok &= JS_ValueToECMAInt32( cx, *argvp++, &arg2 );
+	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
+	ok &= jsval_to_CGSize( cx, *argvp++, (CGSize*) &arg1 );
+	ok &= jsval_to_CGPoint( cx, *argvp++, (CGPoint*) &arg2 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg3 );
-	ok &= jsval_to_CGSize( cx, *argvp++, (CGSize*) &arg4 );
+	ok &= JS_ValueToECMAInt32( cx, *argvp++, &arg4 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg5 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCRipple3D* ret_val;
 
-	ret_val = [CCRipple3D actionWithPosition:(CGPoint)arg0 radius:(float)arg1 waves:(int)arg2 amplitude:(float)arg3 grid:(CGSize)arg4 duration:(ccTime)arg5  ];
+	ret_val = [CCRipple3D actionWithDuration:(ccTime)arg0 size:(CGSize)arg1 position:(CGPoint)arg2 radius:(float)arg3 waves:(NSInteger)arg4 amplitude:(float)arg5  ];
 
 	JS_SET_RVAL(cx, vp, NSObject_to_jsval(cx, ret_val));
 
@@ -29432,9 +29432,9 @@ JSBool JSB_CCRipple3D_amplitudeRate(JSContext *cx, uint32_t argc, jsval *vp) {
 	return JS_TRUE;
 }
 
-// Arguments: CGPoint, float, int, float, CGSize, ccTime
+// Arguments: ccTime, CGSize, CGPoint, float, NSInteger, float
 // Ret value: None (None)
-JSBool JSB_CCRipple3D_initWithPosition_radius_waves_amplitude_grid_duration_(JSContext *cx, uint32_t argc, jsval *vp) {
+JSBool JSB_CCRipple3D_initWithDuration_size_position_radius_waves_amplitude_(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
@@ -29443,17 +29443,17 @@ JSBool JSB_CCRipple3D_initWithPosition_radius_waves_amplitude_grid_duration_(JSC
 	JSB_PRECONDITION2( argc == 6, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
-	CGPoint arg0; double arg1; int32_t arg2; double arg3; CGSize arg4; double arg5; 
+	double arg0; CGSize arg1; CGPoint arg2; double arg3; int32_t arg4; double arg5; 
 
-	ok &= jsval_to_CGPoint( cx, *argvp++, (CGPoint*) &arg0 );
-	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
-	ok &= JS_ValueToECMAInt32( cx, *argvp++, &arg2 );
+	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
+	ok &= jsval_to_CGSize( cx, *argvp++, (CGSize*) &arg1 );
+	ok &= jsval_to_CGPoint( cx, *argvp++, (CGPoint*) &arg2 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg3 );
-	ok &= jsval_to_CGSize( cx, *argvp++, (CGSize*) &arg4 );
+	ok &= JS_ValueToECMAInt32( cx, *argvp++, &arg4 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg5 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
-	CCRipple3D *real = [(CCRipple3D*)[proxy.klass alloc] initWithPosition:(CGPoint)arg0 radius:(float)arg1 waves:(int)arg2 amplitude:(float)arg3 grid:(CGSize)arg4 duration:(ccTime)arg5  ];
+	CCRipple3D *real = [(CCRipple3D*)[proxy.klass alloc] initWithDuration:(ccTime)arg0 size:(CGSize)arg1 position:(CGPoint)arg2 radius:(float)arg3 waves:(NSInteger)arg4 amplitude:(float)arg5  ];
 	[proxy setRealObj: real];
 	[real autorelease];
 
@@ -29547,7 +29547,7 @@ void JSB_CCRipple3D_createClass(JSContext *cx, JSObject* globalObj, const char* 
 	static JSFunctionSpec funcs[] = {
 		JS_FN("getAmplitude", JSB_CCRipple3D_amplitude, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("getAmplitudeRate", JSB_CCRipple3D_amplitudeRate, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
-		JS_FN("initWithPositionRadiusWavesAmplitudeGridDuration", JSB_CCRipple3D_initWithPosition_radius_waves_amplitude_grid_duration_, 6, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("initWithDurationSizePositionRadiusWavesAmplitude", JSB_CCRipple3D_initWithDuration_size_position_radius_waves_amplitude_, 6, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("getPosition", JSB_CCRipple3D_position, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("setAmplitude", JSB_CCRipple3D_setAmplitude_, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("setAmplitudeRate", JSB_CCRipple3D_setAmplitudeRate_, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
@@ -29555,7 +29555,7 @@ void JSB_CCRipple3D_createClass(JSContext *cx, JSObject* globalObj, const char* 
 		JS_FS_END
 	};
 	static JSFunctionSpec st_funcs[] = {
-		JS_FN("actionWithPositionRadiusWavesAmplitudeGridDuration", JSB_CCRipple3D_actionWithPosition_radius_waves_amplitude_grid_duration__static, 6, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("actionWithDurationSizePositionRadiusWavesAmplitude", JSB_CCRipple3D_actionWithDuration_size_position_radius_waves_amplitude__static, 6, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FS_END
 	};
 
@@ -31261,30 +31261,30 @@ void JSB_CCShuffleTiles_finalize(JSFreeOp *fop, JSObject *obj)
 	jsb_del_proxy_for_jsobject( obj );
 }
 
-// Arguments: int, CGSize, ccTime
+// Arguments: ccTime, CGSize, unsigned int
 // Ret value: CCShuffleTiles* (o)
-JSBool JSB_CCShuffleTiles_actionWithSeed_grid_duration__static(JSContext *cx, uint32_t argc, jsval *vp) {
+JSBool JSB_CCShuffleTiles_actionWithDuration_size_seed__static(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSB_PRECONDITION2( argc == 3, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
-	int32_t arg0; CGSize arg1; double arg2; 
+	double arg0; CGSize arg1; uint32_t arg2; 
 
-	ok &= JS_ValueToECMAInt32( cx, *argvp++, &arg0 );
+	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
 	ok &= jsval_to_CGSize( cx, *argvp++, (CGSize*) &arg1 );
-	ok &= JS_ValueToNumber( cx, *argvp++, &arg2 );
+	ok &= JS_ValueToECMAUint32( cx, *argvp++, &arg2 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCShuffleTiles* ret_val;
 
-	ret_val = [CCShuffleTiles actionWithSeed:(int)arg0 grid:(CGSize)arg1 duration:(ccTime)arg2  ];
+	ret_val = [CCShuffleTiles actionWithDuration:(ccTime)arg0 size:(CGSize)arg1 seed:(unsigned int)arg2  ];
 
 	JS_SET_RVAL(cx, vp, NSObject_to_jsval(cx, ret_val));
 
 	return JS_TRUE;
 }
 
-// Arguments: int, CGSize, ccTime
+// Arguments: ccTime, CGSize, unsigned int
 // Ret value: None (None)
-JSBool JSB_CCShuffleTiles_initWithSeed_grid_duration_(JSContext *cx, uint32_t argc, jsval *vp) {
+JSBool JSB_CCShuffleTiles_initWithDuration_size_seed_(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
@@ -31293,14 +31293,14 @@ JSBool JSB_CCShuffleTiles_initWithSeed_grid_duration_(JSContext *cx, uint32_t ar
 	JSB_PRECONDITION2( argc == 3, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
-	int32_t arg0; CGSize arg1; double arg2; 
+	double arg0; CGSize arg1; uint32_t arg2; 
 
-	ok &= JS_ValueToECMAInt32( cx, *argvp++, &arg0 );
+	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
 	ok &= jsval_to_CGSize( cx, *argvp++, (CGSize*) &arg1 );
-	ok &= JS_ValueToNumber( cx, *argvp++, &arg2 );
+	ok &= JS_ValueToECMAUint32( cx, *argvp++, &arg2 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
-	CCShuffleTiles *real = [(CCShuffleTiles*)[proxy.klass alloc] initWithSeed:(int)arg0 grid:(CGSize)arg1 duration:(ccTime)arg2  ];
+	CCShuffleTiles *real = [(CCShuffleTiles*)[proxy.klass alloc] initWithDuration:(ccTime)arg0 size:(CGSize)arg1 seed:(unsigned int)arg2  ];
 	[proxy setRealObj: real];
 	[real autorelease];
 
@@ -31328,11 +31328,11 @@ void JSB_CCShuffleTiles_createClass(JSContext *cx, JSObject* globalObj, const ch
 		{0, 0, 0, 0, 0}
 	};
 	static JSFunctionSpec funcs[] = {
-		JS_FN("initWithSeedGridDuration", JSB_CCShuffleTiles_initWithSeed_grid_duration_, 3, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("initWithDurationSizeSeed", JSB_CCShuffleTiles_initWithDuration_size_seed_, 3, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FS_END
 	};
 	static JSFunctionSpec st_funcs[] = {
-		JS_FN("actionWithSeedGridDuration", JSB_CCShuffleTiles_actionWithSeed_grid_duration__static, 3, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("actionWithDurationSizeSeed", JSB_CCShuffleTiles_actionWithDuration_size_seed__static, 3, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FS_END
 	};
 
@@ -33154,31 +33154,31 @@ void JSB_CCShaky3D_finalize(JSFreeOp *fop, JSObject *obj)
 	jsb_del_proxy_for_jsobject( obj );
 }
 
-// Arguments: int, BOOL, CGSize, ccTime
+// Arguments: ccTime, CGSize, int, BOOL
 // Ret value: CCShaky3D* (o)
-JSBool JSB_CCShaky3D_actionWithRange_shakeZ_grid_duration__static(JSContext *cx, uint32_t argc, jsval *vp) {
+JSBool JSB_CCShaky3D_actionWithDuration_size_range_shakeZ__static(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSB_PRECONDITION2( argc == 4, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
-	int32_t arg0; JSBool arg1; CGSize arg2; double arg3; 
+	double arg0; CGSize arg1; int32_t arg2; JSBool arg3; 
 
-	ok &= JS_ValueToECMAInt32( cx, *argvp++, &arg0 );
-	ok &= JS_ValueToBoolean( cx, *argvp++, &arg1 );
-	ok &= jsval_to_CGSize( cx, *argvp++, (CGSize*) &arg2 );
-	ok &= JS_ValueToNumber( cx, *argvp++, &arg3 );
+	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
+	ok &= jsval_to_CGSize( cx, *argvp++, (CGSize*) &arg1 );
+	ok &= JS_ValueToECMAInt32( cx, *argvp++, &arg2 );
+	ok &= JS_ValueToBoolean( cx, *argvp++, &arg3 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCShaky3D* ret_val;
 
-	ret_val = [CCShaky3D actionWithRange:(int)arg0 shakeZ:(BOOL)arg1 grid:(CGSize)arg2 duration:(ccTime)arg3  ];
+	ret_val = [CCShaky3D actionWithDuration:(ccTime)arg0 size:(CGSize)arg1 range:(int)arg2 shakeZ:(BOOL)arg3  ];
 
 	JS_SET_RVAL(cx, vp, NSObject_to_jsval(cx, ret_val));
 
 	return JS_TRUE;
 }
 
-// Arguments: int, BOOL, CGSize, ccTime
+// Arguments: ccTime, CGSize, int, BOOL
 // Ret value: None (None)
-JSBool JSB_CCShaky3D_initWithRange_shakeZ_grid_duration_(JSContext *cx, uint32_t argc, jsval *vp) {
+JSBool JSB_CCShaky3D_initWithDuration_size_range_shakeZ_(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
@@ -33187,15 +33187,15 @@ JSBool JSB_CCShaky3D_initWithRange_shakeZ_grid_duration_(JSContext *cx, uint32_t
 	JSB_PRECONDITION2( argc == 4, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
-	int32_t arg0; JSBool arg1; CGSize arg2; double arg3; 
+	double arg0; CGSize arg1; int32_t arg2; JSBool arg3; 
 
-	ok &= JS_ValueToECMAInt32( cx, *argvp++, &arg0 );
-	ok &= JS_ValueToBoolean( cx, *argvp++, &arg1 );
-	ok &= jsval_to_CGSize( cx, *argvp++, (CGSize*) &arg2 );
-	ok &= JS_ValueToNumber( cx, *argvp++, &arg3 );
+	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
+	ok &= jsval_to_CGSize( cx, *argvp++, (CGSize*) &arg1 );
+	ok &= JS_ValueToECMAInt32( cx, *argvp++, &arg2 );
+	ok &= JS_ValueToBoolean( cx, *argvp++, &arg3 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
-	CCShaky3D *real = [(CCShaky3D*)[proxy.klass alloc] initWithRange:(int)arg0 shakeZ:(BOOL)arg1 grid:(CGSize)arg2 duration:(ccTime)arg3  ];
+	CCShaky3D *real = [(CCShaky3D*)[proxy.klass alloc] initWithDuration:(ccTime)arg0 size:(CGSize)arg1 range:(int)arg2 shakeZ:(BOOL)arg3  ];
 	[proxy setRealObj: real];
 	[real autorelease];
 
@@ -33223,11 +33223,11 @@ void JSB_CCShaky3D_createClass(JSContext *cx, JSObject* globalObj, const char* n
 		{0, 0, 0, 0, 0}
 	};
 	static JSFunctionSpec funcs[] = {
-		JS_FN("initWithRangeShakeZGridDuration", JSB_CCShaky3D_initWithRange_shakeZ_grid_duration_, 4, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("initWithDurationSizeRangeShakeZ", JSB_CCShaky3D_initWithDuration_size_range_shakeZ_, 4, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FS_END
 	};
 	static JSFunctionSpec st_funcs[] = {
-		JS_FN("create", JSB_CCShaky3D_actionWithRange_shakeZ_grid_duration__static, 4, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("actionWithDurationSizeRangeShakeZ", JSB_CCShaky3D_actionWithDuration_size_range_shakeZ__static, 4, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FS_END
 	};
 
@@ -35157,22 +35157,22 @@ void JSB_CCLiquid_finalize(JSFreeOp *fop, JSObject *obj)
 	jsb_del_proxy_for_jsobject( obj );
 }
 
-// Arguments: int, float, CGSize, ccTime
+// Arguments: ccTime, CGSize, NSUInteger, float
 // Ret value: CCLiquid* (o)
-JSBool JSB_CCLiquid_actionWithWaves_amplitude_grid_duration__static(JSContext *cx, uint32_t argc, jsval *vp) {
+JSBool JSB_CCLiquid_actionWithDuration_size_waves_amplitude__static(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSB_PRECONDITION2( argc == 4, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
-	int32_t arg0; double arg1; CGSize arg2; double arg3; 
+	double arg0; CGSize arg1; uint32_t arg2; double arg3; 
 
-	ok &= JS_ValueToECMAInt32( cx, *argvp++, &arg0 );
-	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
-	ok &= jsval_to_CGSize( cx, *argvp++, (CGSize*) &arg2 );
+	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
+	ok &= jsval_to_CGSize( cx, *argvp++, (CGSize*) &arg1 );
+	ok &= JS_ValueToECMAUint32( cx, *argvp++, &arg2 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg3 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCLiquid* ret_val;
 
-	ret_val = [CCLiquid actionWithWaves:(int)arg0 amplitude:(float)arg1 grid:(CGSize)arg2 duration:(ccTime)arg3  ];
+	ret_val = [CCLiquid actionWithDuration:(ccTime)arg0 size:(CGSize)arg1 waves:(NSUInteger)arg2 amplitude:(float)arg3  ];
 
 	JS_SET_RVAL(cx, vp, NSObject_to_jsval(cx, ret_val));
 
@@ -35213,9 +35213,9 @@ JSBool JSB_CCLiquid_amplitudeRate(JSContext *cx, uint32_t argc, jsval *vp) {
 	return JS_TRUE;
 }
 
-// Arguments: int, float, CGSize, ccTime
+// Arguments: ccTime, CGSize, NSUInteger, float
 // Ret value: None (None)
-JSBool JSB_CCLiquid_initWithWaves_amplitude_grid_duration_(JSContext *cx, uint32_t argc, jsval *vp) {
+JSBool JSB_CCLiquid_initWithDuration_size_waves_amplitude_(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
@@ -35224,15 +35224,15 @@ JSBool JSB_CCLiquid_initWithWaves_amplitude_grid_duration_(JSContext *cx, uint32
 	JSB_PRECONDITION2( argc == 4, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
-	int32_t arg0; double arg1; CGSize arg2; double arg3; 
+	double arg0; CGSize arg1; uint32_t arg2; double arg3; 
 
-	ok &= JS_ValueToECMAInt32( cx, *argvp++, &arg0 );
-	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
-	ok &= jsval_to_CGSize( cx, *argvp++, (CGSize*) &arg2 );
+	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
+	ok &= jsval_to_CGSize( cx, *argvp++, (CGSize*) &arg1 );
+	ok &= JS_ValueToECMAUint32( cx, *argvp++, &arg2 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg3 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
-	CCLiquid *real = [(CCLiquid*)[proxy.klass alloc] initWithWaves:(int)arg0 amplitude:(float)arg1 grid:(CGSize)arg2 duration:(ccTime)arg3  ];
+	CCLiquid *real = [(CCLiquid*)[proxy.klass alloc] initWithDuration:(ccTime)arg0 size:(CGSize)arg1 waves:(NSUInteger)arg2 amplitude:(float)arg3  ];
 	[proxy setRealObj: real];
 	[real autorelease];
 
@@ -35306,13 +35306,13 @@ void JSB_CCLiquid_createClass(JSContext *cx, JSObject* globalObj, const char* na
 	static JSFunctionSpec funcs[] = {
 		JS_FN("getAmplitude", JSB_CCLiquid_amplitude, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("getAmplitudeRate", JSB_CCLiquid_amplitudeRate, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
-		JS_FN("initWithWavesAmplitudeGridDuration", JSB_CCLiquid_initWithWaves_amplitude_grid_duration_, 4, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("initWithDurationSizeWavesAmplitude", JSB_CCLiquid_initWithDuration_size_waves_amplitude_, 4, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("setAmplitude", JSB_CCLiquid_setAmplitude_, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("setAmplitudeRate", JSB_CCLiquid_setAmplitudeRate_, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FS_END
 	};
 	static JSFunctionSpec st_funcs[] = {
-		JS_FN("actionWithWavesAmplitudeGridDuration", JSB_CCLiquid_actionWithWaves_amplitude_grid_duration__static, 4, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("actionWithDurationSizeWavesAmplitude", JSB_CCLiquid_actionWithDuration_size_waves_amplitude__static, 4, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FS_END
 	};
 
@@ -37372,24 +37372,24 @@ void JSB_CCWaves_finalize(JSFreeOp *fop, JSObject *obj)
 	jsb_del_proxy_for_jsobject( obj );
 }
 
-// Arguments: int, float, BOOL, BOOL, CGSize, ccTime
+// Arguments: ccTime, CGSize, NSUInteger, float, BOOL, BOOL
 // Ret value: CCWaves* (o)
-JSBool JSB_CCWaves_actionWithWaves_amplitude_horizontal_vertical_grid_duration__static(JSContext *cx, uint32_t argc, jsval *vp) {
+JSBool JSB_CCWaves_actionWithDuration_size_waves_amplitude_horizontal_vertical__static(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSB_PRECONDITION2( argc == 6, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
-	int32_t arg0; double arg1; JSBool arg2; JSBool arg3; CGSize arg4; double arg5; 
+	double arg0; CGSize arg1; uint32_t arg2; double arg3; JSBool arg4; JSBool arg5; 
 
-	ok &= JS_ValueToECMAInt32( cx, *argvp++, &arg0 );
-	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
-	ok &= JS_ValueToBoolean( cx, *argvp++, &arg2 );
-	ok &= JS_ValueToBoolean( cx, *argvp++, &arg3 );
-	ok &= jsval_to_CGSize( cx, *argvp++, (CGSize*) &arg4 );
-	ok &= JS_ValueToNumber( cx, *argvp++, &arg5 );
+	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
+	ok &= jsval_to_CGSize( cx, *argvp++, (CGSize*) &arg1 );
+	ok &= JS_ValueToECMAUint32( cx, *argvp++, &arg2 );
+	ok &= JS_ValueToNumber( cx, *argvp++, &arg3 );
+	ok &= JS_ValueToBoolean( cx, *argvp++, &arg4 );
+	ok &= JS_ValueToBoolean( cx, *argvp++, &arg5 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCWaves* ret_val;
 
-	ret_val = [CCWaves actionWithWaves:(int)arg0 amplitude:(float)arg1 horizontal:(BOOL)arg2 vertical:(BOOL)arg3 grid:(CGSize)arg4 duration:(ccTime)arg5  ];
+	ret_val = [CCWaves actionWithDuration:(ccTime)arg0 size:(CGSize)arg1 waves:(NSUInteger)arg2 amplitude:(float)arg3 horizontal:(BOOL)arg4 vertical:(BOOL)arg5  ];
 
 	JS_SET_RVAL(cx, vp, NSObject_to_jsval(cx, ret_val));
 
@@ -37430,9 +37430,9 @@ JSBool JSB_CCWaves_amplitudeRate(JSContext *cx, uint32_t argc, jsval *vp) {
 	return JS_TRUE;
 }
 
-// Arguments: int, float, BOOL, BOOL, CGSize, ccTime
+// Arguments: ccTime, CGSize, NSUInteger, float, BOOL, BOOL
 // Ret value: None (None)
-JSBool JSB_CCWaves_initWithWaves_amplitude_horizontal_vertical_grid_duration_(JSContext *cx, uint32_t argc, jsval *vp) {
+JSBool JSB_CCWaves_initWithDuration_size_waves_amplitude_horizontal_vertical_(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
@@ -37441,17 +37441,17 @@ JSBool JSB_CCWaves_initWithWaves_amplitude_horizontal_vertical_grid_duration_(JS
 	JSB_PRECONDITION2( argc == 6, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
-	int32_t arg0; double arg1; JSBool arg2; JSBool arg3; CGSize arg4; double arg5; 
+	double arg0; CGSize arg1; uint32_t arg2; double arg3; JSBool arg4; JSBool arg5; 
 
-	ok &= JS_ValueToECMAInt32( cx, *argvp++, &arg0 );
-	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
-	ok &= JS_ValueToBoolean( cx, *argvp++, &arg2 );
-	ok &= JS_ValueToBoolean( cx, *argvp++, &arg3 );
-	ok &= jsval_to_CGSize( cx, *argvp++, (CGSize*) &arg4 );
-	ok &= JS_ValueToNumber( cx, *argvp++, &arg5 );
+	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
+	ok &= jsval_to_CGSize( cx, *argvp++, (CGSize*) &arg1 );
+	ok &= JS_ValueToECMAUint32( cx, *argvp++, &arg2 );
+	ok &= JS_ValueToNumber( cx, *argvp++, &arg3 );
+	ok &= JS_ValueToBoolean( cx, *argvp++, &arg4 );
+	ok &= JS_ValueToBoolean( cx, *argvp++, &arg5 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
-	CCWaves *real = [(CCWaves*)[proxy.klass alloc] initWithWaves:(int)arg0 amplitude:(float)arg1 horizontal:(BOOL)arg2 vertical:(BOOL)arg3 grid:(CGSize)arg4 duration:(ccTime)arg5  ];
+	CCWaves *real = [(CCWaves*)[proxy.klass alloc] initWithDuration:(ccTime)arg0 size:(CGSize)arg1 waves:(NSUInteger)arg2 amplitude:(float)arg3 horizontal:(BOOL)arg4 vertical:(BOOL)arg5  ];
 	[proxy setRealObj: real];
 	[real autorelease];
 
@@ -37525,13 +37525,13 @@ void JSB_CCWaves_createClass(JSContext *cx, JSObject* globalObj, const char* nam
 	static JSFunctionSpec funcs[] = {
 		JS_FN("getAmplitude", JSB_CCWaves_amplitude, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("getAmplitudeRate", JSB_CCWaves_amplitudeRate, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
-		JS_FN("initWithWavesAmplitudeHorizontalVerticalGridDuration", JSB_CCWaves_initWithWaves_amplitude_horizontal_vertical_grid_duration_, 6, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("initWithDurationSizeWavesAmplitudeHorizontalVertical", JSB_CCWaves_initWithDuration_size_waves_amplitude_horizontal_vertical_, 6, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("setAmplitude", JSB_CCWaves_setAmplitude_, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("setAmplitudeRate", JSB_CCWaves_setAmplitudeRate_, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FS_END
 	};
 	static JSFunctionSpec st_funcs[] = {
-		JS_FN("actionWithWavesAmplitudeHorizontalVerticalGridDuration", JSB_CCWaves_actionWithWaves_amplitude_horizontal_vertical_grid_duration__static, 6, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("actionWithDurationSizeWavesAmplitudeHorizontalVertical", JSB_CCWaves_actionWithDuration_size_waves_amplitude_horizontal_vertical__static, 6, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FS_END
 	};
 
@@ -38413,31 +38413,31 @@ void JSB_CCLens3D_finalize(JSFreeOp *fop, JSObject *obj)
 	jsb_del_proxy_for_jsobject( obj );
 }
 
-// Arguments: CGPoint, float, CGSize, ccTime
+// Arguments: ccTime, CGSize, CGPoint, float
 // Ret value: CCLens3D* (o)
-JSBool JSB_CCLens3D_actionWithPosition_radius_grid_duration__static(JSContext *cx, uint32_t argc, jsval *vp) {
+JSBool JSB_CCLens3D_actionWithDuration_size_position_radius__static(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSB_PRECONDITION2( argc == 4, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
-	CGPoint arg0; double arg1; CGSize arg2; double arg3; 
+	double arg0; CGSize arg1; CGPoint arg2; double arg3; 
 
-	ok &= jsval_to_CGPoint( cx, *argvp++, (CGPoint*) &arg0 );
-	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
-	ok &= jsval_to_CGSize( cx, *argvp++, (CGSize*) &arg2 );
+	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
+	ok &= jsval_to_CGSize( cx, *argvp++, (CGSize*) &arg1 );
+	ok &= jsval_to_CGPoint( cx, *argvp++, (CGPoint*) &arg2 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg3 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCLens3D* ret_val;
 
-	ret_val = [CCLens3D actionWithPosition:(CGPoint)arg0 radius:(float)arg1 grid:(CGSize)arg2 duration:(ccTime)arg3  ];
+	ret_val = [CCLens3D actionWithDuration:(ccTime)arg0 size:(CGSize)arg1 position:(CGPoint)arg2 radius:(float)arg3  ];
 
 	JS_SET_RVAL(cx, vp, NSObject_to_jsval(cx, ret_val));
 
 	return JS_TRUE;
 }
 
-// Arguments: CGPoint, float, CGSize, ccTime
+// Arguments: ccTime, CGSize, CGPoint, float
 // Ret value: None (None)
-JSBool JSB_CCLens3D_initWithPosition_radius_grid_duration_(JSContext *cx, uint32_t argc, jsval *vp) {
+JSBool JSB_CCLens3D_initWithDuration_size_position_radius_(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
@@ -38446,15 +38446,15 @@ JSBool JSB_CCLens3D_initWithPosition_radius_grid_duration_(JSContext *cx, uint32
 	JSB_PRECONDITION2( argc == 4, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
-	CGPoint arg0; double arg1; CGSize arg2; double arg3; 
+	double arg0; CGSize arg1; CGPoint arg2; double arg3; 
 
-	ok &= jsval_to_CGPoint( cx, *argvp++, (CGPoint*) &arg0 );
-	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
-	ok &= jsval_to_CGSize( cx, *argvp++, (CGSize*) &arg2 );
+	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
+	ok &= jsval_to_CGSize( cx, *argvp++, (CGSize*) &arg1 );
+	ok &= jsval_to_CGPoint( cx, *argvp++, (CGPoint*) &arg2 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg3 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
-	CCLens3D *real = [(CCLens3D*)[proxy.klass alloc] initWithPosition:(CGPoint)arg0 radius:(float)arg1 grid:(CGSize)arg2 duration:(ccTime)arg3  ];
+	CCLens3D *real = [(CCLens3D*)[proxy.klass alloc] initWithDuration:(ccTime)arg0 size:(CGSize)arg1 position:(CGPoint)arg2 radius:(float)arg3  ];
 	[proxy setRealObj: real];
 	[real autorelease];
 
@@ -38541,7 +38541,7 @@ void JSB_CCLens3D_createClass(JSContext *cx, JSObject* globalObj, const char* na
 		{0, 0, 0, 0, 0}
 	};
 	static JSFunctionSpec funcs[] = {
-		JS_FN("initWithPositionRadiusGridDuration", JSB_CCLens3D_initWithPosition_radius_grid_duration_, 4, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("initWithDurationSizePositionRadius", JSB_CCLens3D_initWithDuration_size_position_radius_, 4, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("getLensEffect", JSB_CCLens3D_lensEffect, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("getPosition", JSB_CCLens3D_position, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("setLensEffect", JSB_CCLens3D_setLensEffect_, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
@@ -38549,7 +38549,7 @@ void JSB_CCLens3D_createClass(JSContext *cx, JSObject* globalObj, const char* na
 		JS_FS_END
 	};
 	static JSFunctionSpec st_funcs[] = {
-		JS_FN("actionWithPositionRadiusGridDuration", JSB_CCLens3D_actionWithPosition_radius_grid_duration__static, 4, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("actionWithDurationSizePositionRadius", JSB_CCLens3D_actionWithDuration_size_position_radius__static, 4, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FS_END
 	};
 
@@ -38604,22 +38604,22 @@ void JSB_CCWaves3D_finalize(JSFreeOp *fop, JSObject *obj)
 	jsb_del_proxy_for_jsobject( obj );
 }
 
-// Arguments: int, float, CGSize, ccTime
+// Arguments: ccTime, CGSize, NSUInteger, float
 // Ret value: CCWaves3D* (o)
-JSBool JSB_CCWaves3D_actionWithWaves_amplitude_grid_duration__static(JSContext *cx, uint32_t argc, jsval *vp) {
+JSBool JSB_CCWaves3D_actionWithDuration_size_waves_amplitude__static(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSB_PRECONDITION2( argc == 4, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
-	int32_t arg0; double arg1; CGSize arg2; double arg3; 
+	double arg0; CGSize arg1; uint32_t arg2; double arg3; 
 
-	ok &= JS_ValueToECMAInt32( cx, *argvp++, &arg0 );
-	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
-	ok &= jsval_to_CGSize( cx, *argvp++, (CGSize*) &arg2 );
+	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
+	ok &= jsval_to_CGSize( cx, *argvp++, (CGSize*) &arg1 );
+	ok &= JS_ValueToECMAUint32( cx, *argvp++, &arg2 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg3 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCWaves3D* ret_val;
 
-	ret_val = [CCWaves3D actionWithWaves:(int)arg0 amplitude:(float)arg1 grid:(CGSize)arg2 duration:(ccTime)arg3  ];
+	ret_val = [CCWaves3D actionWithDuration:(ccTime)arg0 size:(CGSize)arg1 waves:(NSUInteger)arg2 amplitude:(float)arg3  ];
 
 	JS_SET_RVAL(cx, vp, NSObject_to_jsval(cx, ret_val));
 
@@ -38660,9 +38660,9 @@ JSBool JSB_CCWaves3D_amplitudeRate(JSContext *cx, uint32_t argc, jsval *vp) {
 	return JS_TRUE;
 }
 
-// Arguments: int, float, CGSize, ccTime
+// Arguments: ccTime, CGSize, NSUInteger, float
 // Ret value: None (None)
-JSBool JSB_CCWaves3D_initWithWaves_amplitude_grid_duration_(JSContext *cx, uint32_t argc, jsval *vp) {
+JSBool JSB_CCWaves3D_initWithDuration_size_waves_amplitude_(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
@@ -38671,15 +38671,15 @@ JSBool JSB_CCWaves3D_initWithWaves_amplitude_grid_duration_(JSContext *cx, uint3
 	JSB_PRECONDITION2( argc == 4, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
-	int32_t arg0; double arg1; CGSize arg2; double arg3; 
+	double arg0; CGSize arg1; uint32_t arg2; double arg3; 
 
-	ok &= JS_ValueToECMAInt32( cx, *argvp++, &arg0 );
-	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
-	ok &= jsval_to_CGSize( cx, *argvp++, (CGSize*) &arg2 );
+	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
+	ok &= jsval_to_CGSize( cx, *argvp++, (CGSize*) &arg1 );
+	ok &= JS_ValueToECMAUint32( cx, *argvp++, &arg2 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg3 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
-	CCWaves3D *real = [(CCWaves3D*)[proxy.klass alloc] initWithWaves:(int)arg0 amplitude:(float)arg1 grid:(CGSize)arg2 duration:(ccTime)arg3  ];
+	CCWaves3D *real = [(CCWaves3D*)[proxy.klass alloc] initWithDuration:(ccTime)arg0 size:(CGSize)arg1 waves:(NSUInteger)arg2 amplitude:(float)arg3  ];
 	[proxy setRealObj: real];
 	[real autorelease];
 
@@ -38753,13 +38753,13 @@ void JSB_CCWaves3D_createClass(JSContext *cx, JSObject* globalObj, const char* n
 	static JSFunctionSpec funcs[] = {
 		JS_FN("getAmplitude", JSB_CCWaves3D_amplitude, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("getAmplitudeRate", JSB_CCWaves3D_amplitudeRate, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
-		JS_FN("initWithWavesAmplitudeGridDuration", JSB_CCWaves3D_initWithWaves_amplitude_grid_duration_, 4, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("initWithDurationSizeWavesAmplitude", JSB_CCWaves3D_initWithDuration_size_waves_amplitude_, 4, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("setAmplitude", JSB_CCWaves3D_setAmplitude_, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("setAmplitudeRate", JSB_CCWaves3D_setAmplitudeRate_, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FS_END
 	};
 	static JSFunctionSpec st_funcs[] = {
-		JS_FN("create", JSB_CCWaves3D_actionWithWaves_amplitude_grid_duration__static, 4, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("actionWithDurationSizeWavesAmplitude", JSB_CCWaves3D_actionWithDuration_size_waves_amplitude__static, 4, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FS_END
 	};
 
@@ -38935,22 +38935,22 @@ void JSB_CCWavesTiles3D_finalize(JSFreeOp *fop, JSObject *obj)
 	jsb_del_proxy_for_jsobject( obj );
 }
 
-// Arguments: int, float, CGSize, ccTime
+// Arguments: ccTime, CGSize, NSUInteger, float
 // Ret value: CCWavesTiles3D* (o)
-JSBool JSB_CCWavesTiles3D_actionWithWaves_amplitude_grid_duration__static(JSContext *cx, uint32_t argc, jsval *vp) {
+JSBool JSB_CCWavesTiles3D_actionWithDuration_size_waves_amplitude__static(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSB_PRECONDITION2( argc == 4, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
-	int32_t arg0; double arg1; CGSize arg2; double arg3; 
+	double arg0; CGSize arg1; uint32_t arg2; double arg3; 
 
-	ok &= JS_ValueToECMAInt32( cx, *argvp++, &arg0 );
-	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
-	ok &= jsval_to_CGSize( cx, *argvp++, (CGSize*) &arg2 );
+	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
+	ok &= jsval_to_CGSize( cx, *argvp++, (CGSize*) &arg1 );
+	ok &= JS_ValueToECMAUint32( cx, *argvp++, &arg2 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg3 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCWavesTiles3D* ret_val;
 
-	ret_val = [CCWavesTiles3D actionWithWaves:(int)arg0 amplitude:(float)arg1 grid:(CGSize)arg2 duration:(ccTime)arg3  ];
+	ret_val = [CCWavesTiles3D actionWithDuration:(ccTime)arg0 size:(CGSize)arg1 waves:(NSUInteger)arg2 amplitude:(float)arg3  ];
 
 	JS_SET_RVAL(cx, vp, NSObject_to_jsval(cx, ret_val));
 
@@ -38991,9 +38991,9 @@ JSBool JSB_CCWavesTiles3D_amplitudeRate(JSContext *cx, uint32_t argc, jsval *vp)
 	return JS_TRUE;
 }
 
-// Arguments: int, float, CGSize, ccTime
+// Arguments: ccTime, CGSize, NSUInteger, float
 // Ret value: None (None)
-JSBool JSB_CCWavesTiles3D_initWithWaves_amplitude_grid_duration_(JSContext *cx, uint32_t argc, jsval *vp) {
+JSBool JSB_CCWavesTiles3D_initWithDuration_size_waves_amplitude_(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
@@ -39002,15 +39002,15 @@ JSBool JSB_CCWavesTiles3D_initWithWaves_amplitude_grid_duration_(JSContext *cx, 
 	JSB_PRECONDITION2( argc == 4, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
-	int32_t arg0; double arg1; CGSize arg2; double arg3; 
+	double arg0; CGSize arg1; uint32_t arg2; double arg3; 
 
-	ok &= JS_ValueToECMAInt32( cx, *argvp++, &arg0 );
-	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
-	ok &= jsval_to_CGSize( cx, *argvp++, (CGSize*) &arg2 );
+	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
+	ok &= jsval_to_CGSize( cx, *argvp++, (CGSize*) &arg1 );
+	ok &= JS_ValueToECMAUint32( cx, *argvp++, &arg2 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg3 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
-	CCWavesTiles3D *real = [(CCWavesTiles3D*)[proxy.klass alloc] initWithWaves:(int)arg0 amplitude:(float)arg1 grid:(CGSize)arg2 duration:(ccTime)arg3  ];
+	CCWavesTiles3D *real = [(CCWavesTiles3D*)[proxy.klass alloc] initWithDuration:(ccTime)arg0 size:(CGSize)arg1 waves:(NSUInteger)arg2 amplitude:(float)arg3  ];
 	[proxy setRealObj: real];
 	[real autorelease];
 
@@ -39084,13 +39084,13 @@ void JSB_CCWavesTiles3D_createClass(JSContext *cx, JSObject* globalObj, const ch
 	static JSFunctionSpec funcs[] = {
 		JS_FN("getAmplitude", JSB_CCWavesTiles3D_amplitude, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("getAmplitudeRate", JSB_CCWavesTiles3D_amplitudeRate, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
-		JS_FN("initWithWavesAmplitudeGridDuration", JSB_CCWavesTiles3D_initWithWaves_amplitude_grid_duration_, 4, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("initWithDurationSizeWavesAmplitude", JSB_CCWavesTiles3D_initWithDuration_size_waves_amplitude_, 4, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("setAmplitude", JSB_CCWavesTiles3D_setAmplitude_, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("setAmplitudeRate", JSB_CCWavesTiles3D_setAmplitudeRate_, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FS_END
 	};
 	static JSFunctionSpec st_funcs[] = {
-		JS_FN("actionWithWavesAmplitudeGridDuration", JSB_CCWavesTiles3D_actionWithWaves_amplitude_grid_duration__static, 4, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("actionWithDurationSizeWavesAmplitude", JSB_CCWavesTiles3D_actionWithDuration_size_waves_amplitude__static, 4, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FS_END
 	};
 
@@ -39145,30 +39145,30 @@ void JSB_CCTurnOffTiles_finalize(JSFreeOp *fop, JSObject *obj)
 	jsb_del_proxy_for_jsobject( obj );
 }
 
-// Arguments: int, CGSize, ccTime
+// Arguments: ccTime, CGSize, unsigned int
 // Ret value: CCTurnOffTiles* (o)
-JSBool JSB_CCTurnOffTiles_actionWithSeed_grid_duration__static(JSContext *cx, uint32_t argc, jsval *vp) {
+JSBool JSB_CCTurnOffTiles_actionWithDuration_size_seed__static(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSB_PRECONDITION2( argc == 3, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
-	int32_t arg0; CGSize arg1; double arg2; 
+	double arg0; CGSize arg1; uint32_t arg2; 
 
-	ok &= JS_ValueToECMAInt32( cx, *argvp++, &arg0 );
+	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
 	ok &= jsval_to_CGSize( cx, *argvp++, (CGSize*) &arg1 );
-	ok &= JS_ValueToNumber( cx, *argvp++, &arg2 );
+	ok &= JS_ValueToECMAUint32( cx, *argvp++, &arg2 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCTurnOffTiles* ret_val;
 
-	ret_val = [CCTurnOffTiles actionWithSeed:(int)arg0 grid:(CGSize)arg1 duration:(ccTime)arg2  ];
+	ret_val = [CCTurnOffTiles actionWithDuration:(ccTime)arg0 size:(CGSize)arg1 seed:(unsigned int)arg2  ];
 
 	JS_SET_RVAL(cx, vp, NSObject_to_jsval(cx, ret_val));
 
 	return JS_TRUE;
 }
 
-// Arguments: int, CGSize, ccTime
+// Arguments: ccTime, CGSize, unsigned int
 // Ret value: None (None)
-JSBool JSB_CCTurnOffTiles_initWithSeed_grid_duration_(JSContext *cx, uint32_t argc, jsval *vp) {
+JSBool JSB_CCTurnOffTiles_initWithDuration_size_seed_(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
@@ -39177,14 +39177,14 @@ JSBool JSB_CCTurnOffTiles_initWithSeed_grid_duration_(JSContext *cx, uint32_t ar
 	JSB_PRECONDITION2( argc == 3, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
-	int32_t arg0; CGSize arg1; double arg2; 
+	double arg0; CGSize arg1; uint32_t arg2; 
 
-	ok &= JS_ValueToECMAInt32( cx, *argvp++, &arg0 );
+	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
 	ok &= jsval_to_CGSize( cx, *argvp++, (CGSize*) &arg1 );
-	ok &= JS_ValueToNumber( cx, *argvp++, &arg2 );
+	ok &= JS_ValueToECMAUint32( cx, *argvp++, &arg2 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
-	CCTurnOffTiles *real = [(CCTurnOffTiles*)[proxy.klass alloc] initWithSeed:(int)arg0 grid:(CGSize)arg1 duration:(ccTime)arg2  ];
+	CCTurnOffTiles *real = [(CCTurnOffTiles*)[proxy.klass alloc] initWithDuration:(ccTime)arg0 size:(CGSize)arg1 seed:(unsigned int)arg2  ];
 	[proxy setRealObj: real];
 	[real autorelease];
 
@@ -39212,11 +39212,11 @@ void JSB_CCTurnOffTiles_createClass(JSContext *cx, JSObject* globalObj, const ch
 		{0, 0, 0, 0, 0}
 	};
 	static JSFunctionSpec funcs[] = {
-		JS_FN("initWithSeedGridDuration", JSB_CCTurnOffTiles_initWithSeed_grid_duration_, 3, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("initWithDurationSizeSeed", JSB_CCTurnOffTiles_initWithDuration_size_seed_, 3, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FS_END
 	};
 	static JSFunctionSpec st_funcs[] = {
-		JS_FN("actionWithSeedGridDuration", JSB_CCTurnOffTiles_actionWithSeed_grid_duration__static, 3, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("actionWithDurationSizeSeed", JSB_CCTurnOffTiles_actionWithDuration_size_seed__static, 3, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FS_END
 	};
 
@@ -39402,29 +39402,29 @@ void JSB_CCSplitCols_finalize(JSFreeOp *fop, JSObject *obj)
 	jsb_del_proxy_for_jsobject( obj );
 }
 
-// Arguments: int, ccTime
+// Arguments: ccTime, NSUInteger
 // Ret value: CCSplitCols* (o)
-JSBool JSB_CCSplitCols_actionWithCols_duration__static(JSContext *cx, uint32_t argc, jsval *vp) {
+JSBool JSB_CCSplitCols_actionWithDuration_cols__static(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSB_PRECONDITION2( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
-	int32_t arg0; double arg1; 
+	double arg0; uint32_t arg1; 
 
-	ok &= JS_ValueToECMAInt32( cx, *argvp++, &arg0 );
-	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
+	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
+	ok &= JS_ValueToECMAUint32( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCSplitCols* ret_val;
 
-	ret_val = [CCSplitCols actionWithCols:(int)arg0 duration:(ccTime)arg1  ];
+	ret_val = [CCSplitCols actionWithDuration:(ccTime)arg0 cols:(NSUInteger)arg1  ];
 
 	JS_SET_RVAL(cx, vp, NSObject_to_jsval(cx, ret_val));
 
 	return JS_TRUE;
 }
 
-// Arguments: int, ccTime
+// Arguments: ccTime, NSUInteger
 // Ret value: None (None)
-JSBool JSB_CCSplitCols_initWithCols_duration_(JSContext *cx, uint32_t argc, jsval *vp) {
+JSBool JSB_CCSplitCols_initWithDuration_cols_(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
@@ -39433,13 +39433,13 @@ JSBool JSB_CCSplitCols_initWithCols_duration_(JSContext *cx, uint32_t argc, jsva
 	JSB_PRECONDITION2( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
-	int32_t arg0; double arg1; 
+	double arg0; uint32_t arg1; 
 
-	ok &= JS_ValueToECMAInt32( cx, *argvp++, &arg0 );
-	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
+	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
+	ok &= JS_ValueToECMAUint32( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
-	CCSplitCols *real = [(CCSplitCols*)[proxy.klass alloc] initWithCols:(int)arg0 duration:(ccTime)arg1  ];
+	CCSplitCols *real = [(CCSplitCols*)[proxy.klass alloc] initWithDuration:(ccTime)arg0 cols:(NSUInteger)arg1  ];
 	[proxy setRealObj: real];
 	[real autorelease];
 
@@ -39467,11 +39467,11 @@ void JSB_CCSplitCols_createClass(JSContext *cx, JSObject* globalObj, const char*
 		{0, 0, 0, 0, 0}
 	};
 	static JSFunctionSpec funcs[] = {
-		JS_FN("initWithColsDuration", JSB_CCSplitCols_initWithCols_duration_, 2, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("initWithDurationCols", JSB_CCSplitCols_initWithDuration_cols_, 2, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FS_END
 	};
 	static JSFunctionSpec st_funcs[] = {
-		JS_FN("actionWithColsDuration", JSB_CCSplitCols_actionWithCols_duration__static, 2, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("actionWithDurationCols", JSB_CCSplitCols_actionWithDuration_cols__static, 2, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FS_END
 	};
 
@@ -40383,23 +40383,23 @@ void JSB_CCTwirl_finalize(JSFreeOp *fop, JSObject *obj)
 	jsb_del_proxy_for_jsobject( obj );
 }
 
-// Arguments: CGPoint, int, float, CGSize, ccTime
+// Arguments: ccTime, CGSize, CGPoint, NSUInteger, float
 // Ret value: CCTwirl* (o)
-JSBool JSB_CCTwirl_actionWithPosition_twirls_amplitude_grid_duration__static(JSContext *cx, uint32_t argc, jsval *vp) {
+JSBool JSB_CCTwirl_actionWithDuration_size_position_twirls_amplitude__static(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSB_PRECONDITION2( argc == 5, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
-	CGPoint arg0; int32_t arg1; double arg2; CGSize arg3; double arg4; 
+	double arg0; CGSize arg1; CGPoint arg2; uint32_t arg3; double arg4; 
 
-	ok &= jsval_to_CGPoint( cx, *argvp++, (CGPoint*) &arg0 );
-	ok &= JS_ValueToECMAInt32( cx, *argvp++, &arg1 );
-	ok &= JS_ValueToNumber( cx, *argvp++, &arg2 );
-	ok &= jsval_to_CGSize( cx, *argvp++, (CGSize*) &arg3 );
+	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
+	ok &= jsval_to_CGSize( cx, *argvp++, (CGSize*) &arg1 );
+	ok &= jsval_to_CGPoint( cx, *argvp++, (CGPoint*) &arg2 );
+	ok &= JS_ValueToECMAUint32( cx, *argvp++, &arg3 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg4 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCTwirl* ret_val;
 
-	ret_val = [CCTwirl actionWithPosition:(CGPoint)arg0 twirls:(int)arg1 amplitude:(float)arg2 grid:(CGSize)arg3 duration:(ccTime)arg4  ];
+	ret_val = [CCTwirl actionWithDuration:(ccTime)arg0 size:(CGSize)arg1 position:(CGPoint)arg2 twirls:(NSUInteger)arg3 amplitude:(float)arg4  ];
 
 	JS_SET_RVAL(cx, vp, NSObject_to_jsval(cx, ret_val));
 
@@ -40440,9 +40440,9 @@ JSBool JSB_CCTwirl_amplitudeRate(JSContext *cx, uint32_t argc, jsval *vp) {
 	return JS_TRUE;
 }
 
-// Arguments: CGPoint, int, float, CGSize, ccTime
+// Arguments: ccTime, CGSize, CGPoint, NSUInteger, float
 // Ret value: None (None)
-JSBool JSB_CCTwirl_initWithPosition_twirls_amplitude_grid_duration_(JSContext *cx, uint32_t argc, jsval *vp) {
+JSBool JSB_CCTwirl_initWithDuration_size_position_twirls_amplitude_(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
@@ -40451,16 +40451,16 @@ JSBool JSB_CCTwirl_initWithPosition_twirls_amplitude_grid_duration_(JSContext *c
 	JSB_PRECONDITION2( argc == 5, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
-	CGPoint arg0; int32_t arg1; double arg2; CGSize arg3; double arg4; 
+	double arg0; CGSize arg1; CGPoint arg2; uint32_t arg3; double arg4; 
 
-	ok &= jsval_to_CGPoint( cx, *argvp++, (CGPoint*) &arg0 );
-	ok &= JS_ValueToECMAInt32( cx, *argvp++, &arg1 );
-	ok &= JS_ValueToNumber( cx, *argvp++, &arg2 );
-	ok &= jsval_to_CGSize( cx, *argvp++, (CGSize*) &arg3 );
+	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
+	ok &= jsval_to_CGSize( cx, *argvp++, (CGSize*) &arg1 );
+	ok &= jsval_to_CGPoint( cx, *argvp++, (CGPoint*) &arg2 );
+	ok &= JS_ValueToECMAUint32( cx, *argvp++, &arg3 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg4 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
-	CCTwirl *real = [(CCTwirl*)[proxy.klass alloc] initWithPosition:(CGPoint)arg0 twirls:(int)arg1 amplitude:(float)arg2 grid:(CGSize)arg3 duration:(ccTime)arg4  ];
+	CCTwirl *real = [(CCTwirl*)[proxy.klass alloc] initWithDuration:(ccTime)arg0 size:(CGSize)arg1 position:(CGPoint)arg2 twirls:(NSUInteger)arg3 amplitude:(float)arg4  ];
 	[proxy setRealObj: real];
 	[real autorelease];
 
@@ -40554,7 +40554,7 @@ void JSB_CCTwirl_createClass(JSContext *cx, JSObject* globalObj, const char* nam
 	static JSFunctionSpec funcs[] = {
 		JS_FN("getAmplitude", JSB_CCTwirl_amplitude, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("getAmplitudeRate", JSB_CCTwirl_amplitudeRate, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
-		JS_FN("initWithPositionTwirlsAmplitudeGridDuration", JSB_CCTwirl_initWithPosition_twirls_amplitude_grid_duration_, 5, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("initWithDurationSizePositionTwirlsAmplitude", JSB_CCTwirl_initWithDuration_size_position_twirls_amplitude_, 5, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("getPosition", JSB_CCTwirl_position, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("setAmplitude", JSB_CCTwirl_setAmplitude_, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("setAmplitudeRate", JSB_CCTwirl_setAmplitudeRate_, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
@@ -40562,7 +40562,7 @@ void JSB_CCTwirl_createClass(JSContext *cx, JSObject* globalObj, const char* nam
 		JS_FS_END
 	};
 	static JSFunctionSpec st_funcs[] = {
-		JS_FN("actionWithPositionTwirlsAmplitudeGridDuration", JSB_CCTwirl_actionWithPosition_twirls_amplitude_grid_duration__static, 5, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("actionWithDurationSizePositionTwirlsAmplitude", JSB_CCTwirl_actionWithDuration_size_position_twirls_amplitude__static, 5, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FS_END
 	};
 
