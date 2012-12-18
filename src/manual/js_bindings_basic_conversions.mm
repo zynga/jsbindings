@@ -125,6 +125,7 @@ JSBool jsval_is_NSString( JSContext *cx, jsval vp, NSString **ret )
 	
 	return JS_TRUE;
 }
+
 JSBool jsval_to_NSString( JSContext *cx, jsval vp, NSString **ret )
 {
 	JSString *jsstr = JS_ValueToString( cx, vp );
@@ -137,7 +138,6 @@ JSBool jsval_to_NSString( JSContext *cx, jsval vp, NSString **ret )
 	
 	JSB_PRECONDITION2(ptr, cx, JS_FALSE, "Error encoding string");
 	
-//	NSString *tmp = [NSString stringWithUTF8String: ptr];
 	NSString *tmp = [NSString stringWithCString:ptr encoding:NSUTF8StringEncoding];
 	
 	JSB_PRECONDITION2( tmp, cx, JS_FALSE, "Error creating string from UTF8");
@@ -483,6 +483,29 @@ JSBool jsval_to_longlong( JSContext *cx, jsval vp, long long *r )
 #endif // JSB_REPRESENT_LONGLONG_AS_STR
 }
 
+JSBool jsval_to_charptr( JSContext *cx, jsval vp, const char **ret )
+{
+	JSString *jsstr = JS_ValueToString( cx, vp );
+	JSB_PRECONDITION2( jsstr, cx, JS_FALSE, "invalid string" );
+	
+	// root it
+	vp = STRING_TO_JSVAL(jsstr);
+	
+	char *ptr = JS_EncodeString(cx, jsstr);
+	
+	JSB_PRECONDITION2(ptr, cx, JS_FALSE, "Error encoding string");
+	
+	// XXX: It is converted to NSString and then back to char* to autorelease the created object.
+	NSString *tmp = [NSString stringWithCString:ptr encoding:NSUTF8StringEncoding];
+	
+	JSB_PRECONDITION2( tmp, cx, JS_FALSE, "Error creating string from UTF8");
+	
+	*ret = [tmp UTF8String];
+	JS_free( cx, ptr );
+	
+	return JS_TRUE;
+}
+
 
 #pragma mark - native to jsval
 
@@ -693,4 +716,9 @@ jsval longlong_to_jsval( JSContext *cx, long long number )
 #endif
 }
 
+jsval charptr_to_jsval( JSContext *cx, const char *str)
+{
+	JSString *ret_obj = JS_NewStringCopyZ(cx, str);
+	return STRING_TO_JSVAL(ret_obj);
+}
 

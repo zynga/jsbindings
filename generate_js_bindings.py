@@ -46,7 +46,7 @@ class ParseOKException(Exception):
 BINDINGS_PREFIX = 'js_bindings_'
 PROXY_PREFIX = 'JSB_'
 METHOD_CONSTRUCTOR, METHOD_CLASS, METHOD_INIT, METHOD_REGULAR = xrange(4)
-JSB_VERSION = 'v0.3'
+JSB_VERSION = 'v0.5'
 
 
 # uncapitalize from: http://stackoverflow.com/a/3847369
@@ -295,6 +295,15 @@ class JSBGenerate(object):
 '''
         return template
 
+    # special case: returning String
+    def generate_retval_charptr(self, declared_type, js_type):
+        template = '''
+\tjsval ret_jsval = charptr_to_jsval( cx, ret_val );
+\tJS_SET_RVAL(cx, vp, ret_jsval );
+'''
+        return template
+
+
     def generate_retval_array(self, declared_type, js_type):
         template = '''
 \tjsval ret_jsval = NSArray_to_jsval( cx, (NSArray*) ret_val );
@@ -379,6 +388,7 @@ class JSBGenerate(object):
         special_convert = {
             'o': self.generate_retval_object,
             'S': self.generate_retval_string,
+            'char*': self.generate_retval_charptr,
             'array': self.generate_retval_array,
             'set': self.generate_retval_set,
             'dict': self.generate_retval_dict,
@@ -416,6 +426,10 @@ class JSBGenerate(object):
             'CCArray*': 'array',
             'NSSet*': 'set',
             'NSDictionary*': 'dict',
+            'const char*': 'char*',
+            'const unsigned char*': 'char*',
+            'char*': 'char*',
+            'unsigned char*': 'char*',
         }
 
         supported_types = {
@@ -441,6 +455,9 @@ class JSBGenerate(object):
             retval = method['retval']
             t = retval[0]['type']
             dt = retval[0]['declared_type']
+            # const ?
+            if 'const' in retval[0]:
+                dt = 'const ' + dt
             dt_class_name = dt.replace('*', '')
 
             # Special case for initializer methods
@@ -503,6 +520,8 @@ class JSBGenerate(object):
             'NSSet*': 'set',
             'void (^)(id)': 'f',
             'void (^)(CCNode *)': 'f',
+            'char*': 'char*',
+            'unsigned char*': 'char*',
         }
 
         supported_types = {
@@ -574,6 +593,11 @@ class JSBGenerate(object):
     # Special case for string to NSString generator
     def generate_argument_string(self, i, arg_js_type, arg_declared_type):
         template = '\tok &= jsval_to_NSString( cx, *argvp++, &arg%d );\n'
+        self.fd_mm.write(template % i)
+
+    # Special case for string to char* generator
+    def generate_argument_charptr(self, i, arg_js_type, arg_declared_type):
+        template = '\tok &= jsval_to_charptr( cx, *argvp++, &arg%d );\n'
         self.fd_mm.write(template % i)
 
     # Special case for objects
@@ -655,6 +679,7 @@ class JSBGenerate(object):
 
         js_special_type_conversions = {
             'S': [self.generate_argument_string, 'NSString*'],
+            'char*': [self.generate_argument_charptr, 'const char*'],
             'o': [self.generate_argument_object, 'id'],
             'array': [self.generate_argument_array, 'NSArray*'],
             'set': [self.generate_argument_set, 'NSSet*'],

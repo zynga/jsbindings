@@ -74,6 +74,8 @@ JSBool jsval_to_c_class( JSContext *cx, jsval vp, void **r, struct jsb_c_proxy_s
 JSBool jsval_to_block_1( JSContext *cx, jsval vp, JSObject *jsthis, js_block *out  );
 /** converts a jsval to a block (2 == receives 2 argument (sender + custom) ) */
 JSBool jsval_to_block_2( JSContext *cx, jsval vp, JSObject *jsthis, jsval arg, js_block *out  );
+/** converts a jsval (JS string) into a char */
+JSBool jsval_to_charptr( JSContext *cx, jsval vp, const char **out);
 
 jsval unknown_to_jsval( JSContext *cx, id obj);
 /** Converts an NSObject into a jsval. It does not creates a new object if the NSObject has already been converted */
@@ -94,3 +96,5 @@ jsval CGRect_to_jsval( JSContext *cx, CGRect r);
 jsval opaque_to_jsval( JSContext *cx, void* opaque);
 /** Converts an C class (a structure) into a jsval. It does not creates a new object it the C class has already been converted */
 jsval c_class_to_jsval( JSContext *cx, void* handle, JSObject* object, JSClass *klass, const char* optional_class_name);
+/* Converts a char ptr into a jsval (using JS string) */
+jsval charptr_to_jsval( JSContext *cx, const char *str);

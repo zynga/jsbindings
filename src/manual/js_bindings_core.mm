@@ -32,6 +32,7 @@
 // cocos2d + chipmunk registration files
 #import "js_bindings_cocos2d_registration.h"
 #import "js_bindings_chipmunk_registration.h"
+#import "js_bindings_system_registration.h"
 
 #pragma mark - Hash
 
@@ -48,7 +49,7 @@ static tHashJSObject *reverse_hash = NULL;
 // Globals
 char * JSB_association_proxy_key = NULL;
 
-const char * JSB_version = "0.4";
+const char * JSB_version = "0.5";
 
 
 static void its_finalize(JSFreeOp *fop, JSObject *obj)
@@ -327,6 +328,12 @@ JSBool JSBCore_restartVM(JSContext *cx, uint32_t argc, jsval *vp)
 #if JSB_INCLUDE_CHIPMUNK
 	jsb_register_chipmunk(_cx, _object);
 #endif // JSB_INCLUDE_CHIPMUNK
+
+	// registers sys bindings
+#if JSB_INCLUDE_SYSTEM
+	jsb_register_system(_cx, _object);
+#endif // JSB_INCLUDE_CHIPMUNK
+
 }
 
 +(void) reportErrorWithContext:(JSContext*)cx message:(NSString*)message report:(JSErrorReport*)report

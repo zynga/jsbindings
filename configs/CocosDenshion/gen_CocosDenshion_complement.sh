@@ -3,5 +3,5 @@
 # run this script from the CocosDenshion directory. eg:
 # cd ~/src/cocos2d-iphone/CocosDenshion/CocosDenshion
 #
-../../external/jsbindings/generate_complement.py -o ../../external/jsbindings/configs/CocosDenshion/CocosDenshion-complement.txt *.h
+../../external/JavaScript/jsbindings/generate_complement.py -o ../../external/JavaScript/jsbindings/configs/CocosDenshion/CocosDenshion-complement.txt *.h
 
