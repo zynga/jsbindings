@@ -446,6 +446,11 @@ JSBool JSBCore_restartVM(JSContext *cx, uint32_t argc, jsval *vp)
 	
 	CCFileUtils *fileUtils = [CCFileUtils sharedFileUtils];
 	NSString *fullpath = [fileUtils fullPathFromRelativePathIgnoringResolutions:filename];
+	if( !fullpath) {
+		char tmp[256];
+		snprintf(tmp, sizeof(tmp)-1, "File not found: %s", [filename UTF8String]);
+		JSB_PRECONDITION(fullpath, tmp);
+	}
 
 	script = JS_CompileUTF8File(_cx, _object, [fullpath UTF8String] );
 
