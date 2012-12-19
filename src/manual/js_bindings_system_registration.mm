@@ -24,6 +24,7 @@
 
 #import "js_bindings_config.h"
 #import "js_bindings_core.h"
+#import "LocalStorage.h"
 
 
 // system
@@ -47,6 +48,12 @@ void jsb_register_system( JSContext *_cx, JSObject *object)
 
 	// sys.localStorage functions
 	JSObject *system = ls;
-#import "js_bindings_system_functions_registration.h"	
+#import "js_bindings_system_functions_registration.h"
+	
+	
+	// Init DB with full path
+	NSString *path = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
+	NSString *fullpath = [path stringByAppendingPathComponent:@"jsb.sqlite"];
+	localStorageInit([fullpath UTF8String]);
 }
 
