@@ -863,7 +863,7 @@ JSBool JSB_CCTexture2D_setTexParameters_(JSContext *cx, uint32_t argc, jsval *vp
 	if( ! ok )
 		return JS_FALSE;
 
-	ccTexParams param = { arg0, arg1, arg2, arg3 };
+	ccTexParams param = { (GLuint)arg0, (GLuint)arg1, (GLuint)arg2, (GLuint)arg3 };
 
 	CCTexture2D *real = (CCTexture2D*) [proxy realObj];
 	[real setTexParameters:&param];
