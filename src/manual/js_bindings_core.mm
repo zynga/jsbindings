@@ -33,17 +33,8 @@
 #import "js_bindings_chipmunk_registration.h"
 #import "js_bindings_system_registration.h"
 
-#import "jsdbgapi.h"
-
-#include <errno.h>
-#include <sys/socket.h>
-#include <netdb.h>
-#include <map>
-#include <string>
-
-static std::map<std::string, js::RootedObject*> __globals;
-static std::map<std::string, js::RootedScript*> __scripts;
-static std::map<int, int> __sockets;
+#include "jsdbgapi.h"
+#include "js_bindings_dbg.h"
 
 #pragma mark - Hash
 
@@ -458,31 +449,6 @@ JSBool JSBCore_restartVM(JSContext *cx, uint32_t argc, jsval *vp)
 	JS_DestroyRuntime(_rt);
 	JS_ShutDown();
 }
-
-- (void)enableDebugger
-{	
-	if (_debugObject == NULL) {
-		_debugObject = JSB_NewGlobalObject(_cx, true);
-		// these are used in the debug socket
-		{
-			JS_DefineFunction(_cx, _debugObject, "log", JSBCore_log, 0, JSPROP_READONLY | JSPROP_PERMANENT);
-			JS_DefineFunction(_cx, _debugObject, "_socketOpen", JSBDebug_SocketOpen, 1, JSPROP_READONLY | JSPROP_PERMANENT);
-			JS_DefineFunction(_cx, _debugObject, "_socketWrite", JSBDebug_SocketWrite, 1, JSPROP_READONLY | JSPROP_PERMANENT);
-			JS_DefineFunction(_cx, _debugObject, "_socketRead", JSBDebug_SocketRead, 1, JSPROP_READONLY | JSPROP_PERMANENT);
-			JS_DefineFunction(_cx, _debugObject, "_socketClose", JSBDebug_SocketClose, 1, JSPROP_READONLY | JSPROP_PERMANENT);
-			[self runScript:@"debugger.js" withContainer:_debugObject];
-
-			// prepare the debugger
-			jsval argv = OBJECT_TO_JSVAL(_object);
-			jsval outval;
-			JS_WrapObject(_cx, &_debugObject);
-			JSAutoCompartment ac(_cx, _debugObject);
-			JS_CallFunctionName(_cx, _debugObject, "_prepareDebugger", 1, &argv, &outval);
-		}
-		// define the start debugger function
-		JS_DefineFunction(_cx, _object, "startDebugger", JSBDebug_StartDebugger, 3, JSPROP_READONLY | JSPROP_PERMANENT);
-	}
-}
 @end
 
 
@@ -611,8 +577,6 @@ void jsb_set_c_proxy_for_jsobject( JSObject *jsobj, void *handle, unsigned long 
 	JS_SetPrivate(jsobj, proxy);
 }
 
-#pragma mark - Debug
-
 JSObject* JSB_NewGlobalObject(JSContext* cx, bool empty)
 {
 	JSObject* glob = JS_NewGlobalObject(cx, &global_class, NULL);
@@ -670,130 +634,6 @@ JSObject* JSB_NewGlobalObject(JSContext* cx, bool empty)
 #endif // JSB_INCLUDE_CHIPMUNK
 
     return glob;
-}
-
-JSBool JSBDebug_StartDebugger(JSContext* cx, unsigned argc, jsval* vp)
-{
-	JSObject* debugGlobal = [[JSBCore sharedInstance] debugObject];
-	if (argc == 3) {
-		jsval* argv = JS_ARGV(cx, vp);
-		jsval out;
-		JS_WrapObject(cx, &debugGlobal);
-		JSAutoCompartment ac(cx, debugGlobal);
-		JS_CallFunctionName(cx, debugGlobal, "_startDebugger", 3, argv, &out);
-		return JS_TRUE;
-	}
-	return JS_FALSE;
-}
-
-// open a socket, bind it to a port and start listening, all at once :)
-JSBool JSBDebug_SocketOpen(JSContext* cx, unsigned argc, jsval* vp)
-{
-    if (argc == 2) {
-        jsval* argv = JS_ARGV(cx, vp);
-        int port = JSVAL_TO_INT(argv[0]);
-        JSObject* callback = JSVAL_TO_OBJECT(argv[1]);
-
-		// FIX
-		// in the c++ version, there's a map for port-number -> socket
-		// I just removed this since for now I'm assuming we're only using this for the debugger
-        int s = __sockets[port];
-        if (!s) {
-            char myname[256];
-            struct sockaddr_in sa;
-            struct hostent *hp;
-            memset(&sa, 0, sizeof(struct sockaddr_in));
-            gethostname(myname, 256);
-            hp = gethostbyname(myname);
-            sa.sin_family = hp->h_addrtype;
-            sa.sin_port = htons(port);
-            if ((s = socket(PF_INET, SOCK_STREAM, 0)) < 0) {
-                JS_ReportError(cx, "error opening socket");
-                return JS_FALSE;
-            }
-            int optval = 1;
-            if ((setsockopt(s, SOL_SOCKET, SO_REUSEADDR, (char*)&optval, sizeof(optval))) < 0) {
-                close(s);
-                JS_ReportError(cx, "error setting socket options");
-                return JS_FALSE;
-            }
-            if ((bind(s, (const struct sockaddr *)&sa, sizeof(struct sockaddr_in))) < 0) {
-                close(s);
-                JS_ReportError(cx, "error binding socket");
-                return JS_FALSE;
-            }
-            listen(s, 1);
-            int clientSocket;
-            if ((clientSocket = accept(s, NULL, NULL)) > 0) {
-                jsval fval = OBJECT_TO_JSVAL(callback);
-                jsval jsSocket = INT_TO_JSVAL(clientSocket);
-                jsval outVal;
-				// store the client socket in the map
-				__sockets[port] = clientSocket;
-                JS_CallFunctionValue(cx, NULL, fval, 1, &jsSocket, &outVal);
-            }
-        } else {
-            // just call the callback with the client socket
-            jsval fval = OBJECT_TO_JSVAL(callback);
-            jsval jsSocket = INT_TO_JSVAL(s);
-            jsval outVal;
-            JS_CallFunctionValue(cx, NULL, fval, 1, &jsSocket, &outVal);
-        }
-        JS_SET_RVAL(cx, vp, INT_TO_JSVAL(s));
-    }
-    return JS_TRUE;
-}
-
-JSBool JSBDebug_SocketRead(JSContext* cx, unsigned argc, jsval* vp)
-{
-    if (argc == 1) {
-        jsval* argv = JS_ARGV(cx, vp);
-        int s = JSVAL_TO_INT(argv[0]);
-        char buff[1024];
-        JSString* outStr = JS_NewStringCopyZ(cx, "");
-
-        int bytesRead;
-        while ((bytesRead = read(s, buff, 1024)) > 0) {
-            JSString* newStr = JS_NewStringCopyN(cx, buff, bytesRead);
-            outStr = JS_ConcatStrings(cx, outStr, newStr);
-            // break on new line
-            if (buff[bytesRead-1] == '\n') {
-                break;
-            }
-        }
-        JS_SET_RVAL(cx, vp, STRING_TO_JSVAL(outStr));
-    } else {
-        JS_SET_RVAL(cx, vp, JSVAL_NULL);
-    }
-    return JS_TRUE;
-}
-
-JSBool JSBDebug_SocketWrite(JSContext* cx, unsigned argc, jsval* vp)
-{
-    if (argc == 2) {
-        jsval* argv = JS_ARGV(cx, vp);
-        int s;
-        const char* str;
-
-        s = JSVAL_TO_INT(argv[0]);
-        JSString* jsstr = JS_ValueToString(cx, argv[1]);
-        str = JS_EncodeString(cx, jsstr);
-
-        write(s, str, strlen(str));
-
-        JS_free(cx, (void*)str);
-    }
-    return JS_TRUE;
-}
-
-JSBool JSBDebug_SocketClose(JSContext* cx, unsigned argc, jsval* vp)
-{
-    if (argc == 1) {
-        jsval* argv = JS_ARGV(cx, vp);
-        int s = JSVAL_TO_INT(argv[0]);
-        close(s);
-    }
-    return JS_TRUE;
 }
 
 #pragma mark Do Nothing - Callbacks

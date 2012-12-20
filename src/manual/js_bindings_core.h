@@ -24,7 +24,7 @@
 
 
 #import <objc/runtime.h>
-#import "jsapi.h"
+#include "jsapi.h"
 
 #import "cocos2d.h"
 #import "chipmunk.h"
@@ -134,69 +134,61 @@ extern char * JSB_association_proxy_key;
  */
 -(JSBool) runScript:(NSString*)filename withContainer:(JSObject *)global;
 
-
--(void) enableDebugger;
 @end
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-	enum {
-		JSB_C_FLAG_CALL_FREE = 0,
-		JSB_C_FLAG_DO_NOT_CALL_FREE =1,
-	};
+enum {
+	JSB_C_FLAG_CALL_FREE = 0,
+	JSB_C_FLAG_DO_NOT_CALL_FREE =1,
+};
 
-	// structure used by "Object Oriented Functions".
-	// handle is a pointer to the native object
-	// flags: flags for the object
-	struct jsb_c_proxy_s {
-		unsigned long flags;	// Should it be removed at "destructor" time, or not ?
-		void *handle;			// native object, like cpSpace, cpBody, etc.
-		JSObject *jsobj;		// JS Object. Needed for rooting / unrooting
-	};
-	
-	// Functions for setting / removing / getting the proxy used by the "C" Object Oriented API. Think of Chipmunk classes
-	struct jsb_c_proxy_s* jsb_get_c_proxy_for_jsobject( JSObject *jsobj );
-	void jsb_del_c_proxy_for_jsobject( JSObject *jsobj );
-	void jsb_set_c_proxy_for_jsobject( JSObject *jsobj, void *handle, unsigned long flags);
+// structure used by "Object Oriented Functions".
+// handle is a pointer to the native object
+// flags: flags for the object
+struct jsb_c_proxy_s {
+	unsigned long flags;	// Should it be removed at "destructor" time, or not ?
+	void *handle;			// native object, like cpSpace, cpBody, etc.
+	JSObject *jsobj;		// JS Object. Needed for rooting / unrooting
+};
 
-	// JSObject -> proxy
-	/** gets a proxy for a given JSObject */
-	void* jsb_get_proxy_for_jsobject(JSObject *jsobj);
-	/** sets a proxy for a given JSObject */
-	void jsb_set_proxy_for_jsobject(void* proxy, JSObject *jsobj);
-	/** dels a proxy for a given JSObject */
-	void jsb_del_proxy_for_jsobject(JSObject *jsobj);
+// Functions for setting / removing / getting the proxy used by the "C" Object Oriented API. Think of Chipmunk classes
+struct jsb_c_proxy_s* jsb_get_c_proxy_for_jsobject( JSObject *jsobj );
+void jsb_del_c_proxy_for_jsobject( JSObject *jsobj );
+void jsb_set_c_proxy_for_jsobject( JSObject *jsobj, void *handle, unsigned long flags);
 
-	// reverse: proxy -> JSObject
-	/** gets a JSObject for a given proxy */
-	JSObject* jsb_get_jsobject_for_proxy(void *proxy);
-	/** sets a JSObject for a given proxy */
-	void jsb_set_jsobject_for_proxy(JSObject *jsobj, void* proxy);
-	/** delts a JSObject for a given proxy */
-	void jsb_del_jsobject_for_proxy(void* proxy);
+// JSObject -> proxy
+/** gets a proxy for a given JSObject */
+void* jsb_get_proxy_for_jsobject(JSObject *jsobj);
+/** sets a proxy for a given JSObject */
+void jsb_set_proxy_for_jsobject(void* proxy, JSObject *jsobj);
+/** dels a proxy for a given JSObject */
+void jsb_del_proxy_for_jsobject(JSObject *jsobj);
 
-	JSBool jsb_set_reserved_slot(JSObject *obj, uint32_t idx, jsval value);
-	
-	
-	// needed for callbacks. It does nothing.
-	JSBool JSB_do_nothing(JSContext *cx, uint32_t argc, jsval *vp);
-	
+// reverse: proxy -> JSObject
+/** gets a JSObject for a given proxy */
+JSObject* jsb_get_jsobject_for_proxy(void *proxy);
+/** sets a JSObject for a given proxy */
+void jsb_set_jsobject_for_proxy(JSObject *jsobj, void* proxy);
+/** delts a JSObject for a given proxy */
+void jsb_del_jsobject_for_proxy(void* proxy);
 
-	// logs a format string to the console
-	JSBool JSBCore_log(JSContext *cx, uint32_t argc, jsval *vp);
+JSBool jsb_set_reserved_slot(JSObject *obj, uint32_t idx, jsval value);
 
-	JSObject* JSB_NewGlobalObject(JSContext* cx, bool empty);
-	JSBool JSBCore_NewGlobal(JSContext* cx, unsigned argc, jsval* vp);
-	JSBool JSBDebug_StartDebugger(JSContext* cx, unsigned argc, jsval* vp);
-	
-	JSBool JSBDebug_SocketOpen(JSContext* cx, unsigned argc, jsval* vp);
-	JSBool JSBDebug_SocketRead(JSContext* cx, unsigned argc, jsval* vp);
-	JSBool JSBDebug_SocketWrite(JSContext* cx, unsigned argc, jsval* vp);
-	JSBool JSBDebug_SocketClose(JSContext* cx, unsigned argc, jsval* vp);
 
-	extern const char* JSB_version;
+// needed for callbacks. It does nothing.
+JSBool JSB_do_nothing(JSContext *cx, uint32_t argc, jsval *vp);
+
+
+// logs a format string to the console
+JSBool JSBCore_log(JSContext *cx, uint32_t argc, jsval *vp);
+
+JSObject* JSB_NewGlobalObject(JSContext* cx, bool empty);
+
+extern const char* JSB_version;
+
 #ifdef __cplusplus
 }
 #endif
