@@ -1,24 +1,24 @@
 #include <errno.h>
 #include <sys/socket.h>
 #include <netdb.h>
-#include <thread>
-#include <chrono>
 #include <iostream>
+#include <string>
 #include <sstream>
-#include <mutex>
 #include <vector>
+#include <pthread.h>
+#include <sched.h>
 #import "js_bindings_dbg.h"
 
 using namespace std;
 
 map<string, js::RootedScript*> __scripts;
 
-thread *debugThread;
+pthread_t debugThread;
 string inData;
 string outData;
 vector<string> queue;
-mutex g_qMutex;
-mutex g_rwMutex;
+pthread_mutex_t g_qMutex;
+pthread_mutex_t g_rwMutex;
 bool vmLock = false;
 jsval frame = JSVAL_NULL, script = JSVAL_NULL;
 int clientSocket;
@@ -29,16 +29,16 @@ bool serverAlive = true;
 void processInput(string data) {
 	NSString* str = [NSString stringWithUTF8String:data.c_str()];
 	if (vmLock) {
-		g_qMutex.lock();
+		pthread_mutex_lock(&g_qMutex);
 		queue.push_back(string(data));
-		g_qMutex.unlock();
+		pthread_mutex_unlock(&g_qMutex);
 	} else {
 		[[JSBCore sharedInstance] performSelector:@selector(debugProcessInput:) onThread:[NSThread mainThread] withObject:str waitUntilDone:YES];
 	}
 }
 
 void clearBuffers() {
-	g_rwMutex.lock();
+	pthread_mutex_lock(&g_rwMutex);
 	{
 		// only process input if there's something and we're not locked
 		if (inData.length() > 0) {
@@ -50,36 +50,57 @@ void clearBuffers() {
 			outData.clear();
 		}
 	}
-	g_rwMutex.unlock();
+	pthread_mutex_unlock(&g_rwMutex);
 }
 
-void serverEntryPoint()
+void* serverEntryPoint(void*)
 {
+#if TARGET_OS_IPHONE
+	// this just in case
+	@autoreleasepool
+{
+#endif
+	// init the mutex
+	assert(pthread_mutex_init(&g_rwMutex, NULL) == 0);
+	assert(pthread_mutex_init(&g_qMutex, NULL) == 0);
 	// start a server, accept the connection and keep reading data from it
-	char myname[256];
-	struct sockaddr_in sa;
-	struct hostent *hp;
+	struct addrinfo hints, *result, *rp;
 	int s;
-	memset(&sa, 0, sizeof(struct sockaddr_in));
-	gethostname(myname, 256);
-	hp = gethostbyname(myname);
-	sa.sin_family = hp->h_addrtype;
-	sa.sin_port = htons(DEBUGGER_PORT);
-	if ((s = socket(PF_INET, SOCK_STREAM, 0)) < 0) {
-		CCLOG(@"error opening debug server socket");
-		return;
+	memset(&hints, 0, sizeof(struct addrinfo));
+	hints.ai_family = AF_INET;
+	hints.ai_socktype = SOCK_STREAM; // TCP
+
+	int err;
+	stringstream portstr;
+	portstr << DEBUGGER_PORT;
+	const char* tmp = portstr.str().c_str();
+	if ((err = getaddrinfo(NULL, tmp, &hints, &result)) != 0) {
+		printf("error: %s\n", gai_strerror(err));
 	}
-	int optval = 1;
-	if ((setsockopt(s, SOL_SOCKET, SO_REUSEADDR, (char*)&optval, sizeof(optval))) < 0) {
+
+	for (rp = result; rp != NULL; rp = rp->ai_next) {
+		if ((s = socket(rp->ai_family, rp->ai_socktype, 0)) < 0) {
+			continue;
+		}
+		int optval = 1;
+		if ((setsockopt(s, SOL_SOCKET, SO_REUSEADDR, (char*)&optval, sizeof(optval))) < 0) {
+			close(s);
+			CCLOG(@"error setting socket options");
+			return NULL;
+		}
+		if ((bind(s, rp->ai_addr, rp->ai_addrlen)) == 0) {
+			break;
+		}
 		close(s);
-		CCLOG(@"error setting socket options");
-		return;
+		s = -1;
 	}
-	if ((bind(s, (const struct sockaddr *)&sa, sizeof(struct sockaddr_in))) < 0) {
-		close(s);
-		CCLOG(@"error binding socket");
-		return;
+	if (s < 0 || rp == NULL) {
+		CCLOG(@"error creating/binding socket");
+		return NULL;
 	}
+	
+	freeaddrinfo(result);
+	
 	listen(s, 1);
 	while (serverAlive && (clientSocket = accept(s, NULL, NULL)) > 0) {
 		// read/write data
@@ -96,6 +117,13 @@ void serverEntryPoint()
 			} // while(read)
 		} // while(serverAlive)
 	}
+	// we're done, destroy the mutex
+	pthread_mutex_destroy(&g_rwMutex);
+	pthread_mutex_destroy(&g_qMutex);
+#ifdef TARGET_OS_IPHONE
+}
+#endif
+	return NULL;
 }
 
 @implementation JSBCore (Debugger)
@@ -138,7 +166,7 @@ void serverEntryPoint()
 		// define the start debugger function
 		JS_DefineFunction(_cx, _object, "startDebugger", JSBDebug_StartDebugger, 3, JSPROP_READONLY | JSPROP_PERMANENT);
 		// start bg thread
-		debugThread = new thread(serverEntryPoint);
+		pthread_create(&debugThread, NULL, serverEntryPoint, NULL);
 	}
 }
 
@@ -164,12 +192,12 @@ JSBool JSBDebug_BufferRead(JSContext* cx, unsigned argc, jsval* vp)
 		JSString* str;
 		// this is safe because we're already inside a lock (from clearBuffers)
 		if (vmLock) {
-			g_rwMutex.lock();
+			pthread_mutex_lock(&g_rwMutex);
 		}
 		str = JS_NewStringCopyZ(cx, inData.c_str());
 		inData.clear();
 		if (vmLock) {
-			g_rwMutex.unlock();			
+			pthread_mutex_unlock(&g_rwMutex);
 		}
 		JS_SET_RVAL(cx, vp, STRING_TO_JSVAL(str));
     } else {
@@ -207,7 +235,7 @@ JSBool JSBDebug_LockExecution(JSContext* cx, unsigned argc, jsval* vp)
 		vmLock = true;
 		while (vmLock) {
 			// try to read the input, if there's anything
-			g_qMutex.lock();
+			pthread_mutex_lock(&g_qMutex);
 			while (queue.size() > 0) {
 				vector<string>::iterator first = queue.begin();
 				string str = *first;
@@ -215,8 +243,8 @@ JSBool JSBDebug_LockExecution(JSContext* cx, unsigned argc, jsval* vp)
 				[[JSBCore sharedInstance] performSelector:@selector(debugProcessInput:) withObject:nsstr];
 				queue.erase(first);
 			}
-			g_qMutex.unlock();
-			this_thread::yield();
+			pthread_mutex_unlock(&g_qMutex);
+			sched_yield();
 		}
 		printf("vm unlocked\n");
 		frame = JSVAL_NULL;
