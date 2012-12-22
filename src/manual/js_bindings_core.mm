@@ -240,7 +240,7 @@ JSBool JSBCore_forceGC(JSContext *cx, uint32_t argc, jsval *vp)
 JSBool JSBCore_restartVM(JSContext *cx, uint32_t argc, jsval *vp)
 {
 	JSB_PRECONDITION2(argc==0, cx, JS_FALSE, "Invalid number of arguments in executeScript");
-	
+
 	[[JSBCore sharedInstance] restartRuntime];
 	return JS_FALSE;
 };
@@ -431,7 +431,9 @@ JSBool JSBCore_restartVM(JSContext *cx, uint32_t argc, jsval *vp)
 	// add script to the global map
 	const char* key = [filename UTF8String];
 	if (__scripts[key]) {
+		js::RootedScript* tmp = __scripts[key];
 		__scripts.erase(key);
+		delete tmp;
 	}
 	js::RootedScript* rootedScript = new js::RootedScript(_cx, script);
 	__scripts[key] = rootedScript;
@@ -595,7 +597,7 @@ JSObject* JSB_NewGlobalObject(JSContext* cx, bool empty)
 
 	if (empty)
 		return glob;
-	
+
 	//
 	// globals
 	//
@@ -632,6 +634,11 @@ JSObject* JSB_NewGlobalObject(JSContext* cx, bool empty)
 #if JSB_INCLUDE_CHIPMUNK
 	jsb_register_chipmunk(cx, glob);
 #endif // JSB_INCLUDE_CHIPMUNK
+
+	// registers sys bindings
+#if JSB_INCLUDE_SYSTEM
+	jsb_register_system(cx, glob);
+#endif // JSB_INCLUDE_SYSTEM
 
     return glob;
 }
