@@ -7,7 +7,7 @@
 #include <vector>
 #include <pthread.h>
 #include <sched.h>
-#import "js_bindings_dbg.h"
+#include "js_bindings_dbg.h"
 
 using namespace std;
 
@@ -55,7 +55,7 @@ void clearBuffers() {
 
 void* serverEntryPoint(void*)
 {
-#if TARGET_OS_IPHONE
+#if TARGET_OS_IPHONE || TARGET_OS_MAC
 	// this just in case
 	@autoreleasepool
 {
@@ -120,7 +120,7 @@ void* serverEntryPoint(void*)
 	// we're done, destroy the mutex
 	pthread_mutex_destroy(&g_rwMutex);
 	pthread_mutex_destroy(&g_qMutex);
-#ifdef TARGET_OS_IPHONE
+#if TARGET_OS_IPHONE || TARGET_OS_MAC
 }
 #endif
 	return NULL;

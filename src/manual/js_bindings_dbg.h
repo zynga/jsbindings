@@ -22,6 +22,9 @@
  * THE SOFTWARE.
  */
 
+#ifndef __JSB_DBG__
+#define __JSB_DBG__
+
 #include <string>
 #include <map>
 #import "js_bindings_core.h"
@@ -46,4 +49,6 @@ JSBool JSBDebug_UnlockExecution(JSContext* cx, unsigned argc, jsval* vp);
 
 #ifdef __cplusplus
 }
+#endif
+
 #endif
