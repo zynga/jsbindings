@@ -338,7 +338,7 @@ cc.PhysicsSprite.prototype.setBody = function( body ) {
     var b = body;
     if( body.handle !== undefined )
         b = body.handle;
-    return this._setBody( b );
+    return this._setCPBody( b );
 };
 
 
