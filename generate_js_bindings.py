@@ -121,6 +121,9 @@ class JSBGenerate(object):
         # JS
         self.js_new_methods = config.js_new_methods
 
+        # Misc
+        self.bridgesupport_files = config.bridgesupport_files
+
     #
     # BEGIN Helper functions
     #

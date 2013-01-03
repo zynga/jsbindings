@@ -55,6 +55,7 @@ class ObjC(object):
             regex_objc_class = r"^\s*@interface\s+([\S]+)\s*:\s*([\w]+)\s*(<.*>)*"
             regex_objc_class_extension = r"^\s*@interface\s+([\S]+)\s*\(\s*([\w]+)\s*\)\s*"
             regex_objc_property_attributes = r"^@property\s*\(([^)]*)\)\s*([a-zA-Z_0-9]+)\s*(<.*>)?(\bint\b|\blong\b|\bchar\b)?(\*)*\s*(.*)\s*;"
+            regex_objc_protocol = r"^\s*@protocol\s+([\S]+)\s*(<.*>)*"
             regex_obj_end = r"^\s*@end\s*$"
 
             current_class = None
@@ -62,8 +63,10 @@ class ObjC(object):
                 interface = re.match(regex_objc_class, line)
                 interface_ext = re.match(regex_objc_class_extension, line)
                 property_attribs = re.match(regex_objc_property_attributes, line)
+                protocol_declaration = re.match(regex_objc_protocol, line)
                 end = re.match(regex_obj_end, line)
 
+                # Found @interface
                 if interface:
                     classname = interface.group(1)
                     subclass = interface.group(2)
@@ -88,10 +91,37 @@ class ObjC(object):
 
                     current_class = classname
                     self.log('--> %s' % current_class)
+
+                # Found @interface bis
                 elif interface_ext:
                     classname = interface_ext.group(1)
                     current_class = classname
                     self.log('--> %s' % current_class)
+
+                # Found @protocol
+                elif protocol_declaration:
+                    classname = protocol_declaration.group(1)
+                    protocols = protocol_declaration.group(2)
+
+                    if classname in self.entries:
+                        self.log('Key already on dictionary %s\n' % classname)
+                    else:
+                        if protocols:
+                            # strip '<>'
+                            protocols = protocols.strip('<> ')
+
+                            # remove spaces
+                            protocols = protocols.replace(' ', '')
+
+                            # split by ','
+                            protocols = protocols.split(',')
+                        else:
+                            protocols = []
+
+                        self.entries[classname] = {'subclass': subclass, 'protocols': protocols}
+                    current_class = classname
+
+                # Found @property
                 elif property_attribs:
                     if not current_class:
                         raise Exception("Fatal: Unparented attrib: %s (%s)" % (str(property_attribs.groups()), filename))
@@ -122,6 +152,7 @@ class ObjC(object):
                         attrib_name = attrib_name.replace('*', '')
                         self.entries[current_class]['properties'][attrib_name] = l
 
+                # Found @end
                 elif end:
                     self.log('<-- %s (%s)' % (current_class, filename))
                     current_class = None
