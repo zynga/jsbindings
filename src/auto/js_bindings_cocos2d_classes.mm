@@ -20259,7 +20259,7 @@ JSBool JSB_CCFileUtils_buildSearchResolutionsOrder(JSContext *cx, uint32_t argc,
 
 // Arguments: NSString*
 // Ret value: NSString* (S)
-JSBool JSB_CCFileUtils_fullPathForKeyIgnoringResolutions_(JSContext *cx, uint32_t argc, jsval *vp) {
+JSBool JSB_CCFileUtils_fullPathForFilename_(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
@@ -20275,7 +20275,33 @@ JSBool JSB_CCFileUtils_fullPathForKeyIgnoringResolutions_(JSContext *cx, uint32_
 	NSString* ret_val;
 
 	CCFileUtils *real = (CCFileUtils*) [proxy realObj];
-	ret_val = [real fullPathForKeyIgnoringResolutions:(NSString*)arg0  ];
+	ret_val = [real fullPathForFilename:(NSString*)arg0  ];
+
+	jsval ret_jsval = NSString_to_jsval( cx, (NSString*) ret_val );
+	JS_SET_RVAL(cx, vp, ret_jsval );
+
+	return JS_TRUE;
+}
+
+// Arguments: NSString*
+// Ret value: NSString* (S)
+JSBool JSB_CCFileUtils_fullPathForFilenameIgnoringResolutions_(JSContext *cx, uint32_t argc, jsval *vp) {
+
+	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
+	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
+
+	JSB_PRECONDITION2( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
+	JSB_PRECONDITION2( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
+	jsval *argvp = JS_ARGV(cx,vp);
+	JSBool ok = JS_TRUE;
+	NSString* arg0; 
+
+	ok &= jsval_to_NSString( cx, *argvp++, &arg0 );
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
+	NSString* ret_val;
+
+	CCFileUtils *real = (CCFileUtils*) [proxy realObj];
+	ret_val = [real fullPathForFilenameIgnoringResolutions:(NSString*)arg0  ];
 
 	jsval ret_jsval = NSString_to_jsval( cx, (NSString*) ret_val );
 	JS_SET_RVAL(cx, vp, ret_jsval );
@@ -20615,7 +20641,8 @@ void JSB_CCFileUtils_createClass(JSContext *cx, JSObject* globalObj, const char*
 	};
 	static JSFunctionSpec funcs[] = {
 		JS_FN("buildSearchResolutionsOrder", JSB_CCFileUtils_buildSearchResolutionsOrder, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
-		JS_FN("fullPathForKeyIgnoringResolutions", JSB_CCFileUtils_fullPathForKeyIgnoringResolutions_, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("fullPathForFilename", JSB_CCFileUtils_fullPathForFilename_, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("fullPathForFilenameIgnoringResolutions", JSB_CCFileUtils_fullPathForFilenameIgnoringResolutions_, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("fullPathFromRelativePath", JSB_CCFileUtils_fullPathFromRelativePath_, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("fullPathFromRelativePathIgnoringResolutions", JSB_CCFileUtils_fullPathFromRelativePathIgnoringResolutions_, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FN("isEnablediPhoneResourcesOniPad", JSB_CCFileUtils_isEnablediPhoneResourcesOniPad, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
