@@ -133,6 +133,19 @@
 #define JSB_INCLUDE_COCOSDENSHION 1
 #endif // JSB_INCLUDE_COCOSDENSHION
 
+/** @def JSB_ENABLE_DEBUGGER
+ Set this to 1 to enable the debugger
+ */
+#ifndef JSB_ENABLE_DEBUGGER
+#define JSB_ENABLE_DEBUGGER 1
+#endif // JSB_ENABLE_DEBUGGER
+
+#if JSB_ENABLE_DEBUGGER
+#define JSB_ENSURE_AUTOCOMPARTMENT(cx, obj) \
+JSAutoCompartment ac(cx, obj)
+#else
+#define JSB_ENSURE_AUTOCOMPARTMENT(cx, obj)
+#endif
 
 /** @def JSB_INCLUDE_SYSTEM
  Whether or not it should include bindings for system components like LocalStorage

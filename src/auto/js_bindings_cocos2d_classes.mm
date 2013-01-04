@@ -2005,6 +2005,7 @@ void JSB_CCNode_createClass(JSContext *cx, JSObject* globalObj, const char* name
 	if (_jsObj) {
 		JSContext* cx = [[JSBCore sharedInstance] globalContext];
 		JSBool found;
+		JSB_ENSURE_AUTOCOMPARTMENT(cx, _jsObj);
 		JS_HasProperty(cx, _jsObj, "onEnter", &found);
 		if (found == JS_TRUE) {
 			jsval rval, fval;
@@ -2022,6 +2023,7 @@ void JSB_CCNode_createClass(JSContext *cx, JSObject* globalObj, const char* name
 	if (_jsObj) {
 		JSContext* cx = [[JSBCore sharedInstance] globalContext];
 		JSBool found;
+		JSB_ENSURE_AUTOCOMPARTMENT(cx, _jsObj);
 		JS_HasProperty(cx, _jsObj, "update", &found);
 		if (found == JS_TRUE) {
 			jsval rval, fval;
@@ -2041,6 +2043,7 @@ void JSB_CCNode_createClass(JSContext *cx, JSObject* globalObj, const char* name
 	if (_jsObj) {
 		JSContext* cx = [[JSBCore sharedInstance] globalContext];
 		JSBool found;
+		JSB_ENSURE_AUTOCOMPARTMENT(cx, _jsObj);
 		JS_HasProperty(cx, _jsObj, "onExitTransitionDidStart", &found);
 		if (found == JS_TRUE) {
 			jsval rval, fval;
@@ -2058,6 +2061,7 @@ void JSB_CCNode_createClass(JSContext *cx, JSObject* globalObj, const char* name
 	if (_jsObj) {
 		JSContext* cx = [[JSBCore sharedInstance] globalContext];
 		JSBool found;
+		JSB_ENSURE_AUTOCOMPARTMENT(cx, _jsObj);
 		JS_HasProperty(cx, _jsObj, "onExit", &found);
 		if (found == JS_TRUE) {
 			jsval rval, fval;
@@ -2075,6 +2079,7 @@ void JSB_CCNode_createClass(JSContext *cx, JSObject* globalObj, const char* name
 	if (_jsObj) {
 		JSContext* cx = [[JSBCore sharedInstance] globalContext];
 		JSBool found;
+		JSB_ENSURE_AUTOCOMPARTMENT(cx, _jsObj);
 		JS_HasProperty(cx, _jsObj, "onEnterTransitionDidFinish", &found);
 		if (found == JS_TRUE) {
 			jsval rval, fval;

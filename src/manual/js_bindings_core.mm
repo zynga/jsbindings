@@ -25,7 +25,6 @@
 #import "js_bindings_config.h"
 #import "js_bindings_core.h"
 
-
 // NS
 #import "js_bindings_NS_manual.h"
 
@@ -33,6 +32,9 @@
 #import "js_bindings_cocos2d_registration.h"
 #import "js_bindings_chipmunk_registration.h"
 #import "js_bindings_system_registration.h"
+
+#include "jsdbgapi.h"
+#include "js_bindings_dbg.h"
 
 #pragma mark - Hash
 
@@ -69,9 +71,9 @@ static JSClass global_class = {
 #pragma mark JSBCore - Helper free functions
 static void reportError(JSContext *cx, const char *message, JSErrorReport *report)
 {
-	fprintf(stderr, "%s:%u:%s\n",  
-			report->filename ? report->filename : "<no filename=\"filename\">",  
-			(unsigned int) report->lineno,  
+	fprintf(stderr, "%s:%u:%s\n",
+			report->filename ? report->filename : "<no filename=\"filename\">",
+			(unsigned int) report->lineno,
 			message);
 };
 
@@ -86,7 +88,7 @@ JSBool JSBCore_log(JSContext *cx, uint32_t argc, jsval *vp)
 			char *cstr = JS_EncodeString(cx, string);
 			fprintf(stderr, "%s\n", cstr);
 		}
-		
+
 		return JS_TRUE;
 	}
 	return JS_FALSE;
@@ -111,7 +113,7 @@ JSBool JSBCore_associateObjectWithNative(JSContext *cx, uint32_t argc, jsval *vp
 {
 	JSB_PRECONDITION(argc==2, "Invalid number of arguments in associateObjectWithNative");
 
-	
+
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSObject *pureJSObj;
 	JSObject *nativeJSObj;
@@ -124,7 +126,7 @@ JSBool JSBCore_associateObjectWithNative(JSContext *cx, uint32_t argc, jsval *vp
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject( nativeJSObj );
 	jsb_set_proxy_for_jsobject( proxy, pureJSObj );
 	[proxy setJsObj:pureJSObj];
-		
+
 	return JS_TRUE;
 };
 
@@ -135,13 +137,13 @@ JSBool JSBCore_getAssociatedNative(JSContext *cx, uint32_t argc, jsval *vp)
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSObject *pureJSObj;
 	JS_ValueToObject( cx, *argvp++, &pureJSObj );
-	
+
 	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject( pureJSObj );
 	id native = [proxy realObj];
-	
+
 	JSObject * obj = get_or_create_jsobject_from_realobj(cx, native);
 	JS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(obj) );
-	
+
 	return JS_TRUE;
 };
 
@@ -169,7 +171,7 @@ JSBool JSBCore_platform(JSContext *cx, uint32_t argc, jsval *vp)
 #error "Unsupported platform"
 #endif
 	jsval ret = STRING_TO_JSVAL(platform);
-	
+
 	JS_SET_RVAL(cx, vp, ret);
 
 	return JS_TRUE;
@@ -188,7 +190,7 @@ JSBool JSBCore_addRootJS(JSContext *cx, uint32_t argc, jsval *vp)
 			CCLOGWARN(@"something went wrong when setting an object to the root");
 		}
 	}
-	
+
 	return JS_TRUE;
 };
 
@@ -214,13 +216,14 @@ static void dumpNamedRoot(const char *name, void *addr,  JSGCRootType type, void
 {
     printf("There is a root named '%s' at %p\n", name, addr);
 }
+
 JSBool JSBCore_dumpRoot(JSContext *cx, uint32_t argc, jsval *vp)
 {
 	// JS_DumpNamedRoots is only available on DEBUG versions of SpiderMonkey.
 	// Mac and Simulator versions were compiled with DEBUG.
 #if DEBUG && (defined(__CC_PLATFORM_MAC) || TARGET_IPHONE_SIMULATOR )
-	JSRuntime *rt = [[JSBCore sharedInstance] runtime];
-	JS_DumpNamedRoots(rt, dumpNamedRoot, NULL);
+//	JSRuntime *rt = [[JSBCore sharedInstance] runtime];
+//	JS_DumpNamedRoots(rt, dumpNamedRoot, NULL);
 #endif
 	return JS_TRUE;
 };
@@ -237,7 +240,7 @@ JSBool JSBCore_forceGC(JSContext *cx, uint32_t argc, jsval *vp)
 JSBool JSBCore_restartVM(JSContext *cx, uint32_t argc, jsval *vp)
 {
 	JSB_PRECONDITION2(argc==0, cx, JS_FALSE, "Invalid number of arguments in executeScript");
-	
+
 	[[JSBCore sharedInstance] restartRuntime];
 	return JS_FALSE;
 };
@@ -248,6 +251,7 @@ JSBool JSBCore_restartVM(JSContext *cx, uint32_t argc, jsval *vp)
 @synthesize globalObject = _object;
 @synthesize globalContext = _cx;
 @synthesize runtime = _rt;
+@synthesize debugObject = _debugObject;
 
 + (id)sharedInstance
 {
@@ -263,17 +267,17 @@ JSBool JSBCore_restartVM(JSContext *cx, uint32_t argc, jsval *vp)
 {
 	self = [super init];
 	if( self ) {
-		
+
 #if DEBUG
 		printf("JSB: JavaScript Bindings v%s\n", JSB_version);
 #endif
-		
+
 		// Must be called only once, and before creating a new runtime
 		JS_SetCStringsAreUTF8();
-		
+
 		[self createRuntime];
 	}
-	
+
 	return self;
 }
 
@@ -283,72 +287,25 @@ JSBool JSBCore_restartVM(JSContext *cx, uint32_t argc, jsval *vp)
 
 	_rt = JS_NewRuntime(8 * 1024 * 1024);
 	_cx = JS_NewContext( _rt, 8192);
-	JS_SetOptions(_cx, JSOPTION_VAROBJFIX);
 	JS_SetVersion(_cx, JSVERSION_LATEST);
+	JS_SetOptions(_cx, JSOPTION_VAROBJFIX | JSOPTION_TYPE_INFERENCE);
 	JS_SetErrorReporter(_cx, reportError);
-	_object = JS_NewGlobalObject( _cx, &global_class, NULL);
-	if (!JS_InitStandardClasses( _cx, _object)) {
-		CCLOGWARN(@"js error");
-	}
-
-	
-	//
-	// globals
-	//
-	JS_DefineFunction(_cx, _object, "require", JSBCore_executeScript, 1, JSPROP_READONLY | JSPROP_PERMANENT);
-	JS_DefineFunction(_cx, _object, "__associateObjWithNative", JSBCore_associateObjectWithNative, 2, JSPROP_READONLY | JSPROP_PERMANENT);
-	JS_DefineFunction(_cx, _object, "__getAssociatedNative", JSBCore_getAssociatedNative, 2, JSPROP_READONLY | JSPROP_PERMANENT);
-	JS_DefineFunction(_cx, _object, "__getPlatform", JSBCore_platform, 0, JSPROP_READONLY | JSPROP_PERMANENT);
-
-	// 
-	// Javascript controller (__jsc__)
-	//
-	JSObject *jsc = JS_NewObject( _cx, NULL, NULL, NULL);
-	jsval jscVal = OBJECT_TO_JSVAL(jsc);
-	JS_SetProperty(_cx, _object, "__jsc__", &jscVal);
-
-	JS_DefineFunction(_cx, jsc, "garbageCollect", JSBCore_forceGC, 0, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
-	JS_DefineFunction(_cx, jsc, "dumpRoot", JSBCore_dumpRoot, 0, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
-	JS_DefineFunction(_cx, jsc, "addGCRootObject", JSBCore_addRootJS, 1, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
-	JS_DefineFunction(_cx, jsc, "removeGCRootObject", JSBCore_removeRootJS, 1, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
-	JS_DefineFunction(_cx, jsc, "executeScript", JSBCore_executeScript, 1, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
-	JS_DefineFunction(_cx, jsc, "restart", JSBCore_restartVM, 0, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
-
-	//
-	// 3rd party developer ?
-	// Add here your own classes registration
-	//
-	
-	// registers cocos2d, cocosdenshion and cocosbuilder reader bindings
-#if JSB_INCLUDE_COCOS2D
-	jsb_register_cocos2d(_cx, _object);
-#endif // JSB_INCLUDE_COCOS2D
-	
-	// registers chipmunk bindings
-#if JSB_INCLUDE_CHIPMUNK
-	jsb_register_chipmunk(_cx, _object);
-#endif // JSB_INCLUDE_CHIPMUNK
-
-	// registers sys bindings
-#if JSB_INCLUDE_SYSTEM
-	jsb_register_system(_cx, _object);
-#endif // JSB_INCLUDE_CHIPMUNK
-
+	_object = JSB_NewGlobalObject(_cx, false);
 }
 
 +(void) reportErrorWithContext:(JSContext*)cx message:(NSString*)message report:(JSErrorReport*)report
 {
-	
+
 }
 
 +(JSBool) logWithContext:(JSContext*)cx argc:(uint32_t)argc vp:(jsval*)vp
 {
-	return JS_TRUE;	
+	return JS_TRUE;
 }
 
 +(JSBool) executeScriptWithContext:(JSContext*)cx argc:(uint32_t)argc vp:(jsval*)vp
 {
-	return JS_TRUE;	
+	return JS_TRUE;
 }
 
 +(JSBool) addRootJSWithContext:(JSContext*)cx argc:(uint32_t)argc vp:(jsval*)vp
@@ -358,7 +315,7 @@ JSBool JSBCore_restartVM(JSContext *cx, uint32_t argc, jsval *vp)
 
 +(JSBool) removeRootJSWithContext:(JSContext*)cx argc:(uint32_t)argc vp:(jsval*)vp
 {
-	return JS_TRUE;	
+	return JS_TRUE;
 }
 
 +(JSBool) forceGCWithContext:(JSContext*)cx argc:(uint32_t)argc vp:(jsval*)vp
@@ -386,7 +343,7 @@ JSBool JSBCore_restartVM(JSContext *cx, uint32_t argc, jsval *vp)
 {
 	// clean cache
 	[self purgeCache];
-	
+
 	JS_DestroyContext(_cx);
 	JS_DestroyRuntime(_rt);
 	_cx = NULL;
@@ -434,11 +391,11 @@ JSBool JSBCore_restartVM(JSContext *cx, uint32_t argc, jsval *vp)
 		jsval rval;
 		ok = JS_EvaluateScript( _cx, _object, (char *)content, (unsigned)contentSize, [filename UTF8String], 1, &rval);
 		free(content);
-		
+
 		if (ok == JS_FALSE)
 			CCLOGWARN(@"error evaluating script: %@", filename);
 	}
-	
+
 	return ok;
 }
 
@@ -447,10 +404,13 @@ JSBool JSBCore_restartVM(JSContext *cx, uint32_t argc, jsval *vp)
  */
 -(JSBool) runScript:(NSString*)filename
 {
+	return [self runScript:filename withContainer:_object];
+}
+
+-(JSBool) runScript:(NSString*)filename withContainer:(JSObject *)global
+{
 	JSBool ok = JS_FALSE;
 
-	static JSScript *script;
-	
 	CCFileUtils *fileUtils = [CCFileUtils sharedFileUtils];
 	NSString *fullpath = [fileUtils fullPathFromRelativePathIgnoringResolutions:filename];
 	if( !fullpath) {
@@ -459,26 +419,27 @@ JSBool JSBCore_restartVM(JSContext *cx, uint32_t argc, jsval *vp)
 		JSB_PRECONDITION(fullpath, tmp);
 	}
 
-	script = JS_CompileUTF8File(_cx, _object, [fullpath UTF8String] );
+	JSScript* script = JS_CompileUTF8File(_cx, global, [fullpath UTF8String] );
 
 	JSB_PRECONDITION(script, "Error compiling script");
-		
-	const char * name = [[NSString stringWithFormat:@"script %@", filename] UTF8String];
-	char *static_name = (char*) malloc(strlen(name)+1);
-	strcpy(static_name, name );
+	{
+		JSAutoCompartment ac(_cx, global);
+		jsval result;
+		ok = JS_ExecuteScript(_cx, global, script, &result);
+	}
 
-    if (!JS_AddNamedScriptRoot(_cx, &script, static_name ) )
-        return JS_FALSE;
-	
-	jsval result;	
-	ok = JS_ExecuteScript(_cx, _object, script, &result);
-		
-    JS_RemoveScriptRoot(_cx, &script);  /* scriptObj becomes unreachable
-										   and will eventually be collected. */
-	free( static_name);
+	// add script to the global map
+	const char* key = [filename UTF8String];
+	if (__scripts[key]) {
+		js::RootedScript* tmp = __scripts[key];
+		__scripts.erase(key);
+		delete tmp;
+	}
+	js::RootedScript* rootedScript = new js::RootedScript(_cx, script);
+	__scripts[key] = rootedScript;
 
 	JSB_PRECONDITION(ok, "Error executing script");
-	
+
     return ok;
 }
 
@@ -500,7 +461,7 @@ void* jsb_get_proxy_for_jsobject(JSObject *obj)
 {
 	tHashJSObject *element = NULL;
 	HASH_FIND_INT(hash, &obj, element);
-	
+
 	if( element )
 		return element->proxy;
 	return nil;
@@ -509,9 +470,9 @@ void* jsb_get_proxy_for_jsobject(JSObject *obj)
 void jsb_set_proxy_for_jsobject(void *proxy, JSObject *obj)
 {
 	NSCAssert( !jsb_get_proxy_for_jsobject(obj), @"Already added. abort");
-	
+
 //	printf("Setting proxy for: %p - %p (%s)\n", obj, proxy, [[proxy description] UTF8String] );
-	
+
 	tHashJSObject *element = (tHashJSObject*) malloc( sizeof( *element ) );
 
 	// XXX: Do not retain it here.
@@ -526,7 +487,7 @@ void jsb_del_proxy_for_jsobject(JSObject *obj)
 {
 	tHashJSObject *element = NULL;
 	HASH_FIND_INT(hash, &obj, element);
-	if( element ) {		
+	if( element ) {
 		HASH_DEL(hash, element);
 		free(element);
 	}
@@ -539,7 +500,7 @@ JSObject* jsb_get_jsobject_for_proxy(void *proxy)
 {
 	tHashJSObject *element = NULL;
 	HASH_FIND_INT(reverse_hash, &proxy, element);
-	
+
 	if( element )
 		return element->jsObject;
 	return NULL;
@@ -548,12 +509,12 @@ JSObject* jsb_get_jsobject_for_proxy(void *proxy)
 void jsb_set_jsobject_for_proxy(JSObject *jsobj, void* proxy)
 {
 	NSCAssert( !jsb_get_jsobject_for_proxy(proxy), @"Already added. abort");
-	
+
 	tHashJSObject *element = (tHashJSObject*) malloc( sizeof( *element ) );
-	
+
 	element->proxy = proxy;
 	element->jsObject = jsobj;
-	
+
 	HASH_ADD_INT( reverse_hash, proxy, element );
 }
 
@@ -561,10 +522,10 @@ void jsb_del_jsobject_for_proxy(void* proxy)
 {
 	tHashJSObject *element = NULL;
 	HASH_FIND_INT(reverse_hash, &proxy, element);
-	if( element ) {		
+	if( element ) {
 		HASH_DEL(reverse_hash, element);
 		free(element);
-	}	
+	}
 }
 
 #pragma mark
@@ -576,9 +537,9 @@ JSBool jsb_set_reserved_slot(JSObject *obj, uint32_t idx, jsval value)
 	NSUInteger slots = JSCLASS_RESERVED_SLOTS(klass);
 	if( idx >= slots )
 		return JS_FALSE;
-	
+
 	JS_SetReservedSlot(obj, idx, value);
-	
+
 	return JS_TRUE;
 }
 
@@ -602,7 +563,7 @@ void jsb_del_c_proxy_for_jsobject( JSObject *jsobj )
 	struct jsb_c_proxy_s *proxy = (struct jsb_c_proxy_s *) JS_GetPrivate(jsobj);
 	NSCAssert(proxy, @"Invalid proxy for JSObject");
 	JS_SetPrivate(jsobj, NULL);
-	
+
 	free(proxy);
 }
 
@@ -610,14 +571,77 @@ void jsb_set_c_proxy_for_jsobject( JSObject *jsobj, void *handle, unsigned long 
 {
 	struct jsb_c_proxy_s *proxy = (struct jsb_c_proxy_s*) malloc(sizeof(*proxy));
 	NSCAssert(proxy, @"No memory for proxy");
-	
+
 	proxy->handle = handle;
 	proxy->flags = flags;
 	proxy->jsobj = jsobj;
-	
+
 	JS_SetPrivate(jsobj, proxy);
 }
 
+JSObject* JSB_NewGlobalObject(JSContext* cx, bool empty)
+{
+	JSObject* glob = JS_NewGlobalObject(cx, &global_class, NULL);
+	if (!glob) {
+		return NULL;
+	}
+	JSAutoCompartment ac(cx, glob);
+	JSBool ok = JS_TRUE;
+	ok = JS_InitStandardClasses(cx, glob);
+	if (ok)
+		JS_InitReflect(cx, glob);
+	if (ok)
+		ok = JS_DefineDebuggerObject(cx, glob);
+	if (!ok)
+		return NULL;
+
+	if (empty)
+		return glob;
+
+	//
+	// globals
+	//
+	JS_DefineFunction(cx, glob, "require", JSBCore_executeScript, 1, JSPROP_READONLY | JSPROP_PERMANENT);
+	JS_DefineFunction(cx, glob, "__associateObjWithNative", JSBCore_associateObjectWithNative, 2, JSPROP_READONLY | JSPROP_PERMANENT);
+	JS_DefineFunction(cx, glob, "__getAssociatedNative", JSBCore_getAssociatedNative, 2, JSPROP_READONLY | JSPROP_PERMANENT);
+	JS_DefineFunction(cx, glob, "__getPlatform", JSBCore_platform, 0, JSPROP_READONLY | JSPROP_PERMANENT);
+
+	//
+	// Javascript controller (__jsc__)
+	//
+	JSObject *jsc = JS_NewObject(cx, NULL, NULL, NULL);
+	jsval jscVal = OBJECT_TO_JSVAL(jsc);
+	JS_SetProperty(cx, glob, "__jsc__", &jscVal);
+
+	JS_DefineFunction(cx, jsc, "garbageCollect", JSBCore_forceGC, 0, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
+	JS_DefineFunction(cx, jsc, "dumpRoot", JSBCore_dumpRoot, 0, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
+	JS_DefineFunction(cx, jsc, "addGCRootObject", JSBCore_addRootJS, 1, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
+	JS_DefineFunction(cx, jsc, "removeGCRootObject", JSBCore_removeRootJS, 1, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
+	JS_DefineFunction(cx, jsc, "executeScript", JSBCore_executeScript, 1, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
+	JS_DefineFunction(cx, jsc, "restart", JSBCore_restartVM, 0, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
+
+	//
+	// 3rd party developer ?
+	// Add here your own classes registration
+	//
+
+	// registers cocos2d, cocosdenshion and cocosbuilder reader bindings
+#if JSB_INCLUDE_COCOS2D
+	jsb_register_cocos2d(cx, glob);
+#endif // JSB_INCLUDE_COCOS2D
+
+	// registers chipmunk bindings
+#if JSB_INCLUDE_CHIPMUNK
+	jsb_register_chipmunk(cx, glob);
+#endif // JSB_INCLUDE_CHIPMUNK
+
+	// registers sys bindings
+#if JSB_INCLUDE_SYSTEM
+	jsb_register_system(cx, glob);
+#endif // JSB_INCLUDE_SYSTEM
+
+    return glob;
+}
 
 #pragma mark Do Nothing - Callbacks
 

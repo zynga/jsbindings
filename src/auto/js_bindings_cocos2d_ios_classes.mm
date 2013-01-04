@@ -1583,6 +1583,7 @@ void JSB_CCLayer_createClass(JSContext *cx, JSObject* globalObj, const char* nam
 	if (_jsObj) {
 		JSContext* cx = [[JSBCore sharedInstance] globalContext];
 		JSBool found;
+		JSB_ENSURE_AUTOCOMPARTMENT(cx, _jsObj);
 		JS_HasProperty(cx, _jsObj, "onTouchEnded", &found);
 		if (found == JS_TRUE) {
 			jsval rval, fval;
@@ -1604,6 +1605,7 @@ void JSB_CCLayer_createClass(JSContext *cx, JSObject* globalObj, const char* nam
 	if (_jsObj) {
 		JSContext* cx = [[JSBCore sharedInstance] globalContext];
 		JSBool found;
+		JSB_ENSURE_AUTOCOMPARTMENT(cx, _jsObj);
 		JS_HasProperty(cx, _jsObj, "onTouchBegan", &found);
 		if (found == JS_TRUE) {
 			jsval rval, fval;
@@ -1626,6 +1628,7 @@ void JSB_CCLayer_createClass(JSContext *cx, JSObject* globalObj, const char* nam
 	if (_jsObj) {
 		JSContext* cx = [[JSBCore sharedInstance] globalContext];
 		JSBool found;
+		JSB_ENSURE_AUTOCOMPARTMENT(cx, _jsObj);
 		JS_HasProperty(cx, _jsObj, "onTouchMoved", &found);
 		if (found == JS_TRUE) {
 			jsval rval, fval;
@@ -1646,6 +1649,7 @@ void JSB_CCLayer_createClass(JSContext *cx, JSObject* globalObj, const char* nam
 	if (_jsObj) {
 		JSContext* cx = [[JSBCore sharedInstance] globalContext];
 		JSBool found;
+		JSB_ENSURE_AUTOCOMPARTMENT(cx, _jsObj);
 		JS_HasProperty(cx, _jsObj, "onTouchesEnded", &found);
 		if (found == JS_TRUE) {
 			jsval rval, fval;
@@ -1666,6 +1670,7 @@ void JSB_CCLayer_createClass(JSContext *cx, JSObject* globalObj, const char* nam
 	if (_jsObj) {
 		JSContext* cx = [[JSBCore sharedInstance] globalContext];
 		JSBool found;
+		JSB_ENSURE_AUTOCOMPARTMENT(cx, _jsObj);
 		JS_HasProperty(cx, _jsObj, "onTouchesCancelled", &found);
 		if (found == JS_TRUE) {
 			jsval rval, fval;
@@ -1686,6 +1691,7 @@ void JSB_CCLayer_createClass(JSContext *cx, JSObject* globalObj, const char* nam
 	if (_jsObj) {
 		JSContext* cx = [[JSBCore sharedInstance] globalContext];
 		JSBool found;
+		JSB_ENSURE_AUTOCOMPARTMENT(cx, _jsObj);
 		JS_HasProperty(cx, _jsObj, "onTouchCancelled", &found);
 		if (found == JS_TRUE) {
 			jsval rval, fval;
@@ -1706,6 +1712,7 @@ void JSB_CCLayer_createClass(JSContext *cx, JSObject* globalObj, const char* nam
 	if (_jsObj) {
 		JSContext* cx = [[JSBCore sharedInstance] globalContext];
 		JSBool found;
+		JSB_ENSURE_AUTOCOMPARTMENT(cx, _jsObj);
 		JS_HasProperty(cx, _jsObj, "onTouchesMoved", &found);
 		if (found == JS_TRUE) {
 			jsval rval, fval;
@@ -1726,6 +1733,7 @@ void JSB_CCLayer_createClass(JSContext *cx, JSObject* globalObj, const char* nam
 	if (_jsObj) {
 		JSContext* cx = [[JSBCore sharedInstance] globalContext];
 		JSBool found;
+		JSB_ENSURE_AUTOCOMPARTMENT(cx, _jsObj);
 		JS_HasProperty(cx, _jsObj, "onTouchesBegan", &found);
 		if (found == JS_TRUE) {
 			jsval rval, fval;

@@ -254,6 +254,7 @@ JSBool jsval_to_block_1( JSContext *cx, jsval vp, JSObject *jsthis, js_block *re
 		jsval rval;
 		jsval val = NSObject_to_jsval(cx, sender);
 
+		JSB_ENSURE_AUTOCOMPARTMENT(cx, jsthis);
 		JSBool ok = JS_CallFunctionValue(cx, jsthis, vp, 1, &val, &rval);
 		JSB_PRECONDITION2(ok, cx, , "Error calling callback (1)");
 	};
@@ -277,6 +278,7 @@ JSBool jsval_to_block_2( JSContext *cx, jsval vp, JSObject *jsthis, jsval arg, j
 		// arg NEEDS TO BE ROOTED! Potential crash
 		vals[1] = arg;
 		
+		JSB_ENSURE_AUTOCOMPARTMENT(cx, jsthis);
 		JSBool ok = JS_CallFunctionValue(cx, jsthis, vp, 2, vals, &rval);
 		JSB_PRECONDITION2(ok, cx, , "Error calling callback (2)");
 	};

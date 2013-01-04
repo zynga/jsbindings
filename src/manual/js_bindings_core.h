@@ -24,7 +24,7 @@
 
 
 #import <objc/runtime.h>
-#import "jsapi.h"
+#include "jsapi.h"
 
 #import "cocos2d.h"
 #import "chipmunk.h"
@@ -41,6 +41,7 @@ extern char * JSB_association_proxy_key;
 	JSRuntime	*_rt;
 	JSContext	*_cx;
 	JSObject	*_object;
+	JSObject    *_debugObject;
 }
 
 /** return the global context */
@@ -49,9 +50,11 @@ extern char * JSB_association_proxy_key;
 /** return the global context */
 @property (nonatomic, readonly) JSContext* globalContext;
 
-/** return the global context */
+/** return the global container */
 @property (nonatomic, readonly) JSObject* globalObject;
 
+/** return the debug container */
+@property (nonatomic, readonly) JSObject* debugObject;
 
 /** returns the shared instance */
 +(JSBCore*) sharedInstance;
@@ -119,10 +122,17 @@ extern char * JSB_association_proxy_key;
 -(BOOL) evalString:(NSString*)string outVal:(jsval*)outVal;
 
 /**
- * will run the specified string
- * @param string The path of the script to be run
+ * will run the specified script using the default container
+ * @param filename The path of the script to be run
  */
 -(JSBool) runScript:(NSString*)filename;
+
+/**
+ * will run the specified script
+ * @param filename The path of the script to be run
+ * @param global The path of the script to be run
+ */
+-(JSBool) runScript:(NSString*)filename withContainer:(JSObject *)global;
 
 @end
 
@@ -130,52 +140,55 @@ extern char * JSB_association_proxy_key;
 extern "C" {
 #endif
 
-	enum {
-		JSB_C_FLAG_CALL_FREE = 0,
-		JSB_C_FLAG_DO_NOT_CALL_FREE =1,
-	};
+enum {
+	JSB_C_FLAG_CALL_FREE = 0,
+	JSB_C_FLAG_DO_NOT_CALL_FREE =1,
+};
 
-	// structure used by "Object Oriented Functions".
-	// handle is a pointer to the native object
-	// flags: flags for the object
-	struct jsb_c_proxy_s {
-		unsigned long flags;	// Should it be removed at "destructor" time, or not ?
-		void *handle;			// native object, like cpSpace, cpBody, etc.
-		JSObject *jsobj;		// JS Object. Needed for rooting / unrooting
-	};
-	
-	// Functions for setting / removing / getting the proxy used by the "C" Object Oriented API. Think of Chipmunk classes
-	struct jsb_c_proxy_s* jsb_get_c_proxy_for_jsobject( JSObject *jsobj );
-	void jsb_del_c_proxy_for_jsobject( JSObject *jsobj );
-	void jsb_set_c_proxy_for_jsobject( JSObject *jsobj, void *handle, unsigned long flags);
+// structure used by "Object Oriented Functions".
+// handle is a pointer to the native object
+// flags: flags for the object
+struct jsb_c_proxy_s {
+	unsigned long flags;	// Should it be removed at "destructor" time, or not ?
+	void *handle;			// native object, like cpSpace, cpBody, etc.
+	JSObject *jsobj;		// JS Object. Needed for rooting / unrooting
+};
 
-	// JSObject -> proxy
-	/** gets a proxy for a given JSObject */
-	void* jsb_get_proxy_for_jsobject(JSObject *jsobj);
-	/** sets a proxy for a given JSObject */
-	void jsb_set_proxy_for_jsobject(void* proxy, JSObject *jsobj);
-	/** dels a proxy for a given JSObject */
-	void jsb_del_proxy_for_jsobject(JSObject *jsobj);
+// Functions for setting / removing / getting the proxy used by the "C" Object Oriented API. Think of Chipmunk classes
+struct jsb_c_proxy_s* jsb_get_c_proxy_for_jsobject( JSObject *jsobj );
+void jsb_del_c_proxy_for_jsobject( JSObject *jsobj );
+void jsb_set_c_proxy_for_jsobject( JSObject *jsobj, void *handle, unsigned long flags);
 
-	// reverse: proxy -> JSObject
-	/** gets a JSObject for a given proxy */
-	JSObject* jsb_get_jsobject_for_proxy(void *proxy);
-	/** sets a JSObject for a given proxy */
-	void jsb_set_jsobject_for_proxy(JSObject *jsobj, void* proxy);
-	/** delts a JSObject for a given proxy */
-	void jsb_del_jsobject_for_proxy(void* proxy);
+// JSObject -> proxy
+/** gets a proxy for a given JSObject */
+void* jsb_get_proxy_for_jsobject(JSObject *jsobj);
+/** sets a proxy for a given JSObject */
+void jsb_set_proxy_for_jsobject(void* proxy, JSObject *jsobj);
+/** dels a proxy for a given JSObject */
+void jsb_del_proxy_for_jsobject(JSObject *jsobj);
 
-	JSBool jsb_set_reserved_slot(JSObject *obj, uint32_t idx, jsval value);
-	
-	
-	// needed for callbacks. It does nothing.
-	JSBool JSB_do_nothing(JSContext *cx, uint32_t argc, jsval *vp);
-	
+// reverse: proxy -> JSObject
+/** gets a JSObject for a given proxy */
+JSObject* jsb_get_jsobject_for_proxy(void *proxy);
+/** sets a JSObject for a given proxy */
+void jsb_set_jsobject_for_proxy(JSObject *jsobj, void* proxy);
+/** delts a JSObject for a given proxy */
+void jsb_del_jsobject_for_proxy(void* proxy);
 
-	// logs a format string to the console
-	JSBool JSBCore_log(JSContext *cx, uint32_t argc, jsval *vp);
+JSBool jsb_set_reserved_slot(JSObject *obj, uint32_t idx, jsval value);
 
-	extern const char* JSB_version;
+
+// needed for callbacks. It does nothing.
+JSBool JSB_do_nothing(JSContext *cx, uint32_t argc, jsval *vp);
+
+
+// logs a format string to the console
+JSBool JSBCore_log(JSContext *cx, uint32_t argc, jsval *vp);
+
+JSObject* JSB_NewGlobalObject(JSContext* cx, bool empty);
+
+extern const char* JSB_version;
+
 #ifdef __cplusplus
 }
 #endif
