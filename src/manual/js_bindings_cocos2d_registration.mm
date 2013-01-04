@@ -47,67 +47,6 @@ void jsb_register_cocos2d_config( JSContext *_cx, JSObject *cocos2d);
 
 void jsb_register_cocos2d_config( JSContext *_cx, JSObject *cocos2d)
 {
-	// Config Object
-	JSObject *ccconfig = JS_NewObject(_cx, NULL, NULL, NULL);
-	// config.os: The Operating system
-	// osx, ios, android, windows, linux, etc..
-#ifdef __CC_PLATFORM_MAC
-	JSString *str = JS_InternString(_cx, "osx");
-#elif defined(__CC_PLATFORM_IOS)
-	JSString *str = JS_InternString(_cx, "ios");
-#endif
-	JS_DefineProperty(_cx, ccconfig, "os", STRING_TO_JSVAL(str), NULL, NULL, JSPROP_ENUMERATE | JSPROP_READONLY | JSPROP_PERMANENT);
-	
-	// config.platform: Platfrom
-	// 'mobile' for any kind of mobile devices, 'desktop' for PCs, 'browser' for Web Browsers
-#ifdef __CC_PLATFORM_MAC
-	str = JS_InternString(_cx, "desktop");
-#elif defined(__CC_PLATFORM_IOS)
-	str = JS_InternString(_cx, "mobile");
-#endif
-	JS_DefineProperty(_cx, ccconfig, "platform", STRING_TO_JSVAL(str), NULL, NULL, JSPROP_ENUMERATE | JSPROP_READONLY | JSPROP_PERMANENT);
-	
-	// config.engine: Type of renderer
-	// 'cocos2d', 'cocos2d-x', 'cocos2d-html5/canvas', 'cocos2d-html5/webgl', etc..
-	str = JS_InternString(_cx, "cocos2d");
-	JS_DefineProperty(_cx, ccconfig, "engine", STRING_TO_JSVAL(str), NULL, NULL, JSPROP_ENUMERATE | JSPROP_READONLY | JSPROP_PERMANENT);
-	
-	// config.arch: CPU Architecture
-	// i386, ARM, x86_64, web
-#ifdef __LP64__
-	str = JS_InternString(_cx, "x86_64");
-#elif defined(__arm__) || defined(__ARM_NEON__)
-	str = JS_InternString(_cx, "arm");
-#else
-	str = JS_InternString(_cx, "i386");
-#endif
-	JS_DefineProperty(_cx, ccconfig, "arch", STRING_TO_JSVAL(str), NULL, NULL, JSPROP_ENUMERATE | JSPROP_READONLY | JSPROP_PERMANENT);
-	
-	// config.version: Version of cocos2d + renderer
-	str = JS_InternString(_cx, [cocos2dVersion() UTF8String] );
-	JS_DefineProperty(_cx, ccconfig, "version", STRING_TO_JSVAL(str), NULL, NULL, JSPROP_ENUMERATE | JSPROP_READONLY | JSPROP_PERMANENT);
-	
-	// config.usesTypedArrays
-#if JSB_COMPATIBLE_WITH_COCOS2D_HTML5_BASIC_TYPES
-	JSBool b = JS_FALSE;
-#else
-	JSBool b = JS_TRUE;
-#endif
-	JS_DefineProperty(_cx, ccconfig, "usesTypedArrays", BOOLEAN_TO_JSVAL(b), NULL, NULL, JSPROP_ENUMERATE | JSPROP_READONLY | JSPROP_PERMANENT);
-	
-	// config.debug: Debug build ?
-#ifdef DEBUG
-	b = JS_TRUE;
-#else
-	b = JS_FALSE;
-#endif
-	JS_DefineProperty(_cx, ccconfig, "debug", BOOLEAN_TO_JSVAL(b), NULL, NULL, JSPROP_ENUMERATE | JSPROP_READONLY | JSPROP_PERMANENT);
-	
-	
-	// Add "config" to "cc"
-	JS_DefineProperty(_cx, cocos2d, "config", OBJECT_TO_JSVAL(ccconfig), NULL, NULL, JSPROP_ENUMERATE | JSPROP_READONLY | JSPROP_PERMANENT);
-	
-	
 	JS_DefineFunction(_cx, cocos2d, "log", JSBCore_log, 0, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 	
 	JSB_NSObject_createClass(_cx, cocos2d, "Object");

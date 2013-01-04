@@ -51,7 +51,7 @@ static tHashJSObject *reverse_hash = NULL;
 // Globals
 char * JSB_association_proxy_key = NULL;
 
-const char * JSB_version = "0.5";
+const char * JSB_version = "JSB v0.5";
 
 
 static void its_finalize(JSFreeOp *fop, JSObject *obj)
@@ -150,23 +150,17 @@ JSBool JSBCore_getAssociatedNative(JSContext *cx, uint32_t argc, jsval *vp)
 
 JSBool JSBCore_platform(JSContext *cx, uint32_t argc, jsval *vp)
 {
-	JSB_PRECONDITION2(argc==0, cx, JS_FALSE, "Invalid number of arguments in getPlatform");
+	JSB_PRECONDITION2(argc==0, cx, JS_FALSE, "Invalid number of arguments in __getPlatform");
 
 	JSString * platform;
 
 // iOS is always 32 bits
 #ifdef __CC_PLATFORM_IOS
-	platform = JS_InternString(cx, "mobile/iOS/32");
+	platform = JS_InternString(cx, "mobile");
 
 // Mac can be 32 or 64 bits
 #elif defined(__CC_PLATFORM_MAC)
-
-#ifdef __LP64__
-	platform = JS_InternString(cx, "desktop/OSX/64");
-#else
-	platform = JS_InternString(cx, "desktop/OSX/32");
-#endif // 32 or 64
-
+	platform = JS_InternString(cx, "desktop");
 #else // unknown platform
 #error "Unsupported platform"
 #endif
@@ -177,6 +171,38 @@ JSBool JSBCore_platform(JSContext *cx, uint32_t argc, jsval *vp)
 	return JS_TRUE;
 };
 
+JSBool JSBCore_version(JSContext *cx, uint32_t argc, jsval *vp)
+{
+	JSB_PRECONDITION2(argc==0, cx, JS_FALSE, "Invalid number of arguments in __getVersion");
+	
+	char version[256];
+	snprintf(version, sizeof(version)-1, "%s - %s", cocos2d_version, JSB_version);
+	JSString * js_version = JS_InternString(cx, version);
+	
+	jsval ret = STRING_TO_JSVAL(js_version);
+	JS_SET_RVAL(cx, vp, ret);
+	
+	return JS_TRUE;
+};
+
+JSBool JSBCore_os(JSContext *cx, uint32_t argc, jsval *vp)
+{
+	JSB_PRECONDITION2(argc==0, cx, JS_FALSE, "Invalid number of arguments in __getOS");
+	
+	JSString * os;
+	
+	// iOS is always 32 bits
+#ifdef __CC_PLATFORM_IOS
+	os = JS_InternString(cx, "iOS");
+#elif defined(__CC_PLATFORM_MAC)
+	os = JS_InternString(cx, "OS X");
+#endif
+	
+	jsval ret = STRING_TO_JSVAL(os);
+	JS_SET_RVAL(cx, vp, ret);
+	
+	return JS_TRUE;
+};
 
 
 /* Register an object as a member of the GC's root set, preventing them from being GC'ed */
@@ -269,7 +295,7 @@ JSBool JSBCore_restartVM(JSContext *cx, uint32_t argc, jsval *vp)
 	if( self ) {
 
 #if DEBUG
-		printf("JSB: JavaScript Bindings v%s\n", JSB_version);
+		printf("JavaScript Bindings - %s\n", JSB_version);
 #endif
 
 		// Must be called only once, and before creating a new runtime
@@ -605,6 +631,8 @@ JSObject* JSB_NewGlobalObject(JSContext* cx, bool empty)
 	JS_DefineFunction(cx, glob, "__associateObjWithNative", JSBCore_associateObjectWithNative, 2, JSPROP_READONLY | JSPROP_PERMANENT);
 	JS_DefineFunction(cx, glob, "__getAssociatedNative", JSBCore_getAssociatedNative, 2, JSPROP_READONLY | JSPROP_PERMANENT);
 	JS_DefineFunction(cx, glob, "__getPlatform", JSBCore_platform, 0, JSPROP_READONLY | JSPROP_PERMANENT);
+	JS_DefineFunction(cx, glob, "__getOS", JSBCore_os, 0, JSPROP_READONLY | JSPROP_PERMANENT);
+	JS_DefineFunction(cx, glob, "__getVersion", JSBCore_version, 0, JSPROP_READONLY | JSPROP_PERMANENT);
 
 	//
 	// Javascript controller (__jsc__)

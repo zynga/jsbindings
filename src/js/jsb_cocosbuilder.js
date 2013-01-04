@@ -2,7 +2,7 @@
 // CocosBuilder definitions
 //
 
-cc.BuilderReader = {};
+cc.BuilderReader = cc.BuilderReader || {};
 
 var _ccbGlobalContext = this;
 

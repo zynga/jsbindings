@@ -1,6 +1,9 @@
 //
 // cocos2d constants
 //
+
+var cc = cc || {};
+
 cc.DIRECTOR_PROJECTION_2D = 0;
 cc.DIRECTOR_PROJECTION_3D = 1;
 
@@ -273,8 +276,8 @@ cc.dump = function(obj)
 // dump config info, but only in debug mode
 cc.dumpConfig = function()
 {
-    if( cc.config.debug )
-        cc.dump(cc.config);
+    cc.dump(sys);
+    cc.dump(sys.capabilities);
 };
 
 //
