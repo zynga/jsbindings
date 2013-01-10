@@ -317,6 +317,9 @@ JSBool JSBCore_restartVM(JSContext *cx, uint32_t argc, jsval *vp)
 	JS_SetOptions(_cx, JSOPTION_VAROBJFIX | JSOPTION_TYPE_INFERENCE);
 	JS_SetErrorReporter(_cx, reportError);
 	_object = JSB_NewGlobalObject(_cx, false);
+#if JSB_ENABLE_DEBUGGER
+	JS_SetDebugMode(_cx, JS_TRUE);
+#endif
 }
 
 +(void) reportErrorWithContext:(JSContext*)cx message:(NSString*)message report:(JSErrorReport*)report
@@ -433,7 +436,7 @@ JSBool JSBCore_restartVM(JSContext *cx, uint32_t argc, jsval *vp)
 	return [self runScript:filename withContainer:_object];
 }
 
--(JSBool) runScript:(NSString*)filename withContainer:(JSObject *)global
+- (JSBool)runScript:(NSString*)filename withContainer:(JSObject *)global
 {
 	JSBool ok = JS_FALSE;
 
@@ -453,6 +456,11 @@ JSBool JSBCore_restartVM(JSContext *cx, uint32_t argc, jsval *vp)
 		jsval result;
 		ok = JS_ExecuteScript(_cx, global, script, &result);
 	}
+	if (!ok) {
+		char tmp[256];
+		snprintf(tmp, sizeof(tmp)-1, "Error executing script: %s", [filename UTF8String]);
+		JSB_PRECONDITION(ok, tmp);
+	}
 
 	// add script to the global map
 	const char* key = [filename UTF8String];
@@ -463,8 +471,6 @@ JSBool JSBCore_restartVM(JSContext *cx, uint32_t argc, jsval *vp)
 	}
 	js::RootedScript* rootedScript = new js::RootedScript(_cx, script);
 	__scripts[key] = rootedScript;
-
-	JSB_PRECONDITION(ok, "Error executing script");
 
     return ok;
 }

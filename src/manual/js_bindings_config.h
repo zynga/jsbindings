@@ -48,6 +48,8 @@
 		if( ! JS_IsExceptionPending( globalContext ) ) {						\
 			printf("jsb: ERROR in %s: %s\n", __FUNCTION__, error_msg);			\
 			JS_ReportError( globalContext, error_msg );							\
+		} else {																\
+			JS_ReportPendingException(globalContext);							\
 		}																		\
 		return JS_FALSE;														\
 	}																			\
@@ -57,7 +59,8 @@
 		printf("jsb: ERROR in %s: %s\n", __FUNCTION__, error_msg);				\
 		if( ! JS_IsExceptionPending( context ) ) {								\
 			printf("jsb: ERROR in %s: %s\n", __FUNCTION__, error_msg);			\
-			JS_ReportError( context, error_msg );								\
+		} else {																\
+			JS_ReportPendingException(context);									\
 		}																		\
 		return ret_value;														\
 	}																			\
