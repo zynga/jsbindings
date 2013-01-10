@@ -6,10 +6,12 @@
  * If the `startDebugger` function is not defined, then you just require your files and start your
  * game :)
  */
-var files = ['cc.main.js'];
+var files = ['MoonWarriors-jsb.js'];
 if (typeof startDebugger !== "undefined") {
-	startDebugger(this, files, 'run()');
+	cc.log("**** will start debugger ****");
+	startDebugger(this, files);
 } else {
+	cc.log("**** no debugger loaded ****");
 	for (var i in files) {
 		require(files[i]);
 	}
