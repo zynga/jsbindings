@@ -674,10 +674,10 @@ class JSBGenerate(object):
             'b': ['JSBool',    'JS_ValueToBoolean'],
             'd': ['double',    'JS_ValueToNumber'],
             'I': ['double',    'JS_ValueToNumber'],    # double converted to string
-            'i': ['int32_t',   'JS_ValueToECMAInt32'],
-            'j': ['int32_t',   'JS_ValueToECMAInt32'],
-            'u': ['uint32_t',  'JS_ValueToECMAUint32'],
-            'c': ['uint16_t',  'JS_ValueToUint16'],
+            'i': ['int32_t',   'jsval_to_int32'],
+            'j': ['int32_t',   'jsval_to_int32'],
+            'u': ['uint32_t',  'jsval_to_uint32'],
+            'c': ['uint16_t',  'jsval_to_uint16'],
         }
 
         js_special_type_conversions = {

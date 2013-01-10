@@ -304,8 +304,8 @@ JSBool __jsb_cpSpace_addCollisionHandler(JSContext *cx, jsval *vp, jsval *argvp,
 	JSBool ok = JS_TRUE;
 	
 	// args
-	ok &= jsval_to_int(cx, *argvp++, (int32_t*) &handler->typeA );
-	ok &= jsval_to_int(cx, *argvp++, (int32_t*) &handler->typeB );
+	ok &= jsval_to_int32(cx, *argvp++, (int32_t*) &handler->typeA );
+	ok &= jsval_to_int32(cx, *argvp++, (int32_t*) &handler->typeB );
 	
 	// this is no longer passed, so "this" is going to be "this".
 //	ok &= JS_ValueToObject(cx, *argvp++, &handler->jsthis );
@@ -405,8 +405,8 @@ JSBool __jsb_cpSpace_removeCollisionHandler(JSContext *cx, jsval *vp, jsval *arg
 	
 	cpCollisionType typeA;
 	cpCollisionType typeB;
-	ok &= jsval_to_int(cx, *argvp++, (int32_t*) &typeA );
-	ok &= jsval_to_int(cx, *argvp++, (int32_t*) &typeB );
+	ok &= jsval_to_int32(cx, *argvp++, (int32_t*) &typeA );
+	ok &= jsval_to_int32(cx, *argvp++, (int32_t*) &typeB );
 
 	JSB_PRECONDITION(ok, "Error parsing arguments");
 	

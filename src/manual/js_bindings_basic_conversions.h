@@ -64,8 +64,9 @@ JSBool jsval_to_CGSize( JSContext *cx, jsval vp, CGSize *out );
 JSBool jsval_to_CGRect( JSContext *cx, jsval vp, CGRect *out );
 /** converts a jsval to a 'handle'. Typically the handle is pointer to a struct */
 JSBool jsval_to_opaque( JSContext *cx, jsval vp, void **out );
-JSBool jsval_to_int( JSContext *cx, jsval vp, int *out);
-JSBool jsval_to_uint( JSContext *cx, jsval vp, unsigned int *ret );
+JSBool jsval_to_int32( JSContext *cx, jsval vp, int32_t *out);
+JSBool jsval_to_uint32( JSContext *cx, jsval vp, uint32_t *ret );
+JSBool jsval_to_uint16( JSContext *cx, jsval vp, uint16_t *ret );
 JSBool jsval_to_long( JSContext *cx, jsval vp, long *out);
 JSBool jsval_to_longlong( JSContext *cx, jsval vp, long long *out);
 /** converts a jsval to a "handle" needed for Object Oriented C API */
@@ -85,8 +86,8 @@ jsval NSNumber_to_jsval( JSContext *cx, NSNumber *number);
 jsval NSDictionary_to_jsval( JSContext *cx, NSDictionary *dict);
 jsval NSArray_to_jsval( JSContext *cx, NSArray *array);
 jsval NSSet_to_jsval( JSContext *cx, NSSet *set);
-jsval int_to_jsval( JSContext *cx, int l);
-jsval uint_to_jsval( JSContext *cx, unsigned int number );
+jsval int32_to_jsval( JSContext *cx, int32_t l);
+jsval uint32_to_jsval( JSContext *cx, uint32_t number );
 jsval long_to_jsval( JSContext *cx, long l);
 jsval longlong_to_jsval( JSContext *cx, long long l);
 jsval CGPoint_to_jsval( JSContext *cx, CGPoint p );

@@ -402,26 +402,40 @@ JSBool jsval_to_c_class( JSContext *cx, jsval vp, void **out_native, struct jsb_
 	return JS_TRUE;
 }
 
-JSBool jsval_to_int( JSContext *cx, jsval vp, int *ret )
+JSBool jsval_to_int32( JSContext *cx, jsval vp, int32_t *outval )
 {
-	// Since this is called to cast uint64 to uint32,
-	// it is needed to initialize the value to 0 first
-#ifdef __LP64__
-	long *tmp = (long*)ret;
-	*tmp = 0;
-#endif
-	return JS_ValueToInt32(cx, vp, (int32_t*)ret);
+	JSBool ret = JS_FALSE;
+	double dp;
+	if( (ret=JS_ValueToNumber(cx, vp, &dp)) ) {
+		if( isnan(dp))
+			return JS_FALSE;
+		*outval = (int32_t)dp;
+	}	
+	return ret;
 }
 
-JSBool jsval_to_uint( JSContext *cx, jsval vp, unsigned int *ret )
+JSBool jsval_to_uint32( JSContext *cx, jsval vp, uint32_t *outval )
 {
-	// Since this is called to cast uint64 to uint32,
-	// it is needed to initialize the value to 0 first
-#ifdef __LP64__
-	long *tmp = (long*)ret;
-	*tmp = 0;
-#endif
-	return JS_ValueToInt32(cx, vp, (int32_t*)ret);
+	JSBool ret = JS_FALSE;
+	double dp;
+	if( (ret=JS_ValueToNumber(cx, vp, &dp)) ) {
+		if( isnan(dp))
+			return JS_FALSE;
+		*outval = (uint32_t)dp;
+	}
+	return ret;
+}
+
+JSBool jsval_to_uint16( JSContext *cx, jsval vp, uint16_t *outval )
+{
+	JSBool ret = JS_FALSE;
+	double dp;
+	if( (ret=JS_ValueToNumber(cx, vp, &dp)) ) {
+		if( isnan(dp))
+			return JS_FALSE;
+		*outval = (uint16_t)dp;
+	}
+	return ret;
 }
 
 
@@ -675,12 +689,12 @@ jsval c_class_to_jsval( JSContext *cx, void* handle, JSObject* object, JSClass *
 	return OBJECT_TO_JSVAL(jsobj);
 }
 
-jsval int_to_jsval( JSContext *cx, int number )
+jsval int32_to_jsval( JSContext *cx, int32_t number )
 {
 	return INT_TO_JSVAL(number);
 }
 
-jsval uint_to_jsval( JSContext *cx, unsigned int number )
+jsval uint32_to_jsval( JSContext *cx, uint32_t number )
 {
 	return UINT_TO_JSVAL(number);
 }
