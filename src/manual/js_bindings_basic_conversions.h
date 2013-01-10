@@ -99,3 +99,10 @@ jsval opaque_to_jsval( JSContext *cx, void* opaque);
 jsval c_class_to_jsval( JSContext *cx, void* handle, JSObject* object, JSClass *klass, const char* optional_class_name);
 /* Converts a char ptr into a jsval (using JS string) */
 jsval charptr_to_jsval( JSContext *cx, const char *str);
+
+
+#ifndef _UINT32
+typedef uint32_t uint32;
+#define _UINT32
+#endif // _UINT32
+
