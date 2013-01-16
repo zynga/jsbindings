@@ -287,18 +287,18 @@
 <constant declared_type='BOOL' name='kCCProfilerCategoryBatchSprite' type='B'/>
 <constant declared_type='BOOL' name='kCCProfilerCategoryParticles' type='B'/>
 <constant declared_type='BOOL' name='kCCProfilerCategorySprite' type='B'/>
-<string_constant value='CCAnimationFrameDisplayedNotification' nsstring='true' name='CCAnimationFrameDisplayedNotification'/>
-<string_constant value='a_color' nsstring='true' name='kCCAttributeNameColor'/>
-<string_constant value='a_position' nsstring='true' name='kCCAttributeNamePosition'/>
-<string_constant value='a_texCoord' nsstring='true' name='kCCAttributeNameTexCoord'/>
-<string_constant value='ShaderPositionColor' nsstring='true' name='kCCShader_PositionColor'/>
-<string_constant value='ShaderPositionLengthTextureColor' nsstring='true' name='kCCShader_PositionLengthTexureColor'/>
-<string_constant value='ShaderPositionTexture' nsstring='true' name='kCCShader_PositionTexture'/>
-<string_constant value='ShaderPositionTextureA8Color' nsstring='true' name='kCCShader_PositionTextureA8Color'/>
-<string_constant value='ShaderPositionTextureColor' nsstring='true' name='kCCShader_PositionTextureColor'/>
-<string_constant value='ShaderPositionTextureColorAlphaTest' nsstring='true' name='kCCShader_PositionTextureColorAlphaTest'/>
-<string_constant value='ShaderPositionTexture_uColor' nsstring='true' name='kCCShader_PositionTexture_uColor'/>
-<string_constant value='ShaderPosition_uColor' nsstring='true' name='kCCShader_Position_uColor'/>
+<string_constant value='CCAnimationFrameDisplayedNotification' name='CCAnimationFrameDisplayedNotification' nsstring='true'/>
+<string_constant value='a_color' name='kCCAttributeNameColor' nsstring='true'/>
+<string_constant value='a_position' name='kCCAttributeNamePosition' nsstring='true'/>
+<string_constant value='a_texCoord' name='kCCAttributeNameTexCoord' nsstring='true'/>
+<string_constant value='ShaderPositionColor' name='kCCShader_PositionColor' nsstring='true'/>
+<string_constant value='ShaderPositionLengthTextureColor' name='kCCShader_PositionLengthTexureColor' nsstring='true'/>
+<string_constant value='ShaderPositionTexture' name='kCCShader_PositionTexture' nsstring='true'/>
+<string_constant value='ShaderPositionTextureA8Color' name='kCCShader_PositionTextureA8Color' nsstring='true'/>
+<string_constant value='ShaderPositionTextureColor' name='kCCShader_PositionTextureColor' nsstring='true'/>
+<string_constant value='ShaderPositionTextureColorAlphaTest' name='kCCShader_PositionTextureColorAlphaTest' nsstring='true'/>
+<string_constant value='ShaderPositionTexture_uColor' name='kCCShader_PositionTexture_uColor' nsstring='true'/>
+<string_constant value='ShaderPosition_uColor' name='kCCShader_Position_uColor' nsstring='true'/>
 <string_constant value='CC_alpha_value' name='kCCUniformAlphaTestValue'/>
 <string_constant value='CC_CosTime' name='kCCUniformCosTime_s'/>
 <string_constant value='CC_MVMatrix' name='kCCUniformMVMatrix_s'/>
@@ -926,7 +926,7 @@
 </function>
 <function name='cc_insertionSort'>
 <arg declared_type='ccCArray*' name='arr' type='^{ccArray=II^@}'/>
-<arg function_pointer='true' declared_type='cc_comparator' name='comparator' type='^?'>
+<arg declared_type='cc_comparator' function_pointer='true' name='comparator' type='^?'>
 <arg const='true' declared_type='void*' type='^v'/>
 <arg const='true' declared_type='void*' type='^v'/>
 <retval declared_type='int' type='i'/>
@@ -936,7 +936,7 @@
 <function name='cc_mergesortL'>
 <arg declared_type='ccCArray*' name='array' type='^{ccArray=II^@}'/>
 <arg declared_type='size_t' name='width' type='L'/>
-<arg function_pointer='true' declared_type='cc_comparator' name='comparator' type='^?'>
+<arg declared_type='cc_comparator' function_pointer='true' name='comparator' type='^?'>
 <arg const='true' declared_type='void*' type='^v'/>
 <arg const='true' declared_type='void*' type='^v'/>
 <retval declared_type='int' type='i'/>
@@ -1019,7 +1019,7 @@
 </function>
 <function name='ccpCompOp'>
 <arg declared_type='CGPoint' name='p' type='{CGPoint=ff}'/>
-<arg function_pointer='true' declared_type='float (*)(float)' name='opFunc' type='^?'>
+<arg declared_type='float (*)(float)' function_pointer='true' name='opFunc' type='^?'>
 <arg declared_type='float' type='f'/>
 <retval declared_type='float' type='f'/>
 </arg>
@@ -1183,12 +1183,12 @@
 <arg declared_type='tImageTGA*' name='info' type='^{sImageTGA=iCCss*i}'/>
 <retval declared_type='void' type='v'/>
 </function>
-<function_alias original='NSPointToCGPoint' name='CCNSPointToCGPoint'/>
-<function_alias original='NSRectToCGRect' name='CCNSRectToCGRect'/>
-<function_alias original='NSSizeToCGSize' name='CCNSSizeToCGSize'/>
-<function_alias original='glBindVertexArrayAPPLE' name='glBindVertexArray'/>
-<function_alias original='glDeleteVertexArraysAPPLE' name='glDeleteVertexArrays'/>
-<function_alias original='glGenVertexArraysAPPLE' name='glGenVertexArrays'/>
+<function_alias name='CCNSPointToCGPoint' original='NSPointToCGPoint'/>
+<function_alias name='CCNSRectToCGRect' original='NSRectToCGRect'/>
+<function_alias name='CCNSSizeToCGSize' original='NSSizeToCGSize'/>
+<function_alias name='glBindVertexArray' original='glBindVertexArrayAPPLE'/>
+<function_alias name='glDeleteVertexArrays' original='glDeleteVertexArraysAPPLE'/>
+<function_alias name='glGenVertexArrays' original='glGenVertexArraysAPPLE'/>
 <class name='CCAccelAmplitude'>
 <method class_method='true' selector='actionWithAction:duration:'>
 <arg declared_type='CCAction*' index='0' name='action' type='@'/>
@@ -1619,7 +1619,7 @@
 <retval declared_type='void' type='v'/>
 </method>
 <method selector='insertionSortUsingCFuncComparator:'>
-<arg function_pointer='true' declared_type='int (*)(void *, void *)' index='0' name='comparator' type='^?'>
+<arg declared_type='int (*)(void *, void *)' function_pointer='true' index='0' name='comparator' type='^?'>
 <arg const='true' declared_type='void*' type='^v'/>
 <arg const='true' declared_type='void*' type='^v'/>
 <retval declared_type='int' type='i'/>
@@ -1648,7 +1648,7 @@
 <retval declared_type='void' type='v'/>
 </method>
 <method selector='mergesortLUsingCFuncComparator:'>
-<arg function_pointer='true' declared_type='int (*)(void *, void *)' index='0' name='comparator' type='^?'>
+<arg declared_type='int (*)(void *, void *)' function_pointer='true' index='0' name='comparator' type='^?'>
 <arg const='true' declared_type='void*' type='^v'/>
 <arg const='true' declared_type='void*' type='^v'/>
 <retval declared_type='int' type='i'/>
@@ -1660,7 +1660,7 @@
 <retval declared_type='id' type='@'/>
 </method>
 <method selector='qsortUsingCFuncComparator:'>
-<arg function_pointer='true' declared_type='int (*)(void *, void *)' index='0' name='comparator' type='^?'>
+<arg declared_type='int (*)(void *, void *)' function_pointer='true' index='0' name='comparator' type='^?'>
 <arg const='true' declared_type='void*' type='^v'/>
 <arg const='true' declared_type='void*' type='^v'/>
 <retval declared_type='int' type='i'/>
@@ -1700,7 +1700,7 @@
 <retval declared_type='void' type='v'/>
 </method>
 <method selector='sortUsingFunction:context:'>
-<arg function_pointer='true' declared_type='NSInteger (*)(id, id, void *)' index='0' name='compare' type='^?'>
+<arg declared_type='NSInteger (*)(id, id, void *)' function_pointer='true' index='0' name='compare' type='^?'>
 <arg declared_type='id' type='@'/>
 <arg declared_type='id' type='@'/>
 <arg declared_type='void*' type='^v'/>
@@ -1816,7 +1816,7 @@
 </class>
 <class name='CCCallBlock'>
 <method class_method='true' selector='actionWithBlock:'>
-<arg function_pointer='true' declared_type='void (^)()' index='0' name='block' type='@?'>
+<arg declared_type='void (^)()' function_pointer='true' index='0' name='block' type='@?'>
 <retval declared_type='void' type='v'/>
 </arg>
 <retval declared_type='id' type='@'/>
@@ -1825,7 +1825,7 @@
 <retval declared_type='void' type='v'/>
 </method>
 <method selector='initWithBlock:'>
-<arg function_pointer='true' declared_type='void (^)()' index='0' name='block' type='@?'>
+<arg declared_type='void (^)()' function_pointer='true' index='0' name='block' type='@?'>
 <retval declared_type='void' type='v'/>
 </arg>
 <retval declared_type='id' type='@'/>
@@ -1833,7 +1833,7 @@
 </class>
 <class name='CCCallBlockN'>
 <method class_method='true' selector='actionWithBlock:'>
-<arg function_pointer='true' declared_type='void (^)(CCNode *)' index='0' name='block' type='@?'>
+<arg declared_type='void (^)(CCNode *)' function_pointer='true' index='0' name='block' type='@?'>
 <arg declared_type='CCNode*' type='@'/>
 <retval declared_type='void' type='v'/>
 </arg>
@@ -1843,7 +1843,7 @@
 <retval declared_type='void' type='v'/>
 </method>
 <method selector='initWithBlock:'>
-<arg function_pointer='true' declared_type='void (^)(CCNode *)' index='0' name='block' type='@?'>
+<arg declared_type='void (^)(CCNode *)' function_pointer='true' index='0' name='block' type='@?'>
 <arg declared_type='CCNode*' type='@'/>
 <retval declared_type='void' type='v'/>
 </arg>
@@ -1852,7 +1852,7 @@
 </class>
 <class name='CCCallBlockO'>
 <method class_method='true' selector='actionWithBlock:object:'>
-<arg function_pointer='true' declared_type='void (^)(id)' index='0' name='block' type='@?'>
+<arg declared_type='void (^)(id)' function_pointer='true' index='0' name='block' type='@?'>
 <arg declared_type='id' type='@'/>
 <retval declared_type='void' type='v'/>
 </arg>
@@ -1863,7 +1863,7 @@
 <retval declared_type='void' type='v'/>
 </method>
 <method selector='initWithBlock:object:'>
-<arg function_pointer='true' declared_type='void (^)(id)' index='0' name='block' type='@?'>
+<arg declared_type='void (^)(id)' function_pointer='true' index='0' name='block' type='@?'>
 <arg declared_type='id' type='@'/>
 <retval declared_type='void' type='v'/>
 </arg>
@@ -1913,7 +1913,7 @@
 <retval declared_type='id' type='@'/>
 </method>
 <method selector='callbackMethod'>
-<retval function_pointer='true' declared_type='CC_CALLBACK_ND' type='^?'>
+<retval declared_type='CC_CALLBACK_ND' function_pointer='true' type='^?'>
 <arg declared_type='id' type='@'/>
 <arg declared_type='SEL' type=':'/>
 <arg declared_type='id' type='@'/>
@@ -1928,7 +1928,7 @@
 <retval declared_type='id' type='@'/>
 </method>
 <method selector='setCallbackMethod:'>
-<arg function_pointer='true' declared_type='CC_CALLBACK_ND' index='0' name='callbackMethod' type='^?'>
+<arg declared_type='CC_CALLBACK_ND' function_pointer='true' index='0' name='callbackMethod' type='^?'>
 <arg declared_type='id' type='@'/>
 <arg declared_type='SEL' type=':'/>
 <arg declared_type='id' type='@'/>
@@ -3497,7 +3497,7 @@
 <arg declared_type='NSArray*' index='0' name='arrayOfLayers' type='@'/>
 <retval declared_type='id' type='@'/>
 </method>
-<method class_method='true' selector='layerWithLayers:' variadic='true' sentinel='0'>
+<method sentinel='0' class_method='true' selector='layerWithLayers:' variadic='true'>
 <arg declared_type='CCLayer*' index='0' name='layer' type='@'/>
 <retval declared_type='id' type='@'/>
 </method>
@@ -3583,7 +3583,7 @@
 <arg declared_type='float' index='0' name='padding' type='f'/>
 <retval declared_type='void' type='v'/>
 </method>
-<method selector='alignItemsInColumns:' variadic='true' sentinel='0'>
+<method sentinel='0' selector='alignItemsInColumns:' variadic='true'>
 <arg declared_type='NSNumber*' index='0' name='columns' type='@'/>
 <retval declared_type='void' type='v'/>
 </method>
@@ -3596,7 +3596,7 @@
 <arg declared_type='NSArray*' index='0' name='arrayOfNumbers' type='@'/>
 <retval declared_type='void' type='v'/>
 </method>
-<method selector='alignItemsInRows:' variadic='true' sentinel='0'>
+<method sentinel='0' selector='alignItemsInRows:' variadic='true'>
 <arg declared_type='NSNumber*' index='0' name='rows' type='@'/>
 <retval declared_type='void' type='v'/>
 </method>
@@ -3627,7 +3627,7 @@
 <arg declared_type='NSArray*' index='0' name='arrayOfItems' type='@'/>
 <retval declared_type='id' type='@'/>
 </method>
-<method class_method='true' selector='menuWithItems:' variadic='true' sentinel='0'>
+<method sentinel='0' class_method='true' selector='menuWithItems:' variadic='true'>
 <arg declared_type='CCMenuItem*' index='0' name='item' type='@'/>
 <retval declared_type='id' type='@'/>
 </method>
@@ -3653,7 +3653,7 @@
 <retval declared_type='void' type='v'/>
 </method>
 <method selector='initWithBlock:'>
-<arg function_pointer='true' declared_type='void (^)(id)' index='0' name='block' type='@?'>
+<arg declared_type='void (^)(id)' function_pointer='true' index='0' name='block' type='@?'>
 <arg declared_type='id' type='@'/>
 <retval declared_type='void' type='v'/>
 </arg>
@@ -3671,7 +3671,7 @@
 <retval declared_type='BOOL' type='B'/>
 </method>
 <method class_method='true' selector='itemWithBlock:'>
-<arg function_pointer='true' declared_type='void (^)(id)' index='0' name='block' type='@?'>
+<arg declared_type='void (^)(id)' function_pointer='true' index='0' name='block' type='@?'>
 <arg declared_type='id' type='@'/>
 <retval declared_type='void' type='v'/>
 </arg>
@@ -3692,7 +3692,7 @@
 <retval declared_type='void' type='v'/>
 </method>
 <method selector='setBlock:'>
-<arg function_pointer='true' declared_type='void (^)(id)' index='0' name='block' type='@?'>
+<arg declared_type='void (^)(id)' function_pointer='true' index='0' name='block' type='@?'>
 <arg declared_type='id' type='@'/>
 <retval declared_type='void' type='v'/>
 </arg>
@@ -3722,7 +3722,7 @@
 <arg declared_type='int' index='2' name='itemWidth' type='i'/>
 <arg declared_type='int' index='3' name='itemHeight' type='i'/>
 <arg declared_type='char' index='4' name='startCharMap' type='c'/>
-<arg function_pointer='true' declared_type='void (^)(id)' index='5' name='block' type='@?'>
+<arg declared_type='void (^)(id)' function_pointer='true' index='5' name='block' type='@?'>
 <arg declared_type='id' type='@'/>
 <retval declared_type='void' type='v'/>
 </arg>
@@ -3752,7 +3752,7 @@
 <arg declared_type='int' index='2' name='itemWidth' type='i'/>
 <arg declared_type='int' index='3' name='itemHeight' type='i'/>
 <arg declared_type='char' index='4' name='startCharMap' type='c'/>
-<arg function_pointer='true' declared_type='void (^)(id)' index='5' name='block' type='@?'>
+<arg declared_type='void (^)(id)' function_pointer='true' index='5' name='block' type='@?'>
 <arg declared_type='id' type='@'/>
 <retval declared_type='void' type='v'/>
 </arg>
@@ -3784,7 +3784,7 @@
 </method>
 <method selector='initWithString:block:'>
 <arg declared_type='NSString*' index='0' name='value' type='@'/>
-<arg function_pointer='true' declared_type='void (^)(id)' index='1' name='block' type='@?'>
+<arg declared_type='void (^)(id)' function_pointer='true' index='1' name='block' type='@?'>
 <arg declared_type='id' type='@'/>
 <retval declared_type='void' type='v'/>
 </arg>
@@ -3802,7 +3802,7 @@
 </method>
 <method class_method='true' selector='itemWithString:block:'>
 <arg declared_type='NSString*' index='0' name='value' type='@'/>
-<arg function_pointer='true' declared_type='void (^)(id)' index='1' name='block' type='@?'>
+<arg declared_type='void (^)(id)' function_pointer='true' index='1' name='block' type='@?'>
 <arg declared_type='id' type='@'/>
 <retval declared_type='void' type='v'/>
 </arg>
@@ -3836,7 +3836,7 @@
 <arg declared_type='NSString*' index='0' name='value' type='@'/>
 <arg declared_type='NSString*' index='1' name='value2' type='@'/>
 <arg declared_type='NSString*' index='2' name='value3' type='@'/>
-<arg function_pointer='true' declared_type='void (^)(id)' index='3' name='block' type='@?'>
+<arg declared_type='void (^)(id)' function_pointer='true' index='3' name='block' type='@?'>
 <arg declared_type='id' type='@'/>
 <retval declared_type='void' type='v'/>
 </arg>
@@ -3858,7 +3858,7 @@
 <method class_method='true' selector='itemWithNormalImage:selectedImage:block:'>
 <arg declared_type='NSString*' index='0' name='value' type='@'/>
 <arg declared_type='NSString*' index='1' name='value2' type='@'/>
-<arg function_pointer='true' declared_type='void (^)(id)' index='2' name='block' type='@?'>
+<arg declared_type='void (^)(id)' function_pointer='true' index='2' name='block' type='@?'>
 <arg declared_type='id' type='@'/>
 <retval declared_type='void' type='v'/>
 </arg>
@@ -3874,7 +3874,7 @@
 <arg declared_type='NSString*' index='0' name='value' type='@'/>
 <arg declared_type='NSString*' index='1' name='value2' type='@'/>
 <arg declared_type='NSString*' index='2' name='value3' type='@'/>
-<arg function_pointer='true' declared_type='void (^)(id)' index='3' name='block' type='@?'>
+<arg declared_type='void (^)(id)' function_pointer='true' index='3' name='block' type='@?'>
 <arg declared_type='id' type='@'/>
 <retval declared_type='void' type='v'/>
 </arg>
@@ -3914,7 +3914,7 @@
 </method>
 <method selector='initWithLabel:block:'>
 <arg declared_type='CCNode*' index='0' name='label' type='@'/>
-<arg function_pointer='true' declared_type='void (^)(id)' index='1' name='block' type='@?'>
+<arg declared_type='void (^)(id)' function_pointer='true' index='1' name='block' type='@?'>
 <arg declared_type='id' type='@'/>
 <retval declared_type='void' type='v'/>
 </arg>
@@ -3932,7 +3932,7 @@
 </method>
 <method class_method='true' selector='itemWithLabel:block:'>
 <arg declared_type='CCNode*' index='0' name='label' type='@'/>
-<arg function_pointer='true' declared_type='void (^)(id)' index='1' name='block' type='@?'>
+<arg declared_type='void (^)(id)' function_pointer='true' index='1' name='block' type='@?'>
 <arg declared_type='id' type='@'/>
 <retval declared_type='void' type='v'/>
 </arg>
@@ -3972,7 +3972,7 @@
 <arg declared_type='CCNode*' index='0' name='normalSprite' type='@'/>
 <arg declared_type='CCNode*' index='1' name='selectedSprite' type='@'/>
 <arg declared_type='CCNode*' index='2' name='disabledSprite' type='@'/>
-<arg function_pointer='true' declared_type='void (^)(id)' index='3' name='block' type='@?'>
+<arg declared_type='void (^)(id)' function_pointer='true' index='3' name='block' type='@?'>
 <arg declared_type='id' type='@'/>
 <retval declared_type='void' type='v'/>
 </arg>
@@ -3994,7 +3994,7 @@
 <method class_method='true' selector='itemWithNormalSprite:selectedSprite:block:'>
 <arg declared_type='CCNode*' index='0' name='normalSprite' type='@'/>
 <arg declared_type='CCNode*' index='1' name='selectedSprite' type='@'/>
-<arg function_pointer='true' declared_type='void (^)(id)' index='2' name='block' type='@?'>
+<arg declared_type='void (^)(id)' function_pointer='true' index='2' name='block' type='@?'>
 <arg declared_type='id' type='@'/>
 <retval declared_type='void' type='v'/>
 </arg>
@@ -4004,7 +4004,7 @@
 <arg declared_type='CCNode*' index='0' name='normalSprite' type='@'/>
 <arg declared_type='CCNode*' index='1' name='selectedSprite' type='@'/>
 <arg declared_type='CCNode*' index='2' name='disabledSprite' type='@'/>
-<arg function_pointer='true' declared_type='void (^)(id)' index='3' name='block' type='@?'>
+<arg declared_type='void (^)(id)' function_pointer='true' index='3' name='block' type='@?'>
 <arg declared_type='id' type='@'/>
 <retval declared_type='void' type='v'/>
 </arg>
@@ -4047,7 +4047,7 @@
 <class name='CCMenuItemToggle'>
 <method selector='initWithItems:block:'>
 <arg declared_type='NSArray*' index='0' name='arrayOfItems' type='@'/>
-<arg function_pointer='true' declared_type='void (^)(id)' index='1' name='block' type='@?'>
+<arg declared_type='void (^)(id)' function_pointer='true' index='1' name='block' type='@?'>
 <arg declared_type='id' type='@'/>
 <retval declared_type='void' type='v'/>
 </arg>
@@ -4059,13 +4059,13 @@
 </method>
 <method class_method='true' selector='itemWithItems:block:'>
 <arg declared_type='NSArray*' index='0' name='arrayOfItems' type='@'/>
-<arg function_pointer='true' declared_type='void (^)(id)' index='1' name='block' type='@?'>
+<arg declared_type='void (^)(id)' function_pointer='true' index='1' name='block' type='@?'>
 <arg declared_type='id' type='@'/>
 <retval declared_type='void' type='v'/>
 </arg>
 <retval declared_type='id' type='@'/>
 </method>
-<method class_method='true' selector='itemWithTarget:selector:items:' variadic='true' sentinel='0'>
+<method sentinel='0' class_method='true' selector='itemWithTarget:selector:items:' variadic='true'>
 <arg declared_type='id' index='0' name='target' type='@'/>
 <arg declared_type='SEL' index='1' name='selector' type=':'/>
 <arg declared_type='CCMenuItem*' index='2' name='item' type='@'/>
@@ -5663,7 +5663,7 @@
 <arg declared_type='uint' index='3' name='repeat' type='I'/>
 <arg declared_type='ccTime' index='4' name='delay' type='f'/>
 <arg declared_type='BOOL' index='5' name='paused' type='B'/>
-<arg function_pointer='true' declared_type='void (^)(ccTime)' index='6' name='block' type='@?'>
+<arg declared_type='void (^)(ccTime)' function_pointer='true' index='6' name='block' type='@?'>
 <arg declared_type='ccTime' type='f'/>
 <retval declared_type='void' type='v'/>
 </arg>
@@ -5738,7 +5738,7 @@
 <arg declared_type='NSArray*' index='0' name='arrayOfActions' type='@'/>
 <retval declared_type='id' type='@'/>
 </method>
-<method class_method='true' selector='actions:' variadic='true' sentinel='0'>
+<method sentinel='0' class_method='true' selector='actions:' variadic='true'>
 <arg declared_type='CCFiniteTimeAction*' index='0' name='action1' type='@'/>
 <retval declared_type='id' type='@'/>
 </method>
@@ -5873,7 +5873,7 @@
 <arg declared_type='NSArray*' index='0' name='arrayOfActions' type='@'/>
 <retval declared_type='id' type='@'/>
 </method>
-<method class_method='true' selector='actions:' variadic='true' sentinel='0'>
+<method sentinel='0' class_method='true' selector='actions:' variadic='true'>
 <arg declared_type='CCFiniteTimeAction*' index='0' name='action1' type='@'/>
 <retval declared_type='id' type='@'/>
 </method>
@@ -7084,7 +7084,7 @@
 </method>
 <method selector='addImageAsync:withBlock:'>
 <arg declared_type='NSString*' index='0' name='filename' type='@'/>
-<arg function_pointer='true' declared_type='void (^)(CCTexture2D *)' index='1' name='block' type='@?'>
+<arg declared_type='void (^)(CCTexture2D *)' function_pointer='true' index='1' name='block' type='@?'>
 <arg declared_type='CCTexture2D*' type='@'/>
 <retval declared_type='void' type='v'/>
 </arg>
@@ -7246,7 +7246,7 @@
 <arg declared_type='uint' index='2' name='r' type='I'/>
 <arg declared_type='ccTime' index='3' name='d' type='f'/>
 <arg declared_type='NSString*' index='4' name='key' type='@'/>
-<arg function_pointer='true' declared_type='void (^)(ccTime)' index='5' name='block' type='@?'>
+<arg declared_type='void (^)(ccTime)' function_pointer='true' index='5' name='block' type='@?'>
 <arg declared_type='ccTime' type='f'/>
 <retval declared_type='void' type='v'/>
 </arg>
@@ -7262,7 +7262,7 @@
 <arg declared_type='id' index='0' name='owner' type='@'/>
 <arg declared_type='ccTime' index='1' name='seconds' type='f'/>
 <arg declared_type='NSString*' index='2' name='key' type='@'/>
-<arg function_pointer='true' declared_type='void (^)(ccTime)' index='3' name='block' type='@?'>
+<arg declared_type='void (^)(ccTime)' function_pointer='true' index='3' name='block' type='@?'>
 <arg declared_type='ccTime' type='f'/>
 <retval declared_type='void' type='v'/>
 </arg>
@@ -7807,20 +7807,20 @@
 </class>
 <class name='NSThread'>
 <method selector='performBlock:'>
-<arg function_pointer='true' declared_type='void (^)(void)' index='0' name='block' type='@?'>
+<arg declared_type='void (^)(void)' function_pointer='true' index='0' name='block' type='@?'>
 <retval declared_type='void' type='v'/>
 </arg>
 <retval declared_type='void' type='v'/>
 </method>
 <method selector='performBlock:waitUntilDone:'>
-<arg function_pointer='true' declared_type='void (^)(void)' index='0' name='block' type='@?'>
+<arg declared_type='void (^)(void)' function_pointer='true' index='0' name='block' type='@?'>
 <retval declared_type='void' type='v'/>
 </arg>
 <arg declared_type='BOOL' index='1' name='wait' type='B'/>
 <retval declared_type='void' type='v'/>
 </method>
 <method selector='performBlock:withObject:waitUntilDone:'>
-<arg function_pointer='true' declared_type='void (^)(id)' index='0' name='block' type='@?'>
+<arg declared_type='void (^)(id)' function_pointer='true' index='0' name='block' type='@?'>
 <arg declared_type='id' type='@'/>
 <retval declared_type='void' type='v'/>
 </arg>

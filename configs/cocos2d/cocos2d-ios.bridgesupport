@@ -187,222 +187,222 @@
 <field name='target' declared_type='id' type='@'/>
 <field name='currentAction' declared_type='CCAction*' type='@&quot;CCAction&quot;'/>
 </struct>
-<constant name='ccBLACK' const='true' declared_type='ccColor3B' type='{_ccColor3B=CCC}'/>
-<constant name='ccBLUE' const='true' declared_type='ccColor3B' type='{_ccColor3B=CCC}'/>
-<constant name='ccGRAY' const='true' declared_type='ccColor3B' type='{_ccColor3B=CCC}'/>
-<constant name='ccGREEN' const='true' declared_type='ccColor3B' type='{_ccColor3B=CCC}'/>
-<constant name='ccMAGENTA' const='true' declared_type='ccColor3B' type='{_ccColor3B=CCC}'/>
-<constant name='ccORANGE' const='true' declared_type='ccColor3B' type='{_ccColor3B=CCC}'/>
-<constant name='ccPositionColorLengthTexture_frag' const='true' declared_type='GLchar*' type='*'/>
-<constant name='ccPositionColorLengthTexture_vert' const='true' declared_type='GLchar*' type='*'/>
-<constant name='ccPositionColor_frag' const='true' declared_type='GLchar*' type='*'/>
-<constant name='ccPositionColor_vert' const='true' declared_type='GLchar*' type='*'/>
-<constant name='ccPositionTextureA8Color_frag' const='true' declared_type='GLchar*' type='*'/>
-<constant name='ccPositionTextureA8Color_vert' const='true' declared_type='GLchar*' type='*'/>
-<constant name='ccPositionTextureColorAlphaTest_frag' const='true' declared_type='GLchar*' type='*'/>
-<constant name='ccPositionTextureColor_frag' const='true' declared_type='GLchar*' type='*'/>
-<constant name='ccPositionTextureColor_vert' const='true' declared_type='GLchar*' type='*'/>
-<constant name='ccPositionTexture_frag' const='true' declared_type='GLchar*' type='*'/>
-<constant name='ccPositionTexture_uColor_frag' const='true' declared_type='GLchar*' type='*'/>
-<constant name='ccPositionTexture_uColor_vert' const='true' declared_type='GLchar*' type='*'/>
-<constant name='ccPositionTexture_vert' const='true' declared_type='GLchar*' type='*'/>
-<constant name='ccPosition_uColor_frag' const='true' declared_type='GLchar*' type='*'/>
-<constant name='ccPosition_uColor_vert' const='true' declared_type='GLchar*' type='*'/>
-<constant name='ccRED' const='true' declared_type='ccColor3B' type='{_ccColor3B=CCC}'/>
-<constant name='ccWHITE' const='true' declared_type='ccColor3B' type='{_ccColor3B=CCC}'/>
-<constant name='ccYELLOW' const='true' declared_type='ccColor3B' type='{_ccColor3B=CCC}'/>
+<constant name='ccBLACK' declared_type='ccColor3B' const='true' type='{_ccColor3B=CCC}'/>
+<constant name='ccBLUE' declared_type='ccColor3B' const='true' type='{_ccColor3B=CCC}'/>
+<constant name='ccGRAY' declared_type='ccColor3B' const='true' type='{_ccColor3B=CCC}'/>
+<constant name='ccGREEN' declared_type='ccColor3B' const='true' type='{_ccColor3B=CCC}'/>
+<constant name='ccMAGENTA' declared_type='ccColor3B' const='true' type='{_ccColor3B=CCC}'/>
+<constant name='ccORANGE' declared_type='ccColor3B' const='true' type='{_ccColor3B=CCC}'/>
+<constant name='ccPositionColorLengthTexture_frag' declared_type='GLchar*' const='true' type='*'/>
+<constant name='ccPositionColorLengthTexture_vert' declared_type='GLchar*' const='true' type='*'/>
+<constant name='ccPositionColor_frag' declared_type='GLchar*' const='true' type='*'/>
+<constant name='ccPositionColor_vert' declared_type='GLchar*' const='true' type='*'/>
+<constant name='ccPositionTextureA8Color_frag' declared_type='GLchar*' const='true' type='*'/>
+<constant name='ccPositionTextureA8Color_vert' declared_type='GLchar*' const='true' type='*'/>
+<constant name='ccPositionTextureColorAlphaTest_frag' declared_type='GLchar*' const='true' type='*'/>
+<constant name='ccPositionTextureColor_frag' declared_type='GLchar*' const='true' type='*'/>
+<constant name='ccPositionTextureColor_vert' declared_type='GLchar*' const='true' type='*'/>
+<constant name='ccPositionTexture_frag' declared_type='GLchar*' const='true' type='*'/>
+<constant name='ccPositionTexture_uColor_frag' declared_type='GLchar*' const='true' type='*'/>
+<constant name='ccPositionTexture_uColor_vert' declared_type='GLchar*' const='true' type='*'/>
+<constant name='ccPositionTexture_vert' declared_type='GLchar*' const='true' type='*'/>
+<constant name='ccPosition_uColor_frag' declared_type='GLchar*' const='true' type='*'/>
+<constant name='ccPosition_uColor_vert' declared_type='GLchar*' const='true' type='*'/>
+<constant name='ccRED' declared_type='ccColor3B' const='true' type='{_ccColor3B=CCC}'/>
+<constant name='ccWHITE' declared_type='ccColor3B' const='true' type='{_ccColor3B=CCC}'/>
+<constant name='ccYELLOW' declared_type='ccColor3B' const='true' type='{_ccColor3B=CCC}'/>
 <constant name='cc_fps_images_hd_png' declared_type='unsigned char*' type='^C'/>
 <constant name='cc_fps_images_ipadhd_png' declared_type='unsigned char*' type='^C'/>
 <constant name='cc_fps_images_png' declared_type='unsigned char*' type='^C'/>
-<constant name='cocos2d_version' const='true' declared_type='char*' type='*'/>
-<constant name='kCCBlendFuncDisable' const='true' declared_type='ccBlendFunc' type='{_ccBlendFunc=II}'/>
-<string_constant value='CCAnimationFrameDisplayedNotification' name='CCAnimationFrameDisplayedNotification' nsstring='true'/>
-<string_constant value='a_color' name='kCCAttributeNameColor' nsstring='true'/>
-<string_constant value='a_position' name='kCCAttributeNamePosition' nsstring='true'/>
-<string_constant value='a_texCoord' name='kCCAttributeNameTexCoord' nsstring='true'/>
-<string_constant value='ShaderPositionColor' name='kCCShader_PositionColor' nsstring='true'/>
-<string_constant value='ShaderPositionLengthTextureColor' name='kCCShader_PositionLengthTexureColor' nsstring='true'/>
-<string_constant value='ShaderPositionTexture' name='kCCShader_PositionTexture' nsstring='true'/>
-<string_constant value='ShaderPositionTextureA8Color' name='kCCShader_PositionTextureA8Color' nsstring='true'/>
-<string_constant value='ShaderPositionTextureColor' name='kCCShader_PositionTextureColor' nsstring='true'/>
-<string_constant value='ShaderPositionTextureColorAlphaTest' name='kCCShader_PositionTextureColorAlphaTest' nsstring='true'/>
-<string_constant value='ShaderPositionTexture_uColor' name='kCCShader_PositionTexture_uColor' nsstring='true'/>
-<string_constant value='ShaderPosition_uColor' name='kCCShader_Position_uColor' nsstring='true'/>
-<string_constant value='CC_alpha_value' name='kCCUniformAlphaTestValue'/>
-<string_constant value='CC_CosTime' name='kCCUniformCosTime_s'/>
-<string_constant value='CC_MVMatrix' name='kCCUniformMVMatrix_s'/>
-<string_constant value='CC_MVPMatrix' name='kCCUniformMVPMatrix_s'/>
-<string_constant value='CC_PMatrix' name='kCCUniformPMatrix_s'/>
-<string_constant value='CC_Random01' name='kCCUniformRandom01_s'/>
-<string_constant value='CC_Texture0' name='kCCUniformSampler_s'/>
-<string_constant value='CC_SinTime' name='kCCUniformSinTime_s'/>
-<string_constant value='CC_Time' name='kCCUniformTime_s'/>
-<enum value='4294967295' name='CCSpriteIndexNotInitialized'/>
-<enum value='1' name='CCTMXOrientationHex'/>
-<enum value='2' name='CCTMXOrientationIso'/>
-<enum value='0' name='CCTMXOrientationOrtho'/>
-<enum value='771' name='CC_BLEND_DST'/>
-<enum value='1' name='CC_BLEND_SRC'/>
-<enum value='0' name='CC_CASCADING_COLOR'/>
-<enum value='0' name='CC_CASCADING_OPACITY'/>
-<enum value='0' name='CC_DIRECTOR_IOS_USE_BACKGROUND_THREAD'/>
-<enum value='0' name='CC_DIRECTOR_MAC_THREAD'/>
-<enum value='0.1f' name='CC_DIRECTOR_STATS_INTERVAL'/>
-<enum value='0' name='CC_ENABLE_BOX2D_INTEGRATION'/>
-<enum value='0' name='CC_ENABLE_CHIPMUNK_INTEGRATION'/>
-<enum value='1' name='CC_ENABLE_DEPRECATED'/>
-<enum value='1' name='CC_ENABLE_GL_STATE_CACHE'/>
-<enum value='0' name='CC_ENABLE_PROFILERS'/>
-<enum value='0' name='CC_FIX_ARTIFACTS_BY_STRECHING_TEXEL'/>
-<enum value='0' name='CC_GL_ALL'/>
-<enum value='0' name='CC_LABELATLAS_DEBUG_DRAW'/>
-<enum value='0' name='CC_LABELBMFONT_DEBUG_DRAW'/>
-<enum value='0' name='CC_MAC_USE_DISPLAY_LINK_THREAD'/>
-<enum value='2' name='CC_MAC_USE_MAIN_THREAD'/>
-<enum value='1' name='CC_MAC_USE_OWN_THREAD'/>
-<enum value='1' name='CC_NODE_RENDER_SUBPIXEL'/>
-<enum value='16' name='CC_PVRMIPMAP_MAX'/>
-<enum value='1' name='CC_SPRITEBATCHNODE_RENDER_SUBPIXEL'/>
-<enum value='0' name='CC_SPRITE_DEBUG_DRAW'/>
-<enum value='0' name='CC_TEXTURE_ATLAS_USE_TRIANGLE_STRIP'/>
-<enum value='1' name='CC_TEXTURE_ATLAS_USE_VAO'/>
-<enum value='1' name='CC_USE_LA88_LABELS'/>
-<enum value='131328' name='COCOS2D_VERSION'/>
-<enum value='2' name='TMXLayerAttribBase64'/>
-<enum value='4' name='TMXLayerAttribGzip'/>
-<enum value='1' name='TMXLayerAttribNone'/>
-<enum value='8' name='TMXLayerAttribZlib'/>
-<enum value='2' name='TMXPropertyLayer'/>
-<enum value='1' name='TMXPropertyMap'/>
-<enum value='0' name='TMXPropertyNone'/>
-<enum value='4' name='TMXPropertyObject'/>
-<enum value='3' name='TMXPropertyObjectGroup'/>
-<enum value='5' name='TMXPropertyTile'/>
-<enum value='-1' name='kCCActionTagInvalid'/>
-<enum value='6' name='kCCDeviceMac'/>
-<enum value='7' name='kCCDeviceMacRetinaDisplay'/>
-<enum value='4' name='kCCDeviceiPad'/>
-<enum value='5' name='kCCDeviceiPadRetinaDisplay'/>
-<enum value='0' name='kCCDeviceiPhone'/>
-<enum value='2' name='kCCDeviceiPhone5'/>
-<enum value='3' name='kCCDeviceiPhone5RetinaDisplay'/>
-<enum value='1' name='kCCDeviceiPhoneRetinaDisplay'/>
-<enum value='0' name='kCCDirectorProjection2D'/>
-<enum value='1' name='kCCDirectorProjection3D'/>
-<enum value='2' name='kCCDirectorProjectionCustom'/>
-<enum value='1' name='kCCDirectorProjectionDefault'/>
-<enum value='3758096384' name='kCCFlipedAll'/>
-<enum value='536870911' name='kCCFlippedMask'/>
-<enum value='0' name='kCCImageFormatJPEG'/>
-<enum value='1' name='kCCImageFormatPNG'/>
-<enum value='32' name='kCCItemSize'/>
-<enum value='-1' name='kCCLabelAutomaticWidth'/>
-<enum value='1' name='kCCLineBreakModeCharacterWrap'/>
-<enum value='2' name='kCCLineBreakModeClip'/>
-<enum value='3' name='kCCLineBreakModeHeadTruncation'/>
-<enum value='5' name='kCCLineBreakModeMiddleTruncation'/>
-<enum value='4' name='kCCLineBreakModeTailTruncation'/>
-<enum value='0' name='kCCLineBreakModeWordWrap'/>
-<enum value='168165376' name='kCCMacVersion_10_6'/>
-<enum value='168230912' name='kCCMacVersion_10_7'/>
-<enum value='168296448' name='kCCMacVersion_10_8'/>
-<enum value='-128' name='kCCMenuHandlerPriority'/>
-<enum value='1' name='kCCMenuStateTrackingTouch'/>
-<enum value='0' name='kCCMenuStateWaiting'/>
-<enum value='-1' name='kCCNodeTagInvalid'/>
-<enum value='-1' name='kCCParticleDurationInfinity'/>
-<enum value='0' name='kCCParticleModeGravity'/>
-<enum value='1' name='kCCParticleModeRadius'/>
-<enum value='-1' name='kCCParticleStartRadiusEqualToEndRadius'/>
-<enum value='-1' name='kCCParticleStartSizeEqualToEndSize'/>
-<enum value='0' name='kCCPositionTypeFree'/>
-<enum value='2' name='kCCPositionTypeGrouped'/>
-<enum value='1' name='kCCPositionTypeRelative'/>
-<enum value='-2147483647' name='kCCPriorityNonSystemMin'/>
-<enum value='-2147483648' name='kCCPrioritySystem'/>
-<enum value='1' name='kCCProgressTimerTypeBar'/>
-<enum value='0' name='kCCProgressTimerTypeRadial'/>
-<enum value='4294967294' name='kCCRepeatForever'/>
-<enum value='0' name='kCCResolutionUnknown'/>
-<enum value='5' name='kCCResolutioniPad'/>
-<enum value='6' name='kCCResolutioniPadRetinaDisplay'/>
-<enum value='1' name='kCCResolutioniPhone'/>
-<enum value='3' name='kCCResolutioniPhone5'/>
-<enum value='4' name='kCCResolutioniPhone5RetinaDisplay'/>
-<enum value='2' name='kCCResolutioniPhoneRetinaDisplay'/>
-<enum value='536870912' name='kCCTMXTileDiagonalFlag'/>
-<enum value='2147483648' name='kCCTMXTileHorizontalFlag'/>
-<enum value='1073741824' name='kCCTMXTileVerticalFlag'/>
-<enum value='1' name='kCCTextAlignmentCenter'/>
-<enum value='0' name='kCCTextAlignmentLeft'/>
-<enum value='2' name='kCCTextAlignmentRight'/>
-<enum value='3' name='kCCTexture2DPixelFormat_A8'/>
-<enum value='5' name='kCCTexture2DPixelFormat_AI88'/>
-<enum value='0' name='kCCTexture2DPixelFormat_Default'/>
-<enum value='4' name='kCCTexture2DPixelFormat_I8'/>
-<enum value='9' name='kCCTexture2DPixelFormat_PVRTC2'/>
-<enum value='8' name='kCCTexture2DPixelFormat_PVRTC4'/>
-<enum value='2' name='kCCTexture2DPixelFormat_RGB565'/>
-<enum value='7' name='kCCTexture2DPixelFormat_RGB5A1'/>
-<enum value='1' name='kCCTexture2DPixelFormat_RGB888'/>
-<enum value='6' name='kCCTexture2DPixelFormat_RGBA4444'/>
-<enum value='0' name='kCCTexture2DPixelFormat_RGBA8888'/>
-<enum value='0' name='kCCTouchBegan'/>
-<enum value='3' name='kCCTouchCancelled'/>
-<enum value='2' name='kCCTouchEnded'/>
-<enum value='4' name='kCCTouchMax'/>
-<enum value='1' name='kCCTouchMoved'/>
-<enum value='15' name='kCCTouchSelectorAllBits'/>
-<enum value='1' name='kCCTouchSelectorBeganBit'/>
-<enum value='8' name='kCCTouchSelectorCancelledBit'/>
-<enum value='4' name='kCCTouchSelectorEndedBit'/>
-<enum value='2' name='kCCTouchSelectorMovedBit'/>
-<enum value='0' name='kCCTouchesAllAtOnce'/>
-<enum value='1' name='kCCTouchesOneByOne'/>
-<enum value='1' name='kCCTransitionOrientationDownOver'/>
-<enum value='0' name='kCCTransitionOrientationLeftOver'/>
-<enum value='1' name='kCCTransitionOrientationRightOver'/>
-<enum value='0' name='kCCTransitionOrientationUpOver'/>
-<enum value='5' name='kCCUniformCosTime'/>
-<enum value='1' name='kCCUniformMVMatrix'/>
-<enum value='2' name='kCCUniformMVPMatrix'/>
-<enum value='0' name='kCCUniformPMatrix'/>
-<enum value='6' name='kCCUniformRandom01'/>
-<enum value='7' name='kCCUniformSampler'/>
-<enum value='4' name='kCCUniformSinTime'/>
-<enum value='3' name='kCCUniformTime'/>
-<enum value='8' name='kCCUniform_MAX'/>
-<enum value='2' name='kCCVertexAttribFlag_Color'/>
-<enum value='0' name='kCCVertexAttribFlag_None'/>
-<enum value='7' name='kCCVertexAttribFlag_PosColorTex'/>
-<enum value='1' name='kCCVertexAttribFlag_Position'/>
-<enum value='4' name='kCCVertexAttribFlag_TexCoords'/>
-<enum value='1' name='kCCVertexAttrib_Color'/>
-<enum value='3' name='kCCVertexAttrib_MAX'/>
-<enum value='0' name='kCCVertexAttrib_Position'/>
-<enum value='2' name='kCCVertexAttrib_TexCoords'/>
-<enum value='2' name='kCCVerticalTextAlignmentBottom'/>
-<enum value='1' name='kCCVerticalTextAlignmentCenter'/>
-<enum value='0' name='kCCVerticalTextAlignmentTop'/>
-<enum value='67108864' name='kCCiOSVersion_4_0'/>
-<enum value='67109120' name='kCCiOSVersion_4_0_1'/>
-<enum value='67174400' name='kCCiOSVersion_4_1'/>
-<enum value='67239936' name='kCCiOSVersion_4_2'/>
-<enum value='67240192' name='kCCiOSVersion_4_2_1'/>
-<enum value='67305472' name='kCCiOSVersion_4_3'/>
-<enum value='67305728' name='kCCiOSVersion_4_3_1'/>
-<enum value='67305984' name='kCCiOSVersion_4_3_2'/>
-<enum value='67306240' name='kCCiOSVersion_4_3_3'/>
-<enum value='67306496' name='kCCiOSVersion_4_3_4'/>
-<enum value='67306752' name='kCCiOSVersion_4_3_5'/>
-<enum value='83886080' name='kCCiOSVersion_5_0'/>
-<enum value='83886336' name='kCCiOSVersion_5_0_1'/>
-<enum value='83951616' name='kCCiOSVersion_5_1_0'/>
-<enum value='100663296' name='kCCiOSVersion_6_0_0'/>
-<enum value='-1' name='kParticleDurationInfinity'/>
-<enum value='-1' name='kParticleStartSizeEqualToEndSize'/>
-<enum value='0' name='kPositionTypeFree'/>
-<enum value='2' name='kPositionTypeGrouped'/>
+<constant name='cocos2d_version' declared_type='char*' const='true' type='*'/>
+<constant name='kCCBlendFuncDisable' declared_type='ccBlendFunc' const='true' type='{_ccBlendFunc=II}'/>
+<string_constant nsstring='true' name='CCAnimationFrameDisplayedNotification' value='CCAnimationFrameDisplayedNotification'/>
+<string_constant nsstring='true' name='kCCAttributeNameColor' value='a_color'/>
+<string_constant nsstring='true' name='kCCAttributeNamePosition' value='a_position'/>
+<string_constant nsstring='true' name='kCCAttributeNameTexCoord' value='a_texCoord'/>
+<string_constant nsstring='true' name='kCCShader_PositionColor' value='ShaderPositionColor'/>
+<string_constant nsstring='true' name='kCCShader_PositionLengthTexureColor' value='ShaderPositionLengthTextureColor'/>
+<string_constant nsstring='true' name='kCCShader_PositionTexture' value='ShaderPositionTexture'/>
+<string_constant nsstring='true' name='kCCShader_PositionTextureA8Color' value='ShaderPositionTextureA8Color'/>
+<string_constant nsstring='true' name='kCCShader_PositionTextureColor' value='ShaderPositionTextureColor'/>
+<string_constant nsstring='true' name='kCCShader_PositionTextureColorAlphaTest' value='ShaderPositionTextureColorAlphaTest'/>
+<string_constant nsstring='true' name='kCCShader_PositionTexture_uColor' value='ShaderPositionTexture_uColor'/>
+<string_constant nsstring='true' name='kCCShader_Position_uColor' value='ShaderPosition_uColor'/>
+<string_constant name='kCCUniformAlphaTestValue' value='CC_alpha_value'/>
+<string_constant name='kCCUniformCosTime_s' value='CC_CosTime'/>
+<string_constant name='kCCUniformMVMatrix_s' value='CC_MVMatrix'/>
+<string_constant name='kCCUniformMVPMatrix_s' value='CC_MVPMatrix'/>
+<string_constant name='kCCUniformPMatrix_s' value='CC_PMatrix'/>
+<string_constant name='kCCUniformRandom01_s' value='CC_Random01'/>
+<string_constant name='kCCUniformSampler_s' value='CC_Texture0'/>
+<string_constant name='kCCUniformSinTime_s' value='CC_SinTime'/>
+<string_constant name='kCCUniformTime_s' value='CC_Time'/>
+<enum name='CCSpriteIndexNotInitialized' value='4294967295'/>
+<enum name='CCTMXOrientationHex' value='1'/>
+<enum name='CCTMXOrientationIso' value='2'/>
+<enum name='CCTMXOrientationOrtho' value='0'/>
+<enum name='CC_BLEND_DST' value='771'/>
+<enum name='CC_BLEND_SRC' value='1'/>
+<enum name='CC_CASCADING_COLOR' value='0'/>
+<enum name='CC_CASCADING_OPACITY' value='0'/>
+<enum name='CC_DIRECTOR_IOS_USE_BACKGROUND_THREAD' value='0'/>
+<enum name='CC_DIRECTOR_MAC_THREAD' value='0'/>
+<enum name='CC_DIRECTOR_STATS_INTERVAL' value='0.1f'/>
+<enum name='CC_ENABLE_BOX2D_INTEGRATION' value='0'/>
+<enum name='CC_ENABLE_CHIPMUNK_INTEGRATION' value='0'/>
+<enum name='CC_ENABLE_DEPRECATED' value='1'/>
+<enum name='CC_ENABLE_GL_STATE_CACHE' value='1'/>
+<enum name='CC_ENABLE_PROFILERS' value='0'/>
+<enum name='CC_FIX_ARTIFACTS_BY_STRECHING_TEXEL' value='0'/>
+<enum name='CC_GL_ALL' value='0'/>
+<enum name='CC_LABELATLAS_DEBUG_DRAW' value='0'/>
+<enum name='CC_LABELBMFONT_DEBUG_DRAW' value='0'/>
+<enum name='CC_MAC_USE_DISPLAY_LINK_THREAD' value='0'/>
+<enum name='CC_MAC_USE_MAIN_THREAD' value='2'/>
+<enum name='CC_MAC_USE_OWN_THREAD' value='1'/>
+<enum name='CC_NODE_RENDER_SUBPIXEL' value='1'/>
+<enum name='CC_PVRMIPMAP_MAX' value='16'/>
+<enum name='CC_SPRITEBATCHNODE_RENDER_SUBPIXEL' value='1'/>
+<enum name='CC_SPRITE_DEBUG_DRAW' value='0'/>
+<enum name='CC_TEXTURE_ATLAS_USE_TRIANGLE_STRIP' value='0'/>
+<enum name='CC_TEXTURE_ATLAS_USE_VAO' value='1'/>
+<enum name='CC_USE_LA88_LABELS' value='1'/>
+<enum name='COCOS2D_VERSION' value='131328'/>
+<enum name='TMXLayerAttribBase64' value='2'/>
+<enum name='TMXLayerAttribGzip' value='4'/>
+<enum name='TMXLayerAttribNone' value='1'/>
+<enum name='TMXLayerAttribZlib' value='8'/>
+<enum name='TMXPropertyLayer' value='2'/>
+<enum name='TMXPropertyMap' value='1'/>
+<enum name='TMXPropertyNone' value='0'/>
+<enum name='TMXPropertyObject' value='4'/>
+<enum name='TMXPropertyObjectGroup' value='3'/>
+<enum name='TMXPropertyTile' value='5'/>
+<enum name='kCCActionTagInvalid' value='-1'/>
+<enum name='kCCDeviceMac' value='6'/>
+<enum name='kCCDeviceMacRetinaDisplay' value='7'/>
+<enum name='kCCDeviceiPad' value='4'/>
+<enum name='kCCDeviceiPadRetinaDisplay' value='5'/>
+<enum name='kCCDeviceiPhone' value='0'/>
+<enum name='kCCDeviceiPhone5' value='2'/>
+<enum name='kCCDeviceiPhone5RetinaDisplay' value='3'/>
+<enum name='kCCDeviceiPhoneRetinaDisplay' value='1'/>
+<enum name='kCCDirectorProjection2D' value='0'/>
+<enum name='kCCDirectorProjection3D' value='1'/>
+<enum name='kCCDirectorProjectionCustom' value='2'/>
+<enum name='kCCDirectorProjectionDefault' value='1'/>
+<enum name='kCCFlipedAll' value='3758096384'/>
+<enum name='kCCFlippedMask' value='536870911'/>
+<enum name='kCCImageFormatJPEG' value='0'/>
+<enum name='kCCImageFormatPNG' value='1'/>
+<enum name='kCCItemSize' value='32'/>
+<enum name='kCCLabelAutomaticWidth' value='-1'/>
+<enum name='kCCLineBreakModeCharacterWrap' value='1'/>
+<enum name='kCCLineBreakModeClip' value='2'/>
+<enum name='kCCLineBreakModeHeadTruncation' value='3'/>
+<enum name='kCCLineBreakModeMiddleTruncation' value='5'/>
+<enum name='kCCLineBreakModeTailTruncation' value='4'/>
+<enum name='kCCLineBreakModeWordWrap' value='0'/>
+<enum name='kCCMacVersion_10_6' value='168165376'/>
+<enum name='kCCMacVersion_10_7' value='168230912'/>
+<enum name='kCCMacVersion_10_8' value='168296448'/>
+<enum name='kCCMenuHandlerPriority' value='-128'/>
+<enum name='kCCMenuStateTrackingTouch' value='1'/>
+<enum name='kCCMenuStateWaiting' value='0'/>
+<enum name='kCCNodeTagInvalid' value='-1'/>
+<enum name='kCCParticleDurationInfinity' value='-1'/>
+<enum name='kCCParticleModeGravity' value='0'/>
+<enum name='kCCParticleModeRadius' value='1'/>
+<enum name='kCCParticleStartRadiusEqualToEndRadius' value='-1'/>
+<enum name='kCCParticleStartSizeEqualToEndSize' value='-1'/>
+<enum name='kCCPositionTypeFree' value='0'/>
+<enum name='kCCPositionTypeGrouped' value='2'/>
+<enum name='kCCPositionTypeRelative' value='1'/>
+<enum name='kCCPriorityNonSystemMin' value='-2147483647'/>
+<enum name='kCCPrioritySystem' value='-2147483648'/>
+<enum name='kCCProgressTimerTypeBar' value='1'/>
+<enum name='kCCProgressTimerTypeRadial' value='0'/>
+<enum name='kCCRepeatForever' value='4294967294'/>
+<enum name='kCCResolutionUnknown' value='0'/>
+<enum name='kCCResolutioniPad' value='5'/>
+<enum name='kCCResolutioniPadRetinaDisplay' value='6'/>
+<enum name='kCCResolutioniPhone' value='1'/>
+<enum name='kCCResolutioniPhone5' value='3'/>
+<enum name='kCCResolutioniPhone5RetinaDisplay' value='4'/>
+<enum name='kCCResolutioniPhoneRetinaDisplay' value='2'/>
+<enum name='kCCTMXTileDiagonalFlag' value='536870912'/>
+<enum name='kCCTMXTileHorizontalFlag' value='2147483648'/>
+<enum name='kCCTMXTileVerticalFlag' value='1073741824'/>
+<enum name='kCCTextAlignmentCenter' value='1'/>
+<enum name='kCCTextAlignmentLeft' value='0'/>
+<enum name='kCCTextAlignmentRight' value='2'/>
+<enum name='kCCTexture2DPixelFormat_A8' value='3'/>
+<enum name='kCCTexture2DPixelFormat_AI88' value='5'/>
+<enum name='kCCTexture2DPixelFormat_Default' value='0'/>
+<enum name='kCCTexture2DPixelFormat_I8' value='4'/>
+<enum name='kCCTexture2DPixelFormat_PVRTC2' value='9'/>
+<enum name='kCCTexture2DPixelFormat_PVRTC4' value='8'/>
+<enum name='kCCTexture2DPixelFormat_RGB565' value='2'/>
+<enum name='kCCTexture2DPixelFormat_RGB5A1' value='7'/>
+<enum name='kCCTexture2DPixelFormat_RGB888' value='1'/>
+<enum name='kCCTexture2DPixelFormat_RGBA4444' value='6'/>
+<enum name='kCCTexture2DPixelFormat_RGBA8888' value='0'/>
+<enum name='kCCTouchBegan' value='0'/>
+<enum name='kCCTouchCancelled' value='3'/>
+<enum name='kCCTouchEnded' value='2'/>
+<enum name='kCCTouchMax' value='4'/>
+<enum name='kCCTouchMoved' value='1'/>
+<enum name='kCCTouchSelectorAllBits' value='15'/>
+<enum name='kCCTouchSelectorBeganBit' value='1'/>
+<enum name='kCCTouchSelectorCancelledBit' value='8'/>
+<enum name='kCCTouchSelectorEndedBit' value='4'/>
+<enum name='kCCTouchSelectorMovedBit' value='2'/>
+<enum name='kCCTouchesAllAtOnce' value='0'/>
+<enum name='kCCTouchesOneByOne' value='1'/>
+<enum name='kCCTransitionOrientationDownOver' value='1'/>
+<enum name='kCCTransitionOrientationLeftOver' value='0'/>
+<enum name='kCCTransitionOrientationRightOver' value='1'/>
+<enum name='kCCTransitionOrientationUpOver' value='0'/>
+<enum name='kCCUniformCosTime' value='5'/>
+<enum name='kCCUniformMVMatrix' value='1'/>
+<enum name='kCCUniformMVPMatrix' value='2'/>
+<enum name='kCCUniformPMatrix' value='0'/>
+<enum name='kCCUniformRandom01' value='6'/>
+<enum name='kCCUniformSampler' value='7'/>
+<enum name='kCCUniformSinTime' value='4'/>
+<enum name='kCCUniformTime' value='3'/>
+<enum name='kCCUniform_MAX' value='8'/>
+<enum name='kCCVertexAttribFlag_Color' value='2'/>
+<enum name='kCCVertexAttribFlag_None' value='0'/>
+<enum name='kCCVertexAttribFlag_PosColorTex' value='7'/>
+<enum name='kCCVertexAttribFlag_Position' value='1'/>
+<enum name='kCCVertexAttribFlag_TexCoords' value='4'/>
+<enum name='kCCVertexAttrib_Color' value='1'/>
+<enum name='kCCVertexAttrib_MAX' value='3'/>
+<enum name='kCCVertexAttrib_Position' value='0'/>
+<enum name='kCCVertexAttrib_TexCoords' value='2'/>
+<enum name='kCCVerticalTextAlignmentBottom' value='2'/>
+<enum name='kCCVerticalTextAlignmentCenter' value='1'/>
+<enum name='kCCVerticalTextAlignmentTop' value='0'/>
+<enum name='kCCiOSVersion_4_0' value='67108864'/>
+<enum name='kCCiOSVersion_4_0_1' value='67109120'/>
+<enum name='kCCiOSVersion_4_1' value='67174400'/>
+<enum name='kCCiOSVersion_4_2' value='67239936'/>
+<enum name='kCCiOSVersion_4_2_1' value='67240192'/>
+<enum name='kCCiOSVersion_4_3' value='67305472'/>
+<enum name='kCCiOSVersion_4_3_1' value='67305728'/>
+<enum name='kCCiOSVersion_4_3_2' value='67305984'/>
+<enum name='kCCiOSVersion_4_3_3' value='67306240'/>
+<enum name='kCCiOSVersion_4_3_4' value='67306496'/>
+<enum name='kCCiOSVersion_4_3_5' value='67306752'/>
+<enum name='kCCiOSVersion_5_0' value='83886080'/>
+<enum name='kCCiOSVersion_5_0_1' value='83886336'/>
+<enum name='kCCiOSVersion_5_1_0' value='83951616'/>
+<enum name='kCCiOSVersion_6_0_0' value='100663296'/>
+<enum name='kParticleDurationInfinity' value='-1'/>
+<enum name='kParticleStartSizeEqualToEndSize' value='-1'/>
+<enum name='kPositionTypeFree' value='0'/>
+<enum name='kPositionTypeGrouped' value='2'/>
 <function name='FNTConfigLoadFile'>
 <arg name='file' declared_type='NSString*' type='@'/>
 <retval declared_type='CCBMFontConfiguration*' type='@'/>
@@ -476,12 +476,12 @@
 <retval declared_type='void' type='v'/>
 </function>
 <function name='ccDrawPoints'>
-<arg name='points' const='true' declared_type='CGPoint*' type='^{CGPoint=ff}'/>
+<arg name='points' declared_type='CGPoint*' const='true' type='^{CGPoint=ff}'/>
 <arg name='numberOfPoints' declared_type='NSUInteger' type='I'/>
 <retval declared_type='void' type='v'/>
 </function>
 <function name='ccDrawPoly'>
-<arg name='vertices' const='true' declared_type='CGPoint*' type='^{CGPoint=ff}'/>
+<arg name='vertices' declared_type='CGPoint*' const='true' type='^{CGPoint=ff}'/>
 <arg name='numOfVertices' declared_type='NSUInteger' type='I'/>
 <arg name='closePolygon' declared_type='BOOL' type='B'/>
 <retval declared_type='void' type='v'/>
@@ -499,7 +499,7 @@
 <retval declared_type='void' type='v'/>
 </function>
 <function name='ccDrawSolidPoly'>
-<arg name='poli' const='true' declared_type='CGPoint*' type='^{CGPoint=ff}'/>
+<arg name='poli' declared_type='CGPoint*' const='true' type='^{CGPoint=ff}'/>
 <arg name='numberOfPoints' declared_type='NSUInteger' type='I'/>
 <arg name='color' declared_type='ccColor4F' type='{_ccColor4F=ffff}'/>
 <retval declared_type='void' type='v'/>
@@ -575,41 +575,41 @@
 <function name='cc_fps_images_len'>
 <retval declared_type='unsigned int' type='I'/>
 </function>
-<function name='ccc3' inline='true'>
-<arg name='r' const='true' declared_type='GLubyte' type='C'/>
-<arg name='g' const='true' declared_type='GLubyte' type='C'/>
-<arg name='b' const='true' declared_type='GLubyte' type='C'/>
+<function inline='true' name='ccc3'>
+<arg name='r' declared_type='GLubyte' const='true' type='C'/>
+<arg name='g' declared_type='GLubyte' const='true' type='C'/>
+<arg name='b' declared_type='GLubyte' const='true' type='C'/>
 <retval declared_type='ccColor3B' type='{_ccColor3B=CCC}'/>
 </function>
-<function name='ccc4' inline='true'>
-<arg name='r' const='true' declared_type='GLubyte' type='C'/>
-<arg name='g' const='true' declared_type='GLubyte' type='C'/>
-<arg name='b' const='true' declared_type='GLubyte' type='C'/>
-<arg name='o' const='true' declared_type='GLubyte' type='C'/>
+<function inline='true' name='ccc4'>
+<arg name='r' declared_type='GLubyte' const='true' type='C'/>
+<arg name='g' declared_type='GLubyte' const='true' type='C'/>
+<arg name='b' declared_type='GLubyte' const='true' type='C'/>
+<arg name='o' declared_type='GLubyte' const='true' type='C'/>
 <retval declared_type='ccColor4B' type='{_ccColor4B=CCCC}'/>
 </function>
-<function name='ccc4BFromccc4F' inline='true'>
+<function inline='true' name='ccc4BFromccc4F'>
 <arg name='c' declared_type='ccColor4F' type='{_ccColor4F=ffff}'/>
 <retval declared_type='ccColor4B' type='{_ccColor4B=CCCC}'/>
 </function>
-<function name='ccc4FEqual' inline='true'>
+<function inline='true' name='ccc4FEqual'>
 <arg name='a' declared_type='ccColor4F' type='{_ccColor4F=ffff}'/>
 <arg name='b' declared_type='ccColor4F' type='{_ccColor4F=ffff}'/>
 <retval declared_type='BOOL' type='B'/>
 </function>
-<function name='ccc4FFromccc3B' inline='true'>
+<function inline='true' name='ccc4FFromccc3B'>
 <arg name='c' declared_type='ccColor3B' type='{_ccColor3B=CCC}'/>
 <retval declared_type='ccColor4F' type='{_ccColor4F=ffff}'/>
 </function>
-<function name='ccc4FFromccc4B' inline='true'>
+<function inline='true' name='ccc4FFromccc4B'>
 <arg name='c' declared_type='ccColor4B' type='{_ccColor4B=CCCC}'/>
 <retval declared_type='ccColor4F' type='{_ccColor4F=ffff}'/>
 </function>
-<function name='ccc4f' inline='true'>
-<arg name='r' const='true' declared_type='GLfloat' type='f'/>
-<arg name='g' const='true' declared_type='GLfloat' type='f'/>
-<arg name='b' const='true' declared_type='GLfloat' type='f'/>
-<arg name='a' const='true' declared_type='GLfloat' type='f'/>
+<function inline='true' name='ccc4f'>
+<arg name='r' declared_type='GLfloat' const='true' type='f'/>
+<arg name='g' declared_type='GLfloat' const='true' type='f'/>
+<arg name='b' declared_type='GLfloat' const='true' type='f'/>
+<arg name='a' declared_type='GLfloat' const='true' type='f'/>
 <retval declared_type='ccColor4F' type='{_ccColor4F=ffff}'/>
 </function>
 <function name='cocos2dVersion'>
@@ -1072,7 +1072,7 @@
 </class>
 <class name='CCCallBlock'>
 <method selector='actionWithBlock:' class_method='true'>
-<arg name='block' function_pointer='true' index='0' declared_type='void (^)()' type='@?'>
+<arg function_pointer='true' name='block' index='0' declared_type='void (^)()' type='@?'>
 <retval declared_type='void' type='v'/>
 </arg>
 <retval declared_type='id' type='@'/>
@@ -1081,7 +1081,7 @@
 <retval declared_type='void' type='v'/>
 </method>
 <method selector='initWithBlock:'>
-<arg name='block' function_pointer='true' index='0' declared_type='void (^)()' type='@?'>
+<arg function_pointer='true' name='block' index='0' declared_type='void (^)()' type='@?'>
 <retval declared_type='void' type='v'/>
 </arg>
 <retval declared_type='id' type='@'/>
@@ -1089,7 +1089,7 @@
 </class>
 <class name='CCCallBlockN'>
 <method selector='actionWithBlock:' class_method='true'>
-<arg name='block' function_pointer='true' index='0' declared_type='void (^)(CCNode *)' type='@?'>
+<arg function_pointer='true' name='block' index='0' declared_type='void (^)(CCNode *)' type='@?'>
 <arg declared_type='CCNode*' type='@'/>
 <retval declared_type='void' type='v'/>
 </arg>
@@ -1099,7 +1099,7 @@
 <retval declared_type='void' type='v'/>
 </method>
 <method selector='initWithBlock:'>
-<arg name='block' function_pointer='true' index='0' declared_type='void (^)(CCNode *)' type='@?'>
+<arg function_pointer='true' name='block' index='0' declared_type='void (^)(CCNode *)' type='@?'>
 <arg declared_type='CCNode*' type='@'/>
 <retval declared_type='void' type='v'/>
 </arg>
@@ -1108,7 +1108,7 @@
 </class>
 <class name='CCCallBlockO'>
 <method selector='actionWithBlock:object:' class_method='true'>
-<arg name='block' function_pointer='true' index='0' declared_type='void (^)(id)' type='@?'>
+<arg function_pointer='true' name='block' index='0' declared_type='void (^)(id)' type='@?'>
 <arg declared_type='id' type='@'/>
 <retval declared_type='void' type='v'/>
 </arg>
@@ -1119,7 +1119,7 @@
 <retval declared_type='void' type='v'/>
 </method>
 <method selector='initWithBlock:object:'>
-<arg name='block' function_pointer='true' index='0' declared_type='void (^)(id)' type='@?'>
+<arg function_pointer='true' name='block' index='0' declared_type='void (^)(id)' type='@?'>
 <arg declared_type='id' type='@'/>
 <retval declared_type='void' type='v'/>
 </arg>
@@ -1184,7 +1184,7 @@
 <retval declared_type='id' type='@'/>
 </method>
 <method selector='setCallbackMethod:'>
-<arg name='callbackMethod' function_pointer='true' index='0' declared_type='CC_CALLBACK_ND' type='^?'>
+<arg function_pointer='true' name='callbackMethod' index='0' declared_type='CC_CALLBACK_ND' type='^?'>
 <arg declared_type='id' type='@'/>
 <arg declared_type='SEL' type=':'/>
 <arg declared_type='id' type='@'/>
@@ -1963,8 +1963,8 @@
 <retval declared_type='NSString*' type='@'/>
 </method>
 <method selector='initWithVertexShaderByteArray:fragmentShaderByteArray:'>
-<arg name='vShaderByteArray' const='true' index='0' declared_type='GLchar*' type='*'/>
-<arg name='fShaderByteArray' const='true' index='1' declared_type='GLchar*' type='*'/>
+<arg name='vShaderByteArray' index='0' declared_type='GLchar*' const='true' type='*'/>
+<arg name='fShaderByteArray' index='1' declared_type='GLchar*' const='true' type='*'/>
 <retval declared_type='id' type='@'/>
 </method>
 <method selector='initWithVertexShaderFilename:fragmentShaderFilename:'>
@@ -2756,7 +2756,7 @@
 <arg name='arrayOfLayers' index='0' declared_type='NSArray*' type='@'/>
 <retval declared_type='id' type='@'/>
 </method>
-<method selector='layerWithLayers:' variadic='true' sentinel='0' class_method='true'>
+<method selector='layerWithLayers:' class_method='true' sentinel='0' variadic='true'>
 <arg name='layer' index='0' declared_type='CCLayer*' type='@'/>
 <retval declared_type='id' type='@'/>
 </method>
@@ -2842,7 +2842,7 @@
 <arg name='padding' index='0' declared_type='float' type='f'/>
 <retval declared_type='void' type='v'/>
 </method>
-<method selector='alignItemsInColumns:' variadic='true' sentinel='0'>
+<method selector='alignItemsInColumns:' sentinel='0' variadic='true'>
 <arg name='columns' index='0' declared_type='NSNumber*' type='@'/>
 <retval declared_type='void' type='v'/>
 </method>
@@ -2855,7 +2855,7 @@
 <arg name='arrayOfNumbers' index='0' declared_type='NSArray*' type='@'/>
 <retval declared_type='void' type='v'/>
 </method>
-<method selector='alignItemsInRows:' variadic='true' sentinel='0'>
+<method selector='alignItemsInRows:' sentinel='0' variadic='true'>
 <arg name='rows' index='0' declared_type='NSNumber*' type='@'/>
 <retval declared_type='void' type='v'/>
 </method>
@@ -2886,7 +2886,7 @@
 <arg name='arrayOfItems' index='0' declared_type='NSArray*' type='@'/>
 <retval declared_type='id' type='@'/>
 </method>
-<method selector='menuWithItems:' variadic='true' sentinel='0' class_method='true'>
+<method selector='menuWithItems:' class_method='true' sentinel='0' variadic='true'>
 <arg name='item' index='0' declared_type='CCMenuItem*' type='@'/>
 <retval declared_type='id' type='@'/>
 </method>
@@ -2912,7 +2912,7 @@
 <retval declared_type='void' type='v'/>
 </method>
 <method selector='initWithBlock:'>
-<arg name='block' function_pointer='true' index='0' declared_type='void (^)(id)' type='@?'>
+<arg function_pointer='true' name='block' index='0' declared_type='void (^)(id)' type='@?'>
 <arg declared_type='id' type='@'/>
 <retval declared_type='void' type='v'/>
 </arg>
@@ -2930,7 +2930,7 @@
 <retval declared_type='BOOL' type='B'/>
 </method>
 <method selector='itemWithBlock:' class_method='true'>
-<arg name='block' function_pointer='true' index='0' declared_type='void (^)(id)' type='@?'>
+<arg function_pointer='true' name='block' index='0' declared_type='void (^)(id)' type='@?'>
 <arg declared_type='id' type='@'/>
 <retval declared_type='void' type='v'/>
 </arg>
@@ -2951,7 +2951,7 @@
 <retval declared_type='void' type='v'/>
 </method>
 <method selector='setBlock:'>
-<arg name='block' function_pointer='true' index='0' declared_type='void (^)(id)' type='@?'>
+<arg function_pointer='true' name='block' index='0' declared_type='void (^)(id)' type='@?'>
 <arg declared_type='id' type='@'/>
 <retval declared_type='void' type='v'/>
 </arg>
@@ -2981,7 +2981,7 @@
 <arg name='itemWidth' index='2' declared_type='int' type='i'/>
 <arg name='itemHeight' index='3' declared_type='int' type='i'/>
 <arg name='startCharMap' index='4' declared_type='char' type='c'/>
-<arg name='block' function_pointer='true' index='5' declared_type='void (^)(id)' type='@?'>
+<arg function_pointer='true' name='block' index='5' declared_type='void (^)(id)' type='@?'>
 <arg declared_type='id' type='@'/>
 <retval declared_type='void' type='v'/>
 </arg>
@@ -3011,7 +3011,7 @@
 <arg name='itemWidth' index='2' declared_type='int' type='i'/>
 <arg name='itemHeight' index='3' declared_type='int' type='i'/>
 <arg name='startCharMap' index='4' declared_type='char' type='c'/>
-<arg name='block' function_pointer='true' index='5' declared_type='void (^)(id)' type='@?'>
+<arg function_pointer='true' name='block' index='5' declared_type='void (^)(id)' type='@?'>
 <arg declared_type='id' type='@'/>
 <retval declared_type='void' type='v'/>
 </arg>
@@ -3043,7 +3043,7 @@
 </method>
 <method selector='initWithString:block:'>
 <arg name='value' index='0' declared_type='NSString*' type='@'/>
-<arg name='block' function_pointer='true' index='1' declared_type='void (^)(id)' type='@?'>
+<arg function_pointer='true' name='block' index='1' declared_type='void (^)(id)' type='@?'>
 <arg declared_type='id' type='@'/>
 <retval declared_type='void' type='v'/>
 </arg>
@@ -3061,7 +3061,7 @@
 </method>
 <method selector='itemWithString:block:' class_method='true'>
 <arg name='value' index='0' declared_type='NSString*' type='@'/>
-<arg name='block' function_pointer='true' index='1' declared_type='void (^)(id)' type='@?'>
+<arg function_pointer='true' name='block' index='1' declared_type='void (^)(id)' type='@?'>
 <arg declared_type='id' type='@'/>
 <retval declared_type='void' type='v'/>
 </arg>
@@ -3095,7 +3095,7 @@
 <arg name='value' index='0' declared_type='NSString*' type='@'/>
 <arg name='value2' index='1' declared_type='NSString*' type='@'/>
 <arg name='value3' index='2' declared_type='NSString*' type='@'/>
-<arg name='block' function_pointer='true' index='3' declared_type='void (^)(id)' type='@?'>
+<arg function_pointer='true' name='block' index='3' declared_type='void (^)(id)' type='@?'>
 <arg declared_type='id' type='@'/>
 <retval declared_type='void' type='v'/>
 </arg>
@@ -3117,7 +3117,7 @@
 <method selector='itemWithNormalImage:selectedImage:block:' class_method='true'>
 <arg name='value' index='0' declared_type='NSString*' type='@'/>
 <arg name='value2' index='1' declared_type='NSString*' type='@'/>
-<arg name='block' function_pointer='true' index='2' declared_type='void (^)(id)' type='@?'>
+<arg function_pointer='true' name='block' index='2' declared_type='void (^)(id)' type='@?'>
 <arg declared_type='id' type='@'/>
 <retval declared_type='void' type='v'/>
 </arg>
@@ -3133,7 +3133,7 @@
 <arg name='value' index='0' declared_type='NSString*' type='@'/>
 <arg name='value2' index='1' declared_type='NSString*' type='@'/>
 <arg name='value3' index='2' declared_type='NSString*' type='@'/>
-<arg name='block' function_pointer='true' index='3' declared_type='void (^)(id)' type='@?'>
+<arg function_pointer='true' name='block' index='3' declared_type='void (^)(id)' type='@?'>
 <arg declared_type='id' type='@'/>
 <retval declared_type='void' type='v'/>
 </arg>
@@ -3173,7 +3173,7 @@
 </method>
 <method selector='initWithLabel:block:'>
 <arg name='label' index='0' declared_type='CCNode*' type='@'/>
-<arg name='block' function_pointer='true' index='1' declared_type='void (^)(id)' type='@?'>
+<arg function_pointer='true' name='block' index='1' declared_type='void (^)(id)' type='@?'>
 <arg declared_type='id' type='@'/>
 <retval declared_type='void' type='v'/>
 </arg>
@@ -3191,7 +3191,7 @@
 </method>
 <method selector='itemWithLabel:block:' class_method='true'>
 <arg name='label' index='0' declared_type='CCNode*' type='@'/>
-<arg name='block' function_pointer='true' index='1' declared_type='void (^)(id)' type='@?'>
+<arg function_pointer='true' name='block' index='1' declared_type='void (^)(id)' type='@?'>
 <arg declared_type='id' type='@'/>
 <retval declared_type='void' type='v'/>
 </arg>
@@ -3231,7 +3231,7 @@
 <arg name='normalSprite' index='0' declared_type='CCNode*' type='@'/>
 <arg name='selectedSprite' index='1' declared_type='CCNode*' type='@'/>
 <arg name='disabledSprite' index='2' declared_type='CCNode*' type='@'/>
-<arg name='block' function_pointer='true' index='3' declared_type='void (^)(id)' type='@?'>
+<arg function_pointer='true' name='block' index='3' declared_type='void (^)(id)' type='@?'>
 <arg declared_type='id' type='@'/>
 <retval declared_type='void' type='v'/>
 </arg>
@@ -3253,7 +3253,7 @@
 <method selector='itemWithNormalSprite:selectedSprite:block:' class_method='true'>
 <arg name='normalSprite' index='0' declared_type='CCNode*' type='@'/>
 <arg name='selectedSprite' index='1' declared_type='CCNode*' type='@'/>
-<arg name='block' function_pointer='true' index='2' declared_type='void (^)(id)' type='@?'>
+<arg function_pointer='true' name='block' index='2' declared_type='void (^)(id)' type='@?'>
 <arg declared_type='id' type='@'/>
 <retval declared_type='void' type='v'/>
 </arg>
@@ -3263,7 +3263,7 @@
 <arg name='normalSprite' index='0' declared_type='CCNode*' type='@'/>
 <arg name='selectedSprite' index='1' declared_type='CCNode*' type='@'/>
 <arg name='disabledSprite' index='2' declared_type='CCNode*' type='@'/>
-<arg name='block' function_pointer='true' index='3' declared_type='void (^)(id)' type='@?'>
+<arg function_pointer='true' name='block' index='3' declared_type='void (^)(id)' type='@?'>
 <arg declared_type='id' type='@'/>
 <retval declared_type='void' type='v'/>
 </arg>
@@ -3306,7 +3306,7 @@
 <class name='CCMenuItemToggle'>
 <method selector='initWithItems:block:'>
 <arg name='arrayOfItems' index='0' declared_type='NSArray*' type='@'/>
-<arg name='block' function_pointer='true' index='1' declared_type='void (^)(id)' type='@?'>
+<arg function_pointer='true' name='block' index='1' declared_type='void (^)(id)' type='@?'>
 <arg declared_type='id' type='@'/>
 <retval declared_type='void' type='v'/>
 </arg>
@@ -3318,13 +3318,13 @@
 </method>
 <method selector='itemWithItems:block:' class_method='true'>
 <arg name='arrayOfItems' index='0' declared_type='NSArray*' type='@'/>
-<arg name='block' function_pointer='true' index='1' declared_type='void (^)(id)' type='@?'>
+<arg function_pointer='true' name='block' index='1' declared_type='void (^)(id)' type='@?'>
 <arg declared_type='id' type='@'/>
 <retval declared_type='void' type='v'/>
 </arg>
 <retval declared_type='id' type='@'/>
 </method>
-<method selector='itemWithTarget:selector:items:' variadic='true' sentinel='0' class_method='true'>
+<method selector='itemWithTarget:selector:items:' class_method='true' sentinel='0' variadic='true'>
 <arg name='target' index='0' declared_type='id' type='@'/>
 <arg name='selector' index='1' declared_type='SEL' type=':'/>
 <arg name='item' index='2' declared_type='CCMenuItem*' type='@'/>
@@ -4878,7 +4878,7 @@
 <arg name='repeat' index='3' declared_type='uint' type='I'/>
 <arg name='delay' index='4' declared_type='ccTime' type='f'/>
 <arg name='paused' index='5' declared_type='BOOL' type='B'/>
-<arg name='block' function_pointer='true' index='6' declared_type='void (^)(ccTime)' type='@?'>
+<arg function_pointer='true' name='block' index='6' declared_type='void (^)(ccTime)' type='@?'>
 <arg declared_type='ccTime' type='f'/>
 <retval declared_type='void' type='v'/>
 </arg>
@@ -4953,7 +4953,7 @@
 <arg name='arrayOfActions' index='0' declared_type='NSArray*' type='@'/>
 <retval declared_type='id' type='@'/>
 </method>
-<method selector='actions:' variadic='true' sentinel='0' class_method='true'>
+<method selector='actions:' class_method='true' sentinel='0' variadic='true'>
 <arg name='action1' index='0' declared_type='CCFiniteTimeAction*' type='@'/>
 <retval declared_type='id' type='@'/>
 </method>
@@ -5088,7 +5088,7 @@
 <arg name='arrayOfActions' index='0' declared_type='NSArray*' type='@'/>
 <retval declared_type='id' type='@'/>
 </method>
-<method selector='actions:' variadic='true' sentinel='0' class_method='true'>
+<method selector='actions:' class_method='true' sentinel='0' variadic='true'>
 <arg name='action1' index='0' declared_type='CCFiniteTimeAction*' type='@'/>
 <retval declared_type='id' type='@'/>
 </method>
@@ -6091,7 +6091,7 @@
 <retval declared_type='id' type='@'/>
 </method>
 <method selector='initWithData:pixelFormat:pixelsWide:pixelsHigh:contentSize:'>
-<arg name='data' const='true' index='0' declared_type='void*' type='^v'/>
+<arg name='data' index='0' declared_type='void*' const='true' type='^v'/>
 <arg name='pixelFormat' index='1' declared_type='CCTexture2DPixelFormat' type='i'/>
 <arg name='width' index='2' declared_type='NSUInteger' type='I'/>
 <arg name='height' index='3' declared_type='NSUInteger' type='I'/>
@@ -6323,7 +6323,7 @@
 </method>
 <method selector='addImageAsync:withBlock:'>
 <arg name='filename' index='0' declared_type='NSString*' type='@'/>
-<arg name='block' function_pointer='true' index='1' declared_type='void (^)(CCTexture2D *)' type='@?'>
+<arg function_pointer='true' name='block' index='1' declared_type='void (^)(CCTexture2D *)' type='@?'>
 <arg declared_type='CCTexture2D*' type='@'/>
 <retval declared_type='void' type='v'/>
 </arg>
@@ -6485,7 +6485,7 @@
 <arg name='r' index='2' declared_type='uint' type='I'/>
 <arg name='d' index='3' declared_type='ccTime' type='f'/>
 <arg name='key' index='4' declared_type='NSString*' type='@'/>
-<arg name='block' function_pointer='true' index='5' declared_type='void (^)(ccTime)' type='@?'>
+<arg function_pointer='true' name='block' index='5' declared_type='void (^)(ccTime)' type='@?'>
 <arg declared_type='ccTime' type='f'/>
 <retval declared_type='void' type='v'/>
 </arg>
@@ -6501,7 +6501,7 @@
 <arg name='owner' index='0' declared_type='id' type='@'/>
 <arg name='seconds' index='1' declared_type='ccTime' type='f'/>
 <arg name='key' index='2' declared_type='NSString*' type='@'/>
-<arg name='block' function_pointer='true' index='3' declared_type='void (^)(ccTime)' type='@?'>
+<arg function_pointer='true' name='block' index='3' declared_type='void (^)(ccTime)' type='@?'>
 <arg declared_type='ccTime' type='f'/>
 <retval declared_type='void' type='v'/>
 </arg>
