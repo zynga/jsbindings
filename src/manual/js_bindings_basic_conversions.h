@@ -47,7 +47,7 @@ JSBool jsval_is_NSObject( JSContext *cx, jsval vp, NSObject **ret );
 /** converts a jsval to a NSString */
 JSBool jsval_to_NSString( JSContext *cx , jsval vp, NSString **out );
 
-/** converts a jsval to a NSObject */
+/** converts a jsval to a NSObject. If jsval is null it will return [NSNull null]. */
 JSBool jsval_to_NSObject( JSContext *cx, jsval vp, NSObject **out );
 
 /** converts a jsval to a NSArray */

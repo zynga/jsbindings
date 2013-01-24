@@ -17,13 +17,9 @@ cc.BuilderReader.load = function(file, owner, parentSize)
     var reader = cc._Reader.create();
     var node;
 
-    if (owner && parentSize)
+    if (parentSize)
     {
-        node = reader.load(file, owner, parentSize);
-    }
-    else if (owner)
-    {
-        node = reader.load(file,owner);
+        node = reader.load(file, null, parentSize);
     }
     else
     {
@@ -42,7 +38,11 @@ cc.BuilderReader.load = function(file, owner, parentSize)
             var callbackName = ownerCallbackNames[i];
             var callbackNode = ownerCallbackNodes[i];
 
+            cc.log( callbackName );
+            cc.log( callbackNode );
+
             callbackNode.setCallback(owner[callbackName], owner);
+
         }
 
         // Variables

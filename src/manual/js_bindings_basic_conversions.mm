@@ -81,6 +81,12 @@ JSBool jsval_is_NSObject( JSContext *cx, jsval vp, NSObject **ret )
 // Convert function
 JSBool jsval_to_NSObject( JSContext *cx, jsval vp, NSObject **ret )
 {
+	// special case: jsval is null
+	if( JSVAL_IS_NULL(vp) ) {
+		*ret = [NSNull null];
+		return JS_TRUE;
+	}
+
 	JSObject *jsobj;
 	JSBool ok = JS_ValueToObject( cx, vp, &jsobj );
 	JSB_PRECONDITION2( ok, cx, JS_FALSE, "Error converting value to object");
