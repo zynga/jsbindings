@@ -377,6 +377,9 @@ JSBool JSB_CCMenuItemFont_itemWithString_block__static(JSContext *cx, uint32_t a
 	else
 		ret_val = [CCMenuItemFont itemWithString:normal block:(void(^)(id sender))js_func];
 
+	// XXX: This will be the default behavior on v2.2
+	[ret_val setReleaseBlockAtCleanup:NO];
+
 	JSObject *jsobj = get_or_create_jsobject_from_realobj( cx, ret_val );
 	
 	// "root" callback function
@@ -469,6 +472,9 @@ JSBool JSB_CCMenuItemLabel_itemWithLabel_block__static(JSContext *cx, uint32_t a
 		ret_val = [CCMenuItemLabel itemWithLabel:label];
 	else if (argc >= 2 )
 		ret_val = [CCMenuItemLabel itemWithLabel:label block:(void(^)(id sender))js_func];
+
+	// XXX: This will be the default behavior on v2.2
+	[ret_val setReleaseBlockAtCleanup:NO];
 
 	JSObject *jsobj = get_or_create_jsobject_from_realobj( cx, ret_val );
 	JS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(jsobj));
@@ -577,6 +583,9 @@ JSBool JSB_CCMenuItemImage_itemWithNormalImage_selectedImage_disabledImage_block
 		ret_val = [CCMenuItemImage itemWithNormalImage:normal selectedImage:selected block:(void(^)(id sender))js_func];
 	else if (argc == 5 )
 		ret_val = [CCMenuItemImage itemWithNormalImage:normal selectedImage:selected disabledImage:disabled block:(void(^)(id sender))js_func];
+
+	// XXX: This will be the default behavior on v2.2
+	[ret_val setReleaseBlockAtCleanup:NO];
 
 	JSObject *jsobj = get_or_create_jsobject_from_realobj( cx, ret_val );
 	JS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(jsobj));
@@ -714,6 +723,9 @@ JSBool JSB_CCMenuItemSprite_itemWithNormalSprite_selectedSprite_disabledSprite_b
 		ret_val = [CCMenuItemSprite itemWithNormalSprite:normal selectedSprite:selected block:(void(^)(id sender))js_func];
 	else if (argc == 5 || (argc==4 && lastArgIsCallback) )
 		ret_val = [CCMenuItemSprite itemWithNormalSprite:normal selectedSprite:selected disabledSprite:disabled block:(void(^)(id sender))js_func];
+
+	// XXX: This will be the default behavior on v2.2
+	[ret_val setReleaseBlockAtCleanup:NO];
 
 	JSObject *jsobj = get_or_create_jsobject_from_realobj( cx, ret_val );
 	JS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(jsobj));
