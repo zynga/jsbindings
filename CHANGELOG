@@ -1,4 +1,7 @@
-version 0.5 - XX-Jan-2013
+version 0.6 - XX-Mar-2013
+- [FIX] JSB: RGBAProtocol: color/opacity -> getColor/getOpacity
+
+version 0.5 - 29-Jan-2013
 - [FIX] JSB: Errors inside require() are reported correctly
 		Improved errors in Chipmunk and cocos2d manual functions
 		Removed JSB_PRECONDITION3(). Merged in JSB_PRECONDITION2()
