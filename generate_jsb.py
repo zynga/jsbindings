@@ -3054,8 +3054,8 @@ class JSBindings(object):
         #
         # Is there any function to register:
         if 'function' in self.bs['signatures']:
-            #functions = JSBGenerateFunctions(self)
-            functions = plugin_jsb_gl.JSBGenerateFunctions_GL(self)
+            functions = JSBGenerateFunctions(self)
+            #functions = plugin_jsb_gl.JSBGenerateFunctions_GL(self)
             functions.generate_bindings()
 
         #
