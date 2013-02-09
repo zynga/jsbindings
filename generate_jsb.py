@@ -128,6 +128,111 @@ class JSBGenerate(object):
         # Misc
         self.bridgesupport_files = config.bridgesupport_files
 
+        #
+        # conversion rules
+        #
+        self.init_args_conversion()
+
+    def init_args_conversion(self):
+        #
+        # Conversion rules
+        #
+
+        # Shared
+        # Left column: BridgeSupport types
+        # Right column: JS types
+        self.args_supported_declared_types = {
+            'NSString*': 'S',
+            'NSArray*': 'array',
+            'NSMutableArray*': 'array',
+            'CCArray*': 'array',
+            'NSSet*': 'set',
+            'NSDictionary*': 'dict',
+            'const char*': 'char*',
+            'const unsigned char*': 'char*',
+            'char*': 'char*',
+            'unsigned char*': 'char*',
+            'void (^)(id)': 'f',
+            'void (^)(CCNode *)': 'f',
+        }
+
+        self.args_supported_types = {
+            'f': 'd',  # float
+            'd': 'd',  # double
+            'i': 'i',  # integer
+            'I': 'u',  # unsigned integer
+            'c': 'c',  # char
+            'C': 'c',  # unsigned char
+            'B': 'b',  # BOOL
+            's': 'c',  # short
+            'v':  None,  # void (for retval)
+            'L': 'long',          # long (special conversion)
+            'Q': 'longlong',      # long long (special conversion)
+        }
+
+        # retval only
+        self.retval_direct_convert = {
+            'i': 'INT_TO_JSVAL((int32_t)ret_val)',
+            'u': 'UINT_TO_JSVAL((uint32_t)ret_val)',
+            'b': 'BOOLEAN_TO_JSVAL(ret_val)',
+            's': 'STRING_TO_JSVAL(ret_val)',
+            'd': 'DOUBLE_TO_JSVAL(ret_val)',
+            'c': 'INT_TO_JSVAL((int32_t)ret_val)',
+            'long': 'long_to_jsval(cx, ret_val)',                # long: not supported on JS 64-bit
+            'longlong': 'longlong_to_jsval(cx, ret_val)',        # long long: not supported on JS
+            'void': 'JSVAL_VOID',
+            None: 'JSVAL_VOID',
+        }
+
+        self.retval_special_convert = {
+            'o': self.generate_retval_object,
+            'S': self.generate_retval_string,
+            'char*': self.generate_retval_charptr,
+            'array': self.generate_retval_array,
+            'set': self.generate_retval_set,
+            'dict': self.generate_retval_dict,
+        }
+
+        # Arguments only
+        # b      JSBool          Boolean
+        # c      uint16_t/jschar ECMA uint16_t, Unicode char
+        # i      int32_t         ECMA int32_t
+        # u      uint32_t        ECMA uint32_t
+        # j      int32_t         Rounded int32_t (coordinate)
+        # d      double          IEEE double
+        # I      double          Integral IEEE double
+        # S      JSString *      Unicode string, accessed by a JSString pointer
+        # W      jschar *        Unicode character vector, 0-terminated (W for wide)
+        # o      JSObject *      Object reference
+        # f      JSFunction *    Function private
+        # v      jsval           Argument value (no conversion)
+        # *      N/A             Skip this argument (no vararg)
+        # /      N/A             End of required arguments
+        # More info:
+        # https://developer.mozilla.org/en/SpiderMonkey/JSAPI_Reference/JS_ConvertArguments
+        self.args_js_types_conversions = {
+            'b': ['JSBool',    'JS_ValueToBoolean'],
+            'd': ['double',    'JS_ValueToNumber'],
+            'I': ['double',    'JS_ValueToNumber'],    # double converted to string
+            'i': ['int32_t',   'jsval_to_int32'],
+            'j': ['int32_t',   'jsval_to_int32'],
+            'u': ['uint32_t',  'jsval_to_uint32'],
+            'c': ['uint16_t',  'jsval_to_uint16'],
+        }
+
+        self.args_js_special_type_conversions = {
+            'S': [self.generate_argument_string, 'NSString*'],
+            'dict': [self.generate_argument_dict, 'NSDictionary*'],
+            'char*': [self.generate_argument_charptr, 'const char*'],
+            'o': [self.generate_argument_object, 'id'],
+            'array': [self.generate_argument_array, 'NSArray*'],
+            'set': [self.generate_argument_set, 'NSSet*'],
+            'f': [self.generate_argument_function, 'js_block'],
+            'long':     [self.generate_argument_long, 'long'],
+            'longlong': [self.generate_argument_longlong, 'long long'],
+        }
+
+
     #
     # BEGIN Helper functions
     #
@@ -384,26 +489,6 @@ class JSBGenerate(object):
         return template % ('JSB_%s_object' % klass, 'JSB_%s_class' % klass, klass)
 
     def generate_retval(self, declared_type, js_type, method=None):
-        direct_convert = {
-            'i': 'INT_TO_JSVAL((int32_t)ret_val)',
-            'u': 'UINT_TO_JSVAL((uint32_t)ret_val)',
-            'b': 'BOOLEAN_TO_JSVAL(ret_val)',
-            's': 'STRING_TO_JSVAL(ret_val)',
-            'd': 'DOUBLE_TO_JSVAL(ret_val)',
-            'c': 'INT_TO_JSVAL((int32_t)ret_val)',
-            'long': 'long_to_jsval(cx, ret_val)',                # long: not supoprted on JS 64-bit
-            'longlong': 'longlong_to_jsval(cx, ret_val)',        # long long: not supported on JS
-            'void': 'JSVAL_VOID',
-            None: 'JSVAL_VOID',
-        }
-        special_convert = {
-            'o': self.generate_retval_object,
-            'S': self.generate_retval_string,
-            'char*': self.generate_retval_charptr,
-            'array': self.generate_retval_array,
-            'set': self.generate_retval_set,
-            'dict': self.generate_retval_dict,
-        }
 
         if method and self.is_method_initializer(method):
             return '\tJS_SET_RVAL(cx, vp, JSVAL_TRUE);'
@@ -417,10 +502,10 @@ class JSBGenerate(object):
             ret = self.generate_retval_struct_manual(declared_type, js_type)
         elif self.is_valid_structure(js_type):
             ret = self.generate_retval_struct_automatic(declared_type, js_type)
-        elif js_type in special_convert:
-            ret = special_convert[js_type](declared_type, js_type)
-        elif js_type in direct_convert:
-            s = direct_convert[js_type]
+        elif js_type in self.retval_special_convert:
+            ret = self.retval_special_convert[js_type](declared_type, js_type)
+        elif js_type in self.retval_direct_convert:
+            s = self.retval_direct_convert[js_type]
             ret = '\tJS_SET_RVAL(cx, vp, %s);' % s
         else:
             raise Exception("Invalid key: %s" % js_type)
@@ -428,33 +513,6 @@ class JSBGenerate(object):
         return ret
 
     def validate_retval(self, method, class_name=None):
-        # Left column: BridgeSupport types
-        # Right column: JS types
-        supported_declared_types = {
-            'NSString*': 'S',
-            'NSArray*': 'array',
-            'NSMutableArray*': 'array',
-            'CCArray*': 'array',
-            'NSSet*': 'set',
-            'NSDictionary*': 'dict',
-            'const char*': 'char*',
-            'const unsigned char*': 'char*',
-            'char*': 'char*',
-            'unsigned char*': 'char*',
-        }
-
-        supported_types = {
-            'f': 'd',  # float
-            'd': 'd',  # double
-            'i': 'i',  # integer
-            'I': 'u',  # unsigned integer
-            'c': 'c',  # char
-            'C': 'c',  # unsigned char
-            'B': 'b',  # BOOL
-            'v':  None,  # void (for retval)
-            'L': 'long',          # long (special conversion)
-            'Q': 'longlong',      # long long (special conversion)
-        }
 
 #        s = method['selector']
 
@@ -482,17 +540,17 @@ class JSBGenerate(object):
                 ret_declared_type = class_name + '*'
 
             # Part of supported declared types ?
-            elif dt in supported_declared_types:
-                ret_js_type = supported_declared_types[dt]
+            elif dt in self.args_supported_declared_types:
+                ret_js_type = self.args_supported_declared_types[dt]
                 ret_declared_type = dt
 
             # Part of supported types ?
-            elif t in supported_types:
-                if supported_types[t] == None:  # void type
+            elif t in self.args_supported_types:
+                if self.args_supported_types[t] == None:  # void type
                     ret_js_type = None
                     ret_declared_type = 'void'
                 else:
-                    ret_js_type = supported_types[t]
+                    ret_js_type = self.args_supported_types[t]
                     ret_declared_type = retval[0]['declared_type']
 
             # special case for Objects
@@ -521,32 +579,6 @@ class JSBGenerate(object):
         return (ret_js_type, ret_declared_type)
 
     def validate_argument(self, arg):
-        # Left column: BridgeSupport types
-        # Right column: JS types
-        supported_declared_types = {
-            'NSString*': 'S',
-            'NSArray*': 'array',
-            'CCArray*': 'array',
-            'NSMutableArray*': 'array',
-            'NSSet*': 'set',
-            'void (^)(id)': 'f',
-            'void (^)(CCNode *)': 'f',
-            'char*': 'char*',
-            'unsigned char*': 'char*',
-        }
-
-        supported_types = {
-            'f': 'd',  # float
-            'd': 'd',  # double
-            'i': 'i',  # integer
-            'I': 'u',  # unsigned integer
-            'c': 'c',  # char
-            'C': 'c',  # unsigned char
-            'B': 'b',  # BOOL
-            's': 'c',  # short
-            'L': 'long',       # long (custom conversion)
-            'Q': 'longlong',   # long long (custom conversion)
-        }
 
         t = arg['type']
         dt = arg['declared_type']
@@ -559,11 +591,11 @@ class JSBGenerate(object):
 
         # IMPORTANT: 1st search on declared types.
         # NSString should be treated as a special case, not as a generic object
-        if dt in supported_declared_types:
-            return (supported_declared_types[dt], dt)
+        if dt in self.args_supported_declared_types:
+            return (self.args_supported_declared_types[dt], dt)
 
-        elif t in supported_types:
-            return (supported_types[t], dt)
+        elif t in self.args_supported_types:
+            return (self.args_supported_types[t], dt)
 
         # special case for Objects
         elif t == '@' and dt_class_name in self.supported_classes:
@@ -603,6 +635,11 @@ class JSBGenerate(object):
     def generate_argument_variadic_2_nsarray(self):
         template = '\tok &= jsvals_variadic_to_NSArray( cx, argvp, argc, &arg0 );\n'
         self.fd_mm.write(template)
+
+    # Special case for string to NSString generator
+    def generate_argument_dict(self, i, arg_js_type, arg_declared_type):
+        template = '\tok &= jsval_to_NSDictionary( cx, *argvp++, &arg%d );\n'
+        self.fd_mm.write(template % i)
 
     # Special case for string to NSString generator
     def generate_argument_string(self, i, arg_js_type, arg_declared_type):
@@ -665,42 +702,6 @@ class JSBGenerate(object):
         self.fd_mm.write(template % (i))
 
     def generate_arguments(self, args_declared_type, args_js_type, properties={}):
-        # b      JSBool          Boolean
-        # c      uint16_t/jschar ECMA uint16_t, Unicode char
-        # i      int32_t         ECMA int32_t
-        # u      uint32_t        ECMA uint32_t
-        # j      int32_t         Rounded int32_t (coordinate)
-        # d      double          IEEE double
-        # I      double          Integral IEEE double
-        # S      JSString *      Unicode string, accessed by a JSString pointer
-        # W      jschar *        Unicode character vector, 0-terminated (W for wide)
-        # o      JSObject *      Object reference
-        # f      JSFunction *    Function private
-        # v      jsval           Argument value (no conversion)
-        # *      N/A             Skip this argument (no vararg)
-        # /      N/A             End of required arguments
-        # More info:
-        # https://developer.mozilla.org/en/SpiderMonkey/JSAPI_Reference/JS_ConvertArguments
-        js_types_conversions = {
-            'b': ['JSBool',    'JS_ValueToBoolean'],
-            'd': ['double',    'JS_ValueToNumber'],
-            'I': ['double',    'JS_ValueToNumber'],    # double converted to string
-            'i': ['int32_t',   'jsval_to_int32'],
-            'j': ['int32_t',   'jsval_to_int32'],
-            'u': ['uint32_t',  'jsval_to_uint32'],
-            'c': ['uint16_t',  'jsval_to_uint16'],
-        }
-
-        js_special_type_conversions = {
-            'S': [self.generate_argument_string, 'NSString*'],
-            'char*': [self.generate_argument_charptr, 'const char*'],
-            'o': [self.generate_argument_object, 'id'],
-            'array': [self.generate_argument_array, 'NSArray*'],
-            'set': [self.generate_argument_set, 'NSSet*'],
-            'f': [self.generate_argument_function, 'js_block'],
-            'long':     [self.generate_argument_long, 'long'],
-            'longlong': [self.generate_argument_longlong, 'long long'],
-        }
 
         # First  time
         self.fd_mm.write('\tjsval *argvp = JS_ARGV(cx,vp);\n')
@@ -720,10 +721,10 @@ class JSBGenerate(object):
                 declared_vars += '%s arg%d;' % (args_declared_type[i], i)
             elif self.is_valid_structure(arg):
                 declared_vars += '%s arg%d;' % (args_declared_type[i], i)
-            elif arg in js_types_conversions:
-                declared_vars += '%s arg%d;' % (js_types_conversions[arg][0], i)
-            elif arg in js_special_type_conversions:
-                declared_vars += '%s arg%d;' % (js_special_type_conversions[arg][1], i)
+            elif arg in self.args_js_types_conversions:
+                declared_vars += '%s arg%d;' % (self.args_js_types_conversions[arg][0], i)
+            elif arg in self.args_js_special_type_conversions:
+                declared_vars += '%s arg%d;' % (self.args_js_special_type_conversions[arg][1], i)
             declared_vars += ' '
         self.fd_mm.write('%s\n\n' % declared_vars)
 
@@ -758,11 +759,11 @@ class JSBGenerate(object):
                     self.generate_argument_struct_manual(i, arg, args_declared_type[i])
                 elif self.is_valid_structure(arg):
                     self.generate_argument_struct_automatic(i, arg, args_declared_type[i])
-                elif arg in js_types_conversions:
-                    t = js_types_conversions[arg]
+                elif arg in self.args_js_types_conversions:
+                    t = self.args_js_types_conversions[arg]
                     self.fd_mm.write('\tok &= %s( cx, *argvp++, &arg%d );\n' % (t[1], i))
-                elif arg in js_special_type_conversions:
-                    js_special_type_conversions[arg][0](i, arg, args_declared_type[i])
+                elif arg in self.args_js_special_type_conversions:
+                    self.args_js_special_type_conversions[arg][0](i, arg, args_declared_type[i])
                 else:
                     raise ParseException('Unsupported argument type: %s' % arg)
 
@@ -2438,7 +2439,7 @@ class JSBGenerateEnums(JSBGenerate):
 
     def get_name_for_enum(self, name):
         prefix = self.get_enum_property('prefix_to_remove')
-        if name.startswith(prefix):
+        if prefix and name.startswith(prefix):
             name = name[len(prefix):]
 
         # sanity check: variables can't start with digit in JS
@@ -2455,7 +2456,14 @@ class JSBGenerateEnums(JSBGenerate):
         enums = self.bs['signatures']['enum']
         for e in enums:
             new_name = self.get_name_for_enum(e['name'])
-            self.fd_js.write('%s.%s\t= 0x%x;\n' % (self.namespace, new_name, int(e['value'])))
+            try:
+                v = int(e['value'])
+                if v >= 0:
+                    self.fd_js.write('%s.%s\t= 0x%x;\n' % (self.namespace, new_name, v))
+                else:
+                    self.fd_js.write('%s.%s\t= %s;\n' % (self.namespace, new_name, e['value']))
+            except ValueError:
+                self.fd_js.write('%s.%s\t= %s;\n' % (self.namespace, new_name, e['value']))
         self.fd_js.close()
 
 
@@ -3041,8 +3049,8 @@ class JSBindings(object):
         #
         # Is there any function to register:
         if 'function' in self.bs['signatures']:
-            #functions = JSBGenerateFunctions(self)
-            functions = plugin_jsb_gl.JSBGenerateFunctions_GL(self)
+            functions = JSBGenerateFunctions(self)
+            #functions = plugin_jsb_gl.JSBGenerateFunctions_GL(self)
             functions.generate_bindings()
 
         #

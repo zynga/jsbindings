@@ -154,6 +154,13 @@ JSBool jsval_to_NSString( JSContext *cx, jsval vp, NSString **ret )
 	return JS_TRUE;
 }
 
+JSBool jsval_to_NSDictionary( JSContext *cx, jsval vp, NSDictionary**ret )
+{
+	NSCAssert(NO, @"NOT IMPLEMENTED!");
+	*ret = [NSDictionary dictionary];
+	return JS_TRUE;
+}
+
 JSBool jsval_to_NSArray( JSContext *cx, jsval vp, NSArray**ret )
 {
 	// Parsing sequence

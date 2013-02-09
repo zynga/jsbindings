@@ -50,6 +50,9 @@ JSBool jsval_to_NSString( JSContext *cx , jsval vp, NSString **out );
 /** converts a jsval to a NSObject. If jsval is null it will return [NSNull null]. */
 JSBool jsval_to_NSObject( JSContext *cx, jsval vp, NSObject **out );
 
+/** converts a jsval to a NSDictionary */
+JSBool jsval_to_NSDictionary( JSContext *cx , jsval vp, NSDictionary** out );
+
 /** converts a jsval to a NSArray */
 JSBool jsval_to_NSArray( JSContext *cx , jsval vp, NSArray **out );
 
