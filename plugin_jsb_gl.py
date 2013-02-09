@@ -27,6 +27,21 @@ from generate_jsb import JSBGenerateFunctions
 #
 class JSBGenerateFunctions_GL(JSBGenerateFunctions):
 
+    def __init__(self, config):
+        super(JSBGenerateFunctions_GL, self).__init__(config)
+
+        # Extend supported types
+        self.args_js_special_type_conversions['TypedArray0'] = [self.generate_argument_typedarray, 'void*']
+
+    def generate_argument_typedarray(self, i, arg_js_type, arg_declared_type):
+        template = '\tGLsizei count;\n\tok &= jsval_to_typedarray( cx, *argvp++, &count, &arg%d);\n'
+        self.fd_mm.write(template % (i))
+
+    def generate_function_c_call_arg(self, i, dt):
+        if self._vectorFunction and dt == 'TypedArray1':
+            return ', count, arg%d ' % i
+        return super(JSBGenerateFunctions_GL, self).generate_function_c_call_arg(i, dt)
+
     def validate_argument(self, arg):
         if self._vectorFunction:
 
@@ -36,7 +51,7 @@ class JSBGenerateFunctions_GL(JSBGenerateFunctions):
 
             # Vector thing
             if arg['type'] == '^i':
-                return ('N/A', 'Vector')
+                return ('TypedArray0', 'TypedArray1')
 
         return super(JSBGenerateFunctions_GL, self).validate_argument(arg)
 

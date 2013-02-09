@@ -1859,7 +1859,15 @@ extern "C" {
         template_funcname = 'JSBool %s%s(JSContext *cx, uint32_t argc, jsval *vp);\n'
         self.fd_h.write(template_funcname % (PROXY_PREFIX, func_name))
 
-    def generate_function_call_to_real_object(self, func_name, num_of_args, ret_js_type, args_declared_type):
+    def generate_function_c_call_arg(self, i, dt):
+        ret = ''
+        # cast needed to prevent compiler errors
+        if i > 0:
+            ret += ', '
+        ret += '(%s)arg%d ' % (dt, i)
+        return ret
+
+    def generate_function_c_call(self, func_name, num_of_args, ret_js_type, args_declared_type):
         if ret_js_type:
             prefix = '\tret_val = %s(' % func_name
         else:
@@ -1868,10 +1876,7 @@ extern "C" {
         call = ''
 
         for i, dt in enumerate(args_declared_type):
-            # cast needed to prevent compiler errors
-            if i > 0:
-                call += ', '
-            call += '(%s)arg%d ' % (dt, i)
+            call += self.generate_function_c_call_arg(i, dt)
 
         call += ' );'
 
@@ -1917,7 +1922,7 @@ JSBool %s%s(JSContext *cx, uint32_t argc, jsval *vp) {
         if ret_js_type:
             self.fd_mm.write('\t%s ret_val;\n' % ret_declared_type)
 
-        call_real = self.generate_function_call_to_real_object(func_name, num_of_args, ret_js_type, args_declared_type)
+        call_real = self.generate_function_c_call(func_name, num_of_args, ret_js_type, args_declared_type)
         self.fd_mm.write('\n%s\n' % call_real)
 
         ret_string = self.generate_retval(ret_declared_type, ret_js_type)
@@ -2177,7 +2182,7 @@ JSBool %s_constructor(JSContext *cx, uint32_t argc, jsval *vp)
                 if num_of_args > 0:
                     self.generate_arguments(args_declared_type, args_js_type)
 
-                call = self.generate_function_call_to_real_object(func_name, num_of_args, True, args_declared_type)
+                call = self.generate_function_c_call(func_name, num_of_args, True, args_declared_type)
                 self.fd_mm.write('\tvoid* %s' % call)
 
                 self.fd_mm.write(template_1_b)
@@ -2261,7 +2266,7 @@ void %s_finalize(JSFreeOp *fop, JSObject *jsthis)
         if ret_js_type:
             self.fd_mm.write('\t%s ret_val;\n' % ret_declared_type)
 
-        call_real = self.generate_function_call_to_real_object(func_name, num_of_args, ret_js_type, args_declared_type)
+        call_real = self.generate_function_c_call(func_name, num_of_args, ret_js_type, args_declared_type)
         self.fd_mm.write('\n%s\n' % call_real)
 
         ret_string = self.generate_retval(ret_declared_type, ret_js_type)
@@ -3049,8 +3054,8 @@ class JSBindings(object):
         #
         # Is there any function to register:
         if 'function' in self.bs['signatures']:
-            functions = JSBGenerateFunctions(self)
-            #functions = plugin_jsb_gl.JSBGenerateFunctions_GL(self)
+            #functions = JSBGenerateFunctions(self)
+            functions = plugin_jsb_gl.JSBGenerateFunctions_GL(self)
             functions.generate_bindings()
 
         #

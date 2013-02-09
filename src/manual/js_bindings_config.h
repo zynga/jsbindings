@@ -133,6 +133,20 @@
 #define JSB_INCLUDE_COCOSDENSHION 1
 #endif // JSB_INCLUDE_COCOSDENSHION
 
+/** @def JSB_INCLUDE_SYSTEM
+ Whether or not it should include bindings for system components like LocalStorage
+ */
+#ifndef JSB_INCLUDE_SYSTEM
+#define JSB_INCLUDE_SYSTEM 1
+#endif // JSB_INCLUDE_SYSTEM
+
+/** @def JSB_INCLUDE_GL
+ Whether or not it should include bindings for WebGL / OpenGL ES 2.0
+ */
+//#ifndef JSB_INCLUDE_GL
+//#define JSB_INCLUDE_GL 0
+//#endif // JSB_INCLUDE_GL
+
 /** @def JSB_ENABLE_DEBUGGER
  Set this to 1 to enable the debugger
  */
@@ -146,12 +160,5 @@ JSAutoCompartment ac(cx, obj)
 #else
 #define JSB_ENSURE_AUTOCOMPARTMENT(cx, obj)
 #endif
-
-/** @def JSB_INCLUDE_SYSTEM
- Whether or not it should include bindings for system components like LocalStorage
- */
-#ifndef JSB_INCLUDE_SYSTEM
-#define JSB_INCLUDE_SYSTEM 1
-#endif // JSB_INCLUDE_SYSTEM
 
 #endif // __JS_BINDINGS_CONFIG_H
