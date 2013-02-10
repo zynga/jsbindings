@@ -34,27 +34,23 @@ class JSBGenerateFunctions_GL(JSBGenerateFunctions):
         self.args_js_special_type_conversions['TypedArray0'] = [self.generate_argument_typedarray, 'void*']
 
     def generate_argument_typedarray(self, i, arg_js_type, arg_declared_type):
-        if self._vectorFunction:
-            t = 'js::ArrayBufferView::TYPE_FLOAT32' if self._vectorFunction.group(2) == 'f' else 'js::ArrayBufferView::TYPE_INT32'
-            template = '\tGLsizei count;\n\tok &= jsval_typedarray_to_dataptr( cx, *argvp++, &count, &arg%d, %s);\n' % (i, t)
+        if self._current_typedarray:
+            template = '\tGLsizei count;\n\tok &= jsval_typedarray_to_dataptr( cx, *argvp++, &count, &arg%d, %s);\n' % (i, self._current_typedarray)
             self.fd_mm.write(template)
         else:
             raise Exception("Logic error in GL plugin")
 
     def generate_function_c_call_arg(self, i, dt):
-        if self._vectorFunction and dt == 'TypedArray1':
-            t = self._vectorFunction.group(2)
-            cast = 'GLfloat' if t == 'f' else 'GLint'
+        if self._current_typedarray and dt == 'TypedArray1':
             ret = ''
             if self._with_count:
                 ret += ', count'
-            ret += ', (%s*)arg%d ' % (cast, i)
+            ret += ', (%s*)arg%d ' % (self._current_cast, i)
             return ret
         return super(JSBGenerateFunctions_GL, self).generate_function_c_call_arg(i, dt)
 
     def validate_argument(self, arg):
-        if self._vectorFunction:
-
+        if self._current_typedarray:
             # Skip count
             if arg['name'] == 'count':
                 return (None, None)
@@ -68,9 +64,24 @@ class JSBGenerateFunctions_GL(JSBGenerateFunctions):
     def generate_function_binding(self, function):
         func_name = function['name']
 
-        # Match for vector functions
+        self._current_funcname = func_name
+        self._current_typedarray = None
+
+        t = None
+        # Testing generic vector functions
         r = re.match('gl\S+([1-4])([fi])v$', func_name)
-        self._vectorFunction = r
-        self._with_count = (re.match('glVertexAttrib[1-4][fi]v', func_name) == None)
+        if r:
+            t = 'f32' if r.group(2) == 'f' else 'i32'
+            self._with_count = (re.match('glVertexAttrib[1-4][fi]v', func_name) == None)
+
+        if t == 'f32':
+            self._current_typedarray = 'js::ArrayBufferView::TYPE_FLOAT32'
+            self._current_cast = 'GLfloat'
+        elif t == 'i32':
+            self._current_typedarray = 'js::ArrayBufferView::TYPE_INT32'
+            self._current_cast = 'GLint'
+        elif t == 'u8':
+            self._current_typedarray = 'js::ArrayBufferView::TYPE_UINT8'
+            self._current_cast = 'GLuint8'
 
         return super(JSBGenerateFunctions_GL, self).generate_function_binding(function)
