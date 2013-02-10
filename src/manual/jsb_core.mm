@@ -32,6 +32,7 @@
 #import "jsb_cocos2d_registration.h"
 #import "jsb_chipmunk_registration.h"
 #import "jsb_system_registration.h"
+#import "jsb_opengl_registration.h"
 
 #include "jsdbgapi.h"
 #include "jsb_dbg.h"
@@ -667,6 +668,11 @@ JSObject* JSB_NewGlobalObject(JSContext* cx, bool empty)
 #if JSB_INCLUDE_SYSTEM
 	jsb_register_system(cx, glob);
 #endif // JSB_INCLUDE_SYSTEM
+
+	// registers opengl bindings
+#if JSB_INCLUDE_OPENGL
+	jsb_register_opengl(cx, glob);
+#endif // JSB_INCLUDE_OPENGL
 
     return glob;
 }
