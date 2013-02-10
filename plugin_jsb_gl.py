@@ -34,8 +34,12 @@ class JSBGenerateFunctions_GL(JSBGenerateFunctions):
         self.args_js_special_type_conversions['TypedArray0'] = [self.generate_argument_typedarray, 'void*']
 
     def generate_argument_typedarray(self, i, arg_js_type, arg_declared_type):
-        template = '\tGLsizei count;\n\tok &= jsval_typedarray_to_dataptr( cx, *argvp++, &count, &arg%d);\n'
-        self.fd_mm.write(template % (i))
+        if self._vectorFunction:
+            t = 'js::ArrayBufferView::TYPE_FLOAT32' if self._vectorFunction.group(2) == 'f' else 'js::ArrayBufferView::TYPE_INT32'
+            template = '\tGLsizei count;\n\tok &= jsval_typedarray_to_dataptr( cx, *argvp++, &count, &arg%d, %s);\n' % (i, t)
+            self.fd_mm.write(template)
+        else:
+            raise Exception("Logic error in GL plugin")
 
     def generate_function_c_call_arg(self, i, dt):
         if self._vectorFunction and dt == 'TypedArray1':

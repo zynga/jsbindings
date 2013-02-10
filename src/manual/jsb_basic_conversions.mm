@@ -157,7 +157,6 @@ JSBool jsval_to_NSString( JSContext *cx, jsval vp, NSString **ret )
 JSBool jsval_to_NSDictionary( JSContext *cx, jsval vp, NSDictionary**ret )
 {
 	NSCAssert(NO, @"NOT IMPLEMENTED!");
-	*ret = [NSDictionary dictionary];
 	return JS_TRUE;
 }
 
@@ -535,13 +534,42 @@ JSBool jsval_to_charptr( JSContext *cx, jsval vp, const char **ret )
 	return JS_TRUE;
 }
 
-JSBool jsval_typedarray_to_dataptr( JSContext *cx, jsval vp, GLsizei *count, void **data)
+JSBool jsval_typedarray_to_dataptr( JSContext *cx, jsval vp, GLsizei *count, void **data, JSArrayBufferViewType t)
 {
 	// Not implemented
-	JSObject *tmp_arg;
-	JSBool ok = JS_ValueToObject( cx, vp, &tmp_arg );
+	JSObject *jsobj;
+	JSBool ok = JS_ValueToObject( cx, vp, &jsobj );
 	JSB_PRECONDITION2( ok, cx, JS_FALSE, "Error converting value to object");
-	JSB_PRECONDITION2( JS_IsTypedArrayObject( tmp_arg, cx ), cx, JS_FALSE, "Not a TypedArray object");
+	JSB_PRECONDITION2( JS_IsTypedArrayObject( jsobj, cx ), cx, JS_FALSE, "Not a TypedArray object");
+
+	*count = JS_GetTypedArrayLength(jsobj, cx);
+	JSArrayBufferViewType type = JS_GetTypedArrayType(jsobj, cx);
+	JSB_PRECONDITION2(t==type, cx, JS_FALSE, "TypedArray type different than expected type");
+
+	switch (type) {
+		case js::ArrayBufferView::TYPE_INT8:
+		case js::ArrayBufferView::TYPE_UINT8:
+			*data = JS_GetUint8ArrayData(jsobj, cx);
+			break;
+
+		case js::ArrayBufferView::TYPE_INT16:
+		case js::ArrayBufferView::TYPE_UINT16:
+			*data = JS_GetUint16ArrayData(jsobj, cx);
+			break;
+
+		case js::ArrayBufferView::TYPE_INT32:
+		case js::ArrayBufferView::TYPE_UINT32:
+			*data = JS_GetUint32ArrayData(jsobj, cx);
+			break;
+
+		case js::ArrayBufferView::TYPE_FLOAT32:
+			*data = JS_GetFloat32ArrayData(jsobj, cx);
+			break;
+
+		default:
+			JSB_PRECONDITION2(JS_FALSE, cx, JS_FALSE, "Unsupported typedarray type");
+			break;
+	}
 
 	return JS_FALSE;
 }

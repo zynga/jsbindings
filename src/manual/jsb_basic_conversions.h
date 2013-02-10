@@ -22,9 +22,13 @@
  * THE SOFTWARE.
  */
 
+#ifndef __JSB_BASIC_CONVERSIONS_H
+#define __JSB_BASIC_CONVERSIONS_H
 
 #import <Foundation/Foundation.h>
 #import "jsb_config.h"
+
+#include "jsfriendapi.h"
 
 typedef void (^js_block)(id sender);
 
@@ -81,7 +85,7 @@ JSBool jsval_to_block_2( JSContext *cx, jsval vp, JSObject *jsthis, jsval arg, j
 /** converts a jsval (JS string) into a char */
 JSBool jsval_to_charptr( JSContext *cx, jsval vp, const char **out);
 /** converts a typedarray into a data pointer */
-JSBool jsval_typedarray_to_dataptr( JSContext *cx, jsval vp, GLsizei *count, void **data);
+JSBool jsval_typedarray_to_dataptr( JSContext *cx, jsval vp, GLsizei *count, void **data, JSArrayBufferViewType t);
 
 jsval unknown_to_jsval( JSContext *cx, id obj);
 /** Converts an NSObject into a jsval. It does not creates a new object if the NSObject has already been converted */
@@ -111,3 +115,4 @@ typedef uint32_t uint32;
 #define _UINT32
 #endif // _UINT32
 
+#endif // __JSB_BASIC_CONVERSIONS_H
