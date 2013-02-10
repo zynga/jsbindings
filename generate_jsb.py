@@ -1873,7 +1873,13 @@ extern "C" {
         ret += '(%s)arg%d ' % (dt, i)
         return ret
 
+    def generate_function_c_call_name(self, name):
+        # it could be overriden by plugins
+        return name
+
     def generate_function_c_call(self, func_name, num_of_args, ret_js_type, args_declared_type):
+
+        func_name = self.generate_function_c_call_name(func_name)
         if ret_js_type:
             prefix = '\tret_val = %s(' % func_name
         else:

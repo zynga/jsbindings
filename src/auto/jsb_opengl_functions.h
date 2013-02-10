@@ -97,6 +97,14 @@ JSBool JSB_glUniformMatrix3fv(JSContext *cx, uint32_t argc, jsval *vp);
 JSBool JSB_glUniformMatrix4fv(JSContext *cx, uint32_t argc, jsval *vp);
 JSBool JSB_glUseProgram(JSContext *cx, uint32_t argc, jsval *vp);
 JSBool JSB_glValidateProgram(JSContext *cx, uint32_t argc, jsval *vp);
+JSBool JSB_glVertexAttrib1f(JSContext *cx, uint32_t argc, jsval *vp);
+JSBool JSB_glVertexAttrib1fv(JSContext *cx, uint32_t argc, jsval *vp);
+JSBool JSB_glVertexAttrib2f(JSContext *cx, uint32_t argc, jsval *vp);
+JSBool JSB_glVertexAttrib2fv(JSContext *cx, uint32_t argc, jsval *vp);
+JSBool JSB_glVertexAttrib3f(JSContext *cx, uint32_t argc, jsval *vp);
+JSBool JSB_glVertexAttrib3fv(JSContext *cx, uint32_t argc, jsval *vp);
+JSBool JSB_glVertexAttrib4f(JSContext *cx, uint32_t argc, jsval *vp);
+JSBool JSB_glVertexAttrib4fv(JSContext *cx, uint32_t argc, jsval *vp);
 JSBool JSB_glViewport(JSContext *cx, uint32_t argc, jsval *vp);
 
 #ifdef __cplusplus

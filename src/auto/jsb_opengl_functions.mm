@@ -1485,6 +1485,152 @@ JSBool JSB_glValidateProgram(JSContext *cx, uint32_t argc, jsval *vp) {
 	return JS_TRUE;
 }
 
+// Arguments: GLuint, GLfloat
+// Ret value: void
+JSBool JSB_glVertexAttrib1f(JSContext *cx, uint32_t argc, jsval *vp) {
+	JSB_PRECONDITION2( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
+	jsval *argvp = JS_ARGV(cx,vp);
+	JSBool ok = JS_TRUE;
+	uint32_t arg0; int32_t arg1; 
+
+	ok &= jsval_to_uint32( cx, *argvp++, &arg0 );
+	ok &= jsval_to_int32( cx, *argvp++, &arg1 );
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
+
+	glVertexAttrib1f((GLuint)arg0 , (GLfloat)arg1  );
+	JS_SET_RVAL(cx, vp, JSVAL_VOID);
+	return JS_TRUE;
+}
+
+// Arguments: GLuint, TypedArray1
+// Ret value: void
+JSBool JSB_glVertexAttrib1fv(JSContext *cx, uint32_t argc, jsval *vp) {
+	JSB_PRECONDITION2( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
+	jsval *argvp = JS_ARGV(cx,vp);
+	JSBool ok = JS_TRUE;
+	uint32_t arg0; void* arg1; 
+
+	ok &= jsval_to_uint32( cx, *argvp++, &arg0 );
+	GLsizei count;
+	ok &= jsval_typedarray_to_dataptr( cx, *argvp++, &count, &arg1, js::ArrayBufferView::TYPE_FLOAT32);
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
+
+	glVertexAttrib1fv((GLuint)arg0 , (GLfloat*)arg1  );
+	JS_SET_RVAL(cx, vp, JSVAL_VOID);
+	return JS_TRUE;
+}
+
+// Arguments: GLuint, GLfloat, GLfloat
+// Ret value: void
+JSBool JSB_glVertexAttrib2f(JSContext *cx, uint32_t argc, jsval *vp) {
+	JSB_PRECONDITION2( argc == 3, cx, JS_FALSE, "Invalid number of arguments" );
+	jsval *argvp = JS_ARGV(cx,vp);
+	JSBool ok = JS_TRUE;
+	uint32_t arg0; int32_t arg1; int32_t arg2; 
+
+	ok &= jsval_to_uint32( cx, *argvp++, &arg0 );
+	ok &= jsval_to_int32( cx, *argvp++, &arg1 );
+	ok &= jsval_to_int32( cx, *argvp++, &arg2 );
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
+
+	glVertexAttrib2f((GLuint)arg0 , (GLfloat)arg1 , (GLfloat)arg2  );
+	JS_SET_RVAL(cx, vp, JSVAL_VOID);
+	return JS_TRUE;
+}
+
+// Arguments: GLuint, TypedArray1
+// Ret value: void
+JSBool JSB_glVertexAttrib2fv(JSContext *cx, uint32_t argc, jsval *vp) {
+	JSB_PRECONDITION2( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
+	jsval *argvp = JS_ARGV(cx,vp);
+	JSBool ok = JS_TRUE;
+	uint32_t arg0; void* arg1; 
+
+	ok &= jsval_to_uint32( cx, *argvp++, &arg0 );
+	GLsizei count;
+	ok &= jsval_typedarray_to_dataptr( cx, *argvp++, &count, &arg1, js::ArrayBufferView::TYPE_FLOAT32);
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
+
+	glVertexAttrib2fv((GLuint)arg0 , (GLfloat*)arg1  );
+	JS_SET_RVAL(cx, vp, JSVAL_VOID);
+	return JS_TRUE;
+}
+
+// Arguments: GLuint, GLfloat, GLfloat, GLfloat
+// Ret value: void
+JSBool JSB_glVertexAttrib3f(JSContext *cx, uint32_t argc, jsval *vp) {
+	JSB_PRECONDITION2( argc == 4, cx, JS_FALSE, "Invalid number of arguments" );
+	jsval *argvp = JS_ARGV(cx,vp);
+	JSBool ok = JS_TRUE;
+	uint32_t arg0; int32_t arg1; int32_t arg2; int32_t arg3; 
+
+	ok &= jsval_to_uint32( cx, *argvp++, &arg0 );
+	ok &= jsval_to_int32( cx, *argvp++, &arg1 );
+	ok &= jsval_to_int32( cx, *argvp++, &arg2 );
+	ok &= jsval_to_int32( cx, *argvp++, &arg3 );
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
+
+	glVertexAttrib3f((GLuint)arg0 , (GLfloat)arg1 , (GLfloat)arg2 , (GLfloat)arg3  );
+	JS_SET_RVAL(cx, vp, JSVAL_VOID);
+	return JS_TRUE;
+}
+
+// Arguments: GLuint, TypedArray1
+// Ret value: void
+JSBool JSB_glVertexAttrib3fv(JSContext *cx, uint32_t argc, jsval *vp) {
+	JSB_PRECONDITION2( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
+	jsval *argvp = JS_ARGV(cx,vp);
+	JSBool ok = JS_TRUE;
+	uint32_t arg0; void* arg1; 
+
+	ok &= jsval_to_uint32( cx, *argvp++, &arg0 );
+	GLsizei count;
+	ok &= jsval_typedarray_to_dataptr( cx, *argvp++, &count, &arg1, js::ArrayBufferView::TYPE_FLOAT32);
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
+
+	glVertexAttrib3fv((GLuint)arg0 , (GLfloat*)arg1  );
+	JS_SET_RVAL(cx, vp, JSVAL_VOID);
+	return JS_TRUE;
+}
+
+// Arguments: GLuint, GLfloat, GLfloat, GLfloat, GLfloat
+// Ret value: void
+JSBool JSB_glVertexAttrib4f(JSContext *cx, uint32_t argc, jsval *vp) {
+	JSB_PRECONDITION2( argc == 5, cx, JS_FALSE, "Invalid number of arguments" );
+	jsval *argvp = JS_ARGV(cx,vp);
+	JSBool ok = JS_TRUE;
+	uint32_t arg0; int32_t arg1; int32_t arg2; int32_t arg3; int32_t arg4; 
+
+	ok &= jsval_to_uint32( cx, *argvp++, &arg0 );
+	ok &= jsval_to_int32( cx, *argvp++, &arg1 );
+	ok &= jsval_to_int32( cx, *argvp++, &arg2 );
+	ok &= jsval_to_int32( cx, *argvp++, &arg3 );
+	ok &= jsval_to_int32( cx, *argvp++, &arg4 );
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
+
+	glVertexAttrib4f((GLuint)arg0 , (GLfloat)arg1 , (GLfloat)arg2 , (GLfloat)arg3 , (GLfloat)arg4  );
+	JS_SET_RVAL(cx, vp, JSVAL_VOID);
+	return JS_TRUE;
+}
+
+// Arguments: GLuint, TypedArray1
+// Ret value: void
+JSBool JSB_glVertexAttrib4fv(JSContext *cx, uint32_t argc, jsval *vp) {
+	JSB_PRECONDITION2( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
+	jsval *argvp = JS_ARGV(cx,vp);
+	JSBool ok = JS_TRUE;
+	uint32_t arg0; void* arg1; 
+
+	ok &= jsval_to_uint32( cx, *argvp++, &arg0 );
+	GLsizei count;
+	ok &= jsval_typedarray_to_dataptr( cx, *argvp++, &count, &arg1, js::ArrayBufferView::TYPE_FLOAT32);
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
+
+	glVertexAttrib4fv((GLuint)arg0 , (GLfloat*)arg1  );
+	JS_SET_RVAL(cx, vp, JSVAL_VOID);
+	return JS_TRUE;
+}
+
 // Arguments: GLint, GLint, GLsizei, GLsizei
 // Ret value: void
 JSBool JSB_glViewport(JSContext *cx, uint32_t argc, jsval *vp) {

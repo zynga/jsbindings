@@ -45,7 +45,11 @@ class JSBGenerateFunctions_GL(JSBGenerateFunctions):
         if self._vectorFunction and dt == 'TypedArray1':
             t = self._vectorFunction.group(2)
             cast = 'GLfloat' if t == 'f' else 'GLint'
-            return ', count, (%s*)arg%d ' % (cast, i)
+            ret = ''
+            if self._with_count:
+                ret += ', count'
+            ret += ', (%s*)arg%d ' % (cast, i)
+            return ret
         return super(JSBGenerateFunctions_GL, self).generate_function_c_call_arg(i, dt)
 
     def validate_argument(self, arg):
@@ -64,11 +68,9 @@ class JSBGenerateFunctions_GL(JSBGenerateFunctions):
     def generate_function_binding(self, function):
         func_name = function['name']
 
-        # Manually bind "vector" functions
- #       print func_name
-
         # Match for vector functions
         r = re.match('gl\S+([1-4])([fi])v$', func_name)
         self._vectorFunction = r
+        self._with_count = (re.match('glVertexAttrib[1-4][fi]v', func_name) == None)
 
         return super(JSBGenerateFunctions_GL, self).generate_function_binding(function)
