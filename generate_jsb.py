@@ -26,8 +26,6 @@ import copy
 import datetime
 import ConfigParser
 import string
-import plugin_jsb_gl
-
 
 class MethodNotFoundException(Exception):
     pass
@@ -49,6 +47,15 @@ PROXY_PREFIX = 'JSB_'
 METHOD_CONSTRUCTOR, METHOD_CLASS, METHOD_INIT, METHOD_REGULAR = xrange(4)
 JSB_VERSION = 'v0.6'
 
+
+# get_class from: http://stackoverflow.com/a/452981
+def get_class(kls):
+    parts = kls.split('.')
+    module = ".".join(parts[:-1])
+    m = __import__(module)
+    for comp in parts[1:]:
+        m = getattr(m, comp)
+    return m
 
 # uncapitalize from: http://stackoverflow.com/a/3847369
 uncapitalize = lambda s: s[:1].lower() + s[1:] if s else ''
@@ -344,7 +351,7 @@ class JSBGenerate(object):
 
     def get_enum_property(self, property):
         try:
-            return self.enum_properties[property].keys()[0]
+            return self.enum_properties[property]
         except KeyError:
             return None
 
@@ -2505,6 +2512,7 @@ class JSBindings(object):
                              'js_new_methods': [],
                              'enum_properties': [],
                              'js_namespace': '',
+                             'plugin': [],
                              }
 
         for s in cp.sections():
@@ -2606,6 +2614,11 @@ class JSBindings(object):
         # JS methods related
         #
         self.init_js_new_methods(config['js_new_methods'])
+
+        #
+        # Plugin init
+        #
+        self.init_plugin(config['plugin'])
 
     def init_complement_file(self):
         self.complement = {}
@@ -2809,21 +2822,16 @@ class JSBindings(object):
             if not prop or len(prop) == 0:
                 continue
             key, value = prop.split('=')
+            self.enum_properties[key] = value
 
-            opts = {}
-            # From value get options
-            options = value.split(';')
-            for o in options:
-                # Options can have their own Key Value
-                if ':' in o:
-                    o_key, o_val = o.split(':')
-                    o_val = o_val.replace('"', '')    # remove possible "
-                else:
-                    o_key = o
-                    o_val = None
-                opts[o_key] = o_val
-
-            self.enum_properties[key] = opts
+    def init_plugin(self, properties):
+        self.plugin_properties = {}
+        for prop in properties:
+            # key value
+            if not prop or len(prop) == 0:
+                continue
+            key, value = prop.split('=')
+            self.plugin_properties[key] = value
 
     def init_js_new_methods(self, properties):
         self.js_new_methods = {}
@@ -3058,8 +3066,11 @@ class JSBindings(object):
         #
         # Is there any function to register:
         if 'function' in self.bs['signatures']:
-            functions = JSBGenerateFunctions(self)
-            #functions = plugin_jsb_gl.JSBGenerateFunctions_GL(self)
+            if 'function_class' in self.plugin_properties:
+                klass = get_class(self.plugin_properties['function_class'])
+                functions = klass(self)
+            else:
+                functions = JSBGenerateFunctions(self)
             functions.generate_bindings()
 
         #

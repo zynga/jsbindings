@@ -535,6 +535,10 @@ JSBool jsval_to_charptr( JSContext *cx, jsval vp, const char **ret )
 	return JS_TRUE;
 }
 
+JSBool jsval_typedarray_to_dataptr( JSContext *cx, jsval vp, GLsizei count, void **data)
+{
+	JSB_PRECONDITION2( JS_IsTypedArrayObject( vp, cx ), cx, JS_FALSE, "Not a TypedArray object");
+}
 
 #pragma mark - native to jsval
 

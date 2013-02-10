@@ -80,6 +80,8 @@ JSBool jsval_to_block_1( JSContext *cx, jsval vp, JSObject *jsthis, js_block *ou
 JSBool jsval_to_block_2( JSContext *cx, jsval vp, JSObject *jsthis, jsval arg, js_block *out  );
 /** converts a jsval (JS string) into a char */
 JSBool jsval_to_charptr( JSContext *cx, jsval vp, const char **out);
+/** converts a typedarray into a data pointer */
+JSBool jsval_typedarray_to_dataptr( JSContext *cx, jsval vp, GLsizei count, void **data);
 
 jsval unknown_to_jsval( JSContext *cx, id obj);
 /** Converts an NSObject into a jsval. It does not creates a new object if the NSObject has already been converted */
