@@ -34,12 +34,14 @@ class JSBGenerateFunctions_GL(JSBGenerateFunctions):
         self.args_js_special_type_conversions['TypedArray0'] = [self.generate_argument_typedarray, 'void*']
 
     def generate_argument_typedarray(self, i, arg_js_type, arg_declared_type):
-        template = '\tGLsizei count;\n\tok &= jsval_to_typedarray( cx, *argvp++, &count, &arg%d);\n'
+        template = '\tGLsizei count;\n\tok &= jsval_typedarray_to_dataptr( cx, *argvp++, &count, &arg%d);\n'
         self.fd_mm.write(template % (i))
 
     def generate_function_c_call_arg(self, i, dt):
         if self._vectorFunction and dt == 'TypedArray1':
-            return ', count, arg%d ' % i
+            t = self._vectorFunction.group(2)
+            cast = 'GLfloat' if t == 'f' else 'GLint'
+            return ', count, (%s*)arg%d ' % (cast, i)
         return super(JSBGenerateFunctions_GL, self).generate_function_c_call_arg(i, dt)
 
     def validate_argument(self, arg):
@@ -62,7 +64,7 @@ class JSBGenerateFunctions_GL(JSBGenerateFunctions):
  #       print func_name
 
         # Match for vector functions
-        r = re.match('gl\S+[1-4][fi]v$', func_name)
-        self._vectorFunction = (r != None)
+        r = re.match('gl\S+([1-4])([fi])v$', func_name)
+        self._vectorFunction = r
 
         return super(JSBGenerateFunctions_GL, self).generate_function_binding(function)

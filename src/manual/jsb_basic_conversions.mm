@@ -535,9 +535,15 @@ JSBool jsval_to_charptr( JSContext *cx, jsval vp, const char **ret )
 	return JS_TRUE;
 }
 
-JSBool jsval_typedarray_to_dataptr( JSContext *cx, jsval vp, GLsizei count, void **data)
+JSBool jsval_typedarray_to_dataptr( JSContext *cx, jsval vp, GLsizei *count, void **data)
 {
-	JSB_PRECONDITION2( JS_IsTypedArrayObject( vp, cx ), cx, JS_FALSE, "Not a TypedArray object");
+	// Not implemented
+	JSObject *tmp_arg;
+	JSBool ok = JS_ValueToObject( cx, vp, &tmp_arg );
+	JSB_PRECONDITION2( ok, cx, JS_FALSE, "Error converting value to object");
+	JSB_PRECONDITION2( JS_IsTypedArrayObject( tmp_arg, cx ), cx, JS_FALSE, "Not a TypedArray object");
+
+	return JS_FALSE;
 }
 
 #pragma mark - native to jsval

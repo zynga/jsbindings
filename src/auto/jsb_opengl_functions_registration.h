@@ -6,6 +6,7 @@
 #include "jsb_config.h"
 #if JSB_INCLUDE_OPENGL
 
+#include "jsb_opengl_manual.h"
 JS_DefineFunction(_cx, opengl, "activeTexture", JSB_glActiveTexture, 1, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 JS_DefineFunction(_cx, opengl, "attachShader", JSB_glAttachShader, 2, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 JS_DefineFunction(_cx, opengl, "bindBuffer", JSB_glBindBuffer, 2, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
@@ -92,14 +93,6 @@ JS_DefineFunction(_cx, opengl, "uniformMatrix3fv", JSB_glUniformMatrix3fv, 4, JS
 JS_DefineFunction(_cx, opengl, "uniformMatrix4fv", JSB_glUniformMatrix4fv, 4, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 JS_DefineFunction(_cx, opengl, "useProgram", JSB_glUseProgram, 1, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 JS_DefineFunction(_cx, opengl, "validateProgram", JSB_glValidateProgram, 1, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
-JS_DefineFunction(_cx, opengl, "vertexAttrib1f", JSB_glVertexAttrib1f, 2, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
-JS_DefineFunction(_cx, opengl, "vertexAttrib1fv", JSB_glVertexAttrib1fv, 2, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
-JS_DefineFunction(_cx, opengl, "vertexAttrib2f", JSB_glVertexAttrib2f, 3, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
-JS_DefineFunction(_cx, opengl, "vertexAttrib2fv", JSB_glVertexAttrib2fv, 2, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
-JS_DefineFunction(_cx, opengl, "vertexAttrib3f", JSB_glVertexAttrib3f, 4, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
-JS_DefineFunction(_cx, opengl, "vertexAttrib3fv", JSB_glVertexAttrib3fv, 2, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
-JS_DefineFunction(_cx, opengl, "vertexAttrib4f", JSB_glVertexAttrib4f, 5, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
-JS_DefineFunction(_cx, opengl, "vertexAttrib4fv", JSB_glVertexAttrib4fv, 2, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 JS_DefineFunction(_cx, opengl, "viewport", JSB_glViewport, 4, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 
 
