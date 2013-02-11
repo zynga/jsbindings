@@ -2,6 +2,8 @@
 // cocos2d constants
 //
 
+require('jsb_cocos2d_enum.js');
+
 var cc = cc || {};
 
 cc.DIRECTOR_PROJECTION_2D = 0;

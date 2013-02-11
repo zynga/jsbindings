@@ -242,6 +242,14 @@ class JSBGenerate(object):
     #
     # BEGIN Helper functions
     #
+    def convert_to_python_type(self, v):
+        l = v.lower()
+        if l == 'true':
+            return True
+        elif l == 'false':
+            return False
+        return v
+
     # whether or not the method is a constructor
     def get_function(self, function_name):
         '''returns a function from function name'''
@@ -349,11 +357,13 @@ class JSBGenerate(object):
     def is_class_method(self, method):
         return 'class_method' in method and method['class_method'] == 'true'
 
-    def get_enum_property(self, property):
+    def get_enum_property(self, property, default=None):
         try:
-            return self.enum_properties[property]
+            v = self.enum_properties[property]
+            v = self.convert_to_python_type(v)
+            return v
         except KeyError:
-            return None
+            return default
 
     def get_number_of_arguments(self, function):
         ret = 0
@@ -2468,6 +2478,16 @@ var %s = %s || {};
 
         return name
 
+    def get_value_for_enum(self, value):
+        try:
+            v = int(value)
+            if v >= 0:
+                return '0x%x' % v
+            else:
+                return value
+        except ValueError:
+            return value
+
     def generate_bindings(self):
         '''Main entry point. Generates the JS bindings'''
         self.create_files()
@@ -2476,14 +2496,8 @@ var %s = %s || {};
         enums = self.bs['signatures']['enum']
         for e in enums:
             new_name = self.get_name_for_enum(e['name'])
-            try:
-                v = int(e['value'])
-                if v >= 0:
-                    self.fd_js.write('%s.%s\t= 0x%x;\n' % (self.config.js_namespace, new_name, v))
-                else:
-                    self.fd_js.write('%s.%s\t= %s;\n' % (self.config.js_namespace, new_name, e['value']))
-            except ValueError:
-                self.fd_js.write('%s.%s\t= %s;\n' % (self.config.js_namespace, new_name, e['value']))
+            new_value = self.get_value_for_enum(e['value'])
+            self.fd_js.write('%s.%s\t= %s;\n' % (self.config.js_namespace, new_name, new_value))
         self.fd_js.close()
 
 
@@ -3064,7 +3078,11 @@ class JSBindings(object):
         #
         # is there any class to register
         if 'class' in self.bs['signatures']:
-            classes = JSBGenerateClasses(self)
+            if 'objc_class' in self.plugin_properties:
+                klass = get_class(self.plugin_properties['objc_class'])
+                classes = klass(self)
+            else:
+                classes = JSBGenerateClasses(self)
             classes.generate_bindings()
 
         #
@@ -3083,14 +3101,22 @@ class JSBindings(object):
         # Object Oriented C code
         #
         if len(self.c_object_properties) > 0:
-            coo = JSBGenerateOOFunctions(self)
-            coo.generate_bindings()
+            if 'oo_function_class' in self.plugin_properties:
+                klass = get_class(self.plugin_properties['oo_function_class'])
+                oo_functions = klass(self)
+            else:
+                oo_functions = JSBGenerateOOFunctions(self)
+            oo_functions.generate_bindings()
 
         #
         # Enums
         #
         if 'enum' in self.bs['signatures']:
-            enums = JSBGenerateEnums(self)
+            if 'enum_class' in self.plugin_properties:
+                klass = get_class(self.plugin_properties['enum_class'])
+                enums = klass(self)
+            else:
+                enums = JSBGenerateEnums(self)
             enums.generate_bindings()
 
 
