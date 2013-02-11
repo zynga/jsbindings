@@ -158,7 +158,7 @@ void* serverEntryPoint(void*)
 		JS_DefineFunction(_cx, _debugObject, "_bufferRead", JSBDebug_BufferRead, 0, JSPROP_READONLY | JSPROP_PERMANENT);
 		JS_DefineFunction(_cx, _debugObject, "_lockVM", JSBDebug_LockExecution, 2, JSPROP_READONLY | JSPROP_PERMANENT);
 		JS_DefineFunction(_cx, _debugObject, "_unlockVM", JSBDebug_UnlockExecution, 0, JSPROP_READONLY | JSPROP_PERMANENT);
-		[self runScript:@"js/jsb_debugger.js" withContainer:_debugObject];
+		[self runScript:@"jsb_debugger.js" withContainer:_debugObject];
 
 		// prepare the debugger
 		jsval argv = OBJECT_TO_JSVAL(_object);
