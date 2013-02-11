@@ -2,7 +2,7 @@
 // cocos2d constants
 //
 
-require('jsb_cocos2d_enum.js');
+require('jsb_cocos2d_enums.js');
 
 var cc = cc || {};
 

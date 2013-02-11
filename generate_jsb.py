@@ -52,9 +52,13 @@ JSB_VERSION = 'v0.6'
 def get_class(kls):
     parts = kls.split('.')
     module = ".".join(parts[:-1])
-    m = __import__(module)
-    for comp in parts[1:]:
-        m = getattr(m, comp)
+    if len(parts) == 1:
+        m = sys.modules[__name__]
+        m = getattr(m, parts[0])
+    else:
+        m = __import__(module)
+        for comp in parts[1:]:
+            m = getattr(m, comp)
     return m
 
 # uncapitalize from: http://stackoverflow.com/a/3847369
@@ -2465,7 +2469,7 @@ var %s = %s || {};
             ))
 
     def create_files(self):
-        self.fd_js = open('../js/jsb_%s_enum.js' % (self.namespace), 'w')
+        self.fd_js = open('../js/jsb_%s_enums.js' % (self.namespace), 'w')
 
     def get_name_for_enum(self, name):
         prefix = self.get_enum_property('prefix_to_remove')
@@ -2508,6 +2512,13 @@ var %s = %s || {};
             if new_name is not None and new_value is not None:
                 self.fd_js.write('%s.%s\t= %s;\n' % (self.config.js_namespace, new_name, new_value))
         self.fd_js.close()
+
+
+# Does nothing. Useful if you don't want to generate the enums
+# Use it from the plugins
+class JSBGenerateEnums_Ignore(JSBGenerateEnums):
+    def generate_bindings(self):
+        pass
 
 
 #

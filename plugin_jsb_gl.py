@@ -20,6 +20,7 @@ import re
 # plugin modules
 from generate_jsb import JSBGenerateFunctions
 
+
 #
 #
 # OpenGL ES 2.0 / WebGL function plugin
