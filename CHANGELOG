@@ -1,9 +1,15 @@
-version 0.5 - XX-Jan-2013
+version 0.6 - XX-Mar-2013
+- [NEW] Files: renamed js_bindigns_ to jsb_
+- [NEW] WebGL / OpenGL ES 2.0: basic functionality added
+- [FIX] JSB: RGBAProtocol: color/opacity -> getColor/getOpacity
+
+version 0.5 - 29-Jan-2013
 - [FIX] JSB: Errors inside require() are reported correctly
 		Improved errors in Chipmunk and cocos2d manual functions
 		Removed JSB_PRECONDITION3(). Merged in JSB_PRECONDITION2()
 		ParticleBatchNode is bound with the official API, like SpriteBatchNode
 		cc.DrawNode.drawPoly works.
+        jsval_to_NSObject returns NSNull if jsval is null
 
 version 0.4 - 4-Dec-2012
 - [FIX] JSB Chipmunk: Added missing properties

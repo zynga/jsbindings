@@ -2,6 +2,8 @@
 // Chipmunk defines
 //
 
+require('jsb_chipmunk_enums.js');
+
 var cp = cp || {};
 
 cp.v = cc.p;
