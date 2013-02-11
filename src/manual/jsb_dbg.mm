@@ -154,7 +154,6 @@ void* serverEntryPoint(void*)
 		JS_WrapObject(_cx, &_debugObject);
 		JSAutoCompartment ac(_cx, _debugObject);
 		// these are used in the debug program
-		JS_DefineFunction(_cx, _debugObject, "log", JSBCore_log, 0, JSPROP_READONLY | JSPROP_PERMANENT);
 		JS_DefineFunction(_cx, _debugObject, "_bufferWrite", JSBDebug_BufferWrite, 1, JSPROP_READONLY | JSPROP_PERMANENT);
 		JS_DefineFunction(_cx, _debugObject, "_bufferRead", JSBDebug_BufferRead, 0, JSPROP_READONLY | JSPROP_PERMANENT);
 		JS_DefineFunction(_cx, _debugObject, "_lockVM", JSBDebug_LockExecution, 2, JSPROP_READONLY | JSPROP_PERMANENT);
