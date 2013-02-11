@@ -12,7 +12,7 @@ JS_DefineFunction(_cx, opengl, "attachShader", JSB_glAttachShader, 2, JSPROP_REA
 JS_DefineFunction(_cx, opengl, "bindBuffer", JSB_glBindBuffer, 2, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 JS_DefineFunction(_cx, opengl, "bindFramebuffer", JSB_glBindFramebuffer, 2, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 JS_DefineFunction(_cx, opengl, "bindRenderbuffer", JSB_glBindRenderbuffer, 2, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
-JS_DefineFunction(_cx, opengl, "bindTexture", JSB_glBindTexture, 2, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
+JS_DefineFunction(_cx, opengl, "_bindTexture", JSB_glBindTexture, 2, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 JS_DefineFunction(_cx, opengl, "blendColor", JSB_glBlendColor, 4, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 JS_DefineFunction(_cx, opengl, "blendEquation", JSB_glBlendEquation, 1, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 JS_DefineFunction(_cx, opengl, "blendEquationSeparate", JSB_glBlendEquationSeparate, 2, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
