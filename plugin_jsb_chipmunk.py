@@ -23,7 +23,7 @@ from generate_jsb import JSBGenerateEnums
 
 #
 #
-# Plugin to generate better enums for cocos2d
+# Plugin to generate better enums for Chipmunk
 #
 #
 class JSBGenerateEnums_CP(JSBGenerateEnums):

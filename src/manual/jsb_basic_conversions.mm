@@ -536,43 +536,91 @@ JSBool jsval_to_charptr( JSContext *cx, jsval vp, const char **ret )
 
 JSBool jsval_typedarray_to_dataptr( JSContext *cx, jsval vp, GLsizei *count, void **data, JSArrayBufferViewType t)
 {
-	// Not implemented
 	JSObject *jsobj;
 	JSBool ok = JS_ValueToObject( cx, vp, &jsobj );
 	JSB_PRECONDITION2( ok, cx, JS_FALSE, "Error converting value to object");
-	JSB_PRECONDITION2( JS_IsTypedArrayObject( jsobj, cx ), cx, JS_FALSE, "Not a TypedArray object");
+
+	// WebGL supports TypedArray and sequences. So when converting a TypedArray, we should
+	// also check for a possible non-Typed Array JS object, like a JS Array.
+	if( JS_IsTypedArrayObject( jsobj, cx ) ) {
+
+		*count = JS_GetTypedArrayLength(jsobj, cx);
+		JSArrayBufferViewType type = JS_GetTypedArrayType(jsobj, cx);
+		JSB_PRECONDITION2(t==type, cx, JS_FALSE, "TypedArray type different than expected type");
+
+		switch (t) {
+			case js::ArrayBufferView::TYPE_INT8:
+			case js::ArrayBufferView::TYPE_UINT8:
+				*data = JS_GetUint8ArrayData(jsobj, cx);
+				break;
+
+			case js::ArrayBufferView::TYPE_INT16:
+			case js::ArrayBufferView::TYPE_UINT16:
+				*data = JS_GetUint16ArrayData(jsobj, cx);
+				break;
+
+			case js::ArrayBufferView::TYPE_INT32:
+			case js::ArrayBufferView::TYPE_UINT32:
+				*data = JS_GetUint32ArrayData(jsobj, cx);
+				break;
+
+			case js::ArrayBufferView::TYPE_FLOAT32:
+				*data = JS_GetFloat32ArrayData(jsobj, cx);
+				break;
+
+			default:
+				JSB_PRECONDITION2(NO, cx, JS_FALSE, "Unsupported typedarray type");
+				break;
+		}
+	} else if( JS_IsArrayObject(cx, jsobj)) {
+		// Slow... avoid it. Use TypedArray instead
+		uint32_t lenghthp;
+		JS_GetArrayLength(cx, jsobj, &lenghthp);
+
+		for( uint32_t i=0; i<lenghthp;i++ ) {
+
+			jsval valarg;
+			JS_GetElement(cx, jsobj, i, &valarg);
+
+			switch(t) {
+				case js::ArrayBufferView::TYPE_INT32:
+				case js::ArrayBufferView::TYPE_UINT32:
+				{
+					uint32_t e = JSVAL_TO_INT(valarg);
+					((uint32_t*)data)[i] = e;
+					break;
+				}
+				case js::ArrayBufferView::TYPE_FLOAT32:
+				{
+					double e = JSVAL_TO_DOUBLE(valarg);
+					((GLfloat*)data)[i] = (GLfloat)e;
+					break;
+				}
+				default:
+					JSB_PRECONDITION2(NO, cx, JS_FALSE, "Unsupported typedarray type");
+					break;
+			}
+		}
+
+	} else
+		JSB_PRECONDITION2(NO, cx, JS_FALSE, "Object shall be a TypedArray or Sequence");
+
+	return JS_TRUE;
+}
+
+JSBool get_typedarray_dataptr( JSContext *cx, jsval vp, GLsizei *count, GLvoid **data )
+{
+	JSObject *jsobj;
+	JSBool ok = JS_ValueToObject( cx, vp, &jsobj );
+	JSB_PRECONDITION2( ok, cx, JS_FALSE, "Error converting value to object");
+	JSB_PRECONDITION2( JS_IsTypedArrayObject(jsobj, cx), cx, JS_FALSE, "Not a typedarray object");
 
 	*count = JS_GetTypedArrayLength(jsobj, cx);
-	JSArrayBufferViewType type = JS_GetTypedArrayType(jsobj, cx);
-	JSB_PRECONDITION2(t==type, cx, JS_FALSE, "TypedArray type different than expected type");
-
-	switch (type) {
-		case js::ArrayBufferView::TYPE_INT8:
-		case js::ArrayBufferView::TYPE_UINT8:
-			*data = JS_GetUint8ArrayData(jsobj, cx);
-			break;
-
-		case js::ArrayBufferView::TYPE_INT16:
-		case js::ArrayBufferView::TYPE_UINT16:
-			*data = JS_GetUint16ArrayData(jsobj, cx);
-			break;
-
-		case js::ArrayBufferView::TYPE_INT32:
-		case js::ArrayBufferView::TYPE_UINT32:
-			*data = JS_GetUint32ArrayData(jsobj, cx);
-			break;
-
-		case js::ArrayBufferView::TYPE_FLOAT32:
-			*data = JS_GetFloat32ArrayData(jsobj, cx);
-			break;
-
-		default:
-			JSB_PRECONDITION2(JS_FALSE, cx, JS_FALSE, "Unsupported typedarray type");
-			break;
-	}
-
-	return JS_FALSE;
+	*data = JS_GetArrayBufferViewData(jsobj, cx);
+	
+	return JS_TRUE;
 }
+
 
 #pragma mark - native to jsval
 

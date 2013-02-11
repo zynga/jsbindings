@@ -896,6 +896,29 @@ JSBool JSB_glPolygonOffset(JSContext *cx, uint32_t argc, jsval *vp) {
 	return JS_TRUE;
 }
 
+// Arguments: GLint, GLint, GLsizei, GLsizei, GLenum, GLenum, TypedArray
+// Ret value: void
+JSBool JSB_glReadPixels(JSContext *cx, uint32_t argc, jsval *vp) {
+	JSB_PRECONDITION2( argc == 7, cx, JS_FALSE, "Invalid number of arguments" );
+	jsval *argvp = JS_ARGV(cx,vp);
+	JSBool ok = JS_TRUE;
+	int32_t arg0; int32_t arg1; int32_t arg2; int32_t arg3; uint32_t arg4; uint32_t arg5; void* arg6; 
+
+	ok &= jsval_to_int32( cx, *argvp++, &arg0 );
+	ok &= jsval_to_int32( cx, *argvp++, &arg1 );
+	ok &= jsval_to_int32( cx, *argvp++, &arg2 );
+	ok &= jsval_to_int32( cx, *argvp++, &arg3 );
+	ok &= jsval_to_uint32( cx, *argvp++, &arg4 );
+	ok &= jsval_to_uint32( cx, *argvp++, &arg5 );
+	GLsizei count;
+	ok &= get_typedarray_dataptr( cx, *argvp++, &count, &arg6);
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
+
+	glReadPixels((GLint)arg0 , (GLint)arg1 , (GLsizei)arg2 , (GLsizei)arg3 , (GLenum)arg4 , (GLenum)arg5 , (GLvoid*)arg6  );
+	JS_SET_RVAL(cx, vp, JSVAL_VOID);
+	return JS_TRUE;
+}
+
 // Arguments: 
 // Ret value: void
 JSBool JSB_glReleaseShaderCompiler(JSContext *cx, uint32_t argc, jsval *vp) {
@@ -1121,7 +1144,7 @@ JSBool JSB_glUniform1f(JSContext *cx, uint32_t argc, jsval *vp) {
 	return JS_TRUE;
 }
 
-// Arguments: GLint, TypedArray1
+// Arguments: GLint, TypedArray/Sequence
 // Ret value: void
 JSBool JSB_glUniform1fv(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSB_PRECONDITION2( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
@@ -1156,7 +1179,7 @@ JSBool JSB_glUniform1i(JSContext *cx, uint32_t argc, jsval *vp) {
 	return JS_TRUE;
 }
 
-// Arguments: GLint, TypedArray1
+// Arguments: GLint, TypedArray/Sequence
 // Ret value: void
 JSBool JSB_glUniform1iv(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSB_PRECONDITION2( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
@@ -1192,7 +1215,7 @@ JSBool JSB_glUniform2f(JSContext *cx, uint32_t argc, jsval *vp) {
 	return JS_TRUE;
 }
 
-// Arguments: GLint, TypedArray1
+// Arguments: GLint, TypedArray/Sequence
 // Ret value: void
 JSBool JSB_glUniform2fv(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSB_PRECONDITION2( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
@@ -1228,7 +1251,7 @@ JSBool JSB_glUniform2i(JSContext *cx, uint32_t argc, jsval *vp) {
 	return JS_TRUE;
 }
 
-// Arguments: GLint, TypedArray1
+// Arguments: GLint, TypedArray/Sequence
 // Ret value: void
 JSBool JSB_glUniform2iv(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSB_PRECONDITION2( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
@@ -1265,7 +1288,7 @@ JSBool JSB_glUniform3f(JSContext *cx, uint32_t argc, jsval *vp) {
 	return JS_TRUE;
 }
 
-// Arguments: GLint, TypedArray1
+// Arguments: GLint, TypedArray/Sequence
 // Ret value: void
 JSBool JSB_glUniform3fv(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSB_PRECONDITION2( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
@@ -1302,7 +1325,7 @@ JSBool JSB_glUniform3i(JSContext *cx, uint32_t argc, jsval *vp) {
 	return JS_TRUE;
 }
 
-// Arguments: GLint, TypedArray1
+// Arguments: GLint, TypedArray/Sequence
 // Ret value: void
 JSBool JSB_glUniform3iv(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSB_PRECONDITION2( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
@@ -1340,7 +1363,7 @@ JSBool JSB_glUniform4f(JSContext *cx, uint32_t argc, jsval *vp) {
 	return JS_TRUE;
 }
 
-// Arguments: GLint, TypedArray1
+// Arguments: GLint, TypedArray/Sequence
 // Ret value: void
 JSBool JSB_glUniform4fv(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSB_PRECONDITION2( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
@@ -1378,7 +1401,7 @@ JSBool JSB_glUniform4i(JSContext *cx, uint32_t argc, jsval *vp) {
 	return JS_TRUE;
 }
 
-// Arguments: GLint, TypedArray1
+// Arguments: GLint, TypedArray/Sequence
 // Ret value: void
 JSBool JSB_glUniform4iv(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSB_PRECONDITION2( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
@@ -1396,7 +1419,7 @@ JSBool JSB_glUniform4iv(JSContext *cx, uint32_t argc, jsval *vp) {
 	return JS_TRUE;
 }
 
-// Arguments: GLint, GLboolean, TypedArray1
+// Arguments: GLint, GLboolean, TypedArray/Sequence
 // Ret value: void
 JSBool JSB_glUniformMatrix2fv(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSB_PRECONDITION2( argc == 3, cx, JS_FALSE, "Invalid number of arguments" );
@@ -1415,7 +1438,7 @@ JSBool JSB_glUniformMatrix2fv(JSContext *cx, uint32_t argc, jsval *vp) {
 	return JS_TRUE;
 }
 
-// Arguments: GLint, GLboolean, TypedArray1
+// Arguments: GLint, GLboolean, TypedArray/Sequence
 // Ret value: void
 JSBool JSB_glUniformMatrix3fv(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSB_PRECONDITION2( argc == 3, cx, JS_FALSE, "Invalid number of arguments" );
@@ -1434,7 +1457,7 @@ JSBool JSB_glUniformMatrix3fv(JSContext *cx, uint32_t argc, jsval *vp) {
 	return JS_TRUE;
 }
 
-// Arguments: GLint, GLboolean, TypedArray1
+// Arguments: GLint, GLboolean, TypedArray/Sequence
 // Ret value: void
 JSBool JSB_glUniformMatrix4fv(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSB_PRECONDITION2( argc == 3, cx, JS_FALSE, "Invalid number of arguments" );
@@ -1502,7 +1525,7 @@ JSBool JSB_glVertexAttrib1f(JSContext *cx, uint32_t argc, jsval *vp) {
 	return JS_TRUE;
 }
 
-// Arguments: GLuint, TypedArray1
+// Arguments: GLuint, TypedArray/Sequence
 // Ret value: void
 JSBool JSB_glVertexAttrib1fv(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSB_PRECONDITION2( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
@@ -1538,7 +1561,7 @@ JSBool JSB_glVertexAttrib2f(JSContext *cx, uint32_t argc, jsval *vp) {
 	return JS_TRUE;
 }
 
-// Arguments: GLuint, TypedArray1
+// Arguments: GLuint, TypedArray/Sequence
 // Ret value: void
 JSBool JSB_glVertexAttrib2fv(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSB_PRECONDITION2( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
@@ -1575,7 +1598,7 @@ JSBool JSB_glVertexAttrib3f(JSContext *cx, uint32_t argc, jsval *vp) {
 	return JS_TRUE;
 }
 
-// Arguments: GLuint, TypedArray1
+// Arguments: GLuint, TypedArray/Sequence
 // Ret value: void
 JSBool JSB_glVertexAttrib3fv(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSB_PRECONDITION2( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
@@ -1613,7 +1636,7 @@ JSBool JSB_glVertexAttrib4f(JSContext *cx, uint32_t argc, jsval *vp) {
 	return JS_TRUE;
 }
 
-// Arguments: GLuint, TypedArray1
+// Arguments: GLuint, TypedArray/Sequence
 // Ret value: void
 JSBool JSB_glVertexAttrib4fv(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSB_PRECONDITION2( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );

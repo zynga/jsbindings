@@ -64,6 +64,7 @@ JSBool JSB_glLineWidth(JSContext *cx, uint32_t argc, jsval *vp);
 JSBool JSB_glLinkProgram(JSContext *cx, uint32_t argc, jsval *vp);
 JSBool JSB_glPixelStorei(JSContext *cx, uint32_t argc, jsval *vp);
 JSBool JSB_glPolygonOffset(JSContext *cx, uint32_t argc, jsval *vp);
+JSBool JSB_glReadPixels(JSContext *cx, uint32_t argc, jsval *vp);
 JSBool JSB_glReleaseShaderCompiler(JSContext *cx, uint32_t argc, jsval *vp);
 JSBool JSB_glRenderbufferStorage(JSContext *cx, uint32_t argc, jsval *vp);
 JSBool JSB_glSampleCoverage(JSContext *cx, uint32_t argc, jsval *vp);

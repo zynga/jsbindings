@@ -60,6 +60,7 @@ JS_DefineFunction(_cx, opengl, "lineWidth", JSB_glLineWidth, 1, JSPROP_READONLY 
 JS_DefineFunction(_cx, opengl, "linkProgram", JSB_glLinkProgram, 1, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 JS_DefineFunction(_cx, opengl, "pixelStorei", JSB_glPixelStorei, 2, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 JS_DefineFunction(_cx, opengl, "polygonOffset", JSB_glPolygonOffset, 2, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
+JS_DefineFunction(_cx, opengl, "readPixels", JSB_glReadPixels, 7, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 JS_DefineFunction(_cx, opengl, "releaseShaderCompiler", JSB_glReleaseShaderCompiler, 0, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 JS_DefineFunction(_cx, opengl, "renderbufferStorage", JSB_glRenderbufferStorage, 4, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 JS_DefineFunction(_cx, opengl, "sampleCoverage", JSB_glSampleCoverage, 2, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
