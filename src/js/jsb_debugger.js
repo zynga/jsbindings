@@ -87,7 +87,7 @@ this.processInput = function (str, frame, script) {
 	if (md && frame) {
 		var res = frame['eval'](md[1]),
 			k;
-		if (res['return']) {
+		if (res && res['return']) {
 			var r = res['return'];
 			_bufferWrite("* " + (typeof r) + "\n");
 			if (typeof r != "object") {
@@ -107,8 +107,10 @@ this.processInput = function (str, frame, script) {
 					_bufferWrite("\n");
 				}
 			}
-		} else if (res['throw']) {
+		} else if (res && res['throw']) {
 			_bufferWrite("!! got exception: " + res['throw'].message + "\n");
+		} else {
+			_bufferWrite("!! invalid return from eval\n");
 		}
 		return;
 	} else if (md) {
