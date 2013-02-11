@@ -2479,14 +2479,20 @@ var %s = %s || {};
         return name
 
     def get_value_for_enum(self, value):
+        ret = ''
         try:
             v = int(value)
             if v >= 0:
-                return '0x%x' % v
+                ret = '0x%x' % v
             else:
-                return value
+                ret = value
         except ValueError:
-            return value
+            ret = value
+
+        # Float with ending 'f' but not an hexadecimad
+        if ret[-1] == 'f' and not ret.startswith('0x'):
+            ret = ret[:-1]
+        return ret
 
     def generate_bindings(self):
         '''Main entry point. Generates the JS bindings'''
@@ -2497,7 +2503,10 @@ var %s = %s || {};
         for e in enums:
             new_name = self.get_name_for_enum(e['name'])
             new_value = self.get_value_for_enum(e['value'])
-            self.fd_js.write('%s.%s\t= %s;\n' % (self.config.js_namespace, new_name, new_value))
+
+            # only write to if if both are not none
+            if new_name is not None and new_value is not None:
+                self.fd_js.write('%s.%s\t= %s;\n' % (self.config.js_namespace, new_name, new_value))
         self.fd_js.close()
 
 

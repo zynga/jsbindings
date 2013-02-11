@@ -28,6 +28,36 @@ from generate_jsb import JSBGenerateEnums
 class JSBGenerateEnums_CC(JSBGenerateEnums):
     pass
 
+    def get_name_for_enum(self, name):
+        ok = False
+        if name.startswith('kCC'):
+            name = name[3:]
+            ok = True
+
+        if name.startswith('CC'):
+            name = name[2:]
+            ok = True
+
+        if ok:
+            n = []
+            array = re.findall('[A-Z][^A-Z]*', name)
+            if array and len(array) > 0:
+                prev = ''
+                for e in array:
+                    e = e.upper()
+                    if re.match('[A-Z][_0-9]?$',e) and len(n) >= 1:
+                        prev = prev + e
+                        n[-1] = prev
+                    else:
+                        n.append(e)
+                        prev = e
+                    print n
+            name = '_'.join(n)
+        else:
+            name = None
+
+        return name
+
 
 # Plugin that does nothing. Useful if you don't want to generate the enums
 class JSBGenerateEnums_Ignore(JSBGenerateEnums):
