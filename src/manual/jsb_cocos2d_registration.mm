@@ -44,11 +44,11 @@
 // CocosBuilder reader
 #import "jsb_CocosBuilderReader_classes.h"
 
-
+// forward declarations
 void JSB_GLNode_createClass(JSContext *cx, JSObject* globalObj, const char* name );
-
-
 void jsb_register_cocos2d_config( JSContext *_cx, JSObject *cocos2d);
+
+//
 
 void jsb_register_cocos2d_config( JSContext *_cx, JSObject *cocos2d)
 {

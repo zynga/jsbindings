@@ -40,6 +40,13 @@ class JSBGenerateFunctions_GL(JSBGenerateFunctions):
         self.args_js_special_type_conversions['TypedArray'] = [self.generate_argument_typedarray, 'void*']
         self.args_js_special_type_conversions['ArrayBufferView'] = [self.generate_argument_arraybufferview, 'void*']
 
+        # Other supported functions
+        self.supported_functions_without_count = ['glReadPixels', 'glDrawElements']
+        self.supported_functions_with_count = ['glBufferData', 'glBufferSubData']
+
+        # Only valid when _with_count is enabled
+        self.args_to_ignore_in_js = ['count', 'size']
+
     def generate_argument_typedarray(self, i, arg_js_type, arg_declared_type):
         if self._current_typedarray:
             # TypedArray is used as an IN paramter
@@ -68,7 +75,7 @@ class JSBGenerateFunctions_GL(JSBGenerateFunctions):
     def validate_argument(self, arg):
         if self._current_typedarray:
             # Skip count, size: ivars for glUniformXXX, glBufferData, etc...
-            if arg['name'] == 'count' or arg['name'] == 'size':
+            if self._with_count and arg['name'] in self.args_to_ignore_in_js:
                 return (None, None)
 
             # Vector thing
@@ -99,12 +106,9 @@ class JSBGenerateFunctions_GL(JSBGenerateFunctions):
             t = 'f32' if r.group(2) == 'f' else 'i32'
             self._with_count = (re.match('glVertexAttrib[1-4][fi]v', func_name) == None)
         else:
-            # Other supported functions
-            supported_functions = ['glReadPixels']
-            supported_functions_with_count = ['glBufferData', 'glBufferSubData']
-            if func_name in supported_functions:
+            if func_name in self.supported_functions_without_count:
                 t = 'v'
-            elif func_name in supported_functions_with_count:
+            elif func_name in self.supported_functions_with_count:
                 t = 'v'
                 self._with_count = True
 

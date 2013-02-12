@@ -32,8 +32,12 @@ JS_DefineFunction(_cx, opengl, "copyTexSubImage2D", JSB_glCopyTexSubImage2D, 8, 
 JS_DefineFunction(_cx, opengl, "_createProgram", JSB_glCreateProgram, 0, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 JS_DefineFunction(_cx, opengl, "_createShader", JSB_glCreateShader, 1, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 JS_DefineFunction(_cx, opengl, "cullFace", JSB_glCullFace, 1, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
+JS_DefineFunction(_cx, opengl, "_deleteBuffer", JSB_glDeleteBuffers, 2, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
+JS_DefineFunction(_cx, opengl, "_deleteFramebuffer", JSB_glDeleteFramebuffers, 2, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 JS_DefineFunction(_cx, opengl, "deleteProgram", JSB_glDeleteProgram, 1, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
+JS_DefineFunction(_cx, opengl, "_deleteRenderbuffer", JSB_glDeleteRenderbuffers, 2, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 JS_DefineFunction(_cx, opengl, "deleteShader", JSB_glDeleteShader, 1, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
+JS_DefineFunction(_cx, opengl, "_deleteTexture", JSB_glDeleteTextures, 2, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 JS_DefineFunction(_cx, opengl, "depthFunc", JSB_glDepthFunc, 1, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 JS_DefineFunction(_cx, opengl, "depthMask", JSB_glDepthMask, 1, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 JS_DefineFunction(_cx, opengl, "depthRangef", JSB_glDepthRangef, 2, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
@@ -41,6 +45,7 @@ JS_DefineFunction(_cx, opengl, "detachShader", JSB_glDetachShader, 2, JSPROP_REA
 JS_DefineFunction(_cx, opengl, "disable", JSB_glDisable, 1, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 JS_DefineFunction(_cx, opengl, "disableVertexAttribArray", JSB_glDisableVertexAttribArray, 1, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 JS_DefineFunction(_cx, opengl, "drawArrays", JSB_glDrawArrays, 3, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
+JS_DefineFunction(_cx, opengl, "drawElements", JSB_glDrawElements, 4, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 JS_DefineFunction(_cx, opengl, "enable", JSB_glEnable, 1, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 JS_DefineFunction(_cx, opengl, "enableVertexAttribArray", JSB_glEnableVertexAttribArray, 1, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 JS_DefineFunction(_cx, opengl, "finish", JSB_glFinish, 0, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );

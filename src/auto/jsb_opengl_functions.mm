@@ -598,6 +598,26 @@ JSBool JSB_glDrawArrays(JSContext *cx, uint32_t argc, jsval *vp) {
 	return JS_TRUE;
 }
 
+// Arguments: GLenum, GLsizei, GLenum, ArrayBufferView
+// Ret value: void
+JSBool JSB_glDrawElements(JSContext *cx, uint32_t argc, jsval *vp) {
+	JSB_PRECONDITION2( argc == 4, cx, JS_FALSE, "Invalid number of arguments" );
+	jsval *argvp = JS_ARGV(cx,vp);
+	JSBool ok = JS_TRUE;
+	uint32_t arg0; int32_t arg1; uint32_t arg2; void* arg3; 
+
+	ok &= jsval_to_uint32( cx, *argvp++, &arg0 );
+	ok &= jsval_to_int32( cx, *argvp++, &arg1 );
+	ok &= jsval_to_uint32( cx, *argvp++, &arg2 );
+	GLsizei count;
+	ok &= get_arraybufferview_dataptr( cx, *argvp++, &count, &arg3);
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
+
+	glDrawElements((GLenum)arg0 , (GLsizei)arg1 , (GLenum)arg2 , (GLvoid*)arg3  );
+	JS_SET_RVAL(cx, vp, JSVAL_VOID);
+	return JS_TRUE;
+}
+
 // Arguments: GLenum
 // Ret value: void
 JSBool JSB_glEnable(JSContext *cx, uint32_t argc, jsval *vp) {
