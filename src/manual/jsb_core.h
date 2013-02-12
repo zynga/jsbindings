@@ -22,6 +22,8 @@
  * THE SOFTWARE.
  */
 
+#ifndef __JSB_CORE_H
+#define __JSB_CORE_H
 
 #import <objc/runtime.h>
 #include "jsapi.h"
@@ -193,3 +195,4 @@ extern const char* JSB_version;
 }
 #endif
 
+#endif // __JSB_CORE_H

@@ -24,7 +24,7 @@
 
 
 #import "jsb_config.h"
-#ifdef JSB_INCLUDE_CHIPMUNK
+#if JSB_INCLUDE_CHIPMUNK
 
 #import "jsapi.h"
 #import "jsfriendapi.h"

@@ -77,6 +77,11 @@ class JSBGenerateFunctions_GL(JSBGenerateFunctions):
                 return ('TypedArray_IN', 'TypedArray/Sequence')
             elif arg['type'] == '^v':
                 return ('TypedArray_OUT', 'TypedArray')
+        else:
+            # Special case: glVertexAttribPointer
+            if self._current_funcname == 'glVertexAttribPointer' and arg['type'] == '^v':
+                # Argument is an integer, but cast it as a void *
+                return ('i', 'GLvoid*')
 
         return super(JSBGenerateFunctions_GL, self).validate_argument(arg)
 

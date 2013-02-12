@@ -25,7 +25,7 @@
 
 #import "jsb_config.h"
 
-#ifdef JSB_INCLUDE_COCOS2D
+#if JSB_INCLUDE_COCOS2D
 
 #import "jsfriendapi.h"
 #import "jsdbgapi.h"

@@ -2002,7 +2002,8 @@ JSBool %s%s(JSContext *cx, uint32_t argc, jsval *vp) {
         for f in functions:
             if f['name'] in self.functions_to_bind:
                 try:
-                    self.generate_function_binding(f)
+                    if f['name'] not in self.config.function_manual:
+                        self.generate_function_binding(f)
                     self.generate_function_declaration(f['name'])
                     self.functions_bound.append(f['name'])
                 except ParseException, e:
@@ -2800,7 +2801,7 @@ class JSBindings(object):
 
     def init_function_properties(self, properties):
         self.function_properties = {}
-        self.struct_manual = []
+        self.function_manual = []
         for prop in properties:
             # key value
             if not prop or len(prop) == 0:
