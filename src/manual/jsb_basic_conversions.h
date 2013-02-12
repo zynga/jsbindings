@@ -86,11 +86,8 @@ JSBool jsval_to_block_2( JSContext *cx, jsval vp, JSObject *jsthis, jsval arg, j
 JSBool jsval_to_charptr( JSContext *cx, jsval vp, const char **out);
 /** converts a typedarray-like sequence (typedarray or array of numbers) into a data pointer */
 JSBool jsval_typedarray_to_dataptr( JSContext *cx, jsval vp, GLsizei *count, void **data, JSArrayBufferViewType t);
-/** obtains the data pointer and size from a typedarray.
- Use it when the TypedArray is used as an OUT parameter.
- When used as an IN parameter, use jsval_typedarray_to_dataptr instead.
-*/
-JSBool get_typedarray_dataptr( JSContext *cx, jsval vp, GLsizei *count, GLvoid **data );
+/** obtains the data pointer and size from an Array Buffer View (think of TypedArrays).*/
+JSBool get_arraybufferview_dataptr( JSContext *cx, jsval vp, GLsizei *count, GLvoid **data );
 
 jsval unknown_to_jsval( JSContext *cx, id obj);
 /** Converts an NSObject into a jsval. It does not creates a new object if the NSObject has already been converted */

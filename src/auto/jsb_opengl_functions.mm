@@ -203,6 +203,44 @@ JSBool JSB_glBlendFuncSeparate(JSContext *cx, uint32_t argc, jsval *vp) {
 	return JS_TRUE;
 }
 
+// Arguments: GLenum, ArrayBufferView, GLenum
+// Ret value: void
+JSBool JSB_glBufferData(JSContext *cx, uint32_t argc, jsval *vp) {
+	JSB_PRECONDITION2( argc == 3, cx, JS_FALSE, "Invalid number of arguments" );
+	jsval *argvp = JS_ARGV(cx,vp);
+	JSBool ok = JS_TRUE;
+	uint32_t arg0; void* arg1; uint32_t arg2; 
+
+	ok &= jsval_to_uint32( cx, *argvp++, &arg0 );
+	GLsizei count;
+	ok &= get_arraybufferview_dataptr( cx, *argvp++, &count, &arg1);
+	ok &= jsval_to_uint32( cx, *argvp++, &arg2 );
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
+
+	glBufferData((GLenum)arg0 , count, (GLvoid*)arg1 , (GLenum)arg2  );
+	JS_SET_RVAL(cx, vp, JSVAL_VOID);
+	return JS_TRUE;
+}
+
+// Arguments: GLenum, GLintptr, ArrayBufferView
+// Ret value: void
+JSBool JSB_glBufferSubData(JSContext *cx, uint32_t argc, jsval *vp) {
+	JSB_PRECONDITION2( argc == 3, cx, JS_FALSE, "Invalid number of arguments" );
+	jsval *argvp = JS_ARGV(cx,vp);
+	JSBool ok = JS_TRUE;
+	uint32_t arg0; int32_t arg1; void* arg2; 
+
+	ok &= jsval_to_uint32( cx, *argvp++, &arg0 );
+	ok &= jsval_to_int32( cx, *argvp++, &arg1 );
+	GLsizei count;
+	ok &= get_arraybufferview_dataptr( cx, *argvp++, &count, &arg2);
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
+
+	glBufferSubData((GLenum)arg0 , (GLintptr)arg1 , count, (GLvoid*)arg2  );
+	JS_SET_RVAL(cx, vp, JSVAL_VOID);
+	return JS_TRUE;
+}
+
 // Arguments: GLenum
 // Ret value: GLenum
 JSBool JSB_glCheckFramebufferStatus(JSContext *cx, uint32_t argc, jsval *vp) {
@@ -896,7 +934,7 @@ JSBool JSB_glPolygonOffset(JSContext *cx, uint32_t argc, jsval *vp) {
 	return JS_TRUE;
 }
 
-// Arguments: GLint, GLint, GLsizei, GLsizei, GLenum, GLenum, TypedArray
+// Arguments: GLint, GLint, GLsizei, GLsizei, GLenum, GLenum, ArrayBufferView
 // Ret value: void
 JSBool JSB_glReadPixels(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSB_PRECONDITION2( argc == 7, cx, JS_FALSE, "Invalid number of arguments" );
@@ -911,7 +949,7 @@ JSBool JSB_glReadPixels(JSContext *cx, uint32_t argc, jsval *vp) {
 	ok &= jsval_to_uint32( cx, *argvp++, &arg4 );
 	ok &= jsval_to_uint32( cx, *argvp++, &arg5 );
 	GLsizei count;
-	ok &= get_typedarray_dataptr( cx, *argvp++, &count, &arg6);
+	ok &= get_arraybufferview_dataptr( cx, *argvp++, &count, &arg6);
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	glReadPixels((GLint)arg0 , (GLint)arg1 , (GLsizei)arg2 , (GLsizei)arg3 , (GLenum)arg4 , (GLenum)arg5 , (GLvoid*)arg6  );

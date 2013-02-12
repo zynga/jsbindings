@@ -22,6 +22,8 @@ JSBool JSB_glBlendEquation(JSContext *cx, uint32_t argc, jsval *vp);
 JSBool JSB_glBlendEquationSeparate(JSContext *cx, uint32_t argc, jsval *vp);
 JSBool JSB_glBlendFunc(JSContext *cx, uint32_t argc, jsval *vp);
 JSBool JSB_glBlendFuncSeparate(JSContext *cx, uint32_t argc, jsval *vp);
+JSBool JSB_glBufferData(JSContext *cx, uint32_t argc, jsval *vp);
+JSBool JSB_glBufferSubData(JSContext *cx, uint32_t argc, jsval *vp);
 JSBool JSB_glCheckFramebufferStatus(JSContext *cx, uint32_t argc, jsval *vp);
 JSBool JSB_glClear(JSContext *cx, uint32_t argc, jsval *vp);
 JSBool JSB_glClearColor(JSContext *cx, uint32_t argc, jsval *vp);

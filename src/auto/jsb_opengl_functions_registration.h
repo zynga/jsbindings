@@ -18,6 +18,8 @@ JS_DefineFunction(_cx, opengl, "blendEquation", JSB_glBlendEquation, 1, JSPROP_R
 JS_DefineFunction(_cx, opengl, "blendEquationSeparate", JSB_glBlendEquationSeparate, 2, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 JS_DefineFunction(_cx, opengl, "blendFunc", JSB_glBlendFunc, 2, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 JS_DefineFunction(_cx, opengl, "blendFuncSeparate", JSB_glBlendFuncSeparate, 4, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
+JS_DefineFunction(_cx, opengl, "bufferData", JSB_glBufferData, 4, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
+JS_DefineFunction(_cx, opengl, "bufferSubData", JSB_glBufferSubData, 4, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 JS_DefineFunction(_cx, opengl, "checkFramebufferStatus", JSB_glCheckFramebufferStatus, 1, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 JS_DefineFunction(_cx, opengl, "clear", JSB_glClear, 1, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 JS_DefineFunction(_cx, opengl, "clearColor", JSB_glClearColor, 4, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );

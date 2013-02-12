@@ -32,16 +32,15 @@ class JSBGenerateFunctions_GL(JSBGenerateFunctions):
         super(JSBGenerateFunctions_GL, self).__init__(config)
 
         # TypedArray ivars
-        self._typedarray_in = False
         self._current_typedarray = None
         self._with_count = False
-        self._typedarray_dt = ['TypedArray/Sequence', 'TypedArray']
+        self._typedarray_dt = ['TypedArray/Sequence', 'ArrayBufferView']
 
         # Extend supported types
-        self.args_js_special_type_conversions['TypedArray_IN'] = [self.generate_argument_typedarray_in, 'void*']
-        self.args_js_special_type_conversions['TypedArray_OUT'] = [self.generate_argument_typedarray_out, 'void*']
+        self.args_js_special_type_conversions['TypedArray'] = [self.generate_argument_typedarray, 'void*']
+        self.args_js_special_type_conversions['ArrayBufferView'] = [self.generate_argument_arraybufferview, 'void*']
 
-    def generate_argument_typedarray_in(self, i, arg_js_type, arg_declared_type):
+    def generate_argument_typedarray(self, i, arg_js_type, arg_declared_type):
         if self._current_typedarray:
             # TypedArray is used as an IN paramter
             template = '\tGLsizei count;\n\tok &= jsval_typedarray_to_dataptr( cx, *argvp++, &count, &arg%d, %s);\n' % (i, self._current_typedarray)
@@ -49,10 +48,10 @@ class JSBGenerateFunctions_GL(JSBGenerateFunctions):
         else:
             raise Exception("Logic error in GL plugin")
 
-    def generate_argument_typedarray_out(self, i, arg_js_type, arg_declared_type):
+    def generate_argument_arraybufferview(self, i, arg_js_type, arg_declared_type):
         if self._current_typedarray:
             # TypedArray is used as an OUT paramter
-            template = '\tGLsizei count;\n\tok &= get_typedarray_dataptr( cx, *argvp++, &count, &arg%d);\n' % (i)
+            template = '\tGLsizei count;\n\tok &= get_arraybufferview_dataptr( cx, *argvp++, &count, &arg%d);\n' % (i)
             self.fd_mm.write(template)
         else:
             raise Exception("Logic error in GL plugin")
@@ -68,15 +67,15 @@ class JSBGenerateFunctions_GL(JSBGenerateFunctions):
 
     def validate_argument(self, arg):
         if self._current_typedarray:
-            # Skip count
-            if arg['name'] == 'count':
+            # Skip count, size: ivars for glUniformXXX, glBufferData, etc...
+            if arg['name'] == 'count' or arg['name'] == 'size':
                 return (None, None)
 
             # Vector thing
             if arg['type'] == '^i':
-                return ('TypedArray_IN', 'TypedArray/Sequence')
+                return ('TypedArray', 'TypedArray/Sequence')
             elif arg['type'] == '^v':
-                return ('TypedArray_OUT', 'TypedArray')
+                return ('ArrayBufferView', 'ArrayBufferView')
         else:
             # Special case: glVertexAttribPointer
             if self._current_funcname == 'glVertexAttribPointer' and arg['type'] == '^v':
@@ -91,6 +90,7 @@ class JSBGenerateFunctions_GL(JSBGenerateFunctions):
         self._current_funcname = func_name
         self._current_typedarray = None
         self._current_cast = 'GLvoid'
+        self._with_count = False
 
         t = None
         # Testing generic vector functions
@@ -101,8 +101,12 @@ class JSBGenerateFunctions_GL(JSBGenerateFunctions):
         else:
             # Other supported functions
             supported_functions = ['glReadPixels']
+            supported_functions_with_count = ['glBufferData', 'glBufferSubData']
             if func_name in supported_functions:
                 t = 'v'
+            elif func_name in supported_functions_with_count:
+                t = 'v'
+                self._with_count = True
 
         if t == 'f32':
             self._current_typedarray = 'js::ArrayBufferView::TYPE_FLOAT32'
