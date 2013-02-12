@@ -616,9 +616,9 @@ JSBool get_arraybufferview_dataptr( JSContext *cx, jsval vp, GLsizei *count, GLv
 	JSB_PRECONDITION2( ok, cx, JS_FALSE, "Error converting value to object");
 	JSB_PRECONDITION2( JS_IsArrayBufferViewObject(jsobj, cx), cx, JS_FALSE, "Not an ArrayBufferView object");
 
-	*count = JS_GetArrayBufferByteLength(jsobj, cx);
 	*data = JS_GetArrayBufferViewData(jsobj, cx);
-	
+	*count = JS_GetArrayBufferViewByteLength(jsobj, cx);
+
 	return JS_TRUE;
 }
 

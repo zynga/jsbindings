@@ -25,6 +25,7 @@
 #import "jsb_config.h"
 #import "jsb_core.h"
 
+#import "jsb_cocos2d_registration.h"
 
 // cocos2d
 #import "jsb_cocos2d_classes.h"
@@ -42,6 +43,10 @@
 
 // CocosBuilder reader
 #import "jsb_CocosBuilderReader_classes.h"
+
+
+void JSB_GLNode_createClass(JSContext *cx, JSObject* globalObj, const char* name );
+
 
 void jsb_register_cocos2d_config( JSContext *_cx, JSObject *cocos2d);
 
@@ -75,6 +80,9 @@ void jsb_register_cocos2d( JSContext *_cx, JSObject *object)
 	// Register classes: base classes should be registered first
 
 #import "jsb_cocos2d_classes_registration.h"
+	// Manual GLNode registration
+	JSB_GLNode_createClass(_cx, cocos2d, "GLNode");
+
 #import "jsb_cocos2d_functions_registration.h"
 
 #ifdef __CC_PLATFORM_IOS
@@ -86,7 +94,8 @@ void jsb_register_cocos2d( JSContext *_cx, JSObject *object)
 #import "jsb_cocos2d_mac_classes_registration.h"
 #import "jsb_cocos2d_mac_functions_registration.h"
 #endif
-	
+
+
 	//
 	// CocosDenshion
 	//

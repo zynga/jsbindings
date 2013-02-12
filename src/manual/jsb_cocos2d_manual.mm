@@ -40,6 +40,112 @@
 #import "jsb_cocos2d_ios_classes.h"
 #endif
 
+#pragma mark - GLNode Node
+
+
+// Simple node that calls "draw" in JS
+@interface GLNode : CCNode
+@end
+
+@implementation GLNode
+-(void) draw
+{
+	JSB_CCNode *proxy = objc_getAssociatedObject(self, &JSB_association_proxy_key);
+	if( proxy ) {
+		JSObject *jsObj = [proxy jsObj];
+
+		if (jsObj) {
+			JSContext* cx = [[JSBCore sharedInstance] globalContext];
+			JSBool found;
+			JSB_ENSURE_AUTOCOMPARTMENT(cx, jsObj);
+			JS_HasProperty(cx, jsObj, "draw", &found);
+			if (found == JS_TRUE) {
+				jsval rval, fval;
+				jsval *argv = NULL; unsigned argc=0;
+
+				JS_GetProperty(cx, jsObj, "draw", &fval);
+				JS_CallFunctionValue(cx, jsObj, fval, argc, argv, &rval);
+			}
+		}
+	}
+}
+@end
+
+JSClass* JSB_GLNode_class = NULL;
+JSObject* JSB_GLNode_object = NULL;
+
+@interface JSB_GLNode : JSB_CCNode
+@end
+
+@implementation JSB_GLNode
+
++(JSObject*) createJSObjectWithRealObject:(id)realObj context:(JSContext*)cx
+{
+	JSObject *jsobj = JS_NewObject(cx, JSB_GLNode_class, JSB_GLNode_object, NULL);
+	JSB_GLNode *proxy = [[JSB_GLNode alloc] initWithJSObject:jsobj class:[GLNode class]];
+	[proxy setRealObj:realObj];
+
+	if( realObj ) {
+		objc_setAssociatedObject(realObj, &JSB_association_proxy_key, proxy, OBJC_ASSOCIATION_RETAIN);
+		[proxy release];
+	}
+
+	[self swizzleMethods];
+
+	return jsobj;
+}
+@end
+
+// Constructor
+JSBool JSB_GLNode_constructor(JSContext *cx, uint32_t argc, jsval *vp)
+{
+	JSObject *jsobj = [JSB_GLNode createJSObjectWithRealObject:nil context:cx];
+	JS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(jsobj));
+	return JS_TRUE;
+}
+
+// Destructor
+void JSB_GLNode_finalize(JSFreeOp *fop, JSObject *obj)
+{
+	CCLOGINFO(@"jsbindings: finalizing JS object %p (GLNode)", obj);
+	//	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(obj);
+	//	if (proxy) {
+	//		[[proxy realObj] release];
+	//	}
+	jsb_del_proxy_for_jsobject( obj );
+}
+
+void JSB_GLNode_createClass(JSContext *cx, JSObject* globalObj, const char* name )
+{
+	JSB_GLNode_class = (JSClass *)calloc(1, sizeof(JSClass));
+	JSB_GLNode_class->name = name;
+	JSB_GLNode_class->addProperty = JS_PropertyStub;
+	JSB_GLNode_class->delProperty = JS_PropertyStub;
+	JSB_GLNode_class->getProperty = JS_PropertyStub;
+	JSB_GLNode_class->setProperty = JS_StrictPropertyStub;
+	JSB_GLNode_class->enumerate = JS_EnumerateStub;
+	JSB_GLNode_class->resolve = JS_ResolveStub;
+	JSB_GLNode_class->convert = JS_ConvertStub;
+	JSB_GLNode_class->finalize = JSB_GLNode_finalize;
+	JSB_GLNode_class->flags = 0;
+
+	static JSPropertySpec properties[] = {
+		{0, 0, 0, 0, 0}
+	};
+	static JSFunctionSpec funcs[] = {
+		JS_FS_END
+	};
+	static JSFunctionSpec st_funcs[] = {
+		JS_FS_END
+	};
+
+	JSB_GLNode_object = JS_InitClass(cx, globalObj, JSB_CCNode_object, JSB_GLNode_class, JSB_GLNode_constructor,0,properties,funcs,NULL,st_funcs);
+	JSBool found;
+	JS_SetPropertyAttributes(cx, globalObj, name, JSPROP_ENUMERATE | JSPROP_READONLY, &found);
+}
+
+
+
 #pragma mark - convertions
 
 JSBool jsval_to_ccColor3B( JSContext *cx, jsval vp, ccColor3B *ret )
