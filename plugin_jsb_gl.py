@@ -47,6 +47,9 @@ class JSBGenerateFunctions_GL(JSBGenerateFunctions):
         # Only valid when _with_count is enabled
         self.args_to_ignore_in_js = ['count', 'size']
 
+    #
+    # Helper functions
+    #
     def generate_argument_typedarray(self, i, arg_js_type, arg_declared_type):
         if self._current_typedarray:
             # TypedArray is used as an IN paramter
@@ -71,6 +74,25 @@ class JSBGenerateFunctions_GL(JSBGenerateFunctions):
             ret += ', (%s*)arg%d ' % (self._current_cast, i)
             return ret
         return super(JSBGenerateFunctions_GL, self).generate_function_c_call_arg(i, dt)
+
+    #
+    # Overriden methods
+    #
+    def convert_function_name_to_js(self, function_name):
+        # It is possible to add the "name" parameter in opengl_jsb.ini,
+        # but it easier with a plugin
+        functions_with_underscore = ['glBindTexture',
+                                    'glCreateShader', 'glCreateProgram',
+                                    'glAttachShader', 'glLinkProgram', 'glUseProgram', 'glCompileShader',
+                                    'glGetAttribLocation', 'glGetUniformLocation', 'glGetProgramInfoLog', 'glGetShaderInfoLog', 'glGetShaderSource', 'glShaderSource',
+                                    'glGetProgramInfoLog', 'glGetShaderInfoLog', 'glGetShaderSource', 'glShaderSource',
+                                    ''
+                                    ]
+
+        if function_name in functions_with_underscore:
+            name = function_name[2].lower() + function_name[3:]
+            return "_%s" % name
+        return super(JSBGenerateFunctions_GL, self).convert_function_name_to_js(function_name)
 
     def validate_argument(self, arg):
         if self._current_typedarray:
