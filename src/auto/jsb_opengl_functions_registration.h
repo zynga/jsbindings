@@ -9,6 +9,7 @@
 #include "jsb_opengl_manual.h"
 JS_DefineFunction(_cx, opengl, "activeTexture", JSB_glActiveTexture, 1, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 JS_DefineFunction(_cx, opengl, "attachShader", JSB_glAttachShader, 2, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
+JS_DefineFunction(_cx, opengl, "bindAttribLocation", JSB_glBindAttribLocation, 3, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 JS_DefineFunction(_cx, opengl, "bindBuffer", JSB_glBindBuffer, 2, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 JS_DefineFunction(_cx, opengl, "bindFramebuffer", JSB_glBindFramebuffer, 2, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 JS_DefineFunction(_cx, opengl, "bindRenderbuffer", JSB_glBindRenderbuffer, 2, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
@@ -58,12 +59,14 @@ JS_DefineFunction(_cx, opengl, "_createFramebuffer", JSB_glGenFramebuffers, 2, J
 JS_DefineFunction(_cx, opengl, "_createRenderbuffer", JSB_glGenRenderbuffers, 2, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 JS_DefineFunction(_cx, opengl, "_createTexture", JSB_glGenTextures, 2, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 JS_DefineFunction(_cx, opengl, "generateMipmap", JSB_glGenerateMipmap, 1, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
+JS_DefineFunction(_cx, opengl, "getAttribLocation", JSB_glGetAttribLocation, 2, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 JS_DefineFunction(_cx, opengl, "getError", JSB_glGetError, 0, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 JS_DefineFunction(_cx, opengl, "getProgramInfoLog", JSB_glGetProgramInfoLog, 4, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 JS_DefineFunction(_cx, opengl, "getProgramParameter", JSB_glGetProgramiv, 3, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 JS_DefineFunction(_cx, opengl, "getShaderInfoLog", JSB_glGetShaderInfoLog, 4, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 JS_DefineFunction(_cx, opengl, "getShaderSource", JSB_glGetShaderSource, 4, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 JS_DefineFunction(_cx, opengl, "getShaderParameter", JSB_glGetShaderiv, 3, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
+JS_DefineFunction(_cx, opengl, "getUniformLocation", JSB_glGetUniformLocation, 2, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 JS_DefineFunction(_cx, opengl, "hint", JSB_glHint, 2, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 JS_DefineFunction(_cx, opengl, "isBuffer", JSB_glIsBuffer, 1, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 JS_DefineFunction(_cx, opengl, "isEnabled", JSB_glIsEnabled, 1, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );

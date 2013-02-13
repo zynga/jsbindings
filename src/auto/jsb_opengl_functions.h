@@ -13,6 +13,7 @@ extern "C" {
 #endif
 JSBool JSB_glActiveTexture(JSContext *cx, uint32_t argc, jsval *vp);
 JSBool JSB_glAttachShader(JSContext *cx, uint32_t argc, jsval *vp);
+JSBool JSB_glBindAttribLocation(JSContext *cx, uint32_t argc, jsval *vp);
 JSBool JSB_glBindBuffer(JSContext *cx, uint32_t argc, jsval *vp);
 JSBool JSB_glBindFramebuffer(JSContext *cx, uint32_t argc, jsval *vp);
 JSBool JSB_glBindRenderbuffer(JSContext *cx, uint32_t argc, jsval *vp);
@@ -62,12 +63,14 @@ JSBool JSB_glGenFramebuffers(JSContext *cx, uint32_t argc, jsval *vp);
 JSBool JSB_glGenRenderbuffers(JSContext *cx, uint32_t argc, jsval *vp);
 JSBool JSB_glGenTextures(JSContext *cx, uint32_t argc, jsval *vp);
 JSBool JSB_glGenerateMipmap(JSContext *cx, uint32_t argc, jsval *vp);
+JSBool JSB_glGetAttribLocation(JSContext *cx, uint32_t argc, jsval *vp);
 JSBool JSB_glGetError(JSContext *cx, uint32_t argc, jsval *vp);
 JSBool JSB_glGetProgramInfoLog(JSContext *cx, uint32_t argc, jsval *vp);
 JSBool JSB_glGetProgramiv(JSContext *cx, uint32_t argc, jsval *vp);
 JSBool JSB_glGetShaderInfoLog(JSContext *cx, uint32_t argc, jsval *vp);
 JSBool JSB_glGetShaderSource(JSContext *cx, uint32_t argc, jsval *vp);
 JSBool JSB_glGetShaderiv(JSContext *cx, uint32_t argc, jsval *vp);
+JSBool JSB_glGetUniformLocation(JSContext *cx, uint32_t argc, jsval *vp);
 JSBool JSB_glHint(JSContext *cx, uint32_t argc, jsval *vp);
 JSBool JSB_glIsBuffer(JSContext *cx, uint32_t argc, jsval *vp);
 JSBool JSB_glIsEnabled(JSContext *cx, uint32_t argc, jsval *vp);
