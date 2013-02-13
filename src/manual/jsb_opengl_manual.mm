@@ -128,5 +128,105 @@ JSBool JSB_glDeleteFramebuffers(JSContext *cx, uint32_t argc, jsval *vp) {
 	return JS_TRUE;
 }
 
+JSBool JSB_glShaderSource(JSContext *cx, uint32_t argc, jsval *vp) {
+	JSB_PRECONDITION2( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
+	jsval *argvp = JS_ARGV(cx,vp);
+	JSBool ok = JS_TRUE;
+	uint32_t arg0; const char *arg1;
+
+	ok &= jsval_to_uint32( cx, *argvp++, &arg0 );
+	ok &= jsval_to_charptr(cx, *argvp++, &arg1);
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
+
+	glShaderSource(arg0, 1, &arg1, NULL);
+	JS_SET_RVAL(cx, vp, JSVAL_VOID);
+	return JS_TRUE;
+}
+
+JSBool JSB_glGetShaderiv(JSContext *cx, uint32_t argc, jsval *vp) {
+	JSB_PRECONDITION2( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
+	jsval *argvp = JS_ARGV(cx,vp);
+	JSBool ok = JS_TRUE;
+	uint32_t arg0, arg1;
+
+	ok &= jsval_to_uint32( cx, *argvp++, &arg0 );
+	ok &= jsval_to_uint32( cx, *argvp++, &arg1 );
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
+
+	GLint ret;
+	glGetShaderiv(arg0, arg1, &ret);
+	JS_SET_RVAL(cx, vp, INT_TO_JSVAL(ret));
+	return JS_TRUE;
+}
+
+JSBool JSB_glGetProgramiv(JSContext *cx, uint32_t argc, jsval *vp) {
+	JSB_PRECONDITION2( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
+	jsval *argvp = JS_ARGV(cx,vp);
+	JSBool ok = JS_TRUE;
+	uint32_t arg0, arg1;
+
+	ok &= jsval_to_uint32( cx, *argvp++, &arg0 );
+	ok &= jsval_to_uint32( cx, *argvp++, &arg1 );
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
+
+	GLint ret;
+	glGetProgramiv(arg0, arg1, &ret);
+	JS_SET_RVAL(cx, vp, INT_TO_JSVAL(ret));
+	return JS_TRUE;
+}
+
+JSBool JSB_glGetProgramInfoLog(JSContext *cx, uint32_t argc, jsval *vp) {
+	JSB_PRECONDITION2( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
+	jsval *argvp = JS_ARGV(cx,vp);
+	JSBool ok = JS_TRUE;
+	uint32_t arg0;
+
+	ok &= jsval_to_uint32( cx, *argvp++, &arg0 );
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
+
+	GLsizei length;
+	glGetProgramiv(arg0, GL_INFO_LOG_LENGTH, &length);
+	GLchar src[length];
+	glGetProgramInfoLog(arg0, length, NULL, src);
+
+	JS_SET_RVAL(cx, vp, charptr_to_jsval(cx, src));
+	return JS_TRUE;
+}
+
+JSBool JSB_glGetShaderInfoLog(JSContext *cx, uint32_t argc, jsval *vp) {
+	JSB_PRECONDITION2( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
+	jsval *argvp = JS_ARGV(cx,vp);
+	JSBool ok = JS_TRUE;
+	uint32_t arg0;
+
+	ok &= jsval_to_uint32( cx, *argvp++, &arg0 );
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
+
+	GLsizei length;
+	glGetShaderiv(arg0, GL_INFO_LOG_LENGTH, &length);
+	GLchar src[length];
+	glGetShaderInfoLog(arg0, length, NULL, src);
+
+	JS_SET_RVAL(cx, vp, charptr_to_jsval(cx, src));
+	return JS_TRUE;
+}
+
+JSBool JSB_glGetShaderSource(JSContext *cx, uint32_t argc, jsval *vp) {
+	JSB_PRECONDITION2( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
+	jsval *argvp = JS_ARGV(cx,vp);
+	JSBool ok = JS_TRUE;
+	uint32_t arg0;
+
+	ok &= jsval_to_uint32( cx, *argvp++, &arg0 );
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
+
+	GLsizei length;
+	glGetShaderiv(arg0, GL_SHADER_SOURCE_LENGTH, &length);
+	GLchar src[length];
+	glGetShaderSource(arg0, length, NULL, src);
+
+	JS_SET_RVAL(cx, vp, charptr_to_jsval(cx, src));
+	return JS_TRUE;
+}
 
 #endif // JSB_INCLUDE_OPENGL

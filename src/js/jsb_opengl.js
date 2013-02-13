@@ -20,37 +20,31 @@ gl.bindTexture = function(target, texture) {
 };
 
 gl.createTexture = function() {
-
 	// Should it return a WebGLTexture ?
-	return _glCreateTexture();
+	return gl._createTexture();
 };
 
 gl.createBuffer = function() {
-
 	// Should it return a WebGLBuffer ?
-	return _glCreateBuffer();
+	return gl._createBuffer();
 };
 
 gl.createRenderbuffer = function() {
-
 	// it should return a WebGLRenderBuffer
-	return _glCreateRenderuffer();
+	return gl._createRenderuffer();
 };
 
 gl.createFramebuffer = function() {
-
 	// it should return a WebGLBuffer
-	return _glCreateFramebuffer();
+	return gl._createFramebuffer();
 };
 
 gl.createProgram = function() {
-
 	// it should return a WebGLProgram ?
-	return _glCreateProgram();
+	return gl._createProgram();
 };
 
 gl.createShader = function(type) {
-
 	// it should return a WebGLShader ?
-	return _glCreateShader(type);
+	return gl._createShader(type);
 };
