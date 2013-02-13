@@ -79,17 +79,28 @@ class JSBGenerateFunctions_GL(JSBGenerateFunctions):
     # Overriden methods
     #
     def convert_function_name_to_js(self, function_name):
+
+        use_underscore = False
         # It is possible to add the "name" parameter in opengl_jsb.ini,
         # but it easier with a plugin
-        functions_with_underscore = ['glBindTexture',
+        functions_with_underscore = [
                                     'glCreateShader', 'glCreateProgram',
+                                    'glDeleteShader', 'glDeleteProgram',
+                                    'glGetShaderInfoLog', 'glGetProgramInfoLog',
                                     'glAttachShader', 'glLinkProgram', 'glUseProgram', 'glCompileShader',
-                                    'glGetAttribLocation', 'glGetUniformLocation', 'glGetProgramInfoLog', 'glGetShaderInfoLog', 'glGetShaderSource', 'glShaderSource',
-                                    'glGetProgramInfoLog', 'glGetShaderInfoLog', 'glGetShaderSource', 'glShaderSource',
-                                    ''
+                                    'glGetAttribLocation', 'glGetUniformLocation', 'glGetShaderSource', 'glShaderSource',
+                                    'glValidateProgram',
+                                    'glVertexAttribPointer',
                                     ]
 
         if function_name in functions_with_underscore:
+            use_underscore = True
+        elif re.match('gl\S+([1-4])([fi])v$', function_name):
+            use_underscore = True
+        elif re.match('glBind.*$', function_name):
+            use_underscore = True
+
+        if use_underscore:
             name = function_name[2].lower() + function_name[3:]
             return "_%s" % name
         return super(JSBGenerateFunctions_GL, self).convert_function_name_to_js(function_name)

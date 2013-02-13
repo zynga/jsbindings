@@ -52,20 +52,41 @@ gl.createShader = function(type) {
 };
 
 
-//
-// Native functions don't use WebGL objects. Instead, they use ids
-//
 
-// Texture related
+// Bind Related
 gl.bindTexture = function(target, texture) {
 	var texture_id = texture.texture_id;
 
-	// Accepts cocos2d's cc.Texture2D objects.
+	// Accepts cocos2d's cc.Texture2D objects as well
 	if( typeof texture_id === 'undefined' )
 		texture_id = texture.getName();
 
 	gl._bindTexture( target, texture_id );
 };
+
+gl.bindBuffer = function(type, buffer) {
+	gl._bindBuffer(type, buffer.buffer_id);
+};
+
+// Uniform related
+gl.uniformMatrix1fv = function(program, bool, matrix) {
+	gl._uniformMatrix1fv(program.program_id, bool, matrix);
+};
+
+gl.uniformMatrix2fv = function(program, bool, matrix) {
+	gl._uniformMatrix2fv(program.program_id, bool, matrix);
+};
+
+gl.uniformMatrix3fv = function(program, bool, matrix) {
+	gl._uniformMatrix3fv(program.program_id, bool, matrix);
+};
+
+gl.uniformMatrix4fv = function(program, bool, matrix) {
+	gl._uniformMatrix4fv(program.program_id, bool, matrix);
+};
+
+// vertex attrib
+gl.vertexAttribPointer =
 
 // Shader related
 gl.compileShader = function(shader) {
