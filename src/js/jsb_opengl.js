@@ -45,50 +45,106 @@ gl.createProgram = function() {
 	return {program_id:ret};
 };
 
-gl.createShader = function(type) {
+gl.createShader = function(shaderType) {
 	// Returns a "WebGLShader" object
-	var ret = gl._createShader(type);
+	var ret = gl._createShader(shaderType);
 	return {shader_id:ret};
 };
 
+//
+// Delete Functions
+//
+gl.deleteTexture = function(texture) {
+	gl._deleteTexture(texture.texture_id);
+};
 
+gl.deleteBuffer = function(bufer) {
+	gl._deleteBuffer(buffer.buffer_id);
+};
 
+gl.deleteRenderbuffer = function(bufer) {
+	gl._deleteRenderbuffer(buffer.renderbuffer_id);
+};
+
+gl.deleteFramebuffer = function(bufer) {
+	gl._deleteFramebuffer(buffer.framebuffer_id);
+};
+
+gl.deleteProgram = function(program) {
+	gl._deleteProgram(program.program_id);
+};
+
+gl.deleteShader = function(shader) {
+	gl._deleteShader(shader.shader_id);
+};
+
+//
 // Bind Related
+//
 gl.bindTexture = function(target, texture) {
-	var texture_id = texture.texture_id;
 
+	var texture_id;
+	// Accept numbers too. eg: gl.bindTexture(0)
+	if( typeof texture === 'number' )
+		texture_id = texture;
 	// Accepts cocos2d's cc.Texture2D objects as well
-	if( typeof texture_id === 'undefined' )
+	else if( typeof texture.texture_id === 'undefined' )
 		texture_id = texture.getName();
+	else
+		texture_id = texture.texture_id;
 
 	gl._bindTexture( target, texture_id );
 };
 
-gl.bindBuffer = function(type, buffer) {
-	gl._bindBuffer(type, buffer.buffer_id);
+gl.bindBuffer = function(target, buffer) {
+	var buffer_id = buffer.buffer_id;
+
+	// Accept numbers too. eg: gl.bindBuffer(0)
+	if( typeof buffer === 'number' )
+		buffer_id = buffer;
+
+	gl._bindBuffer(target, buffer_id);
 };
 
+gl.bindRenderBuffer = function(target, buffer) {
+	var buffer_id = buffer.renderbuffer_id;
+
+	// Accept numbers too. eg: gl.bindRenderbuffer(0)
+	if( typeof buffer === 'number' )
+		buffer_id = buffer;
+
+	gl._bindRenderbuffer(target, buffer_id);
+};
+
+gl.bindFramebuffer = function(target, buffer) {
+	var buffer_id = buffer.framebuffer_id;
+
+	// Accept numbers too. eg: gl.bindFramebuffer(0)
+	if( typeof buffer === 'number' )
+		buffer_id = buffer;
+
+	gl._bindFramebuffer(target, buffer_id);
+};
+
+//
 // Uniform related
-gl.uniformMatrix1fv = function(program, bool, matrix) {
-	gl._uniformMatrix1fv(program.program_id, bool, matrix);
-};
+//
+// gl.uniformMatrix2fv = function(location, bool, matrix) {
+// 	gl._uniformMatrix2fv(program.program_id, bool, matrix);
+// };
 
-gl.uniformMatrix2fv = function(program, bool, matrix) {
-	gl._uniformMatrix2fv(program.program_id, bool, matrix);
-};
+// gl.uniformMatrix3fv = function(program, bool, matrix) {
+// 	gl._uniformMatrix3fv(program.program_id, bool, matrix);
+// };
 
-gl.uniformMatrix3fv = function(program, bool, matrix) {
-	gl._uniformMatrix3fv(program.program_id, bool, matrix);
-};
+// gl.uniformMatrix4fv = function(program, bool, matrix) {
+// 	gl._uniformMatrix4fv(program.program_id, bool, matrix);
+// };
 
-gl.uniformMatrix4fv = function(program, bool, matrix) {
-	gl._uniformMatrix4fv(program.program_id, bool, matrix);
-};
 
-// vertex attrib
-gl.vertexAttribPointer =
-
+//
 // Shader related
+//
 gl.compileShader = function(shader) {
 	gl._compileShader( shader.shader_id);
 };
@@ -105,7 +161,9 @@ gl.getShaderInfoLog = function(shader) {
 	return gl._getShaderInfoLog(shader.shader_id);
 };
 
+//
 // program related
+//
 gl.attachShader = function(program, shader) {
 	gl._attachShader(program.program_id, shader.shader_id);
 };

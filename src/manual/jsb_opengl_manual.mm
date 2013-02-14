@@ -49,7 +49,7 @@ JSBool JSB_glGenBuffers(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSB_PRECONDITION2( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
 
 	GLuint buffer;
-	glGenBuffers(0, &buffer);
+	glGenBuffers(1, &buffer);
 	JS_SET_RVAL(cx, vp, INT_TO_JSVAL(buffer));
 	return JS_TRUE;
 }

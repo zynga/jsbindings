@@ -538,7 +538,7 @@ JSBool jsval_typedarray_to_dataptr( JSContext *cx, jsval vp, GLsizei *count, voi
 {
 	JSObject *jsobj;
 	JSBool ok = JS_ValueToObject( cx, vp, &jsobj );
-	JSB_PRECONDITION2( ok, cx, JS_FALSE, "Error converting value to object");
+	JSB_PRECONDITION2( ok && jsobj, cx, JS_FALSE, "Error converting value to object");
 
 	// WebGL supports TypedArray and sequences for some of its APIs. So when converting a TypedArray, we should
 	// also check for a possible non-Typed Array JS object, like a JS Array.
@@ -613,7 +613,7 @@ JSBool get_arraybufferview_dataptr( JSContext *cx, jsval vp, GLsizei *count, GLv
 {
 	JSObject *jsobj;
 	JSBool ok = JS_ValueToObject( cx, vp, &jsobj );
-	JSB_PRECONDITION2( ok, cx, JS_FALSE, "Error converting value to object");
+	JSB_PRECONDITION2( ok && jsobj, cx, JS_FALSE, "Error converting value to object");
 	JSB_PRECONDITION2( JS_IsArrayBufferViewObject(jsobj, cx), cx, JS_FALSE, "Not an ArrayBufferView object");
 
 	*data = JS_GetArrayBufferViewData(jsobj, cx);

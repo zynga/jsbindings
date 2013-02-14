@@ -115,6 +115,16 @@ void JSB_GLNode_finalize(JSFreeOp *fop, JSObject *obj)
 	jsb_del_proxy_for_jsobject( obj );
 }
 
+// Arguments:
+// Ret value: GLNode* (o)
+JSBool JSB_GLNode_node_static(JSContext *cx, uint32_t argc, jsval *vp) {
+	JSB_PRECONDITION2( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
+	GLNode* ret_val;
+	ret_val = [GLNode node ];
+	JS_SET_RVAL(cx, vp, NSObject_to_jsval(cx, ret_val));
+	return JS_TRUE;
+}
+
 void JSB_GLNode_createClass(JSContext *cx, JSObject* globalObj, const char* name )
 {
 	JSB_GLNode_class = (JSClass *)calloc(1, sizeof(JSClass));
@@ -136,6 +146,7 @@ void JSB_GLNode_createClass(JSContext *cx, JSObject* globalObj, const char* name
 		JS_FS_END
 	};
 	static JSFunctionSpec st_funcs[] = {
+		JS_FN("create", JSB_GLNode_node_static, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
 		JS_FS_END
 	};
 

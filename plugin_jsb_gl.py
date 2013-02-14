@@ -66,7 +66,15 @@ class JSBGenerateFunctions_GL(JSBGenerateFunctions):
         else:
             raise Exception("Logic error in GL plugin")
 
+    #
+    # Overriden methods
+    #
     def generate_function_c_call_arg(self, i, dt):
+
+        if re.match('glUniformMatrix[2-4][fi]v$', self._current_funcname) and i == 0:
+            # special case for glUniformMatrix4fv since '1' needs to be added as a second argument
+            return 'arg0, 1'
+
         if self._current_typedarray and dt in self._typedarray_dt:
             ret = ''
             if self._with_count:
@@ -75,9 +83,6 @@ class JSBGenerateFunctions_GL(JSBGenerateFunctions):
             return ret
         return super(JSBGenerateFunctions_GL, self).generate_function_c_call_arg(i, dt)
 
-    #
-    # Overriden methods
-    #
     def convert_function_name_to_js(self, function_name):
 
         use_underscore = False
@@ -90,13 +95,12 @@ class JSBGenerateFunctions_GL(JSBGenerateFunctions):
                                     'glAttachShader', 'glLinkProgram', 'glUseProgram', 'glCompileShader',
                                     'glGetAttribLocation', 'glGetUniformLocation', 'glGetShaderSource', 'glShaderSource',
                                     'glValidateProgram',
-                                    'glVertexAttribPointer',
                                     ]
 
         if function_name in functions_with_underscore:
             use_underscore = True
-        elif re.match('gl\S+([1-4])([fi])v$', function_name):
-            use_underscore = True
+        # elif re.match('gl\S+([1-4])([fi])v$', function_name):
+        #     use_underscore = True
         elif re.match('glBind.*$', function_name):
             use_underscore = True
 
@@ -107,6 +111,11 @@ class JSBGenerateFunctions_GL(JSBGenerateFunctions):
 
     def validate_argument(self, arg):
         if self._current_typedarray:
+
+            # Special case: JS UniformMatrix receives 3 args, while C receives 4. C 'count' should be replaced with '1'
+            if re.match('glUniformMatrix[2-4][fi]v$', self._current_funcname) and arg['name'] == 'count':
+                return (None, None)
+
             # Skip count, size: ivars for glUniformXXX, glBufferData, etc...
             if self._with_count and arg['name'] in self.args_to_ignore_in_js:
                 return (None, None)
@@ -139,7 +148,7 @@ class JSBGenerateFunctions_GL(JSBGenerateFunctions):
         r = re.match('gl\S+([1-4])([fi])v$', func_name)
         if r:
             t = 'f32' if r.group(2) == 'f' else 'i32'
-            self._with_count = (re.match('glVertexAttrib[1-4][fi]v', func_name) == None)
+            #self._with_count = (re.match('glVertexAttrib[1-4][fi]v', func_name) == None)
         else:
             if func_name in self.supported_functions_without_count:
                 t = 'v'
