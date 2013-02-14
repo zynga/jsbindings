@@ -18,7 +18,7 @@ __docformat__ = 'restructuredtext'
 import re
 
 # plugin modules
-from generate_jsb import JSBGenerateEnums
+from generate_jsb import JSBGenerateEnums, JSBGenerateFunctions
 
 
 #
@@ -57,3 +57,16 @@ class JSBGenerateEnums_CC(JSBGenerateEnums):
             name = None
 
         return name
+
+#
+#
+# OpenGL ES 2.0 / WebGL function plugin
+#
+#
+class JSBGenerateFunctions_CC(JSBGenerateFunctions):
+
+    def convert_function_name_to_js(self, function_name):
+
+        if function_name.startswith('ccGL'):
+            return 'gl' + function_name[4:]
+        return super(JSBGenerateFunctions_CC, self).convert_function_name_to_js(function_name)
