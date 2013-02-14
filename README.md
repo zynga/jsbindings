@@ -332,9 +332,9 @@ JSB has been used successfully in the following open source projects:
 - CocosDenshion: Sound engine bundled with cocos2d
 - [CocosBuilder Reader](http://cocosbuilder.com/): World editor for cocos2d
 - [Chipmunk Physics v6.1.1] (http://www.chipmunk-physics.net): 2D rigid body physics engine
-- [OpenGL ES 2.0 / WebGL](http://www.khronos.org/registry/webgl/specs/latest/): 
+- [OpenGL ES 2.0 / WebGL](http://www.khronos.org/registry/webgl/specs/latest/): JavaScript OpenGL API
 
-cocos2d-iphone v2.1 comes with 4 demo projects that uses it. 
+cocos2d-iphone v2.1 comes with 5 demo projects that uses it. 
 
 Demo projects:
 
@@ -344,7 +344,7 @@ Demo projects:
 - CocosDragon, a simple platformer game: [Play Web version](http://www.cocos2d-iphone.org/t/js-tests/games/CocosDragonJS/Published%20files%20HTML5/) - [Source code](https://github.com/cocos2d/cocos2d-js-tests/tree/master/games/CocosDragonJS)
 - Crystal Craze, a simple match-3 game: [Play Web version](http://www.cocos2d-iphone.org/t/js-tests/games/CrystalCraze/Published-HTML5/) - [Source code](https://github.com/cocos2d/cocos2d-js-tests/tree/master/games/CrystalCraze)
 
-It is noteworthy that thanks to the powerful set of rules, the JS API generated for cocos2d-iphone + Chipmunk + OpenGL ES 2.0 is exactly the same as the [cocos2d-html5](www.cocos2d-html5.org) + [ChipmunkJS](https://github.com/josephg/Chipmunk-js) + WebGL API.
+It is noteworthy that thanks to the powerful set of rules, the JS API generated for cocos2d-iphone + Chipmunk + OpenGL ES 2.0 is exactly the same as the [cocos2d-html5](www.cocos2d-html5.org) + [ChipmunkJS](https://github.com/josephg/Chipmunk-js) + [WebGL](http://www.khronos.org/registry/webgl/specs/latest/) API.
 
 
 ## Bugs / Limitations
