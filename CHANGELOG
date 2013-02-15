@@ -1,5 +1,9 @@
 version 0.6 - XX-Mar-2013
 - [NEW] Files: renamed js_bindigns_ to jsb_
+- [NEW] JSB Naming Convention:
+        XXX_to_jsval -> JSB_jsval_from_XXX
+        jsval_to_XXX -> JSB_jsval_to_XXX
+        All JSB functions start with "JSB_"
 - [NEW] WebGL / OpenGL ES 2.0: basic functionality added
 - [FIX] JSB: RGBAProtocol: color/opacity -> getColor/getOpacity
 
