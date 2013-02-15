@@ -53,6 +53,7 @@ class JSBGenerateEnums_CC(JSBGenerateEnums):
                         n.append(e)
                         prev = e
             name = '_'.join(n)
+            name = name.replace('__', '_')
         else:
             name = None
 
