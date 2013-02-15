@@ -55,27 +55,57 @@ gl.createShader = function(shaderType) {
 // Delete Functions
 //
 gl.deleteTexture = function(texture) {
-	gl._deleteTexture(texture.texture_id);
+	var texture_id = texture.texture_id;
+	// Accept numbers too. eg: gl.deleteTexture(0)
+	if( typeof texture === 'number' )
+		texture_id = texture;
+
+	gl._deleteTexture(texture_id);
 };
 
 gl.deleteBuffer = function(bufer) {
-	gl._deleteBuffer(buffer.buffer_id);
+	var buffer_id = buffer.buffer_id;
+	// Accept numbers too. eg: gl.deleteBuffer(0)
+	if( typeof buffer === 'number' )
+		buffer_id = buffer;
+
+	gl._deleteBuffer(buffer_id);
 };
 
 gl.deleteRenderbuffer = function(bufer) {
-	gl._deleteRenderbuffer(buffer.renderbuffer_id);
+	var buffer_id = buffer.renderbuffer_id;
+	// Accept numbers too. eg: gl.deleteRenderbuffer(0)
+	if( typeof buffer === 'number' )
+		buffer_id = buffer;
+
+	gl._deleteRenderbuffer(renderbuffer_id);
 };
 
 gl.deleteFramebuffer = function(bufer) {
-	gl._deleteFramebuffer(buffer.framebuffer_id);
+	var buffer_id = buffer.framebuffer_id;
+	// Accept numbers too. eg: gl.deleteFramebuffer(0)
+	if( typeof buffer === 'number' )
+		buffer_id = buffer;
+
+	gl._deleteFramebuffer(buffer_id);
 };
 
 gl.deleteProgram = function(program) {
-	gl._deleteProgram(program.program_id);
+	var program_id = program.program_id;
+	// Accept numbers too. eg: gl.deleteShader(0)
+	if( typeof program === 'number' )
+		program_id = program;
+
+	gl._deleteProgram(program_id);
 };
 
 gl.deleteShader = function(shader) {
-	gl._deleteShader(shader.shader_id);
+	var shader_id = shader.shader_id;
+	// Accept numbers too. eg: gl.deleteShader(0)
+	if( typeof shader === 'number' )
+		shader_id = shader;
+
+	gl._deleteShader(shader_id);
 };
 
 //
@@ -87,9 +117,6 @@ gl.bindTexture = function(target, texture) {
 	// Accept numbers too. eg: gl.bindTexture(0)
 	if( typeof texture === 'number' )
 		texture_id = texture;
-	// Accepts cocos2d's cc.Texture2D objects as well
-	else if( typeof texture.texture_id === 'undefined' )
-		texture_id = texture.getName();
 	else
 		texture_id = texture.texture_id;
 
@@ -165,34 +192,28 @@ gl.getShaderInfoLog = function(shader) {
 // program related
 //
 gl.attachShader = function(program, shader) {
-	var program_id;
+	var program_id = program.program_id;
 	// Accept numbers too. eg: gl.attachShader(17)
 	if( typeof program === 'number' )
 		program_id = program;
-	else
-		program_id = program.program_id;
 
 	gl._attachShader(program_id, shader.shader_id);
 };
 
 gl.linkProgram = function(program) {
-	var program_id;
+	var program_id = program.program_id;
 	// Accept numbers too. eg: gl.linkProgram(17)
 	if( typeof program === 'number' )
 		program_id = program;
-	else
-		program_id = program.program_id;
 
 	gl._linkProgram(program_id);
 };
 
 gl.getProgramParameter = function(program, e) {
-	var program_id;
+	var program_id = program.program_id;
 	// Accept numbers too. eg: gl.getProgramParameter(17)
 	if( typeof program === 'number' )
 		program_id = program;
-	else
-		program_id = program.program_id;
 
 	return gl._getProgramParameter(program_id, e);
 };
@@ -209,25 +230,46 @@ gl.useProgram = function(program) {
 };
 
 gl.getAttribLocation = function(program, name) {
-	var program_id;
+	var program_id = program.program_id;
 	// Accept numbers too. eg: gl.getAttribLocation(17)
 	if( typeof program === 'number' )
 		program_id = program;
-	else
-		program_id = program.program_id;
 
 	return gl._getAttribLocation(program_id, name);
 };
 
-// uniform related
 gl.getUniformLocation = function(program, name) {
-	var program_id;
+	var program_id = program.program_id;
 	// Accept numbers too. eg: gl.getUniformLocation(17)
 	if( typeof program === 'number' )
 		program_id = program;
-	else
-		program_id = program.program_id;
 
 	return gl._getUniformLocation(program_id,name);
 };
 
+gl.getActiveAttrib = function(program, index) {
+	var program_id = program.program_id;
+	// Accept numbers too. eg: gl.getActiveAttrib(17)
+	if( typeof program === 'number' )
+		program_id = program;
+
+	return gl._getActiveAttrib(program_id, index);
+};
+
+gl.getActiveUniform = function(program, index) {
+	var program_id = program.program_id;
+	// Accept numbers too. eg: gl.getActiveUniform(17)
+	if( typeof program === 'number' )
+		program_id = program;
+
+	return gl._getActiveUniform(program_id, index);
+};
+
+gl.getAttachedShaders = function(program) {
+	var program_id = program.program_id;
+	// Accept numbers too. eg: gl.getAttachedShaders(17)
+	if( typeof program === 'number' )
+		program_id = program;
+
+	return gl._getAttachedShaders(program_id);
+};

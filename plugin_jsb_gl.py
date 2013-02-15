@@ -95,6 +95,7 @@ class JSBGenerateFunctions_GL(JSBGenerateFunctions):
                                     'glAttachShader', 'glLinkProgram', 'glUseProgram', 'glCompileShader',
                                     'glGetAttribLocation', 'glGetUniformLocation', 'glGetShaderSource', 'glShaderSource',
                                     'glValidateProgram',
+                                    'glGetActiveUniform', 'glGetActiveAttrib', 'glGetAttachedShaders',
                                     ]
 
         if function_name in functions_with_underscore:

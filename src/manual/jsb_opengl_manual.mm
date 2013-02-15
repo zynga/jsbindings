@@ -229,4 +229,114 @@ JSBool JSB_glGetShaderSource(JSContext *cx, uint32_t argc, jsval *vp) {
 	return JS_TRUE;
 }
 
+// Ret Val:
+//	interface WebGLActiveInfo {
+//		readonly attribute GLint size;
+//		readonly attribute GLenum type;
+//		readonly attribute DOMString name;
+//	};
+JSBool JSB_glGetActiveAttrib(JSContext *cx, uint32_t argc, jsval *vp) {
+	JSB_PRECONDITION2( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
+	jsval *argvp = JS_ARGV(cx,vp);
+	JSBool ok = JS_TRUE;
+	uint32_t arg0, arg1;
+
+	ok &= JSB_jsval_to_uint32( cx, *argvp++, &arg0 );
+	ok &= JSB_jsval_to_uint32( cx, *argvp++, &arg1 );
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
+
+	GLsizei length;
+	glGetProgramiv(arg0, GL_ACTIVE_ATTRIBUTE_MAX_LENGTH, &length);
+	GLchar buffer[length];
+	GLint size = -1;
+	GLenum type = -1;
+
+	glGetActiveAttrib(arg0, arg1, length, NULL, &size, &type, buffer);
+
+	jsval retval = JSVAL_VOID;
+
+	JSObject *object = JS_NewObject(cx, NULL, NULL, NULL );
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error creating JS Object");
+
+	if (!JS_DefineProperty(cx, object, "size", INT_TO_JSVAL(size), NULL, NULL, JSPROP_ENUMERATE | JSPROP_PERMANENT) ||
+		!JS_DefineProperty(cx, object, "type", INT_TO_JSVAL(type), NULL, NULL, JSPROP_ENUMERATE | JSPROP_PERMANENT) ||
+		!JS_DefineProperty(cx, object, "name", JSB_jsval_from_charptr(cx, buffer), NULL, NULL, JSPROP_ENUMERATE | JSPROP_PERMANENT) )
+		return JS_FALSE;
+
+	retval = OBJECT_TO_JSVAL(object);
+
+	JS_SET_RVAL(cx, vp, retval);
+	return JS_TRUE;
+}
+
+// Ret Val:
+//	interface WebGLActiveInfo {
+//		readonly attribute GLint size;
+//		readonly attribute GLenum type;
+//		readonly attribute DOMString name;
+//	};
+JSBool JSB_glGetActiveUniform(JSContext *cx, uint32_t argc, jsval *vp) {
+	JSB_PRECONDITION2( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
+	jsval *argvp = JS_ARGV(cx,vp);
+	JSBool ok = JS_TRUE;
+	uint32_t arg0, arg1;
+
+	ok &= JSB_jsval_to_uint32( cx, *argvp++, &arg0 );
+	ok &= JSB_jsval_to_uint32( cx, *argvp++, &arg1 );
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
+
+	GLsizei length;
+	glGetProgramiv(arg0, GL_ACTIVE_ATTRIBUTE_MAX_LENGTH, &length);
+	GLchar buffer[length];
+	GLint size = -1;
+	GLenum type = -1;
+
+	glGetActiveUniform(arg0, arg1, length, NULL, &size, &type, buffer);
+
+	jsval retval = JSVAL_VOID;
+
+
+	JSObject *object = JS_NewObject(cx, NULL, NULL, NULL );
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error creating JS Object");
+
+	if (!JS_DefineProperty(cx, object, "size", INT_TO_JSVAL(size), NULL, NULL, JSPROP_ENUMERATE | JSPROP_PERMANENT) ||
+		!JS_DefineProperty(cx, object, "type", INT_TO_JSVAL(type), NULL, NULL, JSPROP_ENUMERATE | JSPROP_PERMANENT) ||
+		!JS_DefineProperty(cx, object, "name", JSB_jsval_from_charptr(cx, buffer), NULL, NULL, JSPROP_ENUMERATE | JSPROP_PERMANENT) )
+		return JS_FALSE;
+
+	retval = OBJECT_TO_JSVAL(object);
+
+	JS_SET_RVAL(cx, vp, retval);
+	return JS_TRUE;
+}
+
+// Ret Val: sequence<WebGLShader>?
+JSBool JSB_glGetAttachedShaders(JSContext *cx, uint32_t argc, jsval *vp) {
+	JSB_PRECONDITION2( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
+	jsval *argvp = JS_ARGV(cx,vp);
+	JSBool ok = JS_TRUE;
+	uint32_t arg0;
+
+	ok &= JSB_jsval_to_uint32( cx, *argvp++, &arg0 );
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
+
+	GLsizei length;
+	glGetProgramiv(arg0, GL_ATTACHED_SHADERS, &length);
+	GLuint buffer[length];
+
+	glGetAttachedShaders(arg0, length, NULL, buffer);
+
+	JSObject *jsobj = JS_NewArrayObject(cx, length, NULL);
+	JSB_PRECONDITION2(jsobj, cx, JS_FALSE, "Error creating JS Object");
+
+	for( int i=0; i<length; i++) {
+		jsval e = INT_TO_JSVAL(buffer[i]);
+		JS_SetElement(cx, jsobj, i, &e );
+	}
+
+	JS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(jsobj));
+	return JS_TRUE;
+
+}
+
 #endif // JSB_INCLUDE_OPENGL
