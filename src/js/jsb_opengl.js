@@ -165,27 +165,88 @@ gl.getShaderInfoLog = function(shader) {
 // program related
 //
 gl.attachShader = function(program, shader) {
-	gl._attachShader(program.program_id, shader.shader_id);
+	var program_id;
+	// Accept numbers too. eg: gl.attachShader(17)
+	if( typeof program === 'number' )
+		program_id = program;
+	// Accepts cocos2d's cc.GLProgram objects as well
+	else if( typeof program.program_id === 'undefined' )
+		program_id = program.getProgram();
+	else
+		program_id = program.program_id;
+
+	gl._attachShader(program_id, shader.shader_id);
 };
 
 gl.linkProgram = function(program) {
-	gl._linkProgram(program.program_id);
+	var program_id;
+	// Accept numbers too. eg: gl.linkProgram(17)
+	if( typeof program === 'number' )
+		program_id = program;
+	// Accepts cocos2d's cc.GLProgram objects as well
+	else if( typeof program.program_id === 'undefined' )
+		program_id = program.getProgram();
+	else
+		program_id = program.program_id;
+
+	gl._linkProgram(program_id);
 };
 
 gl.getProgramParameter = function(program, e) {
-	return gl._getProgramParameter(program.program_id, e);
+	var program_id;
+	// Accept numbers too. eg: gl.getProgramParameter(17)
+	if( typeof program === 'number' )
+		program_id = program;
+	// Accepts cocos2d's cc.GLProgram objects as well
+	else if( typeof program.program_id === 'undefined' )
+		program_id = program.getProgram();
+	else
+		program_id = program.program_id;
+
+	return gl._getProgramParameter(program_id, e);
 };
 
 gl.useProgram = function(program) {
-	gl._useProgram (program.program_id);
+	var program_id;
+	// Accept numbers too. eg: gl.useProgram(17)
+	if( typeof program === 'number' )
+		program_id = program;
+	// Accepts cocos2d's cc.GLProgram objects as well
+	else if( typeof program.program_id === 'undefined' )
+		program_id = program.getProgram();
+	else
+		program_id = program.program_id;
+
+	gl._useProgram (program_id);
 };
 
 gl.getAttribLocation = function(program, name) {
-	return gl._getAttribLocation(program.program_id, name);
+	var program_id;
+	// Accept numbers too. eg: gl.getAttribLocation(17)
+	if( typeof program === 'number' )
+		program_id = program;
+	// Accepts cocos2d's cc.GLProgram objects as well
+	else if( typeof program.program_id === 'undefined' )
+		program_id = program.getProgram();
+	else
+		program_id = program.program_id;
+
+	return gl._getAttribLocation(program_id, name);
 };
 
 // uniform related
 gl.getUniformLocation = function(program, name) {
-	return gl._getUniformLocation(program.program_id,name);
+	var program_id;
+	// Accept numbers too. eg: gl.getUniformLocation(17)
+	if( typeof program === 'number' )
+		program_id = program;
+	// Accepts cocos2d's cc.GLProgram objects as well
+	else if( typeof program.program_id === 'undefined' )
+		program_id = program.getProgram();
+	else
+		program_id = program.program_id;
+
+
+	return gl._getUniformLocation(program_id,name);
 };
 
