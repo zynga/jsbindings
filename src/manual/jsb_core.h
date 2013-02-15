@@ -157,27 +157,27 @@ struct jsb_c_proxy_s {
 };
 
 // Functions for setting / removing / getting the proxy used by the "C" Object Oriented API. Think of Chipmunk classes
-struct jsb_c_proxy_s* jsb_get_c_proxy_for_jsobject( JSObject *jsobj );
-void jsb_del_c_proxy_for_jsobject( JSObject *jsobj );
-void jsb_set_c_proxy_for_jsobject( JSObject *jsobj, void *handle, unsigned long flags);
+struct jsb_c_proxy_s* JSB_get_c_proxy_for_jsobject( JSObject *jsobj );
+void JSB_del_c_proxy_for_jsobject( JSObject *jsobj );
+void JSB_set_c_proxy_for_jsobject( JSObject *jsobj, void *handle, unsigned long flags);
 
 // JSObject -> proxy
 /** gets a proxy for a given JSObject */
-void* jsb_get_proxy_for_jsobject(JSObject *jsobj);
+void* JSB_get_proxy_for_jsobject(JSObject *jsobj);
 /** sets a proxy for a given JSObject */
-void jsb_set_proxy_for_jsobject(void* proxy, JSObject *jsobj);
+void JSB_set_proxy_for_jsobject(void* proxy, JSObject *jsobj);
 /** dels a proxy for a given JSObject */
-void jsb_del_proxy_for_jsobject(JSObject *jsobj);
+void JSB_del_proxy_for_jsobject(JSObject *jsobj);
 
 // reverse: proxy -> JSObject
 /** gets a JSObject for a given proxy */
-JSObject* jsb_get_jsobject_for_proxy(void *proxy);
+JSObject* JSB_get_jsobject_for_proxy(void *proxy);
 /** sets a JSObject for a given proxy */
-void jsb_set_jsobject_for_proxy(JSObject *jsobj, void* proxy);
+void JSB_set_jsobject_for_proxy(JSObject *jsobj, void* proxy);
 /** delts a JSObject for a given proxy */
-void jsb_del_jsobject_for_proxy(void* proxy);
+void JSB_del_jsobject_for_proxy(void* proxy);
 
-JSBool jsb_set_reserved_slot(JSObject *obj, uint32_t idx, jsval value);
+JSBool JSB_set_reserved_slot(JSObject *obj, uint32_t idx, jsval value);
 
 
 // needed for callbacks. It does nothing.
@@ -185,7 +185,7 @@ JSBool JSB_do_nothing(JSContext *cx, uint32_t argc, jsval *vp);
 
 
 // logs a format string to the console
-JSBool JSBCore_log(JSContext *cx, uint32_t argc, jsval *vp);
+JSBool JSB_core_log(JSContext *cx, uint32_t argc, jsval *vp);
 
 JSObject* JSB_NewGlobalObject(JSContext* cx, bool empty);
 

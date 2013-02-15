@@ -9,7 +9,7 @@ version 0.5 - 29-Jan-2013
 		Removed JSB_PRECONDITION3(). Merged in JSB_PRECONDITION2()
 		ParticleBatchNode is bound with the official API, like SpriteBatchNode
 		cc.DrawNode.drawPoly works.
-        jsval_to_NSObject returns NSNull if jsval is null
+       JSB_jsval_to_NSObject returns NSNull if jsval is null
 
 version 0.4 - 4-Dec-2012
 - [FIX] JSB Chipmunk: Added missing properties

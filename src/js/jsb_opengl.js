@@ -169,9 +169,6 @@ gl.attachShader = function(program, shader) {
 	// Accept numbers too. eg: gl.attachShader(17)
 	if( typeof program === 'number' )
 		program_id = program;
-	// Accepts cocos2d's cc.GLProgram objects as well
-	else if( typeof program.program_id === 'undefined' )
-		program_id = program.getProgram();
 	else
 		program_id = program.program_id;
 
@@ -183,9 +180,6 @@ gl.linkProgram = function(program) {
 	// Accept numbers too. eg: gl.linkProgram(17)
 	if( typeof program === 'number' )
 		program_id = program;
-	// Accepts cocos2d's cc.GLProgram objects as well
-	else if( typeof program.program_id === 'undefined' )
-		program_id = program.getProgram();
 	else
 		program_id = program.program_id;
 
@@ -197,9 +191,6 @@ gl.getProgramParameter = function(program, e) {
 	// Accept numbers too. eg: gl.getProgramParameter(17)
 	if( typeof program === 'number' )
 		program_id = program;
-	// Accepts cocos2d's cc.GLProgram objects as well
-	else if( typeof program.program_id === 'undefined' )
-		program_id = program.getProgram();
 	else
 		program_id = program.program_id;
 
@@ -211,9 +202,6 @@ gl.useProgram = function(program) {
 	// Accept numbers too. eg: gl.useProgram(17)
 	if( typeof program === 'number' )
 		program_id = program;
-	// Accepts cocos2d's cc.GLProgram objects as well
-	else if( typeof program.program_id === 'undefined' )
-		program_id = program.getProgram();
 	else
 		program_id = program.program_id;
 
@@ -225,9 +213,6 @@ gl.getAttribLocation = function(program, name) {
 	// Accept numbers too. eg: gl.getAttribLocation(17)
 	if( typeof program === 'number' )
 		program_id = program;
-	// Accepts cocos2d's cc.GLProgram objects as well
-	else if( typeof program.program_id === 'undefined' )
-		program_id = program.getProgram();
 	else
 		program_id = program.program_id;
 
@@ -240,12 +225,8 @@ gl.getUniformLocation = function(program, name) {
 	// Accept numbers too. eg: gl.getUniformLocation(17)
 	if( typeof program === 'number' )
 		program_id = program;
-	// Accepts cocos2d's cc.GLProgram objects as well
-	else if( typeof program.program_id === 'undefined' )
-		program_id = program.getProgram();
 	else
 		program_id = program.program_id;
-
 
 	return gl._getUniformLocation(program_id,name);
 };

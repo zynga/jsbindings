@@ -190,8 +190,8 @@ class JSBGenerate(object):
             's': 'STRING_TO_JSVAL(ret_val)',
             'd': 'DOUBLE_TO_JSVAL(ret_val)',
             'c': 'INT_TO_JSVAL((int32_t)ret_val)',
-            'long': 'long_to_jsval(cx, ret_val)',                # long: not supported on JS 64-bit
-            'longlong': 'longlong_to_jsval(cx, ret_val)',        # long long: not supported on JS
+            'long': 'JSB_jsval_from_long(cx, ret_val)',                # long: not supported on JS 64-bit
+            'longlong': 'JSB_jsval_from_longlong(cx, ret_val)',        # long long: not supported on JS
             'void': 'JSVAL_VOID',
             None: 'JSVAL_VOID',
         }
@@ -226,10 +226,10 @@ class JSBGenerate(object):
             'b': ['JSBool',    'JS_ValueToBoolean'],
             'd': ['double',    'JS_ValueToNumber'],
             'I': ['double',    'JS_ValueToNumber'],    # double converted to string
-            'i': ['int32_t',   'jsval_to_int32'],
-            'j': ['int32_t',   'jsval_to_int32'],
-            'u': ['uint32_t',  'jsval_to_uint32'],
-            'c': ['uint16_t',  'jsval_to_uint16'],
+            'i': ['int32_t',   'JSB_jsval_to_int32'],
+            'j': ['int32_t',   'JSB_jsval_to_int32'],
+            'u': ['uint32_t',  'JSB_jsval_to_uint32'],
+            'c': ['uint16_t',  'JSB_jsval_to_uint16'],
         }
 
         self.args_js_special_type_conversions = {
@@ -422,14 +422,14 @@ class JSBGenerate(object):
     # special case: returning Object
     def generate_retval_object(self, declared_type, js_type):
         object_template = '''
-\tJS_SET_RVAL(cx, vp, NSObject_to_jsval(cx, ret_val));
+\tJS_SET_RVAL(cx, vp, JSB_jsval_from_NSObject(cx, ret_val));
 '''
         return object_template
 
     # special case: returning String
     def generate_retval_string(self, declared_type, js_type):
         template = '''
-\tjsval ret_jsval = NSString_to_jsval( cx, (NSString*) ret_val );
+\tjsval ret_jsval = JSB_jsval_from_NSString( cx, (NSString*) ret_val );
 \tJS_SET_RVAL(cx, vp, ret_jsval );
 '''
         return template
@@ -437,28 +437,28 @@ class JSBGenerate(object):
     # special case: returning String
     def generate_retval_charptr(self, declared_type, js_type):
         template = '''
-\tjsval ret_jsval = charptr_to_jsval( cx, ret_val );
+\tjsval ret_jsval = JSB_jsval_from_charptr( cx, ret_val );
 \tJS_SET_RVAL(cx, vp, ret_jsval );
 '''
         return template
 
     def generate_retval_array(self, declared_type, js_type):
         template = '''
-\tjsval ret_jsval = NSArray_to_jsval( cx, (NSArray*) ret_val );
+\tjsval ret_jsval = JSB_jsval_from_NSArray( cx, (NSArray*) ret_val );
 \tJS_SET_RVAL(cx, vp, ret_jsval );
 '''
         return template
 
     def generate_retval_set(self, declared_type, js_type):
         template = '''
-\tjsval ret_jsval = NSSet_to_jsval( cx, (NSSet*) ret_val );
+\tjsval ret_jsval = JSB_jsval_from_NSSet( cx, (NSSet*) ret_val );
 \tJS_SET_RVAL(cx, vp, ret_jsval );
 '''
         return template
 
     def generate_retval_dict(self, declared_type, js_type):
         template = '''
-\tjsval ret_jsval = NSDictionary_to_jsval( cx, (NSDictionary*) ret_val );
+\tjsval ret_jsval = JSB_jsval_from_NSDictionary( cx, (NSDictionary*) ret_val );
 \tJS_SET_RVAL(cx, vp, ret_jsval );
 '''
         return template
@@ -470,7 +470,7 @@ class JSBGenerate(object):
     def generate_retval_struct_manual(self, declared_type, js_type):
         new_name = self.get_name_for_manual_struct(declared_type)
         template = '''
-\tjsval ret_jsval = %s_to_jsval( cx, (%s)ret_val );
+\tjsval ret_jsval = JSB_jsval_from_%s( cx, (%s)ret_val );
 \tJS_SET_RVAL(cx, vp, ret_jsval);
 ''' % (new_name, declared_type)
         return template
@@ -494,7 +494,7 @@ class JSBGenerate(object):
     #
     def generate_retval_opaque(self, declared_type, js_type):
         template = '''
-\tjsval ret_jsval = opaque_to_jsval( cx, ret_val );
+\tjsval ret_jsval = JSB_jsval_from_opaque( cx, ret_val );
 \tJS_SET_RVAL(cx, vp, ret_jsval);
     '''
         return template
@@ -502,7 +502,7 @@ class JSBGenerate(object):
     # If the structure should be returned as an Object. For OO C API (Chipmunk)
     def generate_retval_c_class(self, declared_type, js_type):
         template = '''
-\tjsval ret_jsval = c_class_to_jsval( cx, ret_val, %s, %s, "%s" );
+\tjsval ret_jsval = JSB_jsval_from_c_class( cx, ret_val, %s, %s, "%s" );
 \tJS_SET_RVAL(cx, vp, ret_jsval);
     '''
         # remove '*' from class name
@@ -654,33 +654,33 @@ class JSBGenerate(object):
         return (args_js_type, args_declared_type)
 
     def generate_argument_variadic_2_nsarray(self):
-        template = '\tok &= jsvals_variadic_to_NSArray( cx, argvp, argc, &arg0 );\n'
+        template = '\tok &= JSB_jsvals_variadic_to_NSArray( cx, argvp, argc, &arg0 );\n'
         self.fd_mm.write(template)
 
     # Special case for string to NSString generator
     def generate_argument_dict(self, i, arg_js_type, arg_declared_type):
-        template = '\tok &= jsval_to_NSDictionary( cx, *argvp++, &arg%d );\n'
+        template = '\tok &= JSB_jsval_to_NSDictionary( cx, *argvp++, &arg%d );\n'
         self.fd_mm.write(template % i)
 
     # Special case for string to NSString generator
     def generate_argument_string(self, i, arg_js_type, arg_declared_type):
-        template = '\tok &= jsval_to_NSString( cx, *argvp++, &arg%d );\n'
+        template = '\tok &= JSB_jsval_to_NSString( cx, *argvp++, &arg%d );\n'
         self.fd_mm.write(template % i)
 
     # Special case for string to char* generator
     def generate_argument_charptr(self, i, arg_js_type, arg_declared_type):
-        template = '\tok &= jsval_to_charptr( cx, *argvp++, &arg%d );\n'
+        template = '\tok &= JSB_jsval_to_charptr( cx, *argvp++, &arg%d );\n'
         self.fd_mm.write(template % i)
 
     # Special case for objects
     def generate_argument_object(self, i, arg_js_type, arg_declared_type):
-        object_template = '\tok &= jsval_to_NSObject( cx, *argvp++, &arg%d);\n'
+        object_template = '\tok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg%d);\n'
         self.fd_mm.write(object_template % (i))
 
     # Manual conversion for struct
     def generate_argument_struct_manual(self, i, arg_js_type, arg_declared_type):
         new_name = self.get_name_for_manual_struct(arg_declared_type)
-        template = '\tok &= jsval_to_%s( cx, *argvp++, (%s*) &arg%d );\n' % (new_name, new_name, i)
+        template = '\tok &= JSB_jsval_to_%s( cx, *argvp++, (%s*) &arg%d );\n' % (new_name, new_name, i)
         self.fd_mm.write(template)
 
     def generate_argument_struct_automatic(self, i, arg_js_type, arg_declared_type):
@@ -695,31 +695,31 @@ class JSBGenerate(object):
                                         i, arg_declared_type, i))
 
     def generate_argument_array(self, i, arg_js_type, arg_declared_type):
-        template = '\tok &= jsval_to_NSArray( cx, *argvp++, &arg%d );\n'
+        template = '\tok &= JSB_jsval_to_NSArray( cx, *argvp++, &arg%d );\n'
         self.fd_mm.write(template % (i))
 
     def generate_argument_set(self, i, arg_js_type, arg_declared_type):
-        template = '\tok &= jsval_to_NSSet( cx, *argvp++, &arg%d );\n'
+        template = '\tok &= JSB_jsval_to_NSSet( cx, *argvp++, &arg%d );\n'
         self.fd_mm.write(template % (i))
 
     def generate_argument_function(self, i, arg_js_type, arg_declared_type):
-        template = '\tok &= jsval_to_block_1( cx, *argvp++, JS_THIS_OBJECT(cx, vp), &arg%d );\n'
+        template = '\tok &= JSB_jsval_to_block_1( cx, *argvp++, JS_THIS_OBJECT(cx, vp), &arg%d );\n'
         self.fd_mm.write(template % (i))
 
     def generate_argument_c_class(self, i, arg_js_type, arg_declared_type):
-        template = '\tok &= jsval_to_c_class( cx, *argvp++, (void**)&arg%d, NULL );\n'
+        template = '\tok &= JSB_jsval_to_c_class( cx, *argvp++, (void**)&arg%d, NULL );\n'
         self.fd_mm.write(template % (i))
 
     def generate_argument_opaque(self, i, arg_js_type, arg_declared_type):
-        template = '\tok &= jsval_to_opaque( cx, *argvp++, (void**)&arg%d );\n'
+        template = '\tok &= JSB_jsval_to_opaque( cx, *argvp++, (void**)&arg%d );\n'
         self.fd_mm.write(template % (i))
 
     def generate_argument_long(self, i, arg_js_type, arg_declared_type):
-        template = '\tok &= jsval_to_long( cx, *argvp++, &arg%d );\n'
+        template = '\tok &= JSB_jsval_to_long( cx, *argvp++, &arg%d );\n'
         self.fd_mm.write(template % (i))
 
     def generate_argument_longlong(self, i, arg_js_type, arg_declared_type):
-        template = '\tok &= jsval_to_longlong( cx, *argvp++, &arg%d );\n'
+        template = '\tok &= JSB_jsval_to_longlong( cx, *argvp++, &arg%d );\n'
         self.fd_mm.write(template % (i))
 
     def generate_arguments(self, args_declared_type, args_js_type, properties={}):
@@ -1021,11 +1021,11 @@ JSBool %s_constructor(JSContext *cx, uint32_t argc, jsval *vp)
 void %s_finalize(JSFreeOp *fop, JSObject *obj)
 {
 \tCCLOGINFO(@"jsbindings: finalizing JS object %%p (%s)", obj);
-//\tJSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(obj);
+//\tJSB_NSObject *proxy = (JSB_NSObject*) JSB_get_proxy_for_jsobject(obj);
 //\tif (proxy) {
 //\t\t[[proxy realObj] release];
 //\t}
-\tjsb_del_proxy_for_jsobject( obj );
+\tJSB_del_proxy_for_jsobject( obj );
 }
 '''
         proxy_class_name = '%s%s' % (PROXY_PREFIX, class_name)
@@ -1089,7 +1089,7 @@ JSBool %s_%s%s(JSContext *cx, uint32_t argc, jsval *vp) {
 '''
         template_init = '''
 \tJSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
-\tJSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
+\tJSB_NSObject *proxy = (JSB_NSObject*) JSB_get_proxy_for_jsobject(jsthis);
 
 \tJSB_PRECONDITION2( proxy && %s[proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
 '''
@@ -1452,9 +1452,9 @@ extern JSClass *%s_class;
                     tmp = convert[t] % arg['name']
                     with_args += "\t\t\targv[%d] = %s\n" % (i, tmp)
                 elif dt == 'NSSet':
-                    with_args += "\t\t\targv[%d] = NSSet_to_jsval( cx, %s );\n" % (i, arg['name'])
+                    with_args += "\t\t\targv[%d] = JSB_jsval_from_NSSet( cx, %s );\n" % (i, arg['name'])
                 elif t == '@' and (dt in self.supported_classes or dt in self.class_manual):
-                    with_args += "\t\t\targv[%d] = NSObject_to_jsval( cx, %s );\n" % (i, arg['name'])
+                    with_args += "\t\t\targv[%d] = JSB_jsval_from_NSObject( cx, %s );\n" % (i, arg['name'])
                 else:
                     with_args += '\t\t\targv[%d] = JSVAL_VOID; // XXX TODO Value not supported (%s) \n' % (i, dt)
 
@@ -2129,7 +2129,7 @@ class JSBGenerateOOFunctions(JSBGenerateFunctions):
         super(JSBGenerateOOFunctions, self).generate_function_prefix(func_name, num_of_args)
         template = '''
 \tJSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
-\tstruct jsb_c_proxy_s *proxy = jsb_get_c_proxy_for_jsobject(jsthis);
+\tstruct jsb_c_proxy_s *proxy = JSB_get_c_proxy_for_jsobject(jsthis);
 \t%s* arg0 = (%s*) proxy->handle;
 '''
         self.fd_mm.write(template % (self.current_class_name, self.current_class_name))
@@ -2170,8 +2170,8 @@ JSBool %s_constructor(JSContext *cx, uint32_t argc, jsval *vp)
 '''
         template_1_a = '\tJSObject *jsobj = JS_NewObject(cx, JSB_%s_class, JSB_%s_object, NULL);\n'
         template_1_b = '''
-\n\tjsb_set_jsobject_for_proxy(jsobj, ret_val);
-\tjsb_set_c_proxy_for_jsobject(jsobj, ret_val, JSB_C_FLAG_CALL_FREE);
+\n\tJSB_set_jsobject_for_proxy(jsobj, ret_val);
+\tJSB_set_c_proxy_for_jsobject(jsobj, ret_val, JSB_C_FLAG_CALL_FREE);
 \tJS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(jsobj));
 '''
 
@@ -2230,14 +2230,14 @@ JSBool %s_constructor(JSContext *cx, uint32_t argc, jsval *vp)
 // Destructor
 void %s_finalize(JSFreeOp *fop, JSObject *jsthis)
 {
-\tstruct jsb_c_proxy_s *proxy = jsb_get_c_proxy_for_jsobject(jsthis);
+\tstruct jsb_c_proxy_s *proxy = JSB_get_c_proxy_for_jsobject(jsthis);
 \tif( proxy ) {
 \t\tCCLOGINFO(@"jsbindings: finalizing JS object %%p (%s), handle: %%p", jsthis, proxy->handle);
 
-\t\tjsb_del_jsobject_for_proxy(proxy->handle);
+\t\tJSB_del_jsobject_for_proxy(proxy->handle);
 \t\tif(proxy->flags == JSB_C_FLAG_CALL_FREE)
 \t\t\t%s( (%s*)proxy->handle);
-\t\tjsb_del_c_proxy_for_jsobject(jsthis);
+\t\tJSB_del_c_proxy_for_jsobject(jsthis);
 \t} else {
 \t\tCCLOGINFO(@"jsbindings: finalizing uninitialized JS object %%p (%s)", jsthis);
 \t}

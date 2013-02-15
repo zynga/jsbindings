@@ -80,7 +80,7 @@ static void reportError(JSContext *cx, const char *message, JSErrorReport *repor
 
 #pragma mark JSBCore - Free JS functions
 
-JSBool JSBCore_log(JSContext *cx, uint32_t argc, jsval *vp)
+JSBool JSB_core_log(JSContext *cx, uint32_t argc, jsval *vp)
 {
 	if (argc > 0) {
 		JSString *string = NULL;
@@ -95,7 +95,7 @@ JSBool JSBCore_log(JSContext *cx, uint32_t argc, jsval *vp)
 	return JS_FALSE;
 };
 
-JSBool JSBCore_executeScript(JSContext *cx, uint32_t argc, jsval *vp)
+JSBool JSB_core_executeScript(JSContext *cx, uint32_t argc, jsval *vp)
 {
 	JSB_PRECONDITION2(argc==1, cx, JS_FALSE, "Invalid number of arguments in executeScript");
 
@@ -110,7 +110,7 @@ JSBool JSBCore_executeScript(JSContext *cx, uint32_t argc, jsval *vp)
 	return ok;
 };
 
-JSBool JSBCore_associateObjectWithNative(JSContext *cx, uint32_t argc, jsval *vp)
+JSBool JSB_core_associateObjectWithNative(JSContext *cx, uint32_t argc, jsval *vp)
 {
 	JSB_PRECONDITION(argc==2, "Invalid number of arguments in associateObjectWithNative");
 
@@ -124,14 +124,14 @@ JSBool JSBCore_associateObjectWithNative(JSContext *cx, uint32_t argc, jsval *vp
 
 	JSB_PRECONDITION2(ok && pureJSObj && nativeJSObj, cx, JS_FALSE, "Error parsing parameters");
 
-	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject( nativeJSObj );
-	jsb_set_proxy_for_jsobject( proxy, pureJSObj );
+	JSB_NSObject *proxy = (JSB_NSObject*) JSB_get_proxy_for_jsobject( nativeJSObj );
+	JSB_set_proxy_for_jsobject( proxy, pureJSObj );
 	[proxy setJsObj:pureJSObj];
 
 	return JS_TRUE;
 };
 
-JSBool JSBCore_getAssociatedNative(JSContext *cx, uint32_t argc, jsval *vp)
+JSBool JSB_core_getAssociatedNative(JSContext *cx, uint32_t argc, jsval *vp)
 {
 	JSB_PRECONDITION2(argc==1, cx, JS_FALSE, "Invalid number of arguments in getAssociatedNative");
 
@@ -139,17 +139,17 @@ JSBool JSBCore_getAssociatedNative(JSContext *cx, uint32_t argc, jsval *vp)
 	JSObject *pureJSObj;
 	JS_ValueToObject( cx, *argvp++, &pureJSObj );
 
-	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject( pureJSObj );
+	JSB_NSObject *proxy = (JSB_NSObject*) JSB_get_proxy_for_jsobject( pureJSObj );
 	id native = [proxy realObj];
 
-	JSObject * obj = get_or_create_jsobject_from_realobj(cx, native);
+	JSObject * obj = JSB_get_or_create_jsobject_from_realobj(cx, native);
 	JS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(obj) );
 
 	return JS_TRUE;
 };
 
 
-JSBool JSBCore_platform(JSContext *cx, uint32_t argc, jsval *vp)
+JSBool JSB_core_platform(JSContext *cx, uint32_t argc, jsval *vp)
 {
 	JSB_PRECONDITION2(argc==0, cx, JS_FALSE, "Invalid number of arguments in __getPlatform");
 
@@ -172,7 +172,7 @@ JSBool JSBCore_platform(JSContext *cx, uint32_t argc, jsval *vp)
 	return JS_TRUE;
 };
 
-JSBool JSBCore_version(JSContext *cx, uint32_t argc, jsval *vp)
+JSBool JSB_core_version(JSContext *cx, uint32_t argc, jsval *vp)
 {
 	JSB_PRECONDITION2(argc==0, cx, JS_FALSE, "Invalid number of arguments in __getVersion");
 	
@@ -186,7 +186,7 @@ JSBool JSBCore_version(JSContext *cx, uint32_t argc, jsval *vp)
 	return JS_TRUE;
 };
 
-JSBool JSBCore_os(JSContext *cx, uint32_t argc, jsval *vp)
+JSBool JSB_core_os(JSContext *cx, uint32_t argc, jsval *vp)
 {
 	JSB_PRECONDITION2(argc==0, cx, JS_FALSE, "Invalid number of arguments in __getOS");
 	
@@ -207,7 +207,7 @@ JSBool JSBCore_os(JSContext *cx, uint32_t argc, jsval *vp)
 
 
 /* Register an object as a member of the GC's root set, preventing them from being GC'ed */
-JSBool JSBCore_addRootJS(JSContext *cx, uint32_t argc, jsval *vp)
+JSBool JSB_core_addRootJS(JSContext *cx, uint32_t argc, jsval *vp)
 {
 	JSB_PRECONDITION2(argc==1, cx, JS_FALSE, "Invalid number of arguments in addRootJS");
 
@@ -225,7 +225,7 @@ JSBool JSBCore_addRootJS(JSContext *cx, uint32_t argc, jsval *vp)
  * removes an object from the GC's root, allowing them to be GC'ed if no
  * longer referenced.
  */
-JSBool JSBCore_removeRootJS(JSContext *cx, uint32_t argc, jsval *vp)
+JSBool JSB_core_removeRootJS(JSContext *cx, uint32_t argc, jsval *vp)
 {
 	JSB_PRECONDITION2(argc==1, cx, JS_FALSE, "Invalid number of arguments in removeRootJS");
 
@@ -244,7 +244,7 @@ static void dumpNamedRoot(const char *name, void *addr,  JSGCRootType type, void
     printf("There is a root named '%s' at %p\n", name, addr);
 }
 
-JSBool JSBCore_dumpRoot(JSContext *cx, uint32_t argc, jsval *vp)
+JSBool JSB_core_dumpRoot(JSContext *cx, uint32_t argc, jsval *vp)
 {
 	// JS_DumpNamedRoots is only available on DEBUG versions of SpiderMonkey.
 	// Mac and Simulator versions were compiled with DEBUG.
@@ -258,13 +258,13 @@ JSBool JSBCore_dumpRoot(JSContext *cx, uint32_t argc, jsval *vp)
 /*
  * Force a cycle of GC
  */
-JSBool JSBCore_forceGC(JSContext *cx, uint32_t argc, jsval *vp)
+JSBool JSB_core_forceGC(JSContext *cx, uint32_t argc, jsval *vp)
 {
 	JS_GC( [[JSBCore sharedInstance] runtime] );
 	return JS_TRUE;
 };
 
-JSBool JSBCore_restartVM(JSContext *cx, uint32_t argc, jsval *vp)
+JSBool JSB_core_restartVM(JSContext *cx, uint32_t argc, jsval *vp)
 {
 	JSB_PRECONDITION2(argc==0, cx, JS_FALSE, "Invalid number of arguments in executeScript");
 
@@ -484,7 +484,7 @@ JSBool JSBCore_restartVM(JSContext *cx, uint32_t argc, jsval *vp)
 #pragma mark JSObject-> Proxy
 
 // Hash of JSObject -> proxy
-void* jsb_get_proxy_for_jsobject(JSObject *obj)
+void* JSB_get_proxy_for_jsobject(JSObject *obj)
 {
 	tHashJSObject *element = NULL;
 	HASH_FIND_INT(hash, &obj, element);
@@ -494,9 +494,9 @@ void* jsb_get_proxy_for_jsobject(JSObject *obj)
 	return nil;
 }
 
-void jsb_set_proxy_for_jsobject(void *proxy, JSObject *obj)
+void JSB_set_proxy_for_jsobject(void *proxy, JSObject *obj)
 {
-	NSCAssert( !jsb_get_proxy_for_jsobject(obj), @"Already added. abort");
+	NSCAssert( !JSB_get_proxy_for_jsobject(obj), @"Already added. abort");
 
 //	printf("Setting proxy for: %p - %p (%s)\n", obj, proxy, [[proxy description] UTF8String] );
 
@@ -510,7 +510,7 @@ void jsb_set_proxy_for_jsobject(void *proxy, JSObject *obj)
 	HASH_ADD_INT( hash, jsObject, element );
 }
 
-void jsb_del_proxy_for_jsobject(JSObject *obj)
+void JSB_del_proxy_for_jsobject(JSObject *obj)
 {
 	tHashJSObject *element = NULL;
 	HASH_FIND_INT(hash, &obj, element);
@@ -523,7 +523,7 @@ void jsb_del_proxy_for_jsobject(JSObject *obj)
 #pragma mark Proxy -> JSObject
 
 // Reverse hash: Proxy -> JSObject
-JSObject* jsb_get_jsobject_for_proxy(void *proxy)
+JSObject* JSB_get_jsobject_for_proxy(void *proxy)
 {
 	tHashJSObject *element = NULL;
 	HASH_FIND_INT(reverse_hash, &proxy, element);
@@ -533,9 +533,9 @@ JSObject* jsb_get_jsobject_for_proxy(void *proxy)
 	return NULL;
 }
 
-void jsb_set_jsobject_for_proxy(JSObject *jsobj, void* proxy)
+void JSB_set_jsobject_for_proxy(JSObject *jsobj, void* proxy)
 {
-	NSCAssert( !jsb_get_jsobject_for_proxy(proxy), @"Already added. abort");
+	NSCAssert( !JSB_get_jsobject_for_proxy(proxy), @"Already added. abort");
 
 	tHashJSObject *element = (tHashJSObject*) malloc( sizeof( *element ) );
 
@@ -545,7 +545,7 @@ void jsb_set_jsobject_for_proxy(JSObject *jsobj, void* proxy)
 	HASH_ADD_INT( reverse_hash, proxy, element );
 }
 
-void jsb_del_jsobject_for_proxy(void* proxy)
+void JSB_del_jsobject_for_proxy(void* proxy)
 {
 	tHashJSObject *element = NULL;
 	HASH_FIND_INT(reverse_hash, &proxy, element);
@@ -558,7 +558,7 @@ void jsb_del_jsobject_for_proxy(void* proxy)
 #pragma mark
 
 
-JSBool jsb_set_reserved_slot(JSObject *obj, uint32_t idx, jsval value)
+JSBool JSB_set_reserved_slot(JSObject *obj, uint32_t idx, jsval value)
 {
 	JSClass *klass = JS_GetClass(obj);
 	NSUInteger slots = JSCLASS_RESERVED_SLOTS(klass);
@@ -572,7 +572,7 @@ JSBool jsb_set_reserved_slot(JSObject *obj, uint32_t idx, jsval value)
 
 #pragma mark "C" proxy functions
 
-struct jsb_c_proxy_s* jsb_get_c_proxy_for_jsobject( JSObject *jsobj )
+struct jsb_c_proxy_s* JSB_get_c_proxy_for_jsobject( JSObject *jsobj )
 {
 	struct jsb_c_proxy_s *proxy = (struct jsb_c_proxy_s *) JS_GetPrivate(jsobj);
 
@@ -585,7 +585,7 @@ struct jsb_c_proxy_s* jsb_get_c_proxy_for_jsobject( JSObject *jsobj )
 	return proxy;
 }
 
-void jsb_del_c_proxy_for_jsobject( JSObject *jsobj )
+void JSB_del_c_proxy_for_jsobject( JSObject *jsobj )
 {
 	struct jsb_c_proxy_s *proxy = (struct jsb_c_proxy_s *) JS_GetPrivate(jsobj);
 	NSCAssert(proxy, @"Invalid proxy for JSObject");
@@ -594,7 +594,7 @@ void jsb_del_c_proxy_for_jsobject( JSObject *jsobj )
 	free(proxy);
 }
 
-void jsb_set_c_proxy_for_jsobject( JSObject *jsobj, void *handle, unsigned long flags)
+void JSB_set_c_proxy_for_jsobject( JSObject *jsobj, void *handle, unsigned long flags)
 {
 	struct jsb_c_proxy_s *proxy = (struct jsb_c_proxy_s*) malloc(sizeof(*proxy));
 	NSCAssert(proxy, @"No memory for proxy");
@@ -628,12 +628,12 @@ JSObject* JSB_NewGlobalObject(JSContext* cx, bool empty)
 	//
 	// globals
 	//
-	JS_DefineFunction(cx, glob, "require", JSBCore_executeScript, 1, JSPROP_READONLY | JSPROP_PERMANENT);
-	JS_DefineFunction(cx, glob, "__associateObjWithNative", JSBCore_associateObjectWithNative, 2, JSPROP_READONLY | JSPROP_PERMANENT);
-	JS_DefineFunction(cx, glob, "__getAssociatedNative", JSBCore_getAssociatedNative, 2, JSPROP_READONLY | JSPROP_PERMANENT);
-	JS_DefineFunction(cx, glob, "__getPlatform", JSBCore_platform, 0, JSPROP_READONLY | JSPROP_PERMANENT);
-	JS_DefineFunction(cx, glob, "__getOS", JSBCore_os, 0, JSPROP_READONLY | JSPROP_PERMANENT);
-	JS_DefineFunction(cx, glob, "__getVersion", JSBCore_version, 0, JSPROP_READONLY | JSPROP_PERMANENT);
+	JS_DefineFunction(cx, glob, "require", JSB_core_executeScript, 1, JSPROP_READONLY | JSPROP_PERMANENT);
+	JS_DefineFunction(cx, glob, "__associateObjWithNative", JSB_core_associateObjectWithNative, 2, JSPROP_READONLY | JSPROP_PERMANENT);
+	JS_DefineFunction(cx, glob, "__getAssociatedNative", JSB_core_getAssociatedNative, 2, JSPROP_READONLY | JSPROP_PERMANENT);
+	JS_DefineFunction(cx, glob, "__getPlatform", JSB_core_platform, 0, JSPROP_READONLY | JSPROP_PERMANENT);
+	JS_DefineFunction(cx, glob, "__getOS", JSB_core_os, 0, JSPROP_READONLY | JSPROP_PERMANENT);
+	JS_DefineFunction(cx, glob, "__getVersion", JSB_core_version, 0, JSPROP_READONLY | JSPROP_PERMANENT);
 
 	//
 	// Javascript controller (__jsc__)
@@ -642,12 +642,12 @@ JSObject* JSB_NewGlobalObject(JSContext* cx, bool empty)
 	jsval jscVal = OBJECT_TO_JSVAL(jsc);
 	JS_SetProperty(cx, glob, "__jsc__", &jscVal);
 
-	JS_DefineFunction(cx, jsc, "garbageCollect", JSBCore_forceGC, 0, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
-	JS_DefineFunction(cx, jsc, "dumpRoot", JSBCore_dumpRoot, 0, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
-	JS_DefineFunction(cx, jsc, "addGCRootObject", JSBCore_addRootJS, 1, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
-	JS_DefineFunction(cx, jsc, "removeGCRootObject", JSBCore_removeRootJS, 1, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
-	JS_DefineFunction(cx, jsc, "executeScript", JSBCore_executeScript, 1, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
-	JS_DefineFunction(cx, jsc, "restart", JSBCore_restartVM, 0, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
+	JS_DefineFunction(cx, jsc, "garbageCollect", JSB_core_forceGC, 0, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
+	JS_DefineFunction(cx, jsc, "dumpRoot", JSB_core_dumpRoot, 0, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
+	JS_DefineFunction(cx, jsc, "addGCRootObject", JSB_core_addRootJS, 1, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
+	JS_DefineFunction(cx, jsc, "removeGCRootObject", JSB_core_removeRootJS, 1, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
+	JS_DefineFunction(cx, jsc, "executeScript", JSB_core_executeScript, 1, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
+	JS_DefineFunction(cx, jsc, "restart", JSB_core_restartVM, 0, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 
 	//
 	// 3rd party developer ?

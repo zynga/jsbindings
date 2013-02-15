@@ -52,7 +52,7 @@ void jsb_register_cocos2d_config( JSContext *_cx, JSObject *cocos2d);
 
 void jsb_register_cocos2d_config( JSContext *_cx, JSObject *cocos2d)
 {
-	JS_DefineFunction(_cx, cocos2d, "log", JSBCore_log, 0, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
+	JS_DefineFunction(_cx, cocos2d, "log", JSB_core_log, 0, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 	
 	JSB_NSObject_createClass(_cx, cocos2d, "Object");
 #ifdef __CC_PLATFORM_MAC

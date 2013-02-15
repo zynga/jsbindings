@@ -50,7 +50,7 @@ JSBool JSB_NSObject_constructor(JSContext *cx, uint32_t argc, jsval *vp)
 	
     JSB_NSObject *proxy = [[JSB_NSObject alloc] initWithJSObject:jsobj class:[NSObject class]];
 	
-	jsb_set_proxy_for_jsobject(proxy, jsobj);
+	JSB_set_proxy_for_jsobject(proxy, jsobj);
     JS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(jsobj));
 	
     /* no callbacks */
@@ -63,18 +63,18 @@ void JSB_NSObject_finalize(JSFreeOp *fop, JSObject *obj)
 {
 	CCLOGINFO(@"jsbindings: finalizing JS object %p (NSObject)", obj);
 
-//	JSB_NSObject *proxy = jsb_get_proxy_for_jsobject(obj);
+//	JSB_NSObject *proxy = JSB_get_proxy_for_jsobject(obj);
 //	if (proxy)
 //		[proxy setRealObj:nil];
 
-	jsb_del_proxy_for_jsobject( obj );
+	JSB_del_proxy_for_jsobject( obj );
 }
 
 // Methods
 JSBool JSB_NSObject_init(JSContext *cx, uint32_t argc, jsval *vp) {
 	
 	JSObject* obj = (JSObject *)JS_THIS_OBJECT(cx, vp);
-	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(obj);
+	JSB_NSObject *proxy = (JSB_NSObject*) JSB_get_proxy_for_jsobject(obj);
 	JSB_PRECONDITION2( proxy && ![proxy realObj], cx, JS_FALSE, "Object already initialzied. error" );
 	
 	
@@ -96,7 +96,7 @@ JSBool JSB_NSObject_init(JSContext *cx, uint32_t argc, jsval *vp) {
 JSBool JSB_NSObject_copy(JSContext *cx, uint32_t argc, jsval *vp) {
 	
 	JSObject* obj = (JSObject *)JS_THIS_OBJECT(cx, vp);
-	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(obj);
+	JSB_NSObject *proxy = (JSB_NSObject*) JSB_get_proxy_for_jsobject(obj);
 	NSCAssert( proxy && [proxy realObj], @"Object no initialzied. error");
 	
 
@@ -106,7 +106,7 @@ JSBool JSB_NSObject_copy(JSContext *cx, uint32_t argc, jsval *vp) {
 	if( [real conformsToProtocol:@protocol(NSCopying) ] ) {
 		id native_copy = [[real copy] autorelease];
 		
-		obj_copy = create_jsobject_from_realobj(cx, [native_copy class], native_copy);
+		obj_copy = JSB_create_jsobject_from_realobj(cx, [native_copy class], native_copy);
 
 	} else {
 		JS_SET_RVAL(cx, vp, JSVAL_VOID);
@@ -120,7 +120,7 @@ JSBool JSB_NSObject_copy(JSContext *cx, uint32_t argc, jsval *vp) {
 JSBool JSB_NSObject_retain(JSContext *cx, uint32_t argc, jsval *vp) {
 	
 	JSObject* obj = (JSObject *)JS_THIS_OBJECT(cx, vp);
-	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(obj);
+	JSB_NSObject *proxy = (JSB_NSObject*) JSB_get_proxy_for_jsobject(obj);
 	NSCAssert( proxy && [proxy realObj], @"Object not initialzied. error");
 	
 	id real = (NSObject*) [proxy realObj];
@@ -133,7 +133,7 @@ JSBool JSB_NSObject_retain(JSContext *cx, uint32_t argc, jsval *vp) {
 JSBool JSB_NSObject_release(JSContext *cx, uint32_t argc, jsval *vp) {
 	
 	JSObject* obj = (JSObject *)JS_THIS_OBJECT(cx, vp);
-	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(obj);
+	JSB_NSObject *proxy = (JSB_NSObject*) JSB_get_proxy_for_jsobject(obj);
 	NSCAssert( proxy && [proxy realObj], @"Object not initialzied. error");
 	
 	id real = (NSObject*) [proxy realObj];
@@ -222,7 +222,7 @@ void JSB_NSObject_createClass(JSContext* cx, JSObject* globalObj, const char *na
 		_jsObj = object;
 		_klass = klass;
 		
-		jsb_set_proxy_for_jsobject(self, _jsObj);
+		JSB_set_proxy_for_jsobject(self, _jsObj);
 
 		// Can't use "[self description] since it returns an autorelease version. The string needs to be copied to an static location
 		const char *tmp= [[self description] UTF8String];
@@ -249,7 +249,7 @@ void JSB_NSObject_createClass(JSContext* cx, JSObject* globalObj, const char *na
 	// If the compiler gives you an error, you can safely remove the following line
 	CCLOGINFO(@"jsbindings: deallocing %@", self);
 
-	jsb_del_proxy_for_jsobject(_jsObj);
+	JSB_del_proxy_for_jsobject(_jsObj);
 	
 	if( _description )
 		free(_description);
@@ -276,7 +276,7 @@ JSBool JSB_NSEvent_constructor(JSContext *cx, uint32_t argc, jsval *vp)
 	
     JSB_NSEvent *proxy = [[JSB_NSEvent alloc] initWithJSObject:jsobj class:[NSEvent class]];
 	
-	jsb_set_proxy_for_jsobject(proxy, jsobj);
+	JSB_set_proxy_for_jsobject(proxy, jsobj);
     JS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(jsobj));
 	
     /* no callbacks */
@@ -288,7 +288,7 @@ JSBool JSB_NSEvent_constructor(JSContext *cx, uint32_t argc, jsval *vp)
 JSBool JSB_NSEvent_getLocation(JSContext *cx, uint32_t argc, jsval *vp) {
 	
 	JSObject* obj = (JSObject *)JS_THIS_OBJECT(cx, vp);
-	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(obj);
+	JSB_NSObject *proxy = (JSB_NSObject*) JSB_get_proxy_for_jsobject(obj);
 	NSCAssert( proxy && [proxy realObj], @"Object already initialzied. error");
 	
 	JSB_PRECONDITION( argc == 0, "Invalid number of arguments" );
@@ -301,14 +301,14 @@ JSBool JSB_NSEvent_getLocation(JSContext *cx, uint32_t argc, jsval *vp) {
 	CGPoint location = [event locationInWindow];
 #endif
 	
-	JS_SET_RVAL(cx, vp, CGPoint_to_jsval(cx, location ) );
+	JS_SET_RVAL(cx, vp, JSB_jsval_from_CGPoint(cx, location ) );
 	return JS_TRUE;
 }
 
 JSBool JSB_NSEvent_getDelta(JSContext *cx, uint32_t argc, jsval *vp) {
 	
 	JSObject* obj = (JSObject *)JS_THIS_OBJECT(cx, vp);
-	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(obj);
+	JSB_NSObject *proxy = (JSB_NSObject*) JSB_get_proxy_for_jsobject(obj);
 	NSCAssert( proxy && [proxy realObj], @"Object already initialzied. error");
 	
 	JSB_PRECONDITION( argc == 0, "Invalid number of arguments" );
@@ -323,7 +323,7 @@ JSBool JSB_NSEvent_getDelta(JSContext *cx, uint32_t argc, jsval *vp) {
 	CGFloat y = [real deltaY];
 #endif
 	
-	JS_SET_RVAL(cx, vp, CGPoint_to_jsval(cx, CGPointMake(x,y) ) );
+	JS_SET_RVAL(cx, vp, JSB_jsval_from_CGPoint(cx, CGPointMake(x,y) ) );
 	return JS_TRUE;
 }
 
@@ -333,11 +333,11 @@ void JSB_NSEvent_finalize(JSFreeOp *fop, JSObject *obj)
 {
 	CCLOGINFO(@"jsbindings: finalizing JS object %p (NSEvent)", obj);
 	
-//	JSB_NSObject *proxy = jsb_get_proxy_for_jsobject(obj);
+//	JSB_NSObject *proxy = JSB_get_proxy_for_jsobject(obj);
 //	if (proxy)
 //		[proxy setRealObj:nil];
 
-	jsb_del_proxy_for_jsobject( obj );
+	JSB_del_proxy_for_jsobject( obj );
 }
 
 void JSB_NSEvent_createClass(JSContext* cx, JSObject* globalObj, const char *name )
@@ -409,7 +409,7 @@ JSBool JSB_UITouch_constructor(JSContext *cx, uint32_t argc, jsval *vp)
 	
     JSB_UITouch *proxy = [[JSB_UITouch alloc] initWithJSObject:jsobj class:[UITouch class]];
 	
-	jsb_set_proxy_for_jsobject(proxy, jsobj);
+	JSB_set_proxy_for_jsobject(proxy, jsobj);
     JS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(jsobj));
 	
     /* no callbacks */
@@ -421,7 +421,7 @@ JSBool JSB_UITouch_constructor(JSContext *cx, uint32_t argc, jsval *vp)
 JSBool JSB_UITouch_location(JSContext *cx, uint32_t argc, jsval *vp) {
 	
 	JSObject* obj = (JSObject *)JS_THIS_OBJECT(cx, vp);
-	JSB_NSObject *proxy = (JSB_NSObject*)jsb_get_proxy_for_jsobject(obj);
+	JSB_NSObject *proxy = (JSB_NSObject*)JSB_get_proxy_for_jsobject(obj);
 	NSCAssert( proxy && [proxy realObj], @"Object already initialzied. error");
 	
 	JSB_PRECONDITION( argc == 0, "Invalid number of arguments" );
@@ -434,14 +434,14 @@ JSBool JSB_UITouch_location(JSContext *cx, uint32_t argc, jsval *vp) {
 	CGPoint location = [real locationInView: [real view]];
 #endif
 	
-	JS_SET_RVAL(cx, vp, CGPoint_to_jsval(cx, location) );
+	JS_SET_RVAL(cx, vp, JSB_jsval_from_CGPoint(cx, location) );
 	return JS_TRUE;
 }
 
 JSBool JSB_UITouch_delta(JSContext *cx, uint32_t argc, jsval *vp) {
 	
 	JSObject* obj = (JSObject *)JS_THIS_OBJECT(cx, vp);
-	JSB_NSObject *proxy = (JSB_NSObject*)jsb_get_proxy_for_jsobject(obj);
+	JSB_NSObject *proxy = (JSB_NSObject*)JSB_get_proxy_for_jsobject(obj);
 	NSCAssert( proxy && [proxy realObj], @"Object already initialzied. error");
 	
 	JSB_PRECONDITION( argc == 0, "Invalid number of arguments" );
@@ -458,14 +458,14 @@ JSBool JSB_UITouch_delta(JSContext *cx, uint32_t argc, jsval *vp) {
 	CGPoint delta = CGPointMake(now.x-prev.x, now.y-prev.y);
 #endif
 
-	JS_SET_RVAL(cx, vp, CGPoint_to_jsval(cx, delta ) );
+	JS_SET_RVAL(cx, vp, JSB_jsval_from_CGPoint(cx, delta ) );
 	return JS_TRUE;
 }
 
 JSBool JSB_UITouch_id(JSContext *cx, uint32_t argc, jsval *vp) {
 	
 	JSObject* obj = (JSObject *)JS_THIS_OBJECT(cx, vp);
-	JSB_NSObject *proxy = (JSB_NSObject*)jsb_get_proxy_for_jsobject(obj);
+	JSB_NSObject *proxy = (JSB_NSObject*)JSB_get_proxy_for_jsobject(obj);
 	NSCAssert( proxy && [proxy realObj], @"Object already initialzied. error");
 	
 	JSB_PRECONDITION( argc == 0, "Invalid number of arguments" );
@@ -482,11 +482,11 @@ void JSB_UITouch_finalize(JSFreeOp *fop, JSObject *obj)
 {
 	CCLOGINFO(@"jsbindings: finalizing JS object %p (UITouch)", obj);
 
-//	JSB_NSObject *proxy = jsb_get_proxy_for_jsobject(obj);
+//	JSB_NSObject *proxy = JSB_get_proxy_for_jsobject(obj);
 //	if (proxy)
 //		[proxy setRealObj:nil];
 
-	jsb_del_proxy_for_jsobject( obj );
+	JSB_del_proxy_for_jsobject( obj );
 }
 
 void JSB_UITouch_createClass(JSContext* cx, JSObject* globalObj, const char *name )
@@ -618,11 +618,11 @@ void JSB_UIAccelerometer_finalize(JSFreeOp *fop, JSObject *obj)
 {
 	CCLOGINFO(@"jsbindings: finalizing JS object %p (UIAccelerometer)", obj);
 
-//	JSB_NSObject *proxy = jsb_get_proxy_for_jsobject(obj);
+//	JSB_NSObject *proxy = JSB_get_proxy_for_jsobject(obj);
 //	if (proxy)
 //		[proxy setRealObj:nil];
 	
-	jsb_del_proxy_for_jsobject( obj );
+	JSB_del_proxy_for_jsobject( obj );
 }
 
 // Arguments: 
@@ -633,7 +633,7 @@ JSBool JSB_UIAccelerometer_sharedAccelerometer_static(JSContext *cx, uint32_t ar
 	
 	ret_val = [UIAccelerometer sharedAccelerometer];
 	
-	JSObject *jsobj = get_or_create_jsobject_from_realobj( cx, ret_val );
+	JSObject *jsobj = JSB_get_or_create_jsobject_from_realobj( cx, ret_val );
 	JS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(jsobj));
 	
 	return JS_TRUE;
@@ -643,7 +643,7 @@ JSBool JSB_UIAccelerometer_sharedAccelerometer_static(JSContext *cx, uint32_t ar
 JSBool JSB_UIAccelerometer_getUpdateInterval(JSContext *cx, uint32_t argc, jsval *vp) {
 	
 	JSObject* obj = (JSObject *)JS_THIS_OBJECT(cx, vp);
-	JSB_NSObject *proxy = (JSB_NSObject*)jsb_get_proxy_for_jsobject(obj);
+	JSB_NSObject *proxy = (JSB_NSObject*)JSB_get_proxy_for_jsobject(obj);
 	NSCAssert( proxy && [proxy realObj], @"Object already initialzied. error");
 	
 	JSB_PRECONDITION( argc == 0, "Invalid number of arguments" );
@@ -659,7 +659,7 @@ JSBool JSB_UIAccelerometer_getUpdateInterval(JSContext *cx, uint32_t argc, jsval
 JSBool JSB_UIAccelerometer_setUpdateInterval(JSContext *cx, uint32_t argc, jsval *vp) {
 	
 	JSObject* obj = (JSObject *)JS_THIS_OBJECT(cx, vp);
-	JSB_NSObject *proxy = (JSB_NSObject*)jsb_get_proxy_for_jsobject(obj);
+	JSB_NSObject *proxy = (JSB_NSObject*)JSB_get_proxy_for_jsobject(obj);
 	NSCAssert( proxy && [proxy realObj], @"Object already initialzied. error");
 	
 	JSB_PRECONDITION( argc == 1, "Invalid number of arguments" );
@@ -679,7 +679,7 @@ JSBool JSB_UIAccelerometer_setUpdateInterval(JSContext *cx, uint32_t argc, jsval
 
 JSBool JSB_UIAccelerometer_setDelegate(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSObject* obj = (JSObject *)JS_THIS_OBJECT(cx, vp);
-	JSB_NSObject *proxy = (JSB_NSObject*)jsb_get_proxy_for_jsobject(obj);
+	JSB_NSObject *proxy = (JSB_NSObject*)JSB_get_proxy_for_jsobject(obj);
 	NSCAssert( proxy && [proxy realObj], @"Object already initialzied. error");
 	
 	JSB_PRECONDITION( argc == 2, "Invalid number of arguments" );

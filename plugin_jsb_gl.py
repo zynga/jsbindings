@@ -53,7 +53,7 @@ class JSBGenerateFunctions_GL(JSBGenerateFunctions):
     def generate_argument_typedarray(self, i, arg_js_type, arg_declared_type):
         if self._current_typedarray:
             # TypedArray is used as an IN paramter
-            template = '\tGLsizei count;\n\tok &= jsval_typedarray_to_dataptr( cx, *argvp++, &count, &arg%d, %s);\n' % (i, self._current_typedarray)
+            template = '\tGLsizei count;\n\tok &= JSB_jsval_typedarray_to_dataptr( cx, *argvp++, &count, &arg%d, %s);\n' % (i, self._current_typedarray)
             self.fd_mm.write(template)
         else:
             raise Exception("Logic error in GL plugin")
@@ -61,7 +61,7 @@ class JSBGenerateFunctions_GL(JSBGenerateFunctions):
     def generate_argument_arraybufferview(self, i, arg_js_type, arg_declared_type):
         if self._current_typedarray:
             # TypedArray is used as an OUT paramter
-            template = '\tGLsizei count;\n\tok &= get_arraybufferview_dataptr( cx, *argvp++, &count, &arg%d);\n' % (i)
+            template = '\tGLsizei count;\n\tok &= JSB_get_arraybufferview_dataptr( cx, *argvp++, &count, &arg%d);\n' % (i)
             self.fd_mm.write(template)
         else:
             raise Exception("Logic error in GL plugin")

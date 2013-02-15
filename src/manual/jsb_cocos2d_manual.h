@@ -29,15 +29,15 @@
 #ifdef JSB_INCLUDE_COCOS2D
 #import "cocos2d.h"
 
-JSBool jsval_to_ccColor3B( JSContext *cx, jsval vp, ccColor3B *ret );
-JSBool jsval_to_ccColor4B( JSContext *cx, jsval vp, ccColor4B *ret );
-JSBool jsval_to_ccColor4F( JSContext *cx, jsval vp, ccColor4F *ret );
-jsval ccColor3B_to_jsval( JSContext *cx, ccColor3B p );
-jsval ccColor4B_to_jsval( JSContext *cx, ccColor4B p );
-jsval ccColor4F_to_jsval( JSContext *cx, ccColor4F p );
+JSBool JSB_jsval_to_ccColor3B( JSContext *cx, jsval vp, ccColor3B *ret );
+JSBool JSB_jsval_to_ccColor4B( JSContext *cx, jsval vp, ccColor4B *ret );
+JSBool JSB_jsval_to_ccColor4F( JSContext *cx, jsval vp, ccColor4F *ret );
+jsval JSB_jsval_from_ccColor3B( JSContext *cx, ccColor3B p );
+jsval JSB_jsval_from_ccColor4B( JSContext *cx, ccColor4B p );
+jsval JSB_jsval_from_ccColor4F( JSContext *cx, ccColor4F p );
 
 /** returns an array (not NSArray) of CGPoint. caller should call free */
-JSBool jsval_to_array_of_CGPoint( JSContext *cx, jsval vp, CGPoint**verts, int *numVerts);
+JSBool JSB_jsval_to_array_of_CGPoint( JSContext *cx, jsval vp, CGPoint**verts, int *numVerts);
 
 // XXX argh
 // Apparently this function has a c++ definition... why???

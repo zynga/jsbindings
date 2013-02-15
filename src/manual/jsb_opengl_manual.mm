@@ -78,7 +78,7 @@ JSBool JSB_glDeleteTextures(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	uint32_t arg0;
 
-	ok &= jsval_to_uint32( cx, *argvp++, &arg0 );
+	ok &= JSB_jsval_to_uint32( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	glDeleteTextures(1, &arg0);
@@ -92,7 +92,7 @@ JSBool JSB_glDeleteBuffers(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	uint32_t arg0;
 
-	ok &= jsval_to_uint32( cx, *argvp++, &arg0 );
+	ok &= JSB_jsval_to_uint32( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	glDeleteBuffers(1, &arg0);
@@ -106,7 +106,7 @@ JSBool JSB_glDeleteRenderbuffers(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	uint32_t arg0;
 
-	ok &= jsval_to_uint32( cx, *argvp++, &arg0 );
+	ok &= JSB_jsval_to_uint32( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	glDeleteRenderbuffers(1, &arg0);
@@ -120,7 +120,7 @@ JSBool JSB_glDeleteFramebuffers(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	uint32_t arg0;
 
-	ok &= jsval_to_uint32( cx, *argvp++, &arg0 );
+	ok &= JSB_jsval_to_uint32( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	glDeleteFramebuffers(1, &arg0);
@@ -134,8 +134,8 @@ JSBool JSB_glShaderSource(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	uint32_t arg0; const char *arg1;
 
-	ok &= jsval_to_uint32( cx, *argvp++, &arg0 );
-	ok &= jsval_to_charptr(cx, *argvp++, &arg1);
+	ok &= JSB_jsval_to_uint32( cx, *argvp++, &arg0 );
+	ok &= JSB_jsval_to_charptr(cx, *argvp++, &arg1);
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	glShaderSource(arg0, 1, &arg1, NULL);
@@ -149,8 +149,8 @@ JSBool JSB_glGetShaderiv(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	uint32_t arg0, arg1;
 
-	ok &= jsval_to_uint32( cx, *argvp++, &arg0 );
-	ok &= jsval_to_uint32( cx, *argvp++, &arg1 );
+	ok &= JSB_jsval_to_uint32( cx, *argvp++, &arg0 );
+	ok &= JSB_jsval_to_uint32( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	GLint ret;
@@ -165,8 +165,8 @@ JSBool JSB_glGetProgramiv(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	uint32_t arg0, arg1;
 
-	ok &= jsval_to_uint32( cx, *argvp++, &arg0 );
-	ok &= jsval_to_uint32( cx, *argvp++, &arg1 );
+	ok &= JSB_jsval_to_uint32( cx, *argvp++, &arg0 );
+	ok &= JSB_jsval_to_uint32( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	GLint ret;
@@ -181,7 +181,7 @@ JSBool JSB_glGetProgramInfoLog(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	uint32_t arg0;
 
-	ok &= jsval_to_uint32( cx, *argvp++, &arg0 );
+	ok &= JSB_jsval_to_uint32( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	GLsizei length;
@@ -189,7 +189,7 @@ JSBool JSB_glGetProgramInfoLog(JSContext *cx, uint32_t argc, jsval *vp) {
 	GLchar src[length];
 	glGetProgramInfoLog(arg0, length, NULL, src);
 
-	JS_SET_RVAL(cx, vp, charptr_to_jsval(cx, src));
+	JS_SET_RVAL(cx, vp, JSB_jsval_from_charptr(cx, src));
 	return JS_TRUE;
 }
 
@@ -199,7 +199,7 @@ JSBool JSB_glGetShaderInfoLog(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	uint32_t arg0;
 
-	ok &= jsval_to_uint32( cx, *argvp++, &arg0 );
+	ok &= JSB_jsval_to_uint32( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	GLsizei length;
@@ -207,7 +207,7 @@ JSBool JSB_glGetShaderInfoLog(JSContext *cx, uint32_t argc, jsval *vp) {
 	GLchar src[length];
 	glGetShaderInfoLog(arg0, length, NULL, src);
 
-	JS_SET_RVAL(cx, vp, charptr_to_jsval(cx, src));
+	JS_SET_RVAL(cx, vp, JSB_jsval_from_charptr(cx, src));
 	return JS_TRUE;
 }
 
@@ -217,7 +217,7 @@ JSBool JSB_glGetShaderSource(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	uint32_t arg0;
 
-	ok &= jsval_to_uint32( cx, *argvp++, &arg0 );
+	ok &= JSB_jsval_to_uint32( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	GLsizei length;
@@ -225,7 +225,7 @@ JSBool JSB_glGetShaderSource(JSContext *cx, uint32_t argc, jsval *vp) {
 	GLchar src[length];
 	glGetShaderSource(arg0, length, NULL, src);
 
-	JS_SET_RVAL(cx, vp, charptr_to_jsval(cx, src));
+	JS_SET_RVAL(cx, vp, JSB_jsval_from_charptr(cx, src));
 	return JS_TRUE;
 }
 

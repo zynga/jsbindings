@@ -72,13 +72,13 @@ JSBool JSB_cpBody_setUserData(JSContext *cx, uint32_t argc, jsval *vp);
 
 // convertions
 
-jsval cpBB_to_jsval(JSContext *cx, cpBB bb );
-JSBool jsval_to_cpBB( JSContext *cx, jsval vp, cpBB *ret );
-JSBool jsval_to_array_of_cpvect( JSContext *cx, jsval vp, cpVect**verts, int *numVerts);
+jsval JSB_jsval_from_cpBB(JSContext *cx, cpBB bb );
+JSBool JSB_jsval_to_cpBB( JSContext *cx, jsval vp, cpBB *ret );
+JSBool JSB_jsval_to_array_of_cpvect( JSContext *cx, jsval vp, cpVect**verts, int *numVerts);
 
 // requires cocos2d
-#define cpVect_to_jsval CGPoint_to_jsval
-#define jsval_to_cpVect jsval_to_CGPoint
+#define JSB_jsval_from_cpVect JSB_jsval_from_CGPoint
+#define JSB_jsval_to_cpVect JSB_jsval_to_CGPoint
 
 
 // Object Oriented Chipmunk
