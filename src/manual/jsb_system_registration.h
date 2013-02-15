@@ -26,6 +26,6 @@
 #ifndef __JSB_SYSTEM_REGISTRATION
 #define __JSB_SYSTEM_REGISTRATION
 
-void jsb_register_system( JSContext *globalC, JSObject *globalO);
+void JSB_register_system( JSContext *globalC, JSObject *globalO);
 
 #endif // __JSB_CHIPMUNK_REGISTRATION

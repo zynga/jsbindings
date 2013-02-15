@@ -656,22 +656,22 @@ JSObject* JSB_NewGlobalObject(JSContext* cx, bool empty)
 
 	// registers cocos2d, cocosdenshion and cocosbuilder reader bindings
 #if JSB_INCLUDE_COCOS2D
-	jsb_register_cocos2d(cx, glob);
+	JSB_register_cocos2d(cx, glob);
 #endif // JSB_INCLUDE_COCOS2D
 
 	// registers chipmunk bindings
 #if JSB_INCLUDE_CHIPMUNK
-	jsb_register_chipmunk(cx, glob);
+	JSB_register_chipmunk(cx, glob);
 #endif // JSB_INCLUDE_CHIPMUNK
 
 	// registers sys bindings
 #if JSB_INCLUDE_SYSTEM
-	jsb_register_system(cx, glob);
+	JSB_register_system(cx, glob);
 #endif // JSB_INCLUDE_SYSTEM
 
 	// registers opengl bindings
 #if JSB_INCLUDE_OPENGL
-	jsb_register_opengl(cx, glob);
+	JSB_register_opengl(cx, glob);
 #endif // JSB_INCLUDE_OPENGL
 
     return glob;

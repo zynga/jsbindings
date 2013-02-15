@@ -92,7 +92,7 @@ _The CocosDenshion config files could be found here: [configs/CocosDenshion](htt
 		-(id) init
 		{
 			// ...
-			jsb_register_PROJECTNAME(_cx, _object);
+			JSB_register_PROJECTNAME(_cx, _object);
 			// ...
 		}
 	

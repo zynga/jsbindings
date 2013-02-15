@@ -26,6 +26,6 @@
 #ifndef __JSB_CHIPMUNK_REGISTRATION
 #define __JSB_CHIPMUNK_REGISTRATION
 
-void jsb_register_chipmunk( JSContext *globalC, JSObject *globalO);
+void JSB_register_chipmunk( JSContext *globalC, JSObject *globalO);
 
 #endif // __JSB_CHIPMUNK_REGISTRATION

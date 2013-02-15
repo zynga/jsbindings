@@ -31,7 +31,7 @@
 #import "jsb_system_functions.h"
 
 
-void jsb_register_system( JSContext *_cx, JSObject *object)
+void JSB_register_system( JSContext *_cx, JSObject *object)
 {
 	//
 	// sys

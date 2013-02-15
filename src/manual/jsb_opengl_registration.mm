@@ -29,7 +29,7 @@
 // system
 #import "jsb_opengl_functions.h"
 
-void jsb_register_opengl( JSContext *_cx, JSObject *object)
+void JSB_register_opengl( JSContext *_cx, JSObject *object)
 {
 	//
 	// gl

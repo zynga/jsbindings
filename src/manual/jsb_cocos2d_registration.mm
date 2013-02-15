@@ -46,11 +46,11 @@
 
 // forward declarations
 void JSB_GLNode_createClass(JSContext *cx, JSObject* globalObj, const char* name );
-void jsb_register_cocos2d_config( JSContext *_cx, JSObject *cocos2d);
+void JSB_register_cocos2d_config( JSContext *_cx, JSObject *cocos2d);
 
 //
 
-void jsb_register_cocos2d_config( JSContext *_cx, JSObject *cocos2d)
+void JSB_register_cocos2d_config( JSContext *_cx, JSObject *cocos2d)
 {
 	JS_DefineFunction(_cx, cocos2d, "log", JSB_core_log, 0, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 	
@@ -63,7 +63,7 @@ void jsb_register_cocos2d_config( JSContext *_cx, JSObject *cocos2d)
 #endif	
 }
 
-void jsb_register_cocos2d( JSContext *_cx, JSObject *object)
+void JSB_register_cocos2d( JSContext *_cx, JSObject *object)
 {
 	//
 	// cocos2d
@@ -74,7 +74,7 @@ void jsb_register_cocos2d( JSContext *_cx, JSObject *object)
 	
 
 	// register "config" object
-	jsb_register_cocos2d_config(_cx, cocos2d);
+	JSB_register_cocos2d_config(_cx, cocos2d);
 
 	
 	// Register classes: base classes should be registered first
