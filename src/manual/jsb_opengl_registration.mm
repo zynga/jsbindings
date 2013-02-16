@@ -22,8 +22,9 @@
  * THE SOFTWARE.
  */
 
-#import "jsb_config.h"
-#import "jsb_core.h"
+#include "jsb_config.h"
+#include "jsb_core.h"
+#include "jsb_opengl_manual.h"
 
 
 // system
@@ -37,6 +38,12 @@ void JSB_register_opengl( JSContext *_cx, JSObject *object)
 	JSObject *opengl = JS_NewObject(_cx, NULL, NULL, NULL);
 	jsval openglVal = OBJECT_TO_JSVAL(opengl);
 	JS_SetProperty(_cx, object, "gl", &openglVal);
+
+
+	// New WebGL functions, not present on OpenGL ES 2.0
+	JS_DefineFunction(_cx, opengl, "getSupportedExtensions", JSB_glGetSupportedExtensions, 0, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
+
+
 
 #import "jsb_opengl_functions_registration.h"
 		

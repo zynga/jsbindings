@@ -316,3 +316,21 @@ gl.texSubImage2D = function() {
 
 	gl._texSubImage2D.apply(this, arguments);
 };
+
+//
+// Extensions
+//
+// From the WebGL spec:
+// Returns an object if, and only if, name is an ASCII case-insensitive match [HTML] for one of the names returned from getSupportedExtensions;
+// otherwise, returns null. The object returned from getExtension contains any constants or functions provided by the extension.
+// A returned object may have no constants or functions if the extension does not define any, but a unique object must still be returned.
+// That object is used to indicate that the extension has been enabled.
+// XXX: The returned object must return the functions and constants.
+gl.getExtension = function(extension) {
+	var extensions = gl.getSupportedExtensions();
+	cc.log( extension );
+	cc.log( extensions );
+	if( extensions.indexOf(extension) > -1 )
+		return {};
+	return null;
+};

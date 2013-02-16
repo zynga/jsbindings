@@ -36,7 +36,8 @@
 
 
 // Helper functions that link "glGenXXXs" (OpenGL ES 2.0 spec), with "gl.createXXX" (WebGL spec)
-JSBool JSB_glGenTextures(JSContext *cx, uint32_t argc, jsval *vp) {
+JSBool JSB_glGenTextures(JSContext *cx, uint32_t argc, jsval *vp)
+{
 	JSB_PRECONDITION2( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
 
 	GLuint texture;
@@ -45,7 +46,8 @@ JSBool JSB_glGenTextures(JSContext *cx, uint32_t argc, jsval *vp) {
 	return JS_TRUE;
 }
 
-JSBool JSB_glGenBuffers(JSContext *cx, uint32_t argc, jsval *vp) {
+JSBool JSB_glGenBuffers(JSContext *cx, uint32_t argc, jsval *vp)
+{
 	JSB_PRECONDITION2( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
 
 	GLuint buffer;
@@ -54,7 +56,8 @@ JSBool JSB_glGenBuffers(JSContext *cx, uint32_t argc, jsval *vp) {
 	return JS_TRUE;
 }
 
-JSBool JSB_glGenRenderbuffers(JSContext *cx, uint32_t argc, jsval *vp) {
+JSBool JSB_glGenRenderbuffers(JSContext *cx, uint32_t argc, jsval *vp)
+{
 	JSB_PRECONDITION2( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
 
 	GLuint renderbuffers;
@@ -63,7 +66,8 @@ JSBool JSB_glGenRenderbuffers(JSContext *cx, uint32_t argc, jsval *vp) {
 	return JS_TRUE;
 }
 
-JSBool JSB_glGenFramebuffers(JSContext *cx, uint32_t argc, jsval *vp) {
+JSBool JSB_glGenFramebuffers(JSContext *cx, uint32_t argc, jsval *vp)
+{
 	JSB_PRECONDITION2( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
 
 	GLuint framebuffers;
@@ -72,7 +76,8 @@ JSBool JSB_glGenFramebuffers(JSContext *cx, uint32_t argc, jsval *vp) {
 	return JS_TRUE;
 }
 
-JSBool JSB_glDeleteTextures(JSContext *cx, uint32_t argc, jsval *vp) {
+JSBool JSB_glDeleteTextures(JSContext *cx, uint32_t argc, jsval *vp)
+{
 	JSB_PRECONDITION2( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
@@ -86,7 +91,8 @@ JSBool JSB_glDeleteTextures(JSContext *cx, uint32_t argc, jsval *vp) {
 	return JS_TRUE;
 }
 
-JSBool JSB_glDeleteBuffers(JSContext *cx, uint32_t argc, jsval *vp) {
+JSBool JSB_glDeleteBuffers(JSContext *cx, uint32_t argc, jsval *vp)
+{
 	JSB_PRECONDITION2( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
@@ -100,7 +106,8 @@ JSBool JSB_glDeleteBuffers(JSContext *cx, uint32_t argc, jsval *vp) {
 	return JS_TRUE;
 }
 
-JSBool JSB_glDeleteRenderbuffers(JSContext *cx, uint32_t argc, jsval *vp) {
+JSBool JSB_glDeleteRenderbuffers(JSContext *cx, uint32_t argc, jsval *vp)
+{
 	JSB_PRECONDITION2( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
@@ -114,7 +121,8 @@ JSBool JSB_glDeleteRenderbuffers(JSContext *cx, uint32_t argc, jsval *vp) {
 	return JS_TRUE;
 }
 
-JSBool JSB_glDeleteFramebuffers(JSContext *cx, uint32_t argc, jsval *vp) {
+JSBool JSB_glDeleteFramebuffers(JSContext *cx, uint32_t argc, jsval *vp)
+{
 	JSB_PRECONDITION2( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
@@ -128,7 +136,8 @@ JSBool JSB_glDeleteFramebuffers(JSContext *cx, uint32_t argc, jsval *vp) {
 	return JS_TRUE;
 }
 
-JSBool JSB_glShaderSource(JSContext *cx, uint32_t argc, jsval *vp) {
+JSBool JSB_glShaderSource(JSContext *cx, uint32_t argc, jsval *vp)
+{
 	JSB_PRECONDITION2( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
@@ -143,7 +152,8 @@ JSBool JSB_glShaderSource(JSContext *cx, uint32_t argc, jsval *vp) {
 	return JS_TRUE;
 }
 
-JSBool JSB_glGetShaderiv(JSContext *cx, uint32_t argc, jsval *vp) {
+JSBool JSB_glGetShaderiv(JSContext *cx, uint32_t argc, jsval *vp)
+{
 	JSB_PRECONDITION2( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
@@ -159,7 +169,8 @@ JSBool JSB_glGetShaderiv(JSContext *cx, uint32_t argc, jsval *vp) {
 	return JS_TRUE;
 }
 
-JSBool JSB_glGetProgramiv(JSContext *cx, uint32_t argc, jsval *vp) {
+JSBool JSB_glGetProgramiv(JSContext *cx, uint32_t argc, jsval *vp)
+{
 	JSB_PRECONDITION2( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
@@ -175,7 +186,8 @@ JSBool JSB_glGetProgramiv(JSContext *cx, uint32_t argc, jsval *vp) {
 	return JS_TRUE;
 }
 
-JSBool JSB_glGetProgramInfoLog(JSContext *cx, uint32_t argc, jsval *vp) {
+JSBool JSB_glGetProgramInfoLog(JSContext *cx, uint32_t argc, jsval *vp)
+{
 	JSB_PRECONDITION2( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
@@ -193,7 +205,8 @@ JSBool JSB_glGetProgramInfoLog(JSContext *cx, uint32_t argc, jsval *vp) {
 	return JS_TRUE;
 }
 
-JSBool JSB_glGetShaderInfoLog(JSContext *cx, uint32_t argc, jsval *vp) {
+JSBool JSB_glGetShaderInfoLog(JSContext *cx, uint32_t argc, jsval *vp)
+{
 	JSB_PRECONDITION2( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
@@ -211,7 +224,8 @@ JSBool JSB_glGetShaderInfoLog(JSContext *cx, uint32_t argc, jsval *vp) {
 	return JS_TRUE;
 }
 
-JSBool JSB_glGetShaderSource(JSContext *cx, uint32_t argc, jsval *vp) {
+JSBool JSB_glGetShaderSource(JSContext *cx, uint32_t argc, jsval *vp)
+{
 	JSB_PRECONDITION2( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
@@ -235,7 +249,8 @@ JSBool JSB_glGetShaderSource(JSContext *cx, uint32_t argc, jsval *vp) {
 //		readonly attribute GLenum type;
 //		readonly attribute DOMString name;
 //	};
-JSBool JSB_glGetActiveAttrib(JSContext *cx, uint32_t argc, jsval *vp) {
+JSBool JSB_glGetActiveAttrib(JSContext *cx, uint32_t argc, jsval *vp)
+{
 	JSB_PRECONDITION2( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
@@ -275,7 +290,8 @@ JSBool JSB_glGetActiveAttrib(JSContext *cx, uint32_t argc, jsval *vp) {
 //		readonly attribute GLenum type;
 //		readonly attribute DOMString name;
 //	};
-JSBool JSB_glGetActiveUniform(JSContext *cx, uint32_t argc, jsval *vp) {
+JSBool JSB_glGetActiveUniform(JSContext *cx, uint32_t argc, jsval *vp)
+{
 	JSB_PRECONDITION2( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
@@ -311,7 +327,8 @@ JSBool JSB_glGetActiveUniform(JSContext *cx, uint32_t argc, jsval *vp) {
 }
 
 // Ret Val: sequence<WebGLShader>?
-JSBool JSB_glGetAttachedShaders(JSContext *cx, uint32_t argc, jsval *vp) {
+JSBool JSB_glGetAttachedShaders(JSContext *cx, uint32_t argc, jsval *vp)
+{
 	JSB_PRECONDITION2( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
@@ -338,5 +355,41 @@ JSBool JSB_glGetAttachedShaders(JSContext *cx, uint32_t argc, jsval *vp) {
 	return JS_TRUE;
 
 }
+
+// Ret Val: sequence<DOMString>?
+JSBool JSB_glGetSupportedExtensions(JSContext *cx, uint32_t argc, jsval *vp)
+{
+	JSB_PRECONDITION2( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
+
+	const GLubyte *extensions = glGetString(GL_EXTENSIONS);
+
+	JSObject *jsobj = JS_NewArrayObject(cx, 0, NULL);
+	JSB_PRECONDITION2(jsobj, cx, JS_FALSE, "Error creating JS Object");
+
+	// copy, to be able to add '\0'
+	size_t len = strlen((char*)extensions);
+	GLubyte copy[len+1];
+	strncpy((char*)copy, (const char*)extensions, len );
+
+	int start_extension=0;
+	int element=0;
+	for( int i=0; i<len+1; i++) {
+		if( copy[i]==' ' || copy[i]==',' || i==len ) {
+			copy[i] = 0;
+
+			jsval str = JSB_jsval_from_charptr(cx, (const char*)&copy[start_extension]);
+			JS_SetElement(cx, jsobj, element++, &str );
+
+			start_extension = i+1;
+
+			i++;
+		}
+	}
+
+	JS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(jsobj));
+	return JS_TRUE;
+	
+}
+
 
 #endif // JSB_INCLUDE_OPENGL

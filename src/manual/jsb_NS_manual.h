@@ -22,6 +22,9 @@
  * THE SOFTWARE.
  */
 
+#ifndef __JSB_NS_MANUAL_H
+#define __JSB_NS_MANUAL_H
+
 #import "jsb_config.h"
 
 #ifdef JSB_INCLUDE_NS
@@ -118,5 +121,6 @@ extern "C" {
 
 #endif // __CC_PLATFORM_IOS
 
-
 #endif // JSB_INCLUDE_NS
+
+#endif // __JSB_NS_MANUAL_H
