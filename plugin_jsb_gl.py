@@ -41,11 +41,23 @@ class JSBGenerateFunctions_GL(JSBGenerateFunctions):
         self.args_js_special_type_conversions['ArrayBufferView'] = [self.generate_argument_arraybufferview, 'void*']
 
         # Other supported functions
-        self.supported_functions_without_count = ['glReadPixels', 'glDrawElements']
+        self.supported_functions_without_count = ['glReadPixels', 'glDrawElements', 'glTexImage2D', 'glTexSubImage2D', 'glCompressedTexImage2D', 'glCompressedTexSubImage2D']
         self.supported_functions_with_count = ['glBufferData', 'glBufferSubData']
 
         # Only valid when _with_count is enabled
         self.args_to_ignore_in_js = ['count', 'size']
+
+        # Functions that should have an _ as prefix
+        self.functions_with_underscore = [
+            'glCreateShader', 'glCreateProgram',
+            'glDeleteShader', 'glDeleteProgram',
+            'glGetShaderInfoLog', 'glGetProgramInfoLog',
+            'glAttachShader', 'glLinkProgram', 'glUseProgram', 'glCompileShader',
+            'glGetAttribLocation', 'glGetUniformLocation', 'glGetShaderSource', 'glShaderSource',
+            'glValidateProgram',
+            'glGetActiveUniform', 'glGetActiveAttrib', 'glGetAttachedShaders',
+            'glTexImage2D', 'glTexSubImage2D',
+            ]
 
     #
     # Helper functions
@@ -88,17 +100,8 @@ class JSBGenerateFunctions_GL(JSBGenerateFunctions):
         use_underscore = False
         # It is possible to add the "name" parameter in opengl_jsb.ini,
         # but it easier with a plugin
-        functions_with_underscore = [
-                                    'glCreateShader', 'glCreateProgram',
-                                    'glDeleteShader', 'glDeleteProgram',
-                                    'glGetShaderInfoLog', 'glGetProgramInfoLog',
-                                    'glAttachShader', 'glLinkProgram', 'glUseProgram', 'glCompileShader',
-                                    'glGetAttribLocation', 'glGetUniformLocation', 'glGetShaderSource', 'glShaderSource',
-                                    'glValidateProgram',
-                                    'glGetActiveUniform', 'glGetActiveAttrib', 'glGetAttachedShaders',
-                                    ]
 
-        if function_name in functions_with_underscore:
+        if function_name in self.functions_with_underscore:
             use_underscore = True
         # elif re.match('gl\S+([1-4])([fi])v$', function_name):
         #     use_underscore = True

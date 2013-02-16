@@ -117,6 +117,8 @@ gl.bindTexture = function(target, texture) {
 	// Accept numbers too. eg: gl.bindTexture(0)
 	if( typeof texture === 'number' )
 		texture_id = texture;
+	else if( texture === null )
+		texture_id = 0;
 	else
 		texture_id = texture.texture_id;
 
@@ -124,31 +126,42 @@ gl.bindTexture = function(target, texture) {
 };
 
 gl.bindBuffer = function(target, buffer) {
-	var buffer_id = buffer.buffer_id;
-
+	var buffer_id;
 	// Accept numbers too. eg: gl.bindBuffer(0)
 	if( typeof buffer === 'number' )
 		buffer_id = buffer;
+	else if( buffer === null )
+		buffer_id = 0;
+	else
+		buffer_id = buffer.buffer_id;
 
 	gl._bindBuffer(target, buffer_id);
 };
 
 gl.bindRenderBuffer = function(target, buffer) {
-	var buffer_id = buffer.renderbuffer_id;
+	var buffer_id;
 
 	// Accept numbers too. eg: gl.bindRenderbuffer(0)
 	if( typeof buffer === 'number' )
 		buffer_id = buffer;
+	else if( buffer === null )
+		buffer_id = 0;
+	else
+		buffer_id = buffer.buffer_id;
 
 	gl._bindRenderbuffer(target, buffer_id);
 };
 
 gl.bindFramebuffer = function(target, buffer) {
-	var buffer_id = buffer.framebuffer_id;
+	var buffer_id;
 
 	// Accept numbers too. eg: gl.bindFramebuffer(0)
 	if( typeof buffer === 'number' )
 		buffer_id = buffer;
+	else if( buffer === null )
+		buffer_id = 0;
+	else
+		buffer_id = buffer.buffer_id;
 
 	gl._bindFramebuffer(target, buffer_id);
 };
@@ -272,4 +285,34 @@ gl.getAttachedShaders = function(program) {
 		program_id = program;
 
 	return gl._getAttachedShaders(program_id);
+};
+
+//
+// Texture functions
+//
+
+// XXX: Currently only the 1st one is supported
+// void texImage2D(GLenum target, GLint level, GLenum internalformat, GLsizei width, GLsizei height, GLint border, GLenum format, GLenum type, ArrayBufferView? pixels);
+// void texImage2D(GLenum target, GLint level, GLenum internalformat, GLenum format, GLenum type, ImageData? pixels);
+// void texImage2D(GLenum target, GLint level, GLenum internalformat, GLenum format, GLenum type, HTMLImageElement image); // May throw DOMException
+// void texImage2D(GLenum target, GLint level, GLenum internalformat, GLenum format, GLenum type, HTMLCanvasElement canvas); // May throw DOMException
+// void texImage2D(GLenum target, GLint level, GLenum internalformat, GLenum format, GLenum type, HTMLVideoElement video); // May throw DOMException
+gl.texImage2D = function() {
+	if( arguments.length !=  9)
+		throw "texImage2D: Unsupported number of parameters:" + arguments.length;
+
+	gl._texImage2D.apply(this, arguments);
+};
+
+// XXX: Currently only the 1st one is supported
+// void texSubImage2D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLenum type, ArrayBufferView? pixels);
+// void texSubImage2D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLenum format, GLenum type, ImageData? pixels);
+// void texSubImage2D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLenum format, GLenum type, HTMLImageElement image); // May throw DOMException
+// void texSubImage2D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLenum format, GLenum type, HTMLCanvasElement canvas); // May throw DOMException
+// void texSubImage2D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLenum format, GLenum type, HTMLVideoElement video); // May throw DOMException
+gl.texSubImage2D = function() {
+	if( arguments.length !=  9)
+		throw "texImage2D: Unsupported number of parameters";
+
+	gl._texSubImage2D.apply(this, arguments);
 };

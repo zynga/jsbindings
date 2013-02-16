@@ -378,6 +378,55 @@ JSBool JSB_glCompileShader(JSContext *cx, uint32_t argc, jsval *vp) {
 	return JS_TRUE;
 }
 
+// Arguments: GLenum, GLint, GLenum, GLsizei, GLsizei, GLint, GLsizei, ArrayBufferView
+// Ret value: void
+JSBool JSB_glCompressedTexImage2D(JSContext *cx, uint32_t argc, jsval *vp) {
+	JSB_PRECONDITION2( argc == 8, cx, JS_FALSE, "Invalid number of arguments" );
+	jsval *argvp = JS_ARGV(cx,vp);
+	JSBool ok = JS_TRUE;
+	uint32_t arg0; int32_t arg1; uint32_t arg2; int32_t arg3; int32_t arg4; int32_t arg5; int32_t arg6; void* arg7; 
+
+	ok &= JSB_jsval_to_uint32( cx, *argvp++, &arg0 );
+	ok &= JSB_jsval_to_int32( cx, *argvp++, &arg1 );
+	ok &= JSB_jsval_to_uint32( cx, *argvp++, &arg2 );
+	ok &= JSB_jsval_to_int32( cx, *argvp++, &arg3 );
+	ok &= JSB_jsval_to_int32( cx, *argvp++, &arg4 );
+	ok &= JSB_jsval_to_int32( cx, *argvp++, &arg5 );
+	ok &= JSB_jsval_to_int32( cx, *argvp++, &arg6 );
+	GLsizei count;
+	ok &= JSB_get_arraybufferview_dataptr( cx, *argvp++, &count, &arg7);
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
+
+	glCompressedTexImage2D((GLenum)arg0 , (GLint)arg1 , (GLenum)arg2 , (GLsizei)arg3 , (GLsizei)arg4 , (GLint)arg5 , (GLsizei)arg6 , (GLvoid*)arg7  );
+	JS_SET_RVAL(cx, vp, JSVAL_VOID);
+	return JS_TRUE;
+}
+
+// Arguments: GLenum, GLint, GLint, GLint, GLsizei, GLsizei, GLenum, GLsizei, ArrayBufferView
+// Ret value: void
+JSBool JSB_glCompressedTexSubImage2D(JSContext *cx, uint32_t argc, jsval *vp) {
+	JSB_PRECONDITION2( argc == 9, cx, JS_FALSE, "Invalid number of arguments" );
+	jsval *argvp = JS_ARGV(cx,vp);
+	JSBool ok = JS_TRUE;
+	uint32_t arg0; int32_t arg1; int32_t arg2; int32_t arg3; int32_t arg4; int32_t arg5; uint32_t arg6; int32_t arg7; void* arg8; 
+
+	ok &= JSB_jsval_to_uint32( cx, *argvp++, &arg0 );
+	ok &= JSB_jsval_to_int32( cx, *argvp++, &arg1 );
+	ok &= JSB_jsval_to_int32( cx, *argvp++, &arg2 );
+	ok &= JSB_jsval_to_int32( cx, *argvp++, &arg3 );
+	ok &= JSB_jsval_to_int32( cx, *argvp++, &arg4 );
+	ok &= JSB_jsval_to_int32( cx, *argvp++, &arg5 );
+	ok &= JSB_jsval_to_uint32( cx, *argvp++, &arg6 );
+	ok &= JSB_jsval_to_int32( cx, *argvp++, &arg7 );
+	GLsizei count;
+	ok &= JSB_get_arraybufferview_dataptr( cx, *argvp++, &count, &arg8);
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
+
+	glCompressedTexSubImage2D((GLenum)arg0 , (GLint)arg1 , (GLint)arg2 , (GLint)arg3 , (GLsizei)arg4 , (GLsizei)arg5 , (GLenum)arg6 , (GLsizei)arg7 , (GLvoid*)arg8  );
+	JS_SET_RVAL(cx, vp, JSVAL_VOID);
+	return JS_TRUE;
+}
+
 // Arguments: GLenum, GLint, GLenum, GLint, GLint, GLsizei, GLsizei, GLint
 // Ret value: void
 JSBool JSB_glCopyTexImage2D(JSContext *cx, uint32_t argc, jsval *vp) {
@@ -1203,6 +1252,31 @@ JSBool JSB_glStencilOpSeparate(JSContext *cx, uint32_t argc, jsval *vp) {
 	return JS_TRUE;
 }
 
+// Arguments: GLenum, GLint, GLint, GLsizei, GLsizei, GLint, GLenum, GLenum, ArrayBufferView
+// Ret value: void
+JSBool JSB_glTexImage2D(JSContext *cx, uint32_t argc, jsval *vp) {
+	JSB_PRECONDITION2( argc == 9, cx, JS_FALSE, "Invalid number of arguments" );
+	jsval *argvp = JS_ARGV(cx,vp);
+	JSBool ok = JS_TRUE;
+	uint32_t arg0; int32_t arg1; int32_t arg2; int32_t arg3; int32_t arg4; int32_t arg5; uint32_t arg6; uint32_t arg7; void* arg8; 
+
+	ok &= JSB_jsval_to_uint32( cx, *argvp++, &arg0 );
+	ok &= JSB_jsval_to_int32( cx, *argvp++, &arg1 );
+	ok &= JSB_jsval_to_int32( cx, *argvp++, &arg2 );
+	ok &= JSB_jsval_to_int32( cx, *argvp++, &arg3 );
+	ok &= JSB_jsval_to_int32( cx, *argvp++, &arg4 );
+	ok &= JSB_jsval_to_int32( cx, *argvp++, &arg5 );
+	ok &= JSB_jsval_to_uint32( cx, *argvp++, &arg6 );
+	ok &= JSB_jsval_to_uint32( cx, *argvp++, &arg7 );
+	GLsizei count;
+	ok &= JSB_get_arraybufferview_dataptr( cx, *argvp++, &count, &arg8);
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
+
+	glTexImage2D((GLenum)arg0 , (GLint)arg1 , (GLint)arg2 , (GLsizei)arg3 , (GLsizei)arg4 , (GLint)arg5 , (GLenum)arg6 , (GLenum)arg7 , (GLvoid*)arg8  );
+	JS_SET_RVAL(cx, vp, JSVAL_VOID);
+	return JS_TRUE;
+}
+
 // Arguments: GLenum, GLenum, GLfloat
 // Ret value: void
 JSBool JSB_glTexParameterf(JSContext *cx, uint32_t argc, jsval *vp) {
@@ -1235,6 +1309,31 @@ JSBool JSB_glTexParameteri(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	glTexParameteri((GLenum)arg0 , (GLenum)arg1 , (GLint)arg2  );
+	JS_SET_RVAL(cx, vp, JSVAL_VOID);
+	return JS_TRUE;
+}
+
+// Arguments: GLenum, GLint, GLint, GLint, GLsizei, GLsizei, GLenum, GLenum, ArrayBufferView
+// Ret value: void
+JSBool JSB_glTexSubImage2D(JSContext *cx, uint32_t argc, jsval *vp) {
+	JSB_PRECONDITION2( argc == 9, cx, JS_FALSE, "Invalid number of arguments" );
+	jsval *argvp = JS_ARGV(cx,vp);
+	JSBool ok = JS_TRUE;
+	uint32_t arg0; int32_t arg1; int32_t arg2; int32_t arg3; int32_t arg4; int32_t arg5; uint32_t arg6; uint32_t arg7; void* arg8; 
+
+	ok &= JSB_jsval_to_uint32( cx, *argvp++, &arg0 );
+	ok &= JSB_jsval_to_int32( cx, *argvp++, &arg1 );
+	ok &= JSB_jsval_to_int32( cx, *argvp++, &arg2 );
+	ok &= JSB_jsval_to_int32( cx, *argvp++, &arg3 );
+	ok &= JSB_jsval_to_int32( cx, *argvp++, &arg4 );
+	ok &= JSB_jsval_to_int32( cx, *argvp++, &arg5 );
+	ok &= JSB_jsval_to_uint32( cx, *argvp++, &arg6 );
+	ok &= JSB_jsval_to_uint32( cx, *argvp++, &arg7 );
+	GLsizei count;
+	ok &= JSB_get_arraybufferview_dataptr( cx, *argvp++, &count, &arg8);
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
+
+	glTexSubImage2D((GLenum)arg0 , (GLint)arg1 , (GLint)arg2 , (GLint)arg3 , (GLsizei)arg4 , (GLsizei)arg5 , (GLenum)arg6 , (GLenum)arg7 , (GLvoid*)arg8  );
 	JS_SET_RVAL(cx, vp, JSVAL_VOID);
 	return JS_TRUE;
 }

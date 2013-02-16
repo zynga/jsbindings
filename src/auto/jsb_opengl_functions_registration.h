@@ -28,6 +28,8 @@ JS_DefineFunction(_cx, opengl, "clearDepthf", JSB_glClearDepthf, 1, JSPROP_READO
 JS_DefineFunction(_cx, opengl, "clearStencil", JSB_glClearStencil, 1, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 JS_DefineFunction(_cx, opengl, "colorMask", JSB_glColorMask, 4, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 JS_DefineFunction(_cx, opengl, "_compileShader", JSB_glCompileShader, 1, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
+JS_DefineFunction(_cx, opengl, "compressedTexImage2D", JSB_glCompressedTexImage2D, 8, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
+JS_DefineFunction(_cx, opengl, "compressedTexSubImage2D", JSB_glCompressedTexSubImage2D, 9, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 JS_DefineFunction(_cx, opengl, "copyTexImage2D", JSB_glCopyTexImage2D, 8, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 JS_DefineFunction(_cx, opengl, "copyTexSubImage2D", JSB_glCopyTexSubImage2D, 8, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 JS_DefineFunction(_cx, opengl, "_createProgram", JSB_glCreateProgram, 0, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
@@ -94,8 +96,10 @@ JS_DefineFunction(_cx, opengl, "stencilMask", JSB_glStencilMask, 1, JSPROP_READO
 JS_DefineFunction(_cx, opengl, "stencilMaskSeparate", JSB_glStencilMaskSeparate, 2, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 JS_DefineFunction(_cx, opengl, "stencilOp", JSB_glStencilOp, 3, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 JS_DefineFunction(_cx, opengl, "stencilOpSeparate", JSB_glStencilOpSeparate, 4, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
+JS_DefineFunction(_cx, opengl, "_texImage2D", JSB_glTexImage2D, 9, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 JS_DefineFunction(_cx, opengl, "texParameterf", JSB_glTexParameterf, 3, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 JS_DefineFunction(_cx, opengl, "texParameteri", JSB_glTexParameteri, 3, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
+JS_DefineFunction(_cx, opengl, "_texSubImage2D", JSB_glTexSubImage2D, 9, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 JS_DefineFunction(_cx, opengl, "uniform1f", JSB_glUniform1f, 2, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 JS_DefineFunction(_cx, opengl, "uniform1fv", JSB_glUniform1fv, 3, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 JS_DefineFunction(_cx, opengl, "uniform1i", JSB_glUniform1i, 2, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
