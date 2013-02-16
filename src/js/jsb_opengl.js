@@ -328,8 +328,6 @@ gl.texSubImage2D = function() {
 // XXX: The returned object must return the functions and constants.
 gl.getExtension = function(extension) {
 	var extensions = gl.getSupportedExtensions();
-	cc.log( extension );
-	cc.log( extensions );
 	if( extensions.indexOf(extension) > -1 )
 		return {};
 	return null;

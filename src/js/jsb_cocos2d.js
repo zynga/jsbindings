@@ -484,3 +484,5 @@ cc.LayerColor.extend = cc.Class.extend;
 cc.Sprite.extend = cc.Class.extend;
 cc.MenuItemFont.extend = cc.Class.extend;
 cc.Scene.extend = cc.Class.extend;
+cc.GLNode.extend = cc.Class.extend;
+
