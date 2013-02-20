@@ -2,7 +2,7 @@
 // Chipmunk defines
 //
 
-require('jsb_chipmunk_enums.js');
+require('jsb_chipmunk_constants.js');
 
 var cp = cp || {};
 

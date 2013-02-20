@@ -18,7 +18,7 @@ __docformat__ = 'restructuredtext'
 #import re
 
 # plugin modules
-from generate_jsb import JSBGenerateEnums
+from generate_jsb import JSBGenerateConstants
 
 
 #
@@ -26,9 +26,9 @@ from generate_jsb import JSBGenerateEnums
 # Plugin to generate better enums for Chipmunk
 #
 #
-class JSBGenerateEnums_CP(JSBGenerateEnums):
+class JSBGenerateConstants_CP(JSBGenerateConstants):
 
-    def get_name_for_enum(self, name):
+    def get_name_for_constant(self, name):
         if name.startswith('CP_'):
             return name[3:]
         return None
