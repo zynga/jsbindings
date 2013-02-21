@@ -513,7 +513,7 @@ JSBool JSB_CCNode_nodeToParentTransform(JSContext *cx, uint32_t argc, jsval *vp)
 	ret_val = [real nodeToParentTransform ];
 
 	JSObject *typedArray = JS_NewFloat32Array(cx, 6 );
-	CGAffineTransform* buffer = (CGAffineTransform*)JS_GetArrayBufferViewData(typedArray, cx);
+	CGAffineTransform* buffer = (CGAffineTransform*)JS_GetArrayBufferViewData(typedArray);
 	*buffer = ret_val;
 	JS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(typedArray));
 
@@ -535,7 +535,7 @@ JSBool JSB_CCNode_nodeToWorldTransform(JSContext *cx, uint32_t argc, jsval *vp) 
 	ret_val = [real nodeToWorldTransform ];
 
 	JSObject *typedArray = JS_NewFloat32Array(cx, 6 );
-	CGAffineTransform* buffer = (CGAffineTransform*)JS_GetArrayBufferViewData(typedArray, cx);
+	CGAffineTransform* buffer = (CGAffineTransform*)JS_GetArrayBufferViewData(typedArray);
 	*buffer = ret_val;
 	JS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(typedArray));
 
@@ -610,7 +610,7 @@ JSBool JSB_CCNode_parentToNodeTransform(JSContext *cx, uint32_t argc, jsval *vp)
 	ret_val = [real parentToNodeTransform ];
 
 	JSObject *typedArray = JS_NewFloat32Array(cx, 6 );
-	CGAffineTransform* buffer = (CGAffineTransform*)JS_GetArrayBufferViewData(typedArray, cx);
+	CGAffineTransform* buffer = (CGAffineTransform*)JS_GetArrayBufferViewData(typedArray);
 	*buffer = ret_val;
 	JS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(typedArray));
 
@@ -1791,7 +1791,7 @@ JSBool JSB_CCNode_worldToNodeTransform(JSContext *cx, uint32_t argc, jsval *vp) 
 	ret_val = [real worldToNodeTransform ];
 
 	JSObject *typedArray = JS_NewFloat32Array(cx, 6 );
-	CGAffineTransform* buffer = (CGAffineTransform*)JS_GetArrayBufferViewData(typedArray, cx);
+	CGAffineTransform* buffer = (CGAffineTransform*)JS_GetArrayBufferViewData(typedArray);
 	*buffer = ret_val;
 	JS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(typedArray));
 
@@ -15112,7 +15112,7 @@ JSBool JSB_CCGrid3DAction_originalVertex_(JSContext *cx, uint32_t argc, jsval *v
 	ret_val = [real originalVertex:(CGPoint)arg0  ];
 
 	JSObject *typedArray = JS_NewFloat32Array(cx, 3 );
-	ccVertex3F* buffer = (ccVertex3F*)JS_GetArrayBufferViewData(typedArray, cx);
+	ccVertex3F* buffer = (ccVertex3F*)JS_GetArrayBufferViewData(typedArray);
 	*buffer = ret_val;
 	JS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(typedArray));
 
@@ -15136,7 +15136,7 @@ JSBool JSB_CCGrid3DAction_setVertex_vertex_(JSContext *cx, uint32_t argc, jsval 
 
 	JSObject *tmp_arg1;
 	ok &= JS_ValueToObject( cx, *argvp++, &tmp_arg1 );
-	arg1 = *(ccVertex3F*)JS_GetArrayBufferViewData( tmp_arg1, cx );
+	arg1 = *(ccVertex3F*)JS_GetArrayBufferViewData( tmp_arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCGrid3DAction *real = (CCGrid3DAction*) [proxy realObj];
@@ -15166,7 +15166,7 @@ JSBool JSB_CCGrid3DAction_vertex_(JSContext *cx, uint32_t argc, jsval *vp) {
 	ret_val = [real vertex:(CGPoint)arg0  ];
 
 	JSObject *typedArray = JS_NewFloat32Array(cx, 3 );
-	ccVertex3F* buffer = (ccVertex3F*)JS_GetArrayBufferViewData(typedArray, cx);
+	ccVertex3F* buffer = (ccVertex3F*)JS_GetArrayBufferViewData(typedArray);
 	*buffer = ret_val;
 	JS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(typedArray));
 
@@ -42617,7 +42617,7 @@ JSBool JSB_CCGrid3D_originalVertex_(JSContext *cx, uint32_t argc, jsval *vp) {
 	ret_val = [real originalVertex:(CGPoint)arg0  ];
 
 	JSObject *typedArray = JS_NewFloat32Array(cx, 3 );
-	ccVertex3F* buffer = (ccVertex3F*)JS_GetArrayBufferViewData(typedArray, cx);
+	ccVertex3F* buffer = (ccVertex3F*)JS_GetArrayBufferViewData(typedArray);
 	*buffer = ret_val;
 	JS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(typedArray));
 
@@ -42641,7 +42641,7 @@ JSBool JSB_CCGrid3D_setVertex_vertex_(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	JSObject *tmp_arg1;
 	ok &= JS_ValueToObject( cx, *argvp++, &tmp_arg1 );
-	arg1 = *(ccVertex3F*)JS_GetArrayBufferViewData( tmp_arg1, cx );
+	arg1 = *(ccVertex3F*)JS_GetArrayBufferViewData( tmp_arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCGrid3D *real = (CCGrid3D*) [proxy realObj];
@@ -42671,7 +42671,7 @@ JSBool JSB_CCGrid3D_vertex_(JSContext *cx, uint32_t argc, jsval *vp) {
 	ret_val = [real vertex:(CGPoint)arg0  ];
 
 	JSObject *typedArray = JS_NewFloat32Array(cx, 3 );
-	ccVertex3F* buffer = (ccVertex3F*)JS_GetArrayBufferViewData(typedArray, cx);
+	ccVertex3F* buffer = (ccVertex3F*)JS_GetArrayBufferViewData(typedArray);
 	*buffer = ret_val;
 	JS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(typedArray));
 

@@ -300,7 +300,8 @@ JSBool JSB_core_restartVM(JSContext *cx, uint32_t argc, jsval *vp)
 #endif
 
 		// Must be called only once, and before creating a new runtime
-		JS_SetCStringsAreUTF8();
+		// XXX: Removed in SpiderMonkey 19.0
+//		JS_SetCStringsAreUTF8();
 
 		[self createRuntime];
 	}
@@ -312,7 +313,7 @@ JSBool JSB_core_restartVM(JSContext *cx, uint32_t argc, jsval *vp)
 {
 	NSAssert(_rt == NULL && _cx==NULL, @"runtime already created. Reset it first");
 
-	_rt = JS_NewRuntime(8 * 1024 * 1024);
+	_rt = JS_NewRuntime(8 * 1024 * 1024, JS_NO_HELPER_THREADS);
 	_cx = JS_NewContext( _rt, 8192);
 	JS_SetVersion(_cx, JSVERSION_LATEST);
 	JS_SetOptions(_cx, JSOPTION_VAROBJFIX | JSOPTION_TYPE_INFERENCE);
@@ -436,6 +437,7 @@ JSBool JSB_core_restartVM(JSContext *cx, uint32_t argc, jsval *vp)
 
 -(JSBool) runScript:(NSString*)filename withContainer:(JSObject *)global
 {
+	CCLOG(@"filename: %@", filename);
 	JSBool ok = JS_FALSE;
 
 	CCFileUtils *fileUtils = [CCFileUtils sharedFileUtils];
@@ -446,24 +448,35 @@ JSBool JSB_core_restartVM(JSContext *cx, uint32_t argc, jsval *vp)
 		JSB_PRECONDITION(fullpath, tmp);
 	}
 
-	JSScript* script = JS_CompileUTF8File(_cx, global, [fullpath UTF8String] );
+	// Removed in SpiderMonkey 19.0
+	//	JSScript* script = JS_CompileUTF8File(_cx, global, [fullpath UTF8String] );
+
+//	NSString *buffer = [NSString stringWithContentsOfFile:fullpath encoding:NSUTF8StringEncoding error:nil];
+//	JSScript* script = JS_CompileScript(_cx, global,
+//					[buffer UTF8String], [buffer length],
+//					 [filename UTF8String], 0);
+
+	js::RootedObject obj(_cx, global);
+	JS::CompileOptions options(_cx);
+	options.setUTF8(true).setFileAndLine([fullpath UTF8String], 1);
+	JSScript *script = JS::Compile(_cx, obj, options, [fullpath UTF8String]);
 
 	JSB_PRECONDITION(script, "Error compiling script");
 	{
-		JSAutoCompartment ac(_cx, global);
+		JSAutoCompartment ac(_cx, obj);
 		jsval result;
-		ok = JS_ExecuteScript(_cx, global, script, &result);
+		ok = JS_ExecuteScript(_cx, obj, script, &result);
 	}
 
 	// add script to the global map
-	const char* key = [filename UTF8String];
-	if (__scripts[key]) {
-		js::RootedScript* tmp = __scripts[key];
-		__scripts.erase(key);
-		delete tmp;
-	}
-	js::RootedScript* rootedScript = new js::RootedScript(_cx, script);
-	__scripts[key] = rootedScript;
+//	const char* key = [filename UTF8String];
+//	if (__scripts[key]) {
+//		js::RootedScript* tmp = __scripts[key];
+//		__scripts.erase(key);
+//		delete tmp;
+//	}
+//	js::RootedScript* rootedScript = new js::RootedScript(_cx, script);
+//	__scripts[key] = rootedScript;
 
 	JSB_PRECONDITION(ok, "Error executing script");
 
@@ -617,13 +630,13 @@ JSObject* JSB_NewGlobalObject(JSContext* cx, bool empty)
 	ok = JS_InitStandardClasses(cx, glob);
 	if (ok)
 		JS_InitReflect(cx, glob);
-	if (ok)
-		ok = JS_DefineDebuggerObject(cx, glob);
-	if (!ok)
-		return NULL;
-
-	if (empty)
-		return glob;
+//	if (ok)
+//		ok = JS_DefineDebuggerObject(cx, glob);
+//	if (!ok)
+//		return NULL;
+//
+//	if (empty)
+//		return glob;
 
 	//
 	// globals
@@ -648,6 +661,9 @@ JSObject* JSB_NewGlobalObject(JSContext* cx, bool empty)
 	JS_DefineFunction(cx, jsc, "removeGCRootObject", JSB_core_removeRootJS, 1, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 	JS_DefineFunction(cx, jsc, "executeScript", JSB_core_executeScript, 1, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 	JS_DefineFunction(cx, jsc, "restart", JSB_core_restartVM, 0, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
+
+	JSBool found = JS_FALSE;
+	JS_SetPropertyAttributes(cx, jsc, "restart", JSPROP_ENUMERATE, &found);
 
 	//
 	// 3rd party developer ?

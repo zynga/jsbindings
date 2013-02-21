@@ -383,10 +383,10 @@ JSBool JSB_jsval_to_opaque( JSContext *cx, jsval vp, void **r)
 	JSObject *tmp_arg;
 	JSBool ok = JS_ValueToObject( cx, vp, &tmp_arg );
 	JSB_PRECONDITION2( ok, cx, JS_FALSE, "Error converting value to object");
-	JSB_PRECONDITION2( tmp_arg && JS_IsTypedArrayObject( tmp_arg, cx ), cx, JS_FALSE, "Not a TypedArray object");
-	JSB_PRECONDITION2( JS_GetTypedArrayByteLength( tmp_arg, cx ) == sizeof(void*), cx, JS_FALSE, "Invalid Typed Array length");
+	JSB_PRECONDITION2( tmp_arg && JS_IsTypedArrayObject( tmp_arg ), cx, JS_FALSE, "Not a TypedArray object");
+	JSB_PRECONDITION2( JS_GetTypedArrayByteLength( tmp_arg ) == sizeof(void*), cx, JS_FALSE, "Invalid Typed Array length");
 	
-	uint32_t* arg_array = (uint32_t*)JS_GetArrayBufferViewData( tmp_arg, cx );
+	uint32_t* arg_array = (uint32_t*)JS_GetArrayBufferViewData( tmp_arg );
 	uint64 ret =  arg_array[0];
 	ret = ret << 32;
 	ret |= arg_array[1];
@@ -543,30 +543,30 @@ JSBool JSB_jsval_typedarray_to_dataptr( JSContext *cx, jsval vp, GLsizei *count,
 	// WebGL supports TypedArray and sequences for some of its APIs. So when converting a TypedArray, we should
 	// also check for a possible non-Typed Array JS object, like a JS Array.
 
-	if( JS_IsTypedArrayObject( jsobj, cx ) ) {
+	if( JS_IsTypedArrayObject( jsobj ) ) {
 
-		*count = JS_GetTypedArrayLength(jsobj, cx);
-		JSArrayBufferViewType type = JS_GetTypedArrayType(jsobj, cx);
+		*count = JS_GetTypedArrayLength(jsobj);
+		JSArrayBufferViewType type = JS_GetArrayBufferViewType(jsobj);
 		JSB_PRECONDITION2(t==type, cx, JS_FALSE, "TypedArray type different than expected type");
 
 		switch (t) {
 			case js::ArrayBufferView::TYPE_INT8:
 			case js::ArrayBufferView::TYPE_UINT8:
-				*data = JS_GetUint8ArrayData(jsobj, cx);
+				*data = JS_GetUint8ArrayData(jsobj);
 				break;
 
 			case js::ArrayBufferView::TYPE_INT16:
 			case js::ArrayBufferView::TYPE_UINT16:
-				*data = JS_GetUint16ArrayData(jsobj, cx);
+				*data = JS_GetUint16ArrayData(jsobj);
 				break;
 
 			case js::ArrayBufferView::TYPE_INT32:
 			case js::ArrayBufferView::TYPE_UINT32:
-				*data = JS_GetUint32ArrayData(jsobj, cx);
+				*data = JS_GetUint32ArrayData(jsobj);
 				break;
 
 			case js::ArrayBufferView::TYPE_FLOAT32:
-				*data = JS_GetFloat32ArrayData(jsobj, cx);
+				*data = JS_GetFloat32ArrayData(jsobj);
 				break;
 
 			default:
@@ -614,10 +614,10 @@ JSBool JSB_get_arraybufferview_dataptr( JSContext *cx, jsval vp, GLsizei *count,
 	JSObject *jsobj;
 	JSBool ok = JS_ValueToObject( cx, vp, &jsobj );
 	JSB_PRECONDITION2( ok && jsobj, cx, JS_FALSE, "Error converting value to object");
-	JSB_PRECONDITION2( JS_IsArrayBufferViewObject(jsobj, cx), cx, JS_FALSE, "Not an ArrayBufferView object");
+	JSB_PRECONDITION2( JS_IsArrayBufferViewObject(jsobj), cx, JS_FALSE, "Not an ArrayBufferView object");
 
-	*data = JS_GetArrayBufferViewData(jsobj, cx);
-	*count = JS_GetArrayBufferViewByteLength(jsobj, cx);
+	*data = JS_GetArrayBufferViewData(jsobj);
+	*count = JS_GetArrayBufferViewByteLength(jsobj);
 
 	return JS_TRUE;
 }
@@ -763,7 +763,7 @@ jsval JSB_jsval_from_opaque( JSContext *cx, void *opaque )
 #ifdef __LP64__
 	uint64_t number = (uint64_t)opaque;
 	JSObject *typedArray = JS_NewUint32Array( cx, 2 );
-	uint32_t *buffer = (uint32_t*)JS_GetArrayBufferViewData(typedArray, cx);
+	uint32_t *buffer = (uint32_t*)JS_GetArrayBufferViewData(typedArray);
 	buffer[0] = number >> 32;
 	buffer[1] = number & 0xffffffff;
 	return OBJECT_TO_JSVAL(typedArray);		

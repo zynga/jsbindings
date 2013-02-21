@@ -46,16 +46,9 @@ JSObject* JSB_NSObject_object = NULL;
 // Constructor
 JSBool JSB_NSObject_constructor(JSContext *cx, uint32_t argc, jsval *vp)
 {
-    JSObject *jsobj = JS_NewObject(cx, JSB_NSObject_class, JSB_NSObject_object, NULL);
-	
-    JSB_NSObject *proxy = [[JSB_NSObject alloc] initWithJSObject:jsobj class:[NSObject class]];
-	
-	JSB_set_proxy_for_jsobject(proxy, jsobj);
-    JS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(jsobj));
-	
-    /* no callbacks */
-    
-    return JS_TRUE;
+	JSObject *jsobj = [JSB_NSObject createJSObjectWithRealObject:nil context:cx];
+	JS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(jsobj));
+	return JS_TRUE;
 }
 
 // Destructor
