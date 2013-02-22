@@ -10,7 +10,7 @@ That means that you can interact with your favorite native library from JS. As a
 ![JSB layer ](https://raw.github.com/zynga/jsbindings/master/docs/jsb_intro.png)
 
 The JS code is interpreted by [SpiderMonkey](https://developer.mozilla.org/en-US/docs/SpiderMonkey), Mozilla's JS virtual machine (VM).
-It uses the latest stable version of SpiderMonkey (as of this writing it is v18.0). The JS VM is extended by JSB to support custom types, custom structures and Objective-C objects.
+It uses the latest stable version of SpiderMonkey (as of this writing it is v19.0). The JS VM is extended by JSB to support custom types, custom structures and Objective-C objects.
 
 JSB has a flexible set of rules that could be used to select the classes, methods, functions and structs to parse or ignore; which methods are callbacks; and renaming rules among some of its features. To ease the creation of these rules, it supports regular expressions.
 

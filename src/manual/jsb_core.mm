@@ -411,7 +411,7 @@ JSBool JSB_core_restartVM(JSContext *cx, uint32_t argc, jsval *vp)
 	JSBool ok = JS_FALSE;
 
 	CCFileUtils *fileUtils = [CCFileUtils sharedFileUtils];
-	NSString *fullpath = [fileUtils fullPathFromRelativePathIgnoringResolutions:filename];
+	NSString *fullpath = [fileUtils fullPathForFilenameIgnoringResolutions:filename];
 
 	unsigned char *content = NULL;
 	size_t contentSize = ccLoadFileIntoMemory([fullpath UTF8String], &content);
@@ -440,7 +440,7 @@ JSBool JSB_core_restartVM(JSContext *cx, uint32_t argc, jsval *vp)
 	JSBool ok = JS_FALSE;
 
 	CCFileUtils *fileUtils = [CCFileUtils sharedFileUtils];
-	NSString *fullpath = [fileUtils fullPathFromRelativePathIgnoringResolutions:filename];
+	NSString *fullpath = [fileUtils fullPathForFilenameIgnoringResolutions:filename];
 	if( !fullpath) {
 		char tmp[256];
 		snprintf(tmp, sizeof(tmp)-1, "File not found: %s", [filename UTF8String]);
