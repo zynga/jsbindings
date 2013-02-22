@@ -152,16 +152,16 @@ void JSB_NSObject_createClass(JSContext* cx, JSObject* globalObj, const char *na
 	JSB_NSObject_class->flags = 0;
 	
 	static JSPropertySpec properties[] = {
-//		{"__nativeObject", kJSPropertyNativeObject, JSPROP_PERMANENT | JSPROP_ENUMERATE | JSPROP_SHARED, JSB_NSObject_getProperty, JSB_NSObject_setProperty},
+//		{"__nativeObject", kJSPropertyNativeObject, JSPROP_PERMANENT | JSPROP_ENUMERATE, JSB_NSObject_getProperty, JSB_NSObject_setProperty},
 		{0, 0, 0, 0, 0}
 	};
 
 	
 	static JSFunctionSpec funcs[] = {
-		JS_FN("init", JSB_NSObject_init, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
-		JS_FN("copy", JSB_NSObject_copy, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
-		JS_FN("retain", JSB_NSObject_retain, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
-		JS_FN("release", JSB_NSObject_release, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("init", JSB_NSObject_init, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
+		JS_FN("copy", JSB_NSObject_copy, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
+		JS_FN("retain", JSB_NSObject_retain, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
+		JS_FN("release", JSB_NSObject_release, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
 		JS_FS_END
 	};
 	
@@ -348,14 +348,14 @@ void JSB_NSEvent_createClass(JSContext* cx, JSObject* globalObj, const char *nam
 	JSB_NSEvent_class->flags = 0;
 	
 	static JSPropertySpec properties[] = {
-//		{"__nativeObject", kJSPropertyNativeObject, JSPROP_PERMANENT | JSPROP_ENUMERATE | JSPROP_SHARED, JSB_NSEvent_getProperty, JSB_NSEvent_setProperty},
+//		{"__nativeObject", kJSPropertyNativeObject, JSPROP_PERMANENT | JSPROP_ENUMERATE,  JSB_NSEvent_getProperty, JSB_NSEvent_setProperty},
 		{0, 0, 0, 0, 0}
 	};
 	
 	
 	static JSFunctionSpec funcs[] = {
-		JS_FN("getLocation", JSB_NSEvent_getLocation, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
-		JS_FN("getDelta", JSB_NSEvent_getDelta, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("getLocation", JSB_NSEvent_getLocation, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
+		JS_FN("getDelta", JSB_NSEvent_getDelta, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
 		JS_FS_END
 	};
 	
@@ -497,15 +497,15 @@ void JSB_UITouch_createClass(JSContext* cx, JSObject* globalObj, const char *nam
 	JSB_UITouch_class->flags = 0;
 	
 	static JSPropertySpec properties[] = {
-//		{"__nativeObject", kJSPropertyNativeObject, JSPROP_PERMANENT | JSPROP_ENUMERATE | JSPROP_SHARED, JSB_UITouch_getProperty, JSB_UITouch_setProperty},
+//		{"__nativeObject", kJSPropertyNativeObject, JSPROP_PERMANENT | JSPROP_ENUMERATE , JSB_UITouch_getProperty, JSB_UITouch_setProperty},
 		{0, 0, 0, 0, 0}
 	};
 	
 	
 	static JSFunctionSpec funcs[] = {
-		JS_FN("getLocation", JSB_UITouch_location, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
-		JS_FN("getDelta", JSB_UITouch_delta, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
-		JS_FN("getId", JSB_UITouch_id, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("getLocation", JSB_UITouch_location, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
+		JS_FN("getDelta", JSB_UITouch_delta, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
+		JS_FN("getId", JSB_UITouch_id, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
 		JS_FS_END
 	};
 	
@@ -725,14 +725,14 @@ void JSB_UIAccelerometer_createClass(JSContext* cx, JSObject* globalObj, const c
 	
 	
 	static JSFunctionSpec funcs[] = {
-		JS_FN("setCallback", JSB_UIAccelerometer_setDelegate, 2, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
-		JS_FN("setUpdateInterval", JSB_UIAccelerometer_setUpdateInterval, 1, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
-		JS_FN("getUpdateInterval", JSB_UIAccelerometer_getUpdateInterval, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("setCallback", JSB_UIAccelerometer_setDelegate, 2, JSPROP_PERMANENT | JSPROP_ENUMERATE),
+		JS_FN("setUpdateInterval", JSB_UIAccelerometer_setUpdateInterval, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
+		JS_FN("getUpdateInterval", JSB_UIAccelerometer_getUpdateInterval, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
 		JS_FS_END
 	};
 	
 	static JSFunctionSpec st_funcs[] = {
-		JS_FN("getInstance", JSB_UIAccelerometer_sharedAccelerometer_static, 0, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),
+		JS_FN("getInstance", JSB_UIAccelerometer_sharedAccelerometer_static, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
 		JS_FS_END
 	};
 	

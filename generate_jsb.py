@@ -481,7 +481,7 @@ class JSBGenerate(object):
     def generate_retval_struct_automatic(self, declared_type, js_type):
         template = '''
 \tJSObject *typedArray = %s(cx, %d );
-\t%s* buffer = (%s*)JS_GetArrayBufferViewData(typedArray, cx);
+\t%s* buffer = (%s*)JS_GetArrayBufferViewData(typedArray);
 \t*buffer = ret_val;
 \tJS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(typedArray));
 '''
@@ -688,7 +688,7 @@ class JSBGenerate(object):
         template = '''
 \tJSObject *tmp_arg%d;
 \tok &= JS_ValueToObject( cx, *argvp++, &tmp_arg%d );
-\targ%d = *(%s*)JS_GetArrayBufferViewData( tmp_arg%d, cx );
+\targ%d = *(%s*)JS_GetArrayBufferViewData( tmp_arg%d );
 '''
         self.fd_mm.write(template % (i,
                                         i,
@@ -1648,7 +1648,7 @@ void %s_createClass(JSContext *cx, JSObject* globalObj, const char* name )
 
         self.fd_mm.write(properties_template)
 
-        js_fn = '\t\tJS_FN("%s", %s, %d, JSPROP_PERMANENT | JSPROP_SHARED %s),\n'
+        js_fn = '\t\tJS_FN("%s", %s, %d, JSPROP_PERMANENT %s),\n'
 
         instance_method_buffer = ''
         class_method_buffer = ''
@@ -2363,7 +2363,7 @@ void %s_createClass(JSContext *cx, JSObject* globalObj, const char* name )
         self.fd_mm.write(template_propertes)
 
         template_funcs_pre = '\tstatic JSFunctionSpec funcs[] = {\n'
-        template_funcs_body = '\t\tJS_FN("%s", %s, %d, JSPROP_PERMANENT | JSPROP_SHARED | JSPROP_ENUMERATE),\n'
+        template_funcs_body = '\t\tJS_FN("%s", %s, %d, JSPROP_PERMANENT | JSPROP_ENUMERATE),\n'
         template_funcs_post = '\t\tJS_FS_END\n\t};'
 
         self.fd_mm.write(template_funcs_pre)

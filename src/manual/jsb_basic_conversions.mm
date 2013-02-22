@@ -105,52 +105,42 @@ JSBool JSB_jsval_to_NSObject( JSContext *cx, jsval vp, NSObject **ret )
 
 JSBool JSB_jsval_is_NSString( JSContext *cx, jsval vp, NSString **ret )
 {
+	// IMPORTANT: Do not use vp.isString() because numbers can also be converted to strings
 	JSString *jsstr = JS_ValueToString( cx, vp );
-	if( !jsstr )
+	if( ! jsstr )
 		return JS_FALSE;
-	
-	// root it
-	vp = STRING_TO_JSVAL(jsstr);
-	
-	char *ptr = JS_EncodeString(cx, jsstr);
-	
-	if( !ptr )
-		return JS_FALSE;
-	
-	NSString *tmp = [NSString stringWithUTF8String: ptr];
-	
-	if( !tmp ) {
-		JS_free( cx, ptr );
-		return JS_FALSE;
-	}
-	
-	if( ret )
-		*ret = tmp;
 
-	JS_free( cx, ptr );
-	
+	const jschar *chars = JS_GetStringCharsZ(cx, jsstr);
+	size_t l = JS_GetStringLength(jsstr);
+
+	JSB_PRECONDITION2(chars, cx, JS_FALSE, "Error getting characters from string");
+
+	NSString *tmp = [NSString stringWithCharacters:chars length:l];
+
+	JSB_PRECONDITION2( tmp, cx, JS_FALSE, "Error creating string from UTF8");
+
+	*ret = tmp;
+
 	return JS_TRUE;
 }
 
 JSBool JSB_jsval_to_NSString( JSContext *cx, jsval vp, NSString **ret )
 {
+	// IMPORTANT: Do not use vp.isString() because numbers can also be converted to strings
 	JSString *jsstr = JS_ValueToString( cx, vp );
 	JSB_PRECONDITION2( jsstr, cx, JS_FALSE, "invalid string" );
+
+	const jschar *chars = JS_GetStringCharsZ(cx, jsstr);
+	size_t l = JS_GetStringLength(jsstr);
+
+	JSB_PRECONDITION2(chars, cx, JS_FALSE, "Error getting characters from string");
 	
-	// root it
-	vp = STRING_TO_JSVAL(jsstr);
-	
-	char *ptr = JS_EncodeString(cx, jsstr);
-	
-	JSB_PRECONDITION2(ptr, cx, JS_FALSE, "Error encoding string");
-	
-	NSString *tmp = [NSString stringWithCString:ptr encoding:NSUTF8StringEncoding];
+	NSString *tmp = [NSString stringWithCharacters:chars length:l];
 	
 	JSB_PRECONDITION2( tmp, cx, JS_FALSE, "Error creating string from UTF8");
 	
 	*ret = tmp;
-	JS_free( cx, ptr );
-	
+
 	return JS_TRUE;
 }
 
