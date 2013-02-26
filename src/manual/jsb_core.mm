@@ -251,6 +251,10 @@ JSBool JSB_core_dumpRoot(JSContext *cx, uint32_t argc, jsval *vp)
 #if DEBUG && (defined(__CC_PLATFORM_MAC) || TARGET_IPHONE_SIMULATOR )
 //	JSRuntime *rt = [[JSBCore sharedInstance] runtime];
 //	JS_DumpNamedRoots(rt, dumpNamedRoot, NULL);
+
+//	JSRuntime *rt = [[JSBCore sharedInstance] runtime];
+//	JS_DumpHeap(rt, stdout, NULL, JSTRACE_OBJECT, NULL, 2, NULL);
+
 #endif
 	return JS_TRUE;
 };
@@ -642,19 +646,10 @@ JSObject* JSB_NewGlobalObject(JSContext* cx, bool empty)
 	JS_DefineFunction(cx, glob, "__getOS", JSB_core_os, 0, JSPROP_READONLY | JSPROP_PERMANENT);
 	JS_DefineFunction(cx, glob, "__getVersion", JSB_core_version, 0, JSPROP_READONLY | JSPROP_PERMANENT);
 
-	//
-	// Javascript controller (__jsc__)
-	//
-	JSObject *jsc = JS_NewObject(cx, NULL, NULL, NULL);
-	jsval jscVal = OBJECT_TO_JSVAL(jsc);
-	JS_SetProperty(cx, glob, "__jsc__", &jscVal);
-
-	JS_DefineFunction(cx, jsc, "garbageCollect", JSB_core_forceGC, 0, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
-	JS_DefineFunction(cx, jsc, "dumpRoot", JSB_core_dumpRoot, 0, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
-	JS_DefineFunction(cx, jsc, "addGCRootObject", JSB_core_addRootJS, 1, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
-	JS_DefineFunction(cx, jsc, "removeGCRootObject", JSB_core_removeRootJS, 1, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
-	JS_DefineFunction(cx, jsc, "executeScript", JSB_core_executeScript, 1, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
-	JS_DefineFunction(cx, jsc, "restart", JSB_core_restartVM, 0, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
+	JS_DefineFunction(cx, glob, "__garbageCollect", JSB_core_forceGC, 0, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
+	JS_DefineFunction(cx, glob, "__dumpRoot", JSB_core_dumpRoot, 0, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
+	JS_DefineFunction(cx, glob, "__executeScript", JSB_core_executeScript, 1, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
+	JS_DefineFunction(cx, glob, "__restartVM", JSB_core_restartVM, 0, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 
 	//
 	// 3rd party developer ?
