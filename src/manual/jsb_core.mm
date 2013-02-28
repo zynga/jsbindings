@@ -461,7 +461,7 @@ JSBool JSB_core_restartVM(JSContext *cx, uint32_t argc, jsval *vp)
 
 	JSB_PRECONDITION(script, "Error compiling script");
 	{
-		JSAutoCompartment ac(_cx, obj);
+		JSB_ENSURE_AUTOCOMPARTMENT(_cx, obj);
 		jsval result;
 		ok = JS_ExecuteScript(_cx, obj, script, &result);
 	}
@@ -623,7 +623,7 @@ JSObject* JSB_NewGlobalObject(JSContext* cx, bool empty)
 	if (!glob) {
 		return NULL;
 	}
-	JSAutoCompartment ac(cx, glob);
+	JSB_ENSURE_AUTOCOMPARTMENT(cx, glob);
 	JSBool ok = JS_TRUE;
 	ok = JS_InitStandardClasses(cx, glob);
 	if (ok)
