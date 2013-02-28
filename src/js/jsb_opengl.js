@@ -111,6 +111,7 @@ gl.deleteShader = function(shader) {
 //
 // Bind Related
 //
+// void bindTexture(GLenum target, WebGLTexture? texture);
 gl.bindTexture = function(target, texture) {
 
 	var texture_id;
@@ -125,6 +126,7 @@ gl.bindTexture = function(target, texture) {
 	gl._bindTexture( target, texture_id );
 };
 
+// void bindBuffer(GLenum target, WebGLBuffer? buffer);
 gl.bindBuffer = function(target, buffer) {
 	var buffer_id;
 	// Accept numbers too. eg: gl.bindBuffer(0)
@@ -138,6 +140,7 @@ gl.bindBuffer = function(target, buffer) {
 	gl._bindBuffer(target, buffer_id);
 };
 
+// void bindRenderbuffer(GLenum target, WebGLRenderbuffer? renderbuffer);
 gl.bindRenderBuffer = function(target, buffer) {
 	var buffer_id;
 
@@ -152,6 +155,7 @@ gl.bindRenderBuffer = function(target, buffer) {
 	gl._bindRenderbuffer(target, buffer_id);
 };
 
+// void bindFramebuffer(GLenum target, WebGLFramebuffer? framebuffer);
 gl.bindFramebuffer = function(target, buffer) {
 	var buffer_id;
 
@@ -169,6 +173,25 @@ gl.bindFramebuffer = function(target, buffer) {
 //
 // Uniform related
 //
+// any getUniform(WebGLProgram? program, WebGLUniformLocation? location);
+gl.getUniform = function(program, location) {
+	var program_id;
+	var location_id;
+
+	// Accept numbers too. eg: gl.bindFramebuffer(0)
+	if( typeof program === 'number' )
+		program_id = program;
+	else
+		program_id = program.program_id;
+
+	if( typeof location === 'number' )
+		location_id = location;
+	else
+		location_id = location.location_id;
+
+	return gl._getUniform(program_id, location_id);
+};
+
 // gl.uniformMatrix2fv = function(location, bool, matrix) {
 // 	gl._uniformMatrix2fv(program.program_id, bool, matrix);
 // };
@@ -185,18 +208,22 @@ gl.bindFramebuffer = function(target, buffer) {
 //
 // Shader related
 //
+// void compileShader(WebGLShader? shader);
 gl.compileShader = function(shader) {
 	gl._compileShader( shader.shader_id);
 };
 
+// void shaderSource(WebGLShader? shader, DOMString source);
 gl.shaderSource = function(shader, source) {
 	gl._shaderSource(shader.shader_id, source);
 };
 
+// any getShaderParameter(WebGLShader? shader, GLenum pname);
 gl.getShaderParameter = function(shader, e) {
 	return gl._getShaderParameter(shader.shader_id,e);
 };
 
+// DOMString? getShaderInfoLog(WebGLShader? shader);
 gl.getShaderInfoLog = function(shader) {
 	return gl._getShaderInfoLog(shader.shader_id);
 };
@@ -204,6 +231,7 @@ gl.getShaderInfoLog = function(shader) {
 //
 // program related
 //
+// void attachShader(WebGLProgram? program, WebGLShader? shader);
 gl.attachShader = function(program, shader) {
 	var program_id = program.program_id;
 	// Accept numbers too. eg: gl.attachShader(17)
@@ -213,6 +241,7 @@ gl.attachShader = function(program, shader) {
 	gl._attachShader(program_id, shader.shader_id);
 };
 
+// void linkProgram(WebGLProgram? program);
 gl.linkProgram = function(program) {
 	var program_id = program.program_id;
 	// Accept numbers too. eg: gl.linkProgram(17)
@@ -222,6 +251,8 @@ gl.linkProgram = function(program) {
 	gl._linkProgram(program_id);
 };
 
+
+// any getProgramParameter(WebGLProgram? program, GLenum pname);
 gl.getProgramParameter = function(program, e) {
 	var program_id = program.program_id;
 	// Accept numbers too. eg: gl.getProgramParameter(17)
@@ -231,6 +262,7 @@ gl.getProgramParameter = function(program, e) {
 	return gl._getProgramParameter(program_id, e);
 };
 
+// void useProgram(WebGLProgram? program);
 gl.useProgram = function(program) {
 	var program_id;
 	// Accept numbers too. eg: gl.useProgram(17)
@@ -242,6 +274,8 @@ gl.useProgram = function(program) {
 	gl._useProgram (program_id);
 };
 
+
+// [WebGLHandlesContextLoss] GLint getAttribLocation(WebGLProgram? program, DOMString name);
 gl.getAttribLocation = function(program, name) {
 	var program_id = program.program_id;
 	// Accept numbers too. eg: gl.getAttribLocation(17)
@@ -251,15 +285,19 @@ gl.getAttribLocation = function(program, name) {
 	return gl._getAttribLocation(program_id, name);
 };
 
+// WebGLUniformLocation? getUniformLocation(WebGLProgram? program, DOMString name);
 gl.getUniformLocation = function(program, name) {
 	var program_id = program.program_id;
 	// Accept numbers too. eg: gl.getUniformLocation(17)
 	if( typeof program === 'number' )
 		program_id = program;
 
+	// XXX: it should return an object, not an integer
 	return gl._getUniformLocation(program_id,name);
 };
 
+
+// WebGLActiveInfo? getActiveAttrib(WebGLProgram? program, GLuint index);
 gl.getActiveAttrib = function(program, index) {
 	var program_id = program.program_id;
 	// Accept numbers too. eg: gl.getActiveAttrib(17)
@@ -269,6 +307,7 @@ gl.getActiveAttrib = function(program, index) {
 	return gl._getActiveAttrib(program_id, index);
 };
 
+// WebGLActiveInfo? getActiveUniform(WebGLProgram? program, GLuint index);
 gl.getActiveUniform = function(program, index) {
 	var program_id = program.program_id;
 	// Accept numbers too. eg: gl.getActiveUniform(17)
@@ -278,6 +317,7 @@ gl.getActiveUniform = function(program, index) {
 	return gl._getActiveUniform(program_id, index);
 };
 
+// sequence<WebGLShader>? getAttachedShaders(WebGLProgram? program);
 gl.getAttachedShaders = function(program) {
 	var program_id = program.program_id;
 	// Accept numbers too. eg: gl.getAttachedShaders(17)

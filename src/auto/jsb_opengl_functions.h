@@ -77,6 +77,7 @@ JSBool JSB_glGetShaderSource(JSContext *cx, uint32_t argc, jsval *vp);
 JSBool JSB_glGetShaderiv(JSContext *cx, uint32_t argc, jsval *vp);
 JSBool JSB_glGetTexParameterfv(JSContext *cx, uint32_t argc, jsval *vp);
 JSBool JSB_glGetUniformLocation(JSContext *cx, uint32_t argc, jsval *vp);
+JSBool JSB_glGetUniformfv(JSContext *cx, uint32_t argc, jsval *vp);
 JSBool JSB_glHint(JSContext *cx, uint32_t argc, jsval *vp);
 JSBool JSB_glIsBuffer(JSContext *cx, uint32_t argc, jsval *vp);
 JSBool JSB_glIsEnabled(JSContext *cx, uint32_t argc, jsval *vp);

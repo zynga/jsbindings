@@ -73,6 +73,7 @@ JS_DefineFunction(_cx, opengl, "_getShaderSource", JSB_glGetShaderSource, 4, JSP
 JS_DefineFunction(_cx, opengl, "_getShaderParameter", JSB_glGetShaderiv, 3, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 JS_DefineFunction(_cx, opengl, "getTexParameter", JSB_glGetTexParameterfv, 3, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 JS_DefineFunction(_cx, opengl, "_getUniformLocation", JSB_glGetUniformLocation, 2, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
+JS_DefineFunction(_cx, opengl, "_getUniform", JSB_glGetUniformfv, 3, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 JS_DefineFunction(_cx, opengl, "hint", JSB_glHint, 2, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 JS_DefineFunction(_cx, opengl, "isBuffer", JSB_glIsBuffer, 1, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 JS_DefineFunction(_cx, opengl, "isEnabled", JSB_glIsEnabled, 1, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );

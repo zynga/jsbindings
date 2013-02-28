@@ -411,5 +411,25 @@ JSBool JSB_glGetTexParameterfv(JSContext *cx, uint32_t argc, jsval *vp)
 	return JS_TRUE;
 }
 
+// any getUniform(WebGLProgram? program, WebGLUniformLocation? location);
+JSBool JSB_glGetUniformfv(JSContext *cx, uint32_t argc, jsval *vp)
+{
+	JSB_PRECONDITION2( argc == 2, cx, JS_FALSE, "JSB_glGetUniformfv: Invalid number of arguments" );
+	jsval *argvp = JS_ARGV(cx,vp);
+	JSBool ok = JS_TRUE;
+	uint32_t arg0, arg1;
+
+	ok &= JSB_jsval_to_uint32( cx, *argvp++, &arg0 );
+	ok &= JSB_jsval_to_uint32( cx, *argvp++, &arg1 );
+
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "JSB_glGetUniformfv: Error processing arguments");
+
+	GLfloat param;
+	glGetUniformfv(arg0, arg1, &param);
+
+	JS_SET_RVAL(cx, vp, DOUBLE_TO_JSVAL(param));
+	return JS_TRUE;
+}
+
 
 #endif // JSB_INCLUDE_OPENGL
