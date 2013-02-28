@@ -391,5 +391,25 @@ JSBool JSB_glGetSupportedExtensions(JSContext *cx, uint32_t argc, jsval *vp)
 	
 }
 
+// any getTexParameter(GLenum target, GLenum pname);
+JSBool JSB_glGetTexParameterfv(JSContext *cx, uint32_t argc, jsval *vp)
+{
+	JSB_PRECONDITION2( argc == 2, cx, JS_FALSE, "JSB_glGetTexParameterfv: Invalid number of arguments" );
+	jsval *argvp = JS_ARGV(cx,vp);
+	JSBool ok = JS_TRUE;
+	uint32_t arg0, arg1;
+
+	ok &= JSB_jsval_to_uint32( cx, *argvp++, &arg0 );
+	ok &= JSB_jsval_to_uint32( cx, *argvp++, &arg1 );
+
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "JSB_glGetTexParameterfv: Error processing arguments");
+
+	GLfloat param;
+	glGetTexParameterfv(arg0, arg1, &param);
+
+	JS_SET_RVAL(cx, vp, DOUBLE_TO_JSVAL(param));
+	return JS_TRUE;
+}
+
 
 #endif // JSB_INCLUDE_OPENGL
