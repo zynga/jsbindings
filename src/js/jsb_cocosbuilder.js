@@ -13,8 +13,6 @@ cc.BuilderReader.setResourcePath = function(path){
 
 cc.BuilderReader.load = function(file, owner, parentSize)
 {
-    cc.log("cc.BuilderReader.load");
-    
     // Load the node graph using the correct function
     var reader = cc._Reader.create();
     var node;
@@ -39,9 +37,6 @@ cc.BuilderReader.load = function(file, owner, parentSize)
         {
             var callbackName = ownerCallbackNames[i];
             var callbackNode = ownerCallbackNodes[i];
-
-            cc.log( callbackName );
-            cc.log( callbackNode );
 
             callbackNode.setCallback(owner[callbackName], owner);
 
@@ -112,15 +107,12 @@ cc.BuilderReader.load = function(file, owner, parentSize)
         }
         
         // Setup timeline callbacks
-        cc.log("printing callbacks");
         var keyframeCallbacks = animationManager.getKeyframeCallbacks();
         for (var j = 0; j < keyframeCallbacks.length; j++)
         {
             var callbackSplit = keyframeCallbacks[j].split(":");
             var callbackType = callbackSplit[0];
             var callbackName = callbackSplit[1];
-            
-            cc.log("callback type: " + callbackType + " name: " + callbackName);
             
             if (callbackType == 1) // Document callback
             {
