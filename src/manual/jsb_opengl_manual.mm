@@ -428,17 +428,87 @@ JSBool JSB_glGetUniformfv(JSContext *cx, uint32_t argc, jsval *vp)
 
 	GLsizei length;
 	glGetProgramiv(arg0, GL_ACTIVE_ATTRIBUTE_MAX_LENGTH, &length);
-	GLchar buffer[length];
+	GLchar namebuffer[length];
 	GLint size = -1;
 	GLenum type = -1;
 
-	glGetActiveUniform(arg0, arg1, length, NULL, &size, &type, buffer);
+	glGetActiveUniform(arg0, arg1, length, NULL, &size, &type, namebuffer);
 
+	int usize = 0;
+	int utype = 0;
+	switch(type) {
 
-	GLfloat param[16];
-	glGetUniformfv(arg0, arg1, param);
+		// float
+		case GL_FLOAT:
+			usize = 1;
+			utype = GL_FLOAT;
+			break;
+		case GL_FLOAT_MAT2:
+			usize = 2 * 2;
+			utype = GL_FLOAT;
+			break;
+		case GL_FLOAT_MAT3:
+			usize = 3 * 3;
+			utype = GL_FLOAT;
+			break;
+		case GL_FLOAT_MAT4:
+			usize = 4 * 4;
+			utype = GL_FLOAT;
+			break;
+		case GL_FLOAT_VEC2:
+			usize = 2;
+			utype = GL_FLOAT;
+			break;
+		case GL_FLOAT_VEC3:
+			usize = 3;
+			utype = GL_FLOAT;
+			break;
+		case GL_FLOAT_VEC4:
+			usize = 4;
+			utype = GL_FLOAT;			
+			break;
 
-	JS_SET_RVAL(cx, vp, DOUBLE_TO_JSVAL(param[0]));
+		// int
+		case GL_INT:
+			usize = 1;
+			utype = GL_INT;
+			break;
+		case GL_INT_VEC2:
+			usize = 1;
+			utype = GL_INT;
+			break;
+		case GL_INT_VEC3:
+			usize = 1;
+			utype = GL_INT;
+			break;
+		case GL_INT_VEC4:
+			usize = 1;
+			utype = GL_INT;
+			break;
+
+		default:
+			JSB_PRECONDITION2(NO, cx, JS_FALSE, "JSB_glGetUniformfv: Uniform Type not supported");
+	}
+
+	JSObject *typedArray = NULL;
+	if( utype == GL_FLOAT) {
+		GLfloat param[usize];
+		glGetUniformfv(arg0, arg1, param);
+
+		typedArray = JS_NewFloat32Array(cx, usize);
+		float *buffer = (float*)JS_GetArrayBufferViewData(typedArray);
+		memcpy( buffer, param, sizeof(float) * usize);
+	} else if( utype == GL_INT ) {
+		GLint param[usize];
+		glGetUniformiv(arg0, arg1, param);
+
+		typedArray = JS_NewInt32Array(cx, usize);
+		GLint *buffer = (GLint*)JS_GetArrayBufferViewData(typedArray);
+		memcpy( buffer, param, sizeof(GLint) * usize);
+
+	}
+
+	JS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(typedArray));
 	return JS_TRUE;
 }
 
