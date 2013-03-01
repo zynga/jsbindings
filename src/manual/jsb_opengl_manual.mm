@@ -438,7 +438,7 @@ JSBool JSB_glGetUniformfv(JSContext *cx, uint32_t argc, jsval *vp)
 	GLfloat param[16];
 	glGetUniformfv(arg0, arg1, param);
 
-	JS_SET_RVAL(cx, vp, DOUBLE_TO_JSVAL(param));
+	JS_SET_RVAL(cx, vp, DOUBLE_TO_JSVAL(param[0]));
 	return JS_TRUE;
 }
 
