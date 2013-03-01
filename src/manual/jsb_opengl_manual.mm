@@ -205,6 +205,7 @@ JSBool JSB_glGetProgramInfoLog(JSContext *cx, uint32_t argc, jsval *vp)
 	return JS_TRUE;
 }
 
+// DOMString? getShaderInfoLog(WebGLShader? shader);
 JSBool JSB_glGetShaderInfoLog(JSContext *cx, uint32_t argc, jsval *vp)
 {
 	JSB_PRECONDITION2( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
@@ -224,6 +225,7 @@ JSBool JSB_glGetShaderInfoLog(JSContext *cx, uint32_t argc, jsval *vp)
 	return JS_TRUE;
 }
 
+// DOMString? getShaderSource(WebGLShader? shader);
 JSBool JSB_glGetShaderSource(JSContext *cx, uint32_t argc, jsval *vp)
 {
 	JSB_PRECONDITION2( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
@@ -243,12 +245,11 @@ JSBool JSB_glGetShaderSource(JSContext *cx, uint32_t argc, jsval *vp)
 	return JS_TRUE;
 }
 
-// Ret Val:
 //	interface WebGLActiveInfo {
 //		readonly attribute GLint size;
 //		readonly attribute GLenum type;
 //		readonly attribute DOMString name;
-//	};
+// WebGLActiveInfo? getActiveAttrib(WebGLProgram? program, GLuint index);
 JSBool JSB_glGetActiveAttrib(JSContext *cx, uint32_t argc, jsval *vp)
 {
 	JSB_PRECONDITION2( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
@@ -284,12 +285,13 @@ JSBool JSB_glGetActiveAttrib(JSContext *cx, uint32_t argc, jsval *vp)
 	return JS_TRUE;
 }
 
-// Ret Val:
+
 //	interface WebGLActiveInfo {
 //		readonly attribute GLint size;
 //		readonly attribute GLenum type;
 //		readonly attribute DOMString name;
 //	};
+// WebGLActiveInfo? getActiveUniform(WebGLProgram? program, GLuint index);
 JSBool JSB_glGetActiveUniform(JSContext *cx, uint32_t argc, jsval *vp)
 {
 	JSB_PRECONDITION2( argc == 2, cx, JS_FALSE, "Invalid number of arguments" );
@@ -326,7 +328,7 @@ JSBool JSB_glGetActiveUniform(JSContext *cx, uint32_t argc, jsval *vp)
 	return JS_TRUE;
 }
 
-// Ret Val: sequence<WebGLShader>?
+// sequence<WebGLShader>? getAttachedShaders(WebGLProgram? program);
 JSBool JSB_glGetAttachedShaders(JSContext *cx, uint32_t argc, jsval *vp)
 {
 	JSB_PRECONDITION2( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
@@ -356,7 +358,7 @@ JSBool JSB_glGetAttachedShaders(JSContext *cx, uint32_t argc, jsval *vp)
 
 }
 
-// Ret Val: sequence<DOMString>?
+// sequence<DOMString>? getSupportedExtensions();
 JSBool JSB_glGetSupportedExtensions(JSContext *cx, uint32_t argc, jsval *vp)
 {
 	JSB_PRECONDITION2( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
@@ -424,8 +426,17 @@ JSBool JSB_glGetUniformfv(JSContext *cx, uint32_t argc, jsval *vp)
 
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "JSB_glGetUniformfv: Error processing arguments");
 
-	GLfloat param;
-	glGetUniformfv(arg0, arg1, &param);
+	GLsizei length;
+	glGetProgramiv(arg0, GL_ACTIVE_ATTRIBUTE_MAX_LENGTH, &length);
+	GLchar buffer[length];
+	GLint size = -1;
+	GLenum type = -1;
+
+	glGetActiveUniform(arg0, arg1, length, NULL, &size, &type, buffer);
+
+
+	GLfloat param[16];
+	glGetUniformfv(arg0, arg1, param);
 
 	JS_SET_RVAL(cx, vp, DOUBLE_TO_JSVAL(param));
 	return JS_TRUE;
