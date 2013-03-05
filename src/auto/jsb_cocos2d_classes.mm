@@ -78,7 +78,7 @@ JSBool JSB_CCNode_addChild_z_tag_(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	id arg0; int32_t arg1; int32_t arg2; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	if (argc >= 2) {
 		ok &= JSB_jsval_to_int32( cx, *argvp++, &arg1 );
 	}
@@ -699,7 +699,7 @@ JSBool JSB_CCNode_removeChild_cleanup_(JSContext *cx, uint32_t argc, jsval *vp) 
 	JSBool ok = JS_TRUE;
 	id arg0; JSBool arg1; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	if (argc >= 2) {
 		ok &= JS_ValueToBoolean( cx, *argvp++, &arg1 );
 	}
@@ -800,7 +800,7 @@ JSBool JSB_CCNode_reorderChild_z_(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	id arg0; int32_t arg1; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	ok &= JSB_jsval_to_int32( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
@@ -890,7 +890,7 @@ JSBool JSB_CCNode_runAction_(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCAction* ret_val;
 
@@ -1023,7 +1023,7 @@ JSBool JSB_CCNode_setActionManager_(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCNode *real = (CCNode*) [proxy realObj];
@@ -1111,7 +1111,7 @@ JSBool JSB_CCNode_setGrid_(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCNode *real = (CCNode*) [proxy realObj];
@@ -1177,7 +1177,7 @@ JSBool JSB_CCNode_setParent_(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCNode *real = (CCNode*) [proxy realObj];
@@ -1331,7 +1331,7 @@ JSBool JSB_CCNode_setScheduler_(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCNode *real = (CCNode*) [proxy realObj];
@@ -1353,7 +1353,7 @@ JSBool JSB_CCNode_setShaderProgram_(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCNode *real = (CCNode*) [proxy realObj];
@@ -1441,7 +1441,7 @@ JSBool JSB_CCNode_setUserObject_(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCNode *real = (CCNode*) [proxy realObj];
@@ -1598,7 +1598,7 @@ JSBool JSB_CCNode_stopAction_(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCNode *real = (CCNode*) [proxy realObj];
@@ -2955,7 +2955,7 @@ JSBool JSB_CCParticleSystem_setBatchNode_(JSContext *cx, uint32_t argc, jsval *v
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCParticleSystem *real = (CCParticleSystem*) [proxy realObj];
@@ -3747,7 +3747,7 @@ JSBool JSB_CCParticleSystem_setTexture_(JSContext *cx, uint32_t argc, jsval *vp)
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCParticleSystem *real = (CCParticleSystem*) [proxy realObj];
@@ -4323,7 +4323,7 @@ JSBool JSB_CCParticleSystemQuad_setDisplayFrame_(JSContext *cx, uint32_t argc, j
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCParticleSystemQuad *real = (CCParticleSystemQuad*) [proxy realObj];
@@ -4345,7 +4345,7 @@ JSBool JSB_CCParticleSystemQuad_setTexture_withRect_(JSContext *cx, uint32_t arg
 	JSBool ok = JS_TRUE;
 	id arg0; CGRect arg1; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	ok &= JSB_jsval_to_CGRect( cx, *argvp++, (CGRect*) &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
@@ -4709,7 +4709,7 @@ JSBool JSB_CCAction_startWithTarget_(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCAction *real = (CCAction*) [proxy realObj];
@@ -5909,7 +5909,7 @@ JSBool JSB_CCReverseTime_actionWithAction__static(JSContext *cx, uint32_t argc, 
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCReverseTime* ret_val;
 
@@ -5933,7 +5933,7 @@ JSBool JSB_CCReverseTime_initWithAction_(JSContext *cx, uint32_t argc, jsval *vp
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCReverseTime *real = [(CCReverseTime*)[proxy.klass alloc] initWithAction:arg0  ];
@@ -6031,7 +6031,7 @@ JSBool JSB_CCActionEase_actionWithAction__static(JSContext *cx, uint32_t argc, j
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCActionEase* ret_val;
 
@@ -6055,7 +6055,7 @@ JSBool JSB_CCActionEase_initWithAction_(JSContext *cx, uint32_t argc, jsval *vp)
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCActionEase *real = [(CCActionEase*)[proxy.klass alloc] initWithAction:arg0  ];
@@ -6173,7 +6173,7 @@ JSBool JSB_CCEaseElastic_actionWithAction_period__static(JSContext *cx, uint32_t
 	JSBool ok = JS_TRUE;
 	id arg0; double arg1; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	if (argc >= 2) {
 		ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
 	}
@@ -6208,7 +6208,7 @@ JSBool JSB_CCEaseElastic_initWithAction_period_(JSContext *cx, uint32_t argc, js
 	JSBool ok = JS_TRUE;
 	id arg0; double arg1; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
@@ -6370,7 +6370,7 @@ JSBool JSB_CCEaseElasticOut_actionWithAction_period__static(JSContext *cx, uint3
 	JSBool ok = JS_TRUE;
 	id arg0; double arg1; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	if (argc >= 2) {
 		ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
 	}
@@ -8140,7 +8140,7 @@ JSBool JSB_CCSprite_initWithSpriteFrame_(JSContext *cx, uint32_t argc, jsval *vp
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCSprite *real = [(CCSprite*)[proxy.klass alloc] initWithSpriteFrame:arg0  ];
@@ -8192,7 +8192,7 @@ JSBool JSB_CCSprite_initWithTexture_rect_(JSContext *cx, uint32_t argc, jsval *v
 	JSBool ok = JS_TRUE;
 	id arg0; CGRect arg1; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	if (argc >= 2) {
 		ok &= JSB_jsval_to_CGRect( cx, *argvp++, (CGRect*) &arg1 );
 	}
@@ -8234,7 +8234,7 @@ JSBool JSB_CCSprite_initWithTexture_rect_rotated_(JSContext *cx, uint32_t argc, 
 	JSBool ok = JS_TRUE;
 	id arg0; CGRect arg1; JSBool arg2; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	ok &= JSB_jsval_to_CGRect( cx, *argvp++, (CGRect*) &arg1 );
 	ok &= JS_ValueToBoolean( cx, *argvp++, &arg2 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
@@ -8262,7 +8262,7 @@ JSBool JSB_CCSprite_isFrameDisplayed_(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	BOOL ret_val;
 
@@ -8327,7 +8327,7 @@ JSBool JSB_CCSprite_setBatchNode_(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCSprite *real = (CCSprite*) [proxy realObj];
@@ -8371,7 +8371,7 @@ JSBool JSB_CCSprite_setDisplayFrame_(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCSprite *real = (CCSprite*) [proxy realObj];
@@ -8460,7 +8460,7 @@ JSBool JSB_CCSprite_setTextureAtlas_(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCSprite *real = (CCSprite*) [proxy realObj];
@@ -8571,7 +8571,7 @@ JSBool JSB_CCSprite_spriteWithSpriteFrame__static(JSContext *cx, uint32_t argc, 
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCSprite* ret_val;
 
@@ -8609,7 +8609,7 @@ JSBool JSB_CCSprite_spriteWithTexture_rect__static(JSContext *cx, uint32_t argc,
 	JSBool ok = JS_TRUE;
 	id arg0; CGRect arg1; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	if (argc >= 2) {
 		ok &= JSB_jsval_to_CGRect( cx, *argvp++, (CGRect*) &arg1 );
 	}
@@ -8716,7 +8716,7 @@ JSBool JSB_CCSprite_setTexture_(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCSprite *real = (CCSprite*) [proxy realObj];
@@ -9491,7 +9491,7 @@ JSBool JSB_CCTransitionScene_initWithDuration_scene_(JSContext *cx, uint32_t arg
 	double arg0; id arg1; 
 
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCTransitionScene *real = [(CCTransitionScene*)[proxy.klass alloc] initWithDuration:(ccTime)arg0 scene:arg1  ];
@@ -9513,7 +9513,7 @@ JSBool JSB_CCTransitionScene_transitionWithDuration_scene__static(JSContext *cx,
 	double arg0; id arg1; 
 
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCTransitionScene* ret_val;
 
@@ -9630,7 +9630,7 @@ JSBool JSB_CCTransitionProgress_progressTimerNodeWithRenderTexture_(JSContext *c
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCProgressTimer* ret_val;
 
@@ -9651,7 +9651,7 @@ JSBool JSB_CCTransitionProgress_transitionWithDuration_scene__static(JSContext *
 	double arg0; id arg1; 
 
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCTransitionProgress* ret_val;
 
@@ -9766,7 +9766,7 @@ JSBool JSB_CCTransitionProgressRadialCCW_progressTimerNodeWithRenderTexture_(JSC
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCProgressTimer* ret_val;
 
@@ -9787,7 +9787,7 @@ JSBool JSB_CCTransitionProgressRadialCCW_transitionWithDuration_scene__static(JS
 	double arg0; id arg1; 
 
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCTransitionProgressRadialCCW* ret_val;
 
@@ -9902,7 +9902,7 @@ JSBool JSB_CCShaderCache_addProgram_forKey_(JSContext *cx, uint32_t argc, jsval 
 	JSBool ok = JS_TRUE;
 	id arg0; NSString* arg1; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	ok &= JSB_jsval_to_NSString( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
@@ -10094,7 +10094,7 @@ JSBool JSB_CCTransitionFadeTR_easeActionWithAction_(JSContext *cx, uint32_t argc
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCActionInterval* ret_val;
 
@@ -10115,7 +10115,7 @@ JSBool JSB_CCTransitionFadeTR_transitionWithDuration_scene__static(JSContext *cx
 	double arg0; id arg1; 
 
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCTransitionFadeTR* ret_val;
 
@@ -10248,7 +10248,7 @@ JSBool JSB_CCEaseBackOut_actionWithAction__static(JSContext *cx, uint32_t argc, 
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCEaseBackOut* ret_val;
 
@@ -10350,7 +10350,7 @@ JSBool JSB_CCTransitionSceneOriented_initWithDuration_scene_orientation_(JSConte
 	double arg0; id arg1; int32_t arg2; 
 
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1 );
 	ok &= JSB_jsval_to_int32( cx, *argvp++, &arg2 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
@@ -10373,7 +10373,7 @@ JSBool JSB_CCTransitionSceneOriented_transitionWithDuration_scene_orientation__s
 	double arg0; id arg1; int32_t arg2; 
 
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1 );
 	ok &= JSB_jsval_to_int32( cx, *argvp++, &arg2 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCTransitionSceneOriented* ret_val;
@@ -10394,7 +10394,7 @@ JSBool JSB_CCTransitionSceneOriented_transitionWithDuration_scene__static(JSCont
 	double arg0; id arg1; 
 
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCTransitionSceneOriented* ret_val;
 
@@ -10674,7 +10674,7 @@ JSBool JSB_CCScaleBy_startWithTarget_(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCScaleBy *real = (CCScaleBy*) [proxy realObj];
@@ -10830,7 +10830,7 @@ JSBool JSB_CCTransitionPageTurn_initWithDuration_scene_backwards_(JSContext *cx,
 	double arg0; id arg1; JSBool arg2; 
 
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1 );
 	ok &= JS_ValueToBoolean( cx, *argvp++, &arg2 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
@@ -10853,7 +10853,7 @@ JSBool JSB_CCTransitionPageTurn_transitionWithDuration_scene_backwards__static(J
 	double arg0; id arg1; JSBool arg2; 
 
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1 );
 	if (argc >= 3) {
 		ok &= JS_ValueToBoolean( cx, *argvp++, &arg2 );
 	}
@@ -10996,7 +10996,7 @@ JSBool JSB_CCTransitionRotoZoom_transitionWithDuration_scene__static(JSContext *
 	double arg0; id arg1; 
 
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCTransitionRotoZoom* ret_val;
 
@@ -11132,7 +11132,7 @@ JSBool JSB_CCTransitionFadeDown_transitionWithDuration_scene__static(JSContext *
 	double arg0; id arg1; 
 
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCTransitionFadeDown* ret_val;
 
@@ -11360,7 +11360,7 @@ JSBool JSB_CCEaseRateAction_actionWithAction_rate__static(JSContext *cx, uint32_
 	JSBool ok = JS_TRUE;
 	id arg0; double arg1; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCEaseRateAction* ret_val;
@@ -11385,7 +11385,7 @@ JSBool JSB_CCEaseRateAction_initWithAction_rate_(JSContext *cx, uint32_t argc, j
 	JSBool ok = JS_TRUE;
 	id arg0; double arg1; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
@@ -11547,7 +11547,7 @@ JSBool JSB_CCEaseInOut_actionWithAction_rate__static(JSContext *cx, uint32_t arg
 	JSBool ok = JS_TRUE;
 	id arg0; double arg1; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCEaseInOut* ret_val;
@@ -11668,7 +11668,7 @@ JSBool JSB_CCTransitionSplitCols_easeActionWithAction_(JSContext *cx, uint32_t a
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCActionInterval* ret_val;
 
@@ -11689,7 +11689,7 @@ JSBool JSB_CCTransitionSplitCols_transitionWithDuration_scene__static(JSContext 
 	double arg0; id arg1; 
 
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCTransitionSplitCols* ret_val;
 
@@ -11806,7 +11806,7 @@ JSBool JSB_CCCardinalSplineTo_initWithDuration_points_tension_(JSContext *cx, ui
 	double arg0; id arg1; double arg2; 
 
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg2 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
@@ -11852,7 +11852,7 @@ JSBool JSB_CCCardinalSplineTo_setPoints_(JSContext *cx, uint32_t argc, jsval *vp
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCCardinalSplineTo *real = (CCCardinalSplineTo*) [proxy realObj];
@@ -11953,7 +11953,7 @@ JSBool JSB_CCCardinalSplineBy_startWithTarget_(JSContext *cx, uint32_t argc, jsv
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCCardinalSplineBy *real = (CCCardinalSplineBy*) [proxy realObj];
@@ -12053,7 +12053,7 @@ JSBool JSB_CCCatmullRomBy_initWithDuration_points_(JSContext *cx, uint32_t argc,
 	double arg0; id arg1; 
 
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCCatmullRomBy *real = [(CCCatmullRomBy*)[proxy.klass alloc] initWithDuration:(ccTime)arg0 points:arg1  ];
@@ -12172,7 +12172,7 @@ JSBool JSB_CCTransitionFlipAngular_transitionWithDuration_scene_orientation__sta
 	double arg0; id arg1; int32_t arg2; 
 
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1 );
 	ok &= JSB_jsval_to_int32( cx, *argvp++, &arg2 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCTransitionFlipAngular* ret_val;
@@ -12193,7 +12193,7 @@ JSBool JSB_CCTransitionFlipAngular_transitionWithDuration_scene__static(JSContex
 	double arg0; id arg1; 
 
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCTransitionFlipAngular* ret_val;
 
@@ -12801,7 +12801,7 @@ JSBool JSB_CCEaseBackIn_actionWithAction__static(JSContext *cx, uint32_t argc, j
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCEaseBackIn* ret_val;
 
@@ -12902,7 +12902,7 @@ JSBool JSB_CCSpriteBatchNode_appendChild_(JSContext *cx, uint32_t argc, jsval *v
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCSpriteBatchNode *real = (CCSpriteBatchNode*) [proxy realObj];
@@ -12924,7 +12924,7 @@ JSBool JSB_CCSpriteBatchNode_atlasIndexForChild_atZ_(JSContext *cx, uint32_t arg
 	JSBool ok = JS_TRUE;
 	id arg0; int32_t arg1; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	ok &= JSB_jsval_to_int32( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	NSUInteger ret_val;
@@ -12973,7 +12973,7 @@ JSBool JSB_CCSpriteBatchNode_batchNodeWithTexture_capacity__static(JSContext *cx
 	JSBool ok = JS_TRUE;
 	id arg0; uint32_t arg1; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	if (argc >= 2) {
 		ok &= JSB_jsval_to_uint32( cx, *argvp++, &arg1 );
 	}
@@ -13071,7 +13071,7 @@ JSBool JSB_CCSpriteBatchNode_initWithTexture_capacity_(JSContext *cx, uint32_t a
 	JSBool ok = JS_TRUE;
 	id arg0; uint32_t arg1; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	ok &= JSB_jsval_to_uint32( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
@@ -13098,7 +13098,7 @@ JSBool JSB_CCSpriteBatchNode_insertChild_inAtlasAtIndex_(JSContext *cx, uint32_t
 	JSBool ok = JS_TRUE;
 	id arg0; uint32_t arg1; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	ok &= JSB_jsval_to_uint32( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
@@ -13121,7 +13121,7 @@ JSBool JSB_CCSpriteBatchNode_insertQuadFromSprite_quadIndex_(JSContext *cx, uint
 	JSBool ok = JS_TRUE;
 	id arg0; uint32_t arg1; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	ok &= JSB_jsval_to_uint32( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
@@ -13144,7 +13144,7 @@ JSBool JSB_CCSpriteBatchNode_rebuildIndexInOrder_atlasIndex_(JSContext *cx, uint
 	JSBool ok = JS_TRUE;
 	id arg0; uint32_t arg1; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	ok &= JSB_jsval_to_uint32( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	NSUInteger ret_val;
@@ -13168,7 +13168,7 @@ JSBool JSB_CCSpriteBatchNode_removeChild_cleanup_(JSContext *cx, uint32_t argc, 
 	JSBool ok = JS_TRUE;
 	id arg0; JSBool arg1; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	if (argc >= 2) {
 		ok &= JS_ValueToBoolean( cx, *argvp++, &arg1 );
 	}
@@ -13225,7 +13225,7 @@ JSBool JSB_CCSpriteBatchNode_removeSpriteFromAtlas_(JSContext *cx, uint32_t argc
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCSpriteBatchNode *real = (CCSpriteBatchNode*) [proxy realObj];
@@ -13269,7 +13269,7 @@ JSBool JSB_CCSpriteBatchNode_setTextureAtlas_(JSContext *cx, uint32_t argc, jsva
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCSpriteBatchNode *real = (CCSpriteBatchNode*) [proxy realObj];
@@ -13310,7 +13310,7 @@ JSBool JSB_CCSpriteBatchNode_updateQuadFromSprite_quadIndex_(JSContext *cx, uint
 	JSBool ok = JS_TRUE;
 	id arg0; uint32_t arg1; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	ok &= JSB_jsval_to_uint32( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
@@ -13333,7 +13333,7 @@ JSBool JSB_CCSpriteBatchNode_setTexture_(JSContext *cx, uint32_t argc, jsval *vp
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCSpriteBatchNode *real = (CCSpriteBatchNode*) [proxy realObj];
@@ -13470,7 +13470,7 @@ JSBool JSB_CCTMXLayer_addChild_z_tag_(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	id arg0; int32_t arg1; int32_t arg2; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	ok &= JSB_jsval_to_int32( cx, *argvp++, &arg1 );
 	ok &= JSB_jsval_to_int32( cx, *argvp++, &arg2 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
@@ -13494,9 +13494,9 @@ JSBool JSB_CCTMXLayer_initWithTilesetInfo_layerInfo_mapInfo_(JSContext *cx, uint
 	JSBool ok = JS_TRUE;
 	id arg0; id arg1; id arg2; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1);
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg2);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1 );
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg2 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCTMXLayer *real = [(CCTMXLayer*)[proxy.klass alloc] initWithTilesetInfo:arg0 layerInfo:arg1 mapInfo:arg2  ];
@@ -13574,9 +13574,9 @@ JSBool JSB_CCTMXLayer_layerWithTilesetInfo_layerInfo_mapInfo__static(JSContext *
 	JSBool ok = JS_TRUE;
 	id arg0; id arg1; id arg2; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1);
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg2);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1 );
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg2 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCTMXLayer* ret_val;
 
@@ -13849,7 +13849,7 @@ JSBool JSB_CCTMXLayer_setTileset_(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCTMXLayer *real = (CCTMXLayer*) [proxy realObj];
@@ -14563,7 +14563,7 @@ JSBool JSB_CCTexture2D_setShaderProgram_(JSContext *cx, uint32_t argc, jsval *vp
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCTexture2D *real = (CCTexture2D*) [proxy realObj];
@@ -14724,7 +14724,7 @@ JSBool JSB_CCAccelDeccelAmplitude_actionWithAction_duration__static(JSContext *c
 	JSBool ok = JS_TRUE;
 	id arg0; double arg1; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCAccelDeccelAmplitude* ret_val;
@@ -14749,7 +14749,7 @@ JSBool JSB_CCAccelDeccelAmplitude_initWithAction_duration_(JSContext *cx, uint32
 	JSBool ok = JS_TRUE;
 	id arg0; double arg1; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
@@ -15133,10 +15133,7 @@ JSBool JSB_CCGrid3DAction_setVertex_vertex_(JSContext *cx, uint32_t argc, jsval 
 	CGPoint arg0; ccVertex3F arg1; 
 
 	ok &= JSB_jsval_to_CGPoint( cx, *argvp++, (CGPoint*) &arg0 );
-
-	JSObject *tmp_arg1;
-	ok &= JS_ValueToObject( cx, *argvp++, &tmp_arg1 );
-	arg1 = *(ccVertex3F*)JS_GetArrayBufferViewData( tmp_arg1 );
+	ok &= JSB_jsval_to_struct( cx, *argvp++, &arg1, sizeof(ccVertex3F) );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCGrid3DAction *real = (CCGrid3DAction*) [proxy realObj];
@@ -15611,8 +15608,8 @@ JSBool JSB_CCMenuItemSprite_itemWithNormalSprite_selectedSprite__static(JSContex
 	JSBool ok = JS_TRUE;
 	id arg0; id arg1; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCMenuItemSprite* ret_val;
 
@@ -15674,7 +15671,7 @@ JSBool JSB_CCMenuItemSprite_setDisabledImage_(JSContext *cx, uint32_t argc, jsva
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCMenuItemSprite *real = (CCMenuItemSprite*) [proxy realObj];
@@ -15696,7 +15693,7 @@ JSBool JSB_CCMenuItemSprite_setNormalImage_(JSContext *cx, uint32_t argc, jsval 
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCMenuItemSprite *real = (CCMenuItemSprite*) [proxy realObj];
@@ -15718,7 +15715,7 @@ JSBool JSB_CCMenuItemSprite_setSelectedImage_(JSContext *cx, uint32_t argc, jsva
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCMenuItemSprite *real = (CCMenuItemSprite*) [proxy realObj];
@@ -16158,7 +16155,7 @@ JSBool JSB_CCMenuItemImage_setDisabledSpriteFrame_(JSContext *cx, uint32_t argc,
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCMenuItemImage *real = (CCMenuItemImage*) [proxy realObj];
@@ -16180,7 +16177,7 @@ JSBool JSB_CCMenuItemImage_setNormalSpriteFrame_(JSContext *cx, uint32_t argc, j
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCMenuItemImage *real = (CCMenuItemImage*) [proxy realObj];
@@ -16202,7 +16199,7 @@ JSBool JSB_CCMenuItemImage_setSelectedSpriteFrame_(JSContext *cx, uint32_t argc,
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCMenuItemImage *real = (CCMenuItemImage*) [proxy realObj];
@@ -16306,7 +16303,7 @@ JSBool JSB_CCParticleBatchNode_addChild_z_tag_(JSContext *cx, uint32_t argc, jsv
 	JSBool ok = JS_TRUE;
 	id arg0; int32_t arg1; int32_t arg2; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	ok &= JSB_jsval_to_int32( cx, *argvp++, &arg1 );
 	ok &= JSB_jsval_to_int32( cx, *argvp++, &arg2 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
@@ -16355,7 +16352,7 @@ JSBool JSB_CCParticleBatchNode_batchNodeWithTexture_capacity__static(JSContext *
 	JSBool ok = JS_TRUE;
 	id arg0; uint32_t arg1; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	if (argc >= 2) {
 		ok &= JSB_jsval_to_uint32( cx, *argvp++, &arg1 );
 	}
@@ -16439,7 +16436,7 @@ JSBool JSB_CCParticleBatchNode_initWithTexture_capacity_(JSContext *cx, uint32_t
 	JSBool ok = JS_TRUE;
 	id arg0; uint32_t arg1; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	ok &= JSB_jsval_to_uint32( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
@@ -16466,7 +16463,7 @@ JSBool JSB_CCParticleBatchNode_insertChild_inAtlasAtIndex_(JSContext *cx, uint32
 	JSBool ok = JS_TRUE;
 	id arg0; uint32_t arg1; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	ok &= JSB_jsval_to_uint32( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
@@ -16489,7 +16486,7 @@ JSBool JSB_CCParticleBatchNode_removeChild_cleanup_(JSContext *cx, uint32_t argc
 	JSBool ok = JS_TRUE;
 	id arg0; JSBool arg1; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	if (argc >= 2) {
 		ok &= JS_ValueToBoolean( cx, *argvp++, &arg1 );
 	}
@@ -16523,7 +16520,7 @@ JSBool JSB_CCParticleBatchNode_setTextureAtlas_(JSContext *cx, uint32_t argc, js
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCParticleBatchNode *real = (CCParticleBatchNode*) [proxy realObj];
@@ -16564,7 +16561,7 @@ JSBool JSB_CCParticleBatchNode_setTexture_(JSContext *cx, uint32_t argc, jsval *
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCParticleBatchNode *real = (CCParticleBatchNode*) [proxy realObj];
@@ -16723,7 +16720,7 @@ JSBool JSB_CCTransitionCrossFade_transitionWithDuration_scene__static(JSContext 
 	double arg0; id arg1; 
 
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCTransitionCrossFade* ret_val;
 
@@ -17140,7 +17137,7 @@ JSBool JSB_CCEaseElasticIn_actionWithAction_period__static(JSContext *cx, uint32
 	JSBool ok = JS_TRUE;
 	id arg0; double arg1; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	if (argc >= 2) {
 		ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
 	}
@@ -17247,7 +17244,7 @@ JSBool JSB_CCSpeed_actionWithAction_speed__static(JSContext *cx, uint32_t argc, 
 	JSBool ok = JS_TRUE;
 	id arg0; double arg1; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCSpeed* ret_val;
@@ -17272,7 +17269,7 @@ JSBool JSB_CCSpeed_initWithAction_speed_(JSContext *cx, uint32_t argc, jsval *vp
 	JSBool ok = JS_TRUE;
 	id arg0; double arg1; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
@@ -17318,7 +17315,7 @@ JSBool JSB_CCSpeed_setInnerAction_(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCSpeed *real = (CCSpeed*) [proxy realObj];
@@ -17635,7 +17632,7 @@ JSBool JSB_CCActionCamera_startWithTarget_(JSContext *cx, uint32_t argc, jsval *
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCActionCamera *real = (CCActionCamera*) [proxy realObj];
@@ -17907,7 +17904,7 @@ JSBool JSB_CCMotionStreak_initWithFade_minSeg_width_color_texture_(JSContext *cx
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg2 );
 	ok &= JSB_jsval_to_ccColor3B( cx, *argvp++, (ccColor3B*) &arg3 );
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg4);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg4 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCMotionStreak *real = [(CCMotionStreak*)[proxy.klass alloc] initWithFade:(float)arg0 minSeg:(float)arg1 width:(float)arg2 color:(ccColor3B)arg3 texture:arg4  ];
@@ -18018,7 +18015,7 @@ JSBool JSB_CCMotionStreak_setTexture_(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCMotionStreak *real = (CCMotionStreak*) [proxy realObj];
@@ -18039,7 +18036,7 @@ JSBool JSB_CCMotionStreak_streakWithFade_minSeg_width_color_texture__static(JSCo
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg2 );
 	ok &= JSB_jsval_to_ccColor3B( cx, *argvp++, (ccColor3B*) &arg3 );
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg4);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg4 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCMotionStreak* ret_val;
 
@@ -18320,7 +18317,7 @@ JSBool JSB_CCAccelAmplitude_actionWithAction_duration__static(JSContext *cx, uin
 	JSBool ok = JS_TRUE;
 	id arg0; double arg1; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCAccelAmplitude* ret_val;
@@ -18345,7 +18342,7 @@ JSBool JSB_CCAccelAmplitude_initWithAction_duration_(JSContext *cx, uint32_t arg
 	JSBool ok = JS_TRUE;
 	id arg0; double arg1; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
@@ -18507,7 +18504,7 @@ JSBool JSB_CCGridBase_afterDraw_(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCGridBase *real = (CCGridBase*) [proxy realObj];
@@ -18631,7 +18628,7 @@ JSBool JSB_CCGridBase_gridWithSize_texture_flippedTexture__static(JSContext *cx,
 	CGSize arg0; id arg1; JSBool arg2; 
 
 	ok &= JSB_jsval_to_CGSize( cx, *argvp++, (CGSize*) &arg0 );
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1 );
 	ok &= JS_ValueToBoolean( cx, *argvp++, &arg2 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCGridBase* ret_val;
@@ -18683,7 +18680,7 @@ JSBool JSB_CCGridBase_initWithSize_texture_flippedTexture_(JSContext *cx, uint32
 	CGSize arg0; id arg1; JSBool arg2; 
 
 	ok &= JSB_jsval_to_CGSize( cx, *argvp++, (CGSize*) &arg0 );
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1 );
 	ok &= JS_ValueToBoolean( cx, *argvp++, &arg2 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
@@ -18782,7 +18779,7 @@ JSBool JSB_CCGridBase_setGrabber_(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCGridBase *real = (CCGridBase*) [proxy realObj];
@@ -18848,7 +18845,7 @@ JSBool JSB_CCGridBase_setShaderProgram_(JSContext *cx, uint32_t argc, jsval *vp)
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCGridBase *real = (CCGridBase*) [proxy realObj];
@@ -18892,7 +18889,7 @@ JSBool JSB_CCGridBase_setTexture_(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCGridBase *real = (CCGridBase*) [proxy realObj];
@@ -19086,7 +19083,7 @@ JSBool JSB_CCTiledGrid3D_gridWithSize_texture_flippedTexture__static(JSContext *
 	CGSize arg0; id arg1; JSBool arg2; 
 
 	ok &= JSB_jsval_to_CGSize( cx, *argvp++, (CGSize*) &arg0 );
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1 );
 	ok &= JS_ValueToBoolean( cx, *argvp++, &arg2 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCTiledGrid3D* ret_val;
@@ -19206,7 +19203,7 @@ JSBool JSB_CCEaseBounce_actionWithAction__static(JSContext *cx, uint32_t argc, j
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCEaseBounce* ret_val;
 
@@ -19324,7 +19321,7 @@ JSBool JSB_CCEaseBounceOut_actionWithAction__static(JSContext *cx, uint32_t argc
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCEaseBounceOut* ret_val;
 
@@ -19543,7 +19540,7 @@ JSBool JSB_CCAnimationCache_addAnimation_name_(JSContext *cx, uint32_t argc, jsv
 	JSBool ok = JS_TRUE;
 	id arg0; NSString* arg1; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	ok &= JSB_jsval_to_NSString( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
@@ -19757,7 +19754,7 @@ JSBool JSB_CCRepeatForever_actionWithAction__static(JSContext *cx, uint32_t argc
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCRepeatForever* ret_val;
 
@@ -19781,7 +19778,7 @@ JSBool JSB_CCRepeatForever_initWithAction_(JSContext *cx, uint32_t argc, jsval *
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCRepeatForever *real = [(CCRepeatForever*)[proxy.klass alloc] initWithAction:arg0  ];
@@ -19826,7 +19823,7 @@ JSBool JSB_CCRepeatForever_setInnerAction_(JSContext *cx, uint32_t argc, jsval *
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCRepeatForever *real = (CCRepeatForever*) [proxy realObj];
@@ -20198,7 +20195,7 @@ JSBool JSB_CCTransitionProgressVertical_progressTimerNodeWithRenderTexture_(JSCo
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCProgressTimer* ret_val;
 
@@ -20219,7 +20216,7 @@ JSBool JSB_CCTransitionProgressVertical_transitionWithDuration_scene__static(JSC
 	double arg0; id arg1; 
 
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCTransitionProgressVertical* ret_val;
 
@@ -21027,7 +21024,7 @@ JSBool JSB_CCAtlasNode_initWithTexture_tileWidth_tileHeight_itemsToRender_(JSCon
 	JSBool ok = JS_TRUE;
 	id arg0; uint32_t arg1; uint32_t arg2; uint32_t arg3; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	ok &= JSB_jsval_to_uint32( cx, *argvp++, &arg1 );
 	ok &= JSB_jsval_to_uint32( cx, *argvp++, &arg2 );
 	ok &= JSB_jsval_to_uint32( cx, *argvp++, &arg3 );
@@ -21146,7 +21143,7 @@ JSBool JSB_CCAtlasNode_setTextureAtlas_(JSContext *cx, uint32_t argc, jsval *vp)
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCAtlasNode *real = (CCAtlasNode*) [proxy realObj];
@@ -21203,7 +21200,7 @@ JSBool JSB_CCAtlasNode_setTexture_(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCAtlasNode *real = (CCAtlasNode*) [proxy realObj];
@@ -21804,7 +21801,7 @@ JSBool JSB_CCTransitionShrinkGrow_easeActionWithAction_(JSContext *cx, uint32_t 
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCActionInterval* ret_val;
 
@@ -21825,7 +21822,7 @@ JSBool JSB_CCTransitionShrinkGrow_transitionWithDuration_scene__static(JSContext
 	double arg0; id arg1; 
 
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCTransitionShrinkGrow* ret_val;
 
@@ -21958,7 +21955,7 @@ JSBool JSB_CCEaseExponentialInOut_actionWithAction__static(JSContext *cx, uint32
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCEaseExponentialInOut* ret_val;
 
@@ -22292,7 +22289,7 @@ JSBool JSB_CCMenuItemLabel_setLabel_(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCMenuItemLabel *real = (CCMenuItemLabel*) [proxy realObj];
@@ -22637,8 +22634,8 @@ JSBool JSB_CCTargetedAction_actionWithTarget_action__static(JSContext *cx, uint3
 	JSBool ok = JS_TRUE;
 	id arg0; id arg1; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCTargetedAction* ret_val;
 
@@ -22662,8 +22659,8 @@ JSBool JSB_CCTargetedAction_initWithTarget_action_(JSContext *cx, uint32_t argc,
 	JSBool ok = JS_TRUE;
 	id arg0; id arg1; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCTargetedAction *real = [(CCTargetedAction*)[proxy.klass alloc] initWithTarget:arg0 action:arg1  ];
@@ -22689,7 +22686,7 @@ JSBool JSB_CCTargetedAction_setForcedTarget_(JSContext *cx, uint32_t argc, jsval
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCTargetedAction *real = (CCTargetedAction*) [proxy realObj];
@@ -23186,8 +23183,8 @@ JSBool JSB_CCSpawn_actionOne_two__static(JSContext *cx, uint32_t argc, jsval *vp
 	JSBool ok = JS_TRUE;
 	id arg0; id arg1; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCSpawn* ret_val;
 
@@ -23230,8 +23227,8 @@ JSBool JSB_CCSpawn_initOne_two_(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	id arg0; id arg1; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCSpawn *real = [(CCSpawn*)[proxy.klass alloc] initOne:arg0 two:arg1  ];
@@ -23952,7 +23949,7 @@ JSBool JSB_CCTransitionFade_initWithDuration_scene_withColor_(JSContext *cx, uin
 	double arg0; id arg1; ccColor3B arg2; 
 
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1 );
 	ok &= JSB_jsval_to_ccColor3B( cx, *argvp++, (ccColor3B*) &arg2 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
@@ -23975,7 +23972,7 @@ JSBool JSB_CCTransitionFade_transitionWithDuration_scene_withColor__static(JSCon
 	double arg0; id arg1; ccColor3B arg2; 
 
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1 );
 	if (argc >= 3) {
 		ok &= JSB_jsval_to_ccColor3B( cx, *argvp++, (ccColor3B*) &arg2 );
 	}
@@ -24159,7 +24156,7 @@ JSBool JSB_CCLabelAtlas_initWithString_texture_itemWidth_itemHeight_startCharMap
 	NSString* arg0; id arg1; uint32_t arg2; uint32_t arg3; uint32_t arg4; 
 
 	ok &= JSB_jsval_to_NSString( cx, *argvp++, &arg0 );
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1 );
 	ok &= JSB_jsval_to_uint32( cx, *argvp++, &arg2 );
 	ok &= JSB_jsval_to_uint32( cx, *argvp++, &arg3 );
 	ok &= JSB_jsval_to_uint32( cx, *argvp++, &arg4 );
@@ -24406,7 +24403,7 @@ JSBool JSB_CCTransitionMoveInL_easeActionWithAction_(JSContext *cx, uint32_t arg
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCActionInterval* ret_val;
 
@@ -24427,7 +24424,7 @@ JSBool JSB_CCTransitionMoveInL_transitionWithDuration_scene__static(JSContext *c
 	double arg0; id arg1; 
 
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCTransitionMoveInL* ret_val;
 
@@ -24556,7 +24553,7 @@ JSBool JSB_CCTransitionMoveInT_transitionWithDuration_scene__static(JSContext *c
 	double arg0; id arg1; 
 
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCTransitionMoveInT* ret_val;
 
@@ -24683,7 +24680,7 @@ JSBool JSB_CCTransitionMoveInR_transitionWithDuration_scene__static(JSContext *c
 	double arg0; id arg1; 
 
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCTransitionMoveInR* ret_val;
 
@@ -24815,7 +24812,7 @@ JSBool JSB_CCEaseExponentialIn_actionWithAction__static(JSContext *cx, uint32_t 
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCEaseExponentialIn* ret_val;
 
@@ -25189,7 +25186,7 @@ JSBool JSB_CCCatmullRomTo_initWithDuration_points_(JSContext *cx, uint32_t argc,
 	double arg0; id arg1; 
 
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCCatmullRomTo *real = [(CCCatmullRomTo*)[proxy.klass alloc] initWithDuration:(ccTime)arg0 points:arg1  ];
@@ -26012,7 +26009,7 @@ JSBool JSB_CCTransitionMoveInB_transitionWithDuration_scene__static(JSContext *c
 	double arg0; id arg1; 
 
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCTransitionMoveInB* ret_val;
 
@@ -26143,7 +26140,7 @@ JSBool JSB_CCTransitionZoomFlipX_transitionWithDuration_scene_orientation__stati
 	double arg0; id arg1; int32_t arg2; 
 
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1 );
 	ok &= JSB_jsval_to_int32( cx, *argvp++, &arg2 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCTransitionZoomFlipX* ret_val;
@@ -26164,7 +26161,7 @@ JSBool JSB_CCTransitionZoomFlipX_transitionWithDuration_scene__static(JSContext 
 	double arg0; id arg1; 
 
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCTransitionZoomFlipX* ret_val;
 
@@ -26297,7 +26294,7 @@ JSBool JSB_CCEaseOut_actionWithAction_rate__static(JSContext *cx, uint32_t argc,
 	JSBool ok = JS_TRUE;
 	id arg0; double arg1; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCEaseOut* ret_val;
@@ -26941,7 +26938,7 @@ JSBool JSB_CCScheduler_isTargetPaused_(JSContext *cx, uint32_t argc, jsval *vp) 
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	BOOL ret_val;
 
@@ -27010,7 +27007,7 @@ JSBool JSB_CCScheduler_pauseTarget_(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCScheduler *real = (CCScheduler*) [proxy realObj];
@@ -27032,7 +27029,7 @@ JSBool JSB_CCScheduler_resumeTarget_(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCScheduler *real = (CCScheduler*) [proxy realObj];
@@ -27076,7 +27073,7 @@ JSBool JSB_CCScheduler_scheduleUpdateForTarget_priority_paused_(JSContext *cx, u
 	JSBool ok = JS_TRUE;
 	id arg0; int32_t arg1; JSBool arg2; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	ok &= JSB_jsval_to_int32( cx, *argvp++, &arg1 );
 	ok &= JS_ValueToBoolean( cx, *argvp++, &arg2 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
@@ -27155,7 +27152,7 @@ JSBool JSB_CCScheduler_unscheduleAllForTarget_(JSContext *cx, uint32_t argc, jsv
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCScheduler *real = (CCScheduler*) [proxy realObj];
@@ -27200,7 +27197,7 @@ JSBool JSB_CCScheduler_unscheduleBlockForKey_target_(JSContext *cx, uint32_t arg
 	NSString* arg0; id arg1; 
 
 	ok &= JSB_jsval_to_NSString( cx, *argvp++, &arg0 );
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCScheduler *real = (CCScheduler*) [proxy realObj];
@@ -27222,7 +27219,7 @@ JSBool JSB_CCScheduler_unscheduleUpdateForTarget_(JSContext *cx, uint32_t argc, 
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCScheduler *real = (CCScheduler*) [proxy realObj];
@@ -27352,7 +27349,7 @@ JSBool JSB_CCFollow_actionWithTarget_worldBoundary__static(JSContext *cx, uint32
 	JSBool ok = JS_TRUE;
 	id arg0; CGRect arg1; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	if (argc >= 2) {
 		ok &= JSB_jsval_to_CGRect( cx, *argvp++, (CGRect*) &arg1 );
 	}
@@ -27404,7 +27401,7 @@ JSBool JSB_CCFollow_initWithTarget_(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCFollow *real = [(CCFollow*)[proxy.klass alloc] initWithTarget:arg0  ];
@@ -27430,7 +27427,7 @@ JSBool JSB_CCFollow_initWithTarget_worldBoundary_(JSContext *cx, uint32_t argc, 
 	JSBool ok = JS_TRUE;
 	id arg0; CGRect arg1; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	ok &= JSB_jsval_to_CGRect( cx, *argvp++, (CGRect*) &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
@@ -27710,7 +27707,7 @@ JSBool JSB_CCAnimationFrame_initWithSpriteFrame_delayUnits_userInfo_(JSContext *
 	JSBool ok = JS_TRUE;
 	id arg0; double arg1; NSDictionary* arg2; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
 	ok &= JSB_jsval_to_NSDictionary( cx, *argvp++, &arg2 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
@@ -27760,7 +27757,7 @@ JSBool JSB_CCAnimationFrame_setSpriteFrame_(JSContext *cx, uint32_t argc, jsval 
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCAnimationFrame *real = (CCAnimationFrame*) [proxy realObj];
@@ -27960,7 +27957,7 @@ JSBool JSB_CCTransitionSlideInL_easeActionWithAction_(JSContext *cx, uint32_t ar
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCActionInterval* ret_val;
 
@@ -27981,7 +27978,7 @@ JSBool JSB_CCTransitionSlideInL_transitionWithDuration_scene__static(JSContext *
 	double arg0; id arg1; 
 
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCTransitionSlideInL* ret_val;
 
@@ -28110,7 +28107,7 @@ JSBool JSB_CCTransitionSlideInB_transitionWithDuration_scene__static(JSContext *
 	double arg0; id arg1; 
 
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCTransitionSlideInB* ret_val;
 
@@ -28460,7 +28457,7 @@ JSBool JSB_CCParallaxNode_addChild_z_parallaxRatio_positionOffset_(JSContext *cx
 	JSBool ok = JS_TRUE;
 	id arg0; int32_t arg1; CGPoint arg2; CGPoint arg3; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	ok &= JSB_jsval_to_int32( cx, *argvp++, &arg1 );
 	ok &= JSB_jsval_to_CGPoint( cx, *argvp++, (CGPoint*) &arg2 );
 	ok &= JSB_jsval_to_CGPoint( cx, *argvp++, (CGPoint*) &arg3 );
@@ -28575,7 +28572,7 @@ JSBool JSB_CCTransitionProgressHorizontal_progressTimerNodeWithRenderTexture_(JS
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCProgressTimer* ret_val;
 
@@ -28596,7 +28593,7 @@ JSBool JSB_CCTransitionProgressHorizontal_transitionWithDuration_scene__static(J
 	double arg0; id arg1; 
 
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCTransitionProgressHorizontal* ret_val;
 
@@ -28706,7 +28703,7 @@ JSBool JSB_CCRepeat_actionWithAction_times__static(JSContext *cx, uint32_t argc,
 	JSBool ok = JS_TRUE;
 	id arg0; uint32_t arg1; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	ok &= JSB_jsval_to_uint32( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCRepeat* ret_val;
@@ -28731,7 +28728,7 @@ JSBool JSB_CCRepeat_initWithAction_times_(JSContext *cx, uint32_t argc, jsval *v
 	JSBool ok = JS_TRUE;
 	id arg0; uint32_t arg1; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	ok &= JSB_jsval_to_uint32( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
@@ -28777,7 +28774,7 @@ JSBool JSB_CCRepeat_setInnerAction_(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCRepeat *real = (CCRepeat*) [proxy realObj];
@@ -29172,7 +29169,7 @@ JSBool JSB_CCTransitionFlipY_transitionWithDuration_scene_orientation__static(JS
 	double arg0; id arg1; int32_t arg2; 
 
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1 );
 	ok &= JSB_jsval_to_int32( cx, *argvp++, &arg2 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCTransitionFlipY* ret_val;
@@ -29193,7 +29190,7 @@ JSBool JSB_CCTransitionFlipY_transitionWithDuration_scene__static(JSContext *cx,
 	double arg0; id arg1; 
 
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCTransitionFlipY* ret_val;
 
@@ -29325,7 +29322,7 @@ JSBool JSB_CCTransitionFlipX_transitionWithDuration_scene_orientation__static(JS
 	double arg0; id arg1; int32_t arg2; 
 
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1 );
 	ok &= JSB_jsval_to_int32( cx, *argvp++, &arg2 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCTransitionFlipX* ret_val;
@@ -29346,7 +29343,7 @@ JSBool JSB_CCTransitionFlipX_transitionWithDuration_scene__static(JSContext *cx,
 	double arg0; id arg1; 
 
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCTransitionFlipX* ret_val;
 
@@ -29457,7 +29454,7 @@ JSBool JSB_CCSpriteFrame_frameWithTexture_rectInPixels_rotated_offset_originalSi
 	JSBool ok = JS_TRUE;
 	id arg0; CGRect arg1; JSBool arg2; CGPoint arg3; CGSize arg4; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	ok &= JSB_jsval_to_CGRect( cx, *argvp++, (CGRect*) &arg1 );
 	if (argc >= 3) {
 		ok &= JS_ValueToBoolean( cx, *argvp++, &arg2 );
@@ -29536,7 +29533,7 @@ JSBool JSB_CCSpriteFrame_initWithTexture_rect_(JSContext *cx, uint32_t argc, jsv
 	JSBool ok = JS_TRUE;
 	id arg0; CGRect arg1; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	ok &= JSB_jsval_to_CGRect( cx, *argvp++, (CGRect*) &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
@@ -29563,7 +29560,7 @@ JSBool JSB_CCSpriteFrame_initWithTexture_rectInPixels_rotated_offset_originalSiz
 	JSBool ok = JS_TRUE;
 	id arg0; CGRect arg1; JSBool arg2; CGPoint arg3; CGSize arg4; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	ok &= JSB_jsval_to_CGRect( cx, *argvp++, (CGRect*) &arg1 );
 	ok &= JS_ValueToBoolean( cx, *argvp++, &arg2 );
 	ok &= JSB_jsval_to_CGPoint( cx, *argvp++, (CGPoint*) &arg3 );
@@ -29941,7 +29938,7 @@ JSBool JSB_CCSpriteFrame_setTexture_(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCSpriteFrame *real = (CCSpriteFrame*) [proxy realObj];
@@ -30316,7 +30313,7 @@ JSBool JSB_CCTextureCache_removeTexture_(JSContext *cx, uint32_t argc, jsval *vp
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCTextureCache *real = (CCTextureCache*) [proxy realObj];
@@ -31045,7 +31042,7 @@ JSBool JSB_CCEaseIn_actionWithAction_rate__static(JSContext *cx, uint32_t argc, 
 	JSBool ok = JS_TRUE;
 	id arg0; double arg1; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCEaseIn* ret_val;
@@ -32245,7 +32242,7 @@ JSBool JSB_CCTransitionZoomFlipY_transitionWithDuration_scene_orientation__stati
 	double arg0; id arg1; int32_t arg2; 
 
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1 );
 	ok &= JSB_jsval_to_int32( cx, *argvp++, &arg2 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCTransitionZoomFlipY* ret_val;
@@ -32266,7 +32263,7 @@ JSBool JSB_CCTransitionZoomFlipY_transitionWithDuration_scene__static(JSContext 
 	double arg0; id arg1; 
 
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCTransitionZoomFlipY* ret_val;
 
@@ -32939,7 +32936,7 @@ JSBool JSB_CCEaseSineIn_actionWithAction__static(JSContext *cx, uint32_t argc, j
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCEaseSineIn* ret_val;
 
@@ -33061,7 +33058,7 @@ JSBool JSB_CCTransitionFadeBL_transitionWithDuration_scene__static(JSContext *cx
 	double arg0; id arg1; 
 
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCTransitionFadeBL* ret_val;
 
@@ -33171,7 +33168,7 @@ JSBool JSB_CCAnimate_actionWithAnimation__static(JSContext *cx, uint32_t argc, j
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCAnimate* ret_val;
 
@@ -33214,7 +33211,7 @@ JSBool JSB_CCAnimate_initWithAnimation_(JSContext *cx, uint32_t argc, jsval *vp)
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCAnimate *real = [(CCAnimate*)[proxy.klass alloc] initWithAnimation:arg0  ];
@@ -33240,7 +33237,7 @@ JSBool JSB_CCAnimate_setAnimation_(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCAnimate *real = (CCAnimate*) [proxy realObj];
@@ -33452,7 +33449,7 @@ JSBool JSB_CCPhysicsSprite_spriteWithSpriteFrame__static(JSContext *cx, uint32_t
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCPhysicsSprite* ret_val;
 
@@ -33490,7 +33487,7 @@ JSBool JSB_CCPhysicsSprite_spriteWithTexture_rect__static(JSContext *cx, uint32_
 	JSBool ok = JS_TRUE;
 	id arg0; CGRect arg1; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	if (argc >= 2) {
 		ok &= JSB_jsval_to_CGRect( cx, *argvp++, (CGRect*) &arg1 );
 	}
@@ -33804,7 +33801,7 @@ JSBool JSB_CCAnimation_addSpriteFrame_(JSContext *cx, uint32_t argc, jsval *vp) 
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCAnimation *real = (CCAnimation*) [proxy realObj];
@@ -33848,7 +33845,7 @@ JSBool JSB_CCAnimation_addSpriteFrameWithTexture_rect_(JSContext *cx, uint32_t a
 	JSBool ok = JS_TRUE;
 	id arg0; CGRect arg1; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	ok &= JSB_jsval_to_CGRect( cx, *argvp++, (CGRect*) &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
@@ -34295,7 +34292,7 @@ JSBool JSB_CCEaseSineInOut_actionWithAction__static(JSContext *cx, uint32_t argc
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCEaseSineInOut* ret_val;
 
@@ -34524,7 +34521,7 @@ JSBool JSB_CCTransitionProgressRadialCW_progressTimerNodeWithRenderTexture_(JSCo
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCProgressTimer* ret_val;
 
@@ -34545,7 +34542,7 @@ JSBool JSB_CCTransitionProgressRadialCW_transitionWithDuration_scene__static(JSC
 	double arg0; id arg1; 
 
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCTransitionProgressRadialCW* ret_val;
 
@@ -35106,7 +35103,7 @@ JSBool JSB_CCTransitionTurnOffTiles_easeActionWithAction_(JSContext *cx, uint32_
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCActionInterval* ret_val;
 
@@ -35127,7 +35124,7 @@ JSBool JSB_CCTransitionTurnOffTiles_transitionWithDuration_scene__static(JSConte
 	double arg0; id arg1; 
 
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCTransitionTurnOffTiles* ret_val;
 
@@ -35255,7 +35252,7 @@ JSBool JSB_CCTransitionSlideInT_transitionWithDuration_scene__static(JSContext *
 	double arg0; id arg1; 
 
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCTransitionSlideInT* ret_val;
 
@@ -35644,7 +35641,7 @@ JSBool JSB_CCTextureAtlas_initWithTexture_capacity_(JSContext *cx, uint32_t argc
 	JSBool ok = JS_TRUE;
 	id arg0; uint32_t arg1; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	ok &= JSB_jsval_to_uint32( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
@@ -35825,7 +35822,7 @@ JSBool JSB_CCTextureAtlas_setTexture_(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCTextureAtlas *real = (CCTextureAtlas*) [proxy realObj];
@@ -35881,7 +35878,7 @@ JSBool JSB_CCTextureAtlas_textureAtlasWithTexture_capacity__static(JSContext *cx
 	JSBool ok = JS_TRUE;
 	id arg0; uint32_t arg1; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	ok &= JSB_jsval_to_uint32( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCTextureAtlas* ret_val;
@@ -36030,7 +36027,7 @@ JSBool JSB_CCTransitionSlideInR_transitionWithDuration_scene__static(JSContext *
 	double arg0; id arg1; 
 
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCTransitionSlideInR* ret_val;
 
@@ -36145,7 +36142,7 @@ JSBool JSB_CCTransitionProgressInOut_progressTimerNodeWithRenderTexture_(JSConte
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCProgressTimer* ret_val;
 
@@ -36166,7 +36163,7 @@ JSBool JSB_CCTransitionProgressInOut_transitionWithDuration_scene__static(JSCont
 	double arg0; id arg1; 
 
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCTransitionProgressInOut* ret_val;
 
@@ -36298,7 +36295,7 @@ JSBool JSB_CCEaseBounceIn_actionWithAction__static(JSContext *cx, uint32_t argc,
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCEaseBounceIn* ret_val;
 
@@ -36629,7 +36626,7 @@ JSBool JSB_CCProgressTimer_initWithSprite_(JSContext *cx, uint32_t argc, jsval *
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCProgressTimer *real = [(CCProgressTimer*)[proxy.klass alloc] initWithSprite:arg0  ];
@@ -36687,7 +36684,7 @@ JSBool JSB_CCProgressTimer_progressWithSprite__static(JSContext *cx, uint32_t ar
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCProgressTimer* ret_val;
 
@@ -36816,7 +36813,7 @@ JSBool JSB_CCProgressTimer_setSprite_(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCProgressTimer *real = (CCProgressTimer*) [proxy realObj];
@@ -37020,7 +37017,7 @@ JSBool JSB_CCEaseBounceInOut_actionWithAction__static(JSContext *cx, uint32_t ar
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCEaseBounceInOut* ret_val;
 
@@ -37249,7 +37246,7 @@ JSBool JSB_CCGrabber_afterRender_(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCGrabber *real = (CCGrabber*) [proxy realObj];
@@ -37271,7 +37268,7 @@ JSBool JSB_CCGrabber_beforeRender_(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCGrabber *real = (CCGrabber*) [proxy realObj];
@@ -37293,7 +37290,7 @@ JSBool JSB_CCGrabber_grab_(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCGrabber *real = (CCGrabber*) [proxy realObj];
@@ -37408,7 +37405,7 @@ JSBool JSB_CCTransitionSplitRows_transitionWithDuration_scene__static(JSContext 
 	double arg0; id arg1; 
 
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCTransitionSplitRows* ret_val;
 
@@ -37904,7 +37901,7 @@ JSBool JSB_CCEaseBackInOut_actionWithAction__static(JSContext *cx, uint32_t argc
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCEaseBackInOut* ret_val;
 
@@ -38022,7 +38019,7 @@ JSBool JSB_CCEaseExponentialOut_actionWithAction__static(JSContext *cx, uint32_t
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCEaseExponentialOut* ret_val;
 
@@ -38334,8 +38331,8 @@ JSBool JSB_CCSequence_actionOne_two__static(JSContext *cx, uint32_t argc, jsval 
 	JSBool ok = JS_TRUE;
 	id arg0; id arg1; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCSequence* ret_val;
 
@@ -38378,8 +38375,8 @@ JSBool JSB_CCSequence_initOne_two_(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	id arg0; id arg1; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCSequence *real = [(CCSequence*)[proxy.klass alloc] initOne:arg0 two:arg1  ];
@@ -38500,7 +38497,7 @@ JSBool JSB_CCEaseElasticInOut_actionWithAction_period__static(JSContext *cx, uin
 	JSBool ok = JS_TRUE;
 	id arg0; double arg1; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	if (argc >= 2) {
 		ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
 	}
@@ -38842,7 +38839,7 @@ JSBool JSB_CCTransitionZoomFlipAngular_transitionWithDuration_scene_orientation_
 	double arg0; id arg1; int32_t arg2; 
 
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1 );
 	ok &= JSB_jsval_to_int32( cx, *argvp++, &arg2 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCTransitionZoomFlipAngular* ret_val;
@@ -38863,7 +38860,7 @@ JSBool JSB_CCTransitionZoomFlipAngular_transitionWithDuration_scene__static(JSCo
 	double arg0; id arg1; 
 
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCTransitionZoomFlipAngular* ret_val;
 
@@ -39004,7 +39001,7 @@ JSBool JSB_CCClippingNode_clippingNodeWithStencil__static(JSContext *cx, uint32_
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCClippingNode* ret_val;
 
@@ -39048,7 +39045,7 @@ JSBool JSB_CCClippingNode_initWithStencil_(JSContext *cx, uint32_t argc, jsval *
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCClippingNode *real = [(CCClippingNode*)[proxy.klass alloc] initWithStencil:arg0  ];
@@ -39135,7 +39132,7 @@ JSBool JSB_CCClippingNode_setStencil_(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCClippingNode *real = (CCClippingNode*) [proxy realObj];
@@ -39389,7 +39386,7 @@ JSBool JSB_CCBezierTo_startWithTarget_(JSContext *cx, uint32_t argc, jsval *vp) 
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCBezierTo *real = (CCBezierTo*) [proxy realObj];
@@ -39483,7 +39480,7 @@ JSBool JSB_CCDeccelAmplitude_actionWithAction_duration__static(JSContext *cx, ui
 	JSBool ok = JS_TRUE;
 	id arg0; double arg1; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCDeccelAmplitude* ret_val;
@@ -39508,7 +39505,7 @@ JSBool JSB_CCDeccelAmplitude_initWithAction_duration_(JSContext *cx, uint32_t ar
 	JSBool ok = JS_TRUE;
 	id arg0; double arg1; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
@@ -40054,7 +40051,7 @@ JSBool JSB_CCJumpTo_startWithTarget_(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCJumpTo *real = (CCJumpTo*) [proxy realObj];
@@ -40527,7 +40524,7 @@ JSBool JSB_CCTransitionJumpZoom_transitionWithDuration_scene__static(JSContext *
 	double arg0; id arg1; 
 
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCTransitionJumpZoom* ret_val;
 
@@ -40787,7 +40784,7 @@ JSBool JSB_CCTransitionFadeUp_transitionWithDuration_scene__static(JSContext *cx
 	double arg0; id arg1; 
 
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCTransitionFadeUp* ret_val;
 
@@ -41483,7 +41480,7 @@ JSBool JSB_CCRenderTexture_setSprite_(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCRenderTexture *real = (CCRenderTexture*) [proxy realObj];
@@ -42638,10 +42635,7 @@ JSBool JSB_CCGrid3D_setVertex_vertex_(JSContext *cx, uint32_t argc, jsval *vp) {
 	CGPoint arg0; ccVertex3F arg1; 
 
 	ok &= JSB_jsval_to_CGPoint( cx, *argvp++, (CGPoint*) &arg0 );
-
-	JSObject *tmp_arg1;
-	ok &= JS_ValueToObject( cx, *argvp++, &tmp_arg1 );
-	arg1 = *(ccVertex3F*)JS_GetArrayBufferViewData( tmp_arg1 );
+	ok &= JSB_jsval_to_struct( cx, *argvp++, &arg1, sizeof(ccVertex3F) );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCGrid3D *real = (CCGrid3D*) [proxy realObj];
@@ -42706,7 +42700,7 @@ JSBool JSB_CCGrid3D_gridWithSize_texture_flippedTexture__static(JSContext *cx, u
 	CGSize arg0; id arg1; JSBool arg2; 
 
 	ok &= JSB_jsval_to_CGSize( cx, *argvp++, (CGSize*) &arg0 );
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1 );
 	ok &= JS_ValueToBoolean( cx, *argvp++, &arg2 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCGrid3D* ret_val;
@@ -42811,8 +42805,8 @@ JSBool JSB_CCActionManager_addAction_target_paused_(JSContext *cx, uint32_t argc
 	JSBool ok = JS_TRUE;
 	id arg0; id arg1; JSBool arg2; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1 );
 	ok &= JS_ValueToBoolean( cx, *argvp++, &arg2 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
@@ -42836,7 +42830,7 @@ JSBool JSB_CCActionManager_getActionByTag_target_(JSContext *cx, uint32_t argc, 
 	int32_t arg0; id arg1; 
 
 	ok &= JSB_jsval_to_int32( cx, *argvp++, &arg0 );
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCAction* ret_val;
 
@@ -42861,7 +42855,7 @@ JSBool JSB_CCActionManager_numberOfRunningActionsInTarget_(JSContext *cx, uint32
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	NSUInteger ret_val;
 
@@ -42904,7 +42898,7 @@ JSBool JSB_CCActionManager_pauseTarget_(JSContext *cx, uint32_t argc, jsval *vp)
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCActionManager *real = (CCActionManager*) [proxy realObj];
@@ -42926,7 +42920,7 @@ JSBool JSB_CCActionManager_removeAction_(JSContext *cx, uint32_t argc, jsval *vp
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCActionManager *real = (CCActionManager*) [proxy realObj];
@@ -42949,7 +42943,7 @@ JSBool JSB_CCActionManager_removeActionByTag_target_(JSContext *cx, uint32_t arg
 	int32_t arg0; id arg1; 
 
 	ok &= JSB_jsval_to_int32( cx, *argvp++, &arg0 );
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCActionManager *real = (CCActionManager*) [proxy realObj];
@@ -42987,7 +42981,7 @@ JSBool JSB_CCActionManager_removeAllActionsFromTarget_(JSContext *cx, uint32_t a
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCActionManager *real = (CCActionManager*) [proxy realObj];
@@ -43009,7 +43003,7 @@ JSBool JSB_CCActionManager_resumeTarget_(JSContext *cx, uint32_t argc, jsval *vp
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCActionManager *real = (CCActionManager*) [proxy realObj];
@@ -43139,7 +43133,7 @@ JSBool JSB_CCSpriteFrameCache_addSpriteFrame_name_(JSContext *cx, uint32_t argc,
 	JSBool ok = JS_TRUE;
 	id arg0; NSString* arg1; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	ok &= JSB_jsval_to_NSString( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
@@ -43163,7 +43157,7 @@ JSBool JSB_CCSpriteFrameCache_addSpriteFramesWithFile_texture_(JSContext *cx, ui
 	NSString* arg0; id arg1; 
 
 	ok &= JSB_jsval_to_NSString( cx, *argvp++, &arg0 );
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCSpriteFrameCache *real = (CCSpriteFrameCache*) [proxy realObj];
@@ -43289,7 +43283,7 @@ JSBool JSB_CCSpriteFrameCache_removeSpriteFramesFromTexture_(JSContext *cx, uint
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	CCSpriteFrameCache *real = (CCSpriteFrameCache*) [proxy realObj];
@@ -43468,7 +43462,7 @@ JSBool JSB_CCEaseSineOut_actionWithAction__static(JSContext *cx, uint32_t argc, 
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCEaseSineOut* ret_val;
 
@@ -43569,7 +43563,7 @@ JSBool JSB_CCTransitionProgressOutIn_progressTimerNodeWithRenderTexture_(JSConte
 	JSBool ok = JS_TRUE;
 	id arg0; 
 
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg0 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCProgressTimer* ret_val;
 
@@ -43590,7 +43584,7 @@ JSBool JSB_CCTransitionProgressOutIn_transitionWithDuration_scene__static(JSCont
 	double arg0; id arg1; 
 
 	ok &= JS_ValueToNumber( cx, *argvp++, &arg0 );
-	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1);
+	ok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg1 );
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 	CCTransitionProgressOutIn* ret_val;
 
