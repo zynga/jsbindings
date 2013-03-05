@@ -405,6 +405,19 @@ JSBool JSB_jsval_to_opaque( JSContext *cx, jsval vp, void **r)
 	return JS_TRUE;
 }
 
+JSBool JSB_jsval_to_struct( JSContext *cx, jsval vp, void *r, size_t size)
+{
+	JSObject *tmp_arg;
+	JSBool ok = JS_ValueToObject( cx, vp, &tmp_arg );
+	JSB_PRECONDITION2( ok, cx, JS_FALSE, "Error converting value to object");
+	JSB_PRECONDITION2( tmp_arg && JS_IsTypedArrayObject( tmp_arg ), cx, JS_FALSE, "Not a TypedArray object");
+	JSB_PRECONDITION2( JS_GetTypedArrayByteLength( tmp_arg ) == size, cx, JS_FALSE, "Invalid Typed Array length");
+
+	void *data = JS_GetArrayBufferViewData( tmp_arg );
+	memcpy(r, data, size);
+	return JS_TRUE;
+}
+
 JSBool JSB_jsval_to_c_class( JSContext *cx, jsval vp, void **out_native, struct jsb_c_proxy_s **out_proxy)
 {
 	JSObject *jsobj;

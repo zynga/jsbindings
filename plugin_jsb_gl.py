@@ -37,8 +37,8 @@ class JSBGenerateFunctions_GL(JSBGenerateFunctions):
         self._typedarray_dt = ['TypedArray/Sequence', 'ArrayBufferView']
 
         # Extend supported types
-        self.args_js_special_type_conversions['TypedArray'] = [self.generate_argument_typedarray, 'void*']
-        self.args_js_special_type_conversions['ArrayBufferView'] = [self.generate_argument_arraybufferview, 'void*']
+        self.args_js_special_type_conversions['TypedArray'] = ['JSB_jsval_typedarray_to_dataptr', 'void*']
+        self.args_js_special_type_conversions['ArrayBufferView'] = ['JSB_get_arraybufferview_dataptr', 'void*']
 
         # Other supported functions
         self.supported_functions_without_count = ['glReadPixels', 'glDrawElements', 'glTexImage2D', 'glTexSubImage2D', 'glCompressedTexImage2D', 'glCompressedTexSubImage2D']
@@ -60,27 +60,28 @@ class JSBGenerateFunctions_GL(JSBGenerateFunctions):
             ]
 
     #
-    # Helper functions
-    #
-    def generate_argument_typedarray(self, i, arg_js_type, arg_declared_type):
-        if self._current_typedarray:
-            # TypedArray is used as an IN paramter
-            template = '\tGLsizei count;\n\tok &= JSB_jsval_typedarray_to_dataptr( cx, *argvp++, &count, &arg%d, %s);\n' % (i, self._current_typedarray)
-            self.fd_mm.write(template)
-        else:
-            raise Exception("Logic error in GL plugin")
-
-    def generate_argument_arraybufferview(self, i, arg_js_type, arg_declared_type):
-        if self._current_typedarray:
-            # TypedArray is used as an OUT paramter
-            template = '\tGLsizei count;\n\tok &= JSB_get_arraybufferview_dataptr( cx, *argvp++, &count, &arg%d);\n' % (i)
-            self.fd_mm.write(template)
-        else:
-            raise Exception("Logic error in GL plugin")
-
-    #
     # Overriden methods
     #
+    def convert_js_to_objc(self, js_type, objc_type):
+        if js_type == 'TypedArray':
+            if not self._current_typedarray:
+                raise Exception("Logic error in GL plugin")
+            js_convert = self.args_js_special_type_conversions[js_type][0]
+            return js_convert + '( cx, %%(jsval)s, &count, %%(retval)s, %s)' % (self._current_typedarray)
+        elif js_type == 'ArrayBufferView':
+            if not self._current_typedarray:
+                raise Exception("Logic error in GL plugin")
+            js_convert = self.args_js_special_type_conversions[js_type][0]
+            return js_convert + '( cx, %(jsval)s, &count, %(retval)s)'
+        else:
+            return super(JSBGenerateFunctions_GL, self).convert_js_to_objc(js_type, objc_type)
+
+    def generate_argument(self, i, arg_js_type, arg_declared_type):
+        template = super(JSBGenerateFunctions_GL, self).generate_argument(i, arg_js_type, arg_declared_type)
+        if arg_js_type in ['TypedArray', 'ArrayBufferView']:
+            template = '\tGLsizei count;\n' + template
+        return template
+
     def generate_function_c_call_arg(self, i, dt):
 
         if re.match('glUniformMatrix[2-4][fi]v$', self._current_funcname) and i == 0:
