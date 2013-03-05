@@ -233,15 +233,15 @@ class JSBGenerate(object):
         }
 
         self.args_js_special_type_conversions = {
-            'S': [self.generate_argument_string, 'NSString*'],
-            'dict': [self.generate_argument_dict, 'NSDictionary*'],
-            'char*': [self.generate_argument_charptr, 'const char*'],
-            'o': [self.generate_argument_object, 'id'],
-            'array': [self.generate_argument_array, 'NSArray*'],
-            'set': [self.generate_argument_set, 'NSSet*'],
-            'f': [self.generate_argument_function, 'js_block'],
-            'long':     [self.generate_argument_long, 'long'],
-            'longlong': [self.generate_argument_longlong, 'long long'],
+            'S': ['JSB_jsval_to_NSString', 'NSString*'],
+            'dict': ['JSB_jsval_to_NSDictionary', 'NSDictionary*'],
+            'char*': ['JSB_jsval_to_charptr', 'const char*'],
+            'o': ['JSB_jsval_to_NSObject', 'id'],
+            'array': ['JSB_jsval_to_NSArray', 'NSArray*'],
+            'set': ['JSB_jsval_to_NSSet', 'NSSet*'],
+            'f': ['JSB_jsval_to_block_1', 'js_block'],
+            'long':     ['JSB_jsval_to_long', 'long'],
+            'longlong': ['JSB_jsval_to_longlong', 'long long'],
         }
 
     #
@@ -657,73 +657,52 @@ class JSBGenerate(object):
         template = '\tok &= JSB_jsvals_variadic_to_NSArray( cx, argvp, argc, &arg0 );\n'
         self.fd_mm.write(template)
 
-    # Special case for string to NSString generator
-    def generate_argument_dict(self, i, arg_js_type, arg_declared_type):
-        template = '\tok &= JSB_jsval_to_NSDictionary( cx, *argvp++, &arg%d );\n'
-        self.fd_mm.write(template % i)
+    def convert_js_to_objc(self, js_type, objc_type):
+        if objc_type in self.function_classes and self.generating_OOF:
+            return 'JSB_jsval_to_c_class( cx, %(jsval)s, (void**)%(retval)s, NULL )'
+        elif objc_type in self.struct_opaque:
+            return 'JSB_jsval_to_opaque( cx, %(jsval)s, (void**)%(retval)s )'
+        elif objc_type in self.struct_manual:
+            new_name = self.get_name_for_manual_struct(objc_type)
+            return 'JSB_jsval_to_%s( cx, %%(jsval)s, (%s*) %%(retval)s )' % (new_name, new_name)
+        elif self.is_valid_structure(js_type):
+            return 'JSB_jsval_to_struct( cx, %%(jsval)s, %%(retval)s, sizeof(%s) )' % (objc_type)
+        elif js_type in self.args_js_types_conversions:
+            js_convert = self.args_js_types_conversions[js_type][1]
+            return js_convert + '( cx, %(jsval)s, %(retval)s )'
+        elif js_type in self.args_js_special_type_conversions:
+            js_convert = self.args_js_special_type_conversions[js_type][0]
+            if js_type == 'f':
+                return js_convert + '( cx, %(jsval)s, JS_THIS_OBJECT(cx, vp), %(retval)s )'
+            else:
+                return js_convert + '( cx, %(jsval)s, %(retval)s )'
+        else:
+            raise ParseException('Unsupported argument type: %s' % js_type)
 
-    # Special case for string to NSString generator
-    def generate_argument_string(self, i, arg_js_type, arg_declared_type):
-        template = '\tok &= JSB_jsval_to_NSString( cx, *argvp++, &arg%d );\n'
-        self.fd_mm.write(template % i)
+    def generate_argument(self, i, arg_js_type, arg_declared_type):
+        template = self.convert_js_to_objc(arg_js_type, arg_declared_type)
+        template = template % ({
+            "jsval": "*argvp++",
+            "retval": "&arg%d" % i
+        })
+        return "\tok &= %s;\n" % template
 
-    # Special case for string to char* generator
-    def generate_argument_charptr(self, i, arg_js_type, arg_declared_type):
-        template = '\tok &= JSB_jsval_to_charptr( cx, *argvp++, &arg%d );\n'
-        self.fd_mm.write(template % i)
-
-    # Special case for objects
-    def generate_argument_object(self, i, arg_js_type, arg_declared_type):
-        object_template = '\tok &= JSB_jsval_to_NSObject( cx, *argvp++, &arg%d);\n'
-        self.fd_mm.write(object_template % (i))
-
-    # Manual conversion for struct
-    def generate_argument_struct_manual(self, i, arg_js_type, arg_declared_type):
-        new_name = self.get_name_for_manual_struct(arg_declared_type)
-        template = '\tok &= JSB_jsval_to_%s( cx, *argvp++, (%s*) &arg%d );\n' % (new_name, new_name, i)
-        self.fd_mm.write(template)
-
-    def generate_argument_struct_automatic(self, i, arg_js_type, arg_declared_type):
-        # This template assumes that the types will be the same on all platforms (eg: 64 and 32-bit platforms)
-        template = '''
-\tJSObject *tmp_arg%d;
-\tok &= JS_ValueToObject( cx, *argvp++, &tmp_arg%d );
-\targ%d = *(%s*)JS_GetArrayBufferViewData( tmp_arg%d );
-'''
-        self.fd_mm.write(template % (i,
-                                        i,
-                                        i, arg_declared_type, i))
-
-    def generate_argument_array(self, i, arg_js_type, arg_declared_type):
-        template = '\tok &= JSB_jsval_to_NSArray( cx, *argvp++, &arg%d );\n'
-        self.fd_mm.write(template % (i))
-
-    def generate_argument_set(self, i, arg_js_type, arg_declared_type):
-        template = '\tok &= JSB_jsval_to_NSSet( cx, *argvp++, &arg%d );\n'
-        self.fd_mm.write(template % (i))
-
-    def generate_argument_function(self, i, arg_js_type, arg_declared_type):
-        template = '\tok &= JSB_jsval_to_block_1( cx, *argvp++, JS_THIS_OBJECT(cx, vp), &arg%d );\n'
-        self.fd_mm.write(template % (i))
-
-    def generate_argument_c_class(self, i, arg_js_type, arg_declared_type):
-        template = '\tok &= JSB_jsval_to_c_class( cx, *argvp++, (void**)&arg%d, NULL );\n'
-        self.fd_mm.write(template % (i))
-
-    def generate_argument_opaque(self, i, arg_js_type, arg_declared_type):
-        template = '\tok &= JSB_jsval_to_opaque( cx, *argvp++, (void**)&arg%d );\n'
-        self.fd_mm.write(template % (i))
-
-    def generate_argument_long(self, i, arg_js_type, arg_declared_type):
-        template = '\tok &= JSB_jsval_to_long( cx, *argvp++, &arg%d );\n'
-        self.fd_mm.write(template % (i))
-
-    def generate_argument_longlong(self, i, arg_js_type, arg_declared_type):
-        template = '\tok &= JSB_jsval_to_longlong( cx, *argvp++, &arg%d );\n'
-        self.fd_mm.write(template % (i))
+    # The type of the value returned byt he JS conversion function
+    def get_conversion_return_type(self, js_type, objc_type):
+        if objc_type in self.struct_opaque or objc_type in self.function_classes:
+            return objc_type
+        elif objc_type in self.struct_manual:
+            return objc_type
+        elif self.is_valid_structure(js_type):
+            return objc_type
+        elif js_type in self.args_js_types_conversions:
+            return self.args_js_types_conversions[js_type][0]
+        elif js_type in self.args_js_special_type_conversions:
+            return self.args_js_special_type_conversions[js_type][1]
+        else:
+            raise ParseException('Unsupported argument type: %s' % js_type)
 
     def generate_arguments(self, args_declared_type, args_js_type, properties={}):
-
         # First  time
         self.fd_mm.write('\tjsval *argvp = JS_ARGV(cx,vp);\n')
         self.fd_mm.write('\tJSBool ok = JS_TRUE;\n')
@@ -736,16 +715,10 @@ class JSBGenerate(object):
         for i, arg in enumerate(args_js_type):
             if i < first_arg:
                 continue
-            if args_declared_type[i] in self.struct_opaque or args_declared_type[i] in self.function_classes:
-                declared_vars += '%s arg%d;' % (args_declared_type[i], i)
-            elif args_declared_type[i] in self.struct_manual:
-                declared_vars += '%s arg%d;' % (args_declared_type[i], i)
-            elif self.is_valid_structure(arg):
-                declared_vars += '%s arg%d;' % (args_declared_type[i], i)
-            elif arg in self.args_js_types_conversions:
-                declared_vars += '%s arg%d;' % (self.args_js_types_conversions[arg][0], i)
-            elif arg in self.args_js_special_type_conversions:
-                declared_vars += '%s arg%d;' % (self.args_js_special_type_conversions[arg][1], i)
+
+            arg_type = self.get_conversion_return_type(arg, args_declared_type[i])
+
+            declared_vars += '%s arg%d;' % (arg_type, i)
             declared_vars += ' '
         self.fd_mm.write('%s\n\n' % declared_vars)
 
@@ -772,21 +745,7 @@ class JSBGenerate(object):
                 if optional_args != None and i >= optional_args:
                     self.fd_mm.write('\tif (argc >= %d) {\n\t' % (i + 1))
 
-                if args_declared_type[i] in self.function_classes and self.generating_OOF:
-                    self.generate_argument_c_class(i, arg, args_declared_type[i])
-                elif args_declared_type[i] in self.struct_opaque:
-                    self.generate_argument_opaque(i, arg, args_declared_type[i])
-                elif args_declared_type[i] in self.struct_manual:
-                    self.generate_argument_struct_manual(i, arg, args_declared_type[i])
-                elif self.is_valid_structure(arg):
-                    self.generate_argument_struct_automatic(i, arg, args_declared_type[i])
-                elif arg in self.args_js_types_conversions:
-                    t = self.args_js_types_conversions[arg]
-                    self.fd_mm.write('\tok &= %s( cx, *argvp++, &arg%d );\n' % (t[1], i))
-                elif arg in self.args_js_special_type_conversions:
-                    self.args_js_special_type_conversions[arg][0](i, arg, args_declared_type[i])
-                else:
-                    raise ParseException('Unsupported argument type: %s' % arg)
+                self.fd_mm.write(self.generate_argument(i, arg, args_declared_type[i]))
 
                 if optional_args != None and i >= optional_args:
                     self.fd_mm.write('\t}\n')
@@ -1305,7 +1264,7 @@ JSBool %s_%s%s(JSContext *cx, uint32_t argc, jsval *vp) {
                 js_ret_val, dt_ret_val = self.validate_retval(real_method, class_name)
 
                 if dt_ret_val != 'void':
-                    pre_ret = '\t%s ret;\n' % dt_ret_val
+                    pre_ret = '\t%s ret = nil;\n' % dt_ret_val
                     assign_ret = 'ret = '
                     post_ret = '\treturn ret;\n'
                 else:
@@ -1481,7 +1440,12 @@ extern JSClass *%s_class;
 \t\t\tJS_GetProperty(cx, _jsObj, "%s", &fval);
 \t\t\tJS_CallFunctionValue(cx, _jsObj, fval, argc, argv, &rval);
 '''
-        template_ret = '\t\t\tJSBool jsbool; JS_ValueToBoolean(cx, rval, &jsbool);\n\t\t\tret = jsbool;\n'
+        template_ret = '''\
+\t\t\t%(ret_type)s ret_val;
+\t\t\tJSBool ok = %(convert)s;
+\t\t\tret = ret_val;
+\t\t\tJSB_PRECONDITION2( ok, cx, ret, "Error converting return value to object");
+'''
         template_end = '''\
 \t\t}
 \t}
@@ -1500,7 +1464,7 @@ extern JSClass *%s_class;
                 js_retval, dt_retval = self.validate_retval(method, class_name)
 
                 if dt_retval != 'void':
-                    pre_ret = '\t%s ret;\n' % dt_retval
+                    pre_ret = '\t%s ret = nil;\n' % dt_retval
                     post_ret = 'return ret;'
                 else:
                     pre_ret = ''
@@ -1515,12 +1479,17 @@ extern JSClass *%s_class;
                                                 converted_args,
                                                 js_name))
 
-                # XXX: It should support any type of return type
-                # XXX: quick hack since most probable it is a BOOL
                 if dt_retval != 'void':
-                    if dt_retval != 'BOOL':
-                        raise Exception("IMPLEMENT ME")
-                    self.fd_mm.write(template_ret)
+                    template = self.convert_js_to_objc(js_retval, dt_retval)
+                    template = template % ({
+                        "jsval": "rval",
+                        "retval": "&ret_val"
+                    })
+                    self.fd_mm.write(template_ret % ({
+                        "convert" : template,
+                        "ret_type": self.get_conversion_return_type(js_retval, dt_retval),
+                        "dt_retval": dt_retval
+                    }))
                 self.fd_mm.write(template_end % post_ret)
 
     def generate_implementation_swizzle(self, class_name):

@@ -74,6 +74,8 @@ JSBool JSB_jsval_to_CGSize( JSContext *cx, jsval vp, CGSize *out );
 JSBool JSB_jsval_to_CGRect( JSContext *cx, jsval vp, CGRect *out );
 /** converts a jsval to a 'handle'. Typically the handle is pointer to a struct */
 JSBool JSB_jsval_to_opaque( JSContext *cx, jsval vp, void **out );
+/** copies the contents of an array buffer view. */
+JSBool JSB_jsval_to_struct( JSContext *cx, jsval vp, void *r, size_t size);
 JSBool JSB_jsval_to_int32( JSContext *cx, jsval vp, int32_t *out);
 JSBool JSB_jsval_to_uint32( JSContext *cx, jsval vp, uint32_t *ret );
 JSBool JSB_jsval_to_uint16( JSContext *cx, jsval vp, uint16_t *ret );
