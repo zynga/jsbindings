@@ -167,9 +167,8 @@ JSBool JSB_jsval_to_NSArray( JSContext *cx, jsval vp, NSArray**ret )
 		jsval valarg;
 		JS_GetElement(cx, jsobj, i, &valarg);
 		
-		// XXX: forcing them to be objects, but they could also be NSString, NSDictionary or NSArray
 		id real_obj;
-		ok = JSB_jsval_is_NSObject( cx, valarg, &real_obj );
+		ok = JSB_jsval_to_unknown( cx, valarg, &real_obj );
 		JSB_PRECONDITION2( ok, cx, JS_FALSE, "Error converting value to nsobject");
 		
 		[array addObject:real_obj];
@@ -206,6 +205,41 @@ JSBool JSB_jsval_to_NSSet( JSContext *cx, jsval vp, NSSet** ret)
 	return JS_TRUE;
 }
 
+JSBool JSB_jsval_to_NSNumber( JSContext *cx, jsval vp, NSNumber** ret)
+{
+	JSBool ok = JSVAL_IS_NUMBER(vp);
+	JSB_PRECONDITION2( ok, cx, JS_FALSE, "Object must be a number");
+
+	*ret = [NSNumber numberWithDouble:JSVAL_TO_DOUBLE(vp)];
+	return JS_TRUE;
+}
+
+JSBool JSB_jsval_to_unknown(JSContext *cx, jsval vp, id* ret)
+{
+	if (JSVAL_IS_NUMBER(vp)) {
+		*ret = [NSNumber numberWithDouble:JSVAL_TO_DOUBLE(vp)];
+		return JS_TRUE;
+	} else if (JSVAL_IS_BOOLEAN(vp)) {
+		*ret = [NSNumber numberWithBool:JSVAL_TO_BOOLEAN(vp)];
+		return JS_TRUE;
+	} else if (JSVAL_IS_STRING(vp)) {
+		return JSB_jsval_to_NSString( cx, vp, ret );
+	}
+
+	if (JSB_jsval_is_NSObject( cx, vp, ret )) {
+		return JS_TRUE;
+	}
+
+	JSObject *jsobj;
+	if (JS_ValueToObject( cx, vp, &jsobj )) {
+		if (JS_IsArrayObject(cx, jsobj)) {
+			return JSB_jsval_to_NSArray(cx, vp, ret);
+		}
+	}
+
+	return JS_FALSE;
+}
+
 JSBool JSB_jsvals_variadic_to_NSArray( JSContext *cx, jsval *vp, int argc, NSArray**ret )
 {
 	NSMutableArray *array = [NSMutableArray arrayWithCapacity:argc];
@@ -213,28 +247,8 @@ JSBool JSB_jsvals_variadic_to_NSArray( JSContext *cx, jsval *vp, int argc, NSArr
 	for( int i=0; i < argc; i++ )
 	{
 		id obj = NULL;
-		JSBool ok = JS_FALSE;
-		
-		// Native Object ?
-		ok = JSB_jsval_is_NSObject( cx, *vp, &obj );
+		JSBool ok = JSB_jsval_to_unknown(cx, *vp, &obj);
 
-		// Number ?
-		if( ! ok ) {
-			double num;
-			
-			// optimization: JS_ValueToNumber is expensive. And can convert an string like "12" to a number
-			if( JSVAL_IS_NUMBER(*vp))
-			   ok = JS_ValueToNumber(cx, *vp, &num );
-			
-			if( ok ) {
-				obj = [NSNumber numberWithDouble:num];
-			}
-		}
-		
-		// String ?
-		if( ! ok )
-			ok = JSB_jsval_is_NSString(cx, *vp, (NSString**)&obj );
-		
 		JSB_PRECONDITION2( ok && obj, cx, JS_FALSE, "Error converting variadic arguments");
 
 		// next
