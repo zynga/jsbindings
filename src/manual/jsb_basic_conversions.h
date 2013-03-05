@@ -66,6 +66,9 @@ JSBool JSB_jsval_to_NSSet( JSContext *cx , jsval vp, NSSet** out );
 /** converts a jsval into the most approrate NSObject based on the value */
 JSBool JSB_jsval_to_unknown(JSContext *cx, jsval vp, id* ret);
 
+/** converts a JSString to a NSString */
+JSBool JSB_JSString_to_NSString( JSContext *cx, JSString *jsstr, NSString **ret );
+
 /** converts a variadic jsval to a NSArray */
 JSBool JSB_jsvals_variadic_to_NSArray( JSContext *cx, jsval *vp, int argc, NSArray** out );
 	
