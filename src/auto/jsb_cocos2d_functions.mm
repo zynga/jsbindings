@@ -40,6 +40,27 @@ JSBool JSB_ccCardinalSplineAt(JSContext *cx, uint32_t argc, jsval *vp) {
 	return JS_TRUE;
 }
 
+// Arguments: CGPoint, CGFloat, CGFloat, CGFloat, NSUInteger, BOOL
+// Ret value: void
+JSBool JSB_ccDrawArc(JSContext *cx, uint32_t argc, jsval *vp) {
+	JSB_PRECONDITION2( argc == 6, cx, JS_FALSE, "Invalid number of arguments" );
+	jsval *argvp = JS_ARGV(cx,vp);
+	JSBool ok = JS_TRUE;
+	CGPoint arg0; double arg1; double arg2; double arg3; uint32_t arg4; JSBool arg5; 
+
+	ok &= JSB_jsval_to_CGPoint( cx, *argvp++, (CGPoint*) &arg0 );
+	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
+	ok &= JS_ValueToNumber( cx, *argvp++, &arg2 );
+	ok &= JS_ValueToNumber( cx, *argvp++, &arg3 );
+	ok &= JSB_jsval_to_uint32( cx, *argvp++, &arg4 );
+	ok &= JS_ValueToBoolean( cx, *argvp++, &arg5 );
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
+
+	ccDrawArc((CGPoint)arg0 , (CGFloat)arg1 , (CGFloat)arg2 , (CGFloat)arg3 , (NSUInteger)arg4 , (BOOL)arg5  );
+	JS_SET_RVAL(cx, vp, JSVAL_VOID);
+	return JS_TRUE;
+}
+
 // Arguments: CCPointArray*, CGFloat, NSUInteger
 // Ret value: void
 JSBool JSB_ccDrawCardinalSpline(JSContext *cx, uint32_t argc, jsval *vp) {
@@ -238,6 +259,44 @@ JSBool JSB_ccDrawRect(JSContext *cx, uint32_t argc, jsval *vp) {
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
 
 	ccDrawRect((CGPoint)arg0 , (CGPoint)arg1  );
+	JS_SET_RVAL(cx, vp, JSVAL_VOID);
+	return JS_TRUE;
+}
+
+// Arguments: CGPoint, CGFloat, CGFloat, CGFloat, NSUInteger
+// Ret value: void
+JSBool JSB_ccDrawSolidArc(JSContext *cx, uint32_t argc, jsval *vp) {
+	JSB_PRECONDITION2( argc == 5, cx, JS_FALSE, "Invalid number of arguments" );
+	jsval *argvp = JS_ARGV(cx,vp);
+	JSBool ok = JS_TRUE;
+	CGPoint arg0; double arg1; double arg2; double arg3; uint32_t arg4; 
+
+	ok &= JSB_jsval_to_CGPoint( cx, *argvp++, (CGPoint*) &arg0 );
+	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
+	ok &= JS_ValueToNumber( cx, *argvp++, &arg2 );
+	ok &= JS_ValueToNumber( cx, *argvp++, &arg3 );
+	ok &= JSB_jsval_to_uint32( cx, *argvp++, &arg4 );
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
+
+	ccDrawSolidArc((CGPoint)arg0 , (CGFloat)arg1 , (CGFloat)arg2 , (CGFloat)arg3 , (NSUInteger)arg4  );
+	JS_SET_RVAL(cx, vp, JSVAL_VOID);
+	return JS_TRUE;
+}
+
+// Arguments: CGPoint, float, NSUInteger
+// Ret value: void
+JSBool JSB_ccDrawSolidCircle(JSContext *cx, uint32_t argc, jsval *vp) {
+	JSB_PRECONDITION2( argc == 3, cx, JS_FALSE, "Invalid number of arguments" );
+	jsval *argvp = JS_ARGV(cx,vp);
+	JSBool ok = JS_TRUE;
+	CGPoint arg0; double arg1; uint32_t arg2; 
+
+	ok &= JSB_jsval_to_CGPoint( cx, *argvp++, (CGPoint*) &arg0 );
+	ok &= JS_ValueToNumber( cx, *argvp++, &arg1 );
+	ok &= JSB_jsval_to_uint32( cx, *argvp++, &arg2 );
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
+
+	ccDrawSolidCircle((CGPoint)arg0 , (float)arg1 , (NSUInteger)arg2  );
 	JS_SET_RVAL(cx, vp, JSVAL_VOID);
 	return JS_TRUE;
 }

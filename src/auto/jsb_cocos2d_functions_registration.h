@@ -9,6 +9,7 @@
 #import "jsb_NS_manual.h"
 #import "jsb_cocos2d_manual.h"
 JS_DefineFunction(_cx, cocos2d, "cardinalSplineAt", JSB_ccCardinalSplineAt, 6, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
+JS_DefineFunction(_cx, cocos2d, "drawArc", JSB_ccDrawArc, 6, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 JS_DefineFunction(_cx, cocos2d, "drawCardinalSpline", JSB_ccDrawCardinalSpline, 3, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 JS_DefineFunction(_cx, cocos2d, "drawCatmullRom", JSB_ccDrawCatmullRom, 2, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 JS_DefineFunction(_cx, cocos2d, "drawCircle", JSB_ccDrawCircle, 5, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
@@ -21,6 +22,8 @@ JS_DefineFunction(_cx, cocos2d, "drawLine", JSB_ccDrawLine, 2, JSPROP_READONLY |
 JS_DefineFunction(_cx, cocos2d, "drawPoint", JSB_ccDrawPoint, 1, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 JS_DefineFunction(_cx, cocos2d, "drawQuadBezier", JSB_ccDrawQuadBezier, 4, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 JS_DefineFunction(_cx, cocos2d, "drawRect", JSB_ccDrawRect, 2, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
+JS_DefineFunction(_cx, cocos2d, "drawSolidArc", JSB_ccDrawSolidArc, 5, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
+JS_DefineFunction(_cx, cocos2d, "drawSolidCircle", JSB_ccDrawSolidCircle, 3, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 JS_DefineFunction(_cx, cocos2d, "drawSolidRect", JSB_ccDrawSolidRect, 3, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 JS_DefineFunction(_cx, cocos2d, "glBindTexture", JSB_ccGLBindTexture, 2, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 JS_DefineFunction(_cx, cocos2d, "glBindTexture2D", JSB_ccGLBindTexture2D, 1, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );

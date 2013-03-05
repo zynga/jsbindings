@@ -147,6 +147,7 @@ cc.OS_VERSION_5_0_1	= 0x5000100;
 cc.OS_VERSION_5_1_0	= 0x5010000;
 cc.OS_VERSION_6_0_0	= 0x6000000;
 cc.ANIMATION_FRAME_DISPLAYED_NOTIFICATION	= 'CCAnimationFrameDisplayedNotification';
+cc.CHIPMUNK_IMPORT	= 'chipmunk.h';
 cc.ATTRIBUTE_NAME_COLOR	= 'a_color';
 cc.ATTRIBUTE_NAME_POSITION	= 'a_position';
 cc.ATTRIBUTE_NAME_TEX_COORD	= 'a_texCoord';

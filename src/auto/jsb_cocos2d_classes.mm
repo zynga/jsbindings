@@ -15286,6 +15286,26 @@ JSBool JSB_CCMenuItem_activate(JSContext *cx, uint32_t argc, jsval *vp) {
 }
 
 // Arguments: 
+// Ret value: CGRect (N/A)
+JSBool JSB_CCMenuItem_activeArea(JSContext *cx, uint32_t argc, jsval *vp) {
+
+	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
+	JSB_NSObject *proxy = (JSB_NSObject*) JSB_get_proxy_for_jsobject(jsthis);
+
+	JSB_PRECONDITION2( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
+	JSB_PRECONDITION2( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
+	CGRect ret_val;
+
+	CCMenuItem *real = (CCMenuItem*) [proxy realObj];
+	ret_val = [real activeArea ];
+
+	jsval ret_jsval = JSB_jsval_from_CGRect( cx, (CGRect)ret_val );
+	JS_SET_RVAL(cx, vp, ret_jsval);
+
+	return JS_TRUE;
+}
+
+// Arguments: 
 // Ret value: void (None)
 JSBool JSB_CCMenuItem_cleanup(JSContext *cx, uint32_t argc, jsval *vp) {
 
@@ -15381,26 +15401,6 @@ JSBool JSB_CCMenuItem_itemWithBlock__static(JSContext *cx, uint32_t argc, jsval 
 }
 
 // Arguments: 
-// Ret value: CGRect (N/A)
-JSBool JSB_CCMenuItem_rect(JSContext *cx, uint32_t argc, jsval *vp) {
-
-	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
-	JSB_NSObject *proxy = (JSB_NSObject*) JSB_get_proxy_for_jsobject(jsthis);
-
-	JSB_PRECONDITION2( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
-	JSB_PRECONDITION2( argc == 0, cx, JS_FALSE, "Invalid number of arguments" );
-	CGRect ret_val;
-
-	CCMenuItem *real = (CCMenuItem*) [proxy realObj];
-	ret_val = [real rect ];
-
-	jsval ret_jsval = JSB_jsval_from_CGRect( cx, (CGRect)ret_val );
-	JS_SET_RVAL(cx, vp, ret_jsval);
-
-	return JS_TRUE;
-}
-
-// Arguments: 
 // Ret value: BOOL (b)
 JSBool JSB_CCMenuItem_releaseBlockAtCleanup(JSContext *cx, uint32_t argc, jsval *vp) {
 
@@ -15429,6 +15429,28 @@ JSBool JSB_CCMenuItem_selected(JSContext *cx, uint32_t argc, jsval *vp) {
 
 	CCMenuItem *real = (CCMenuItem*) [proxy realObj];
 	[real selected ];
+	JS_SET_RVAL(cx, vp, JSVAL_VOID);
+	return JS_TRUE;
+}
+
+// Arguments: CGRect
+// Ret value: void (None)
+JSBool JSB_CCMenuItem_setActiveArea_(JSContext *cx, uint32_t argc, jsval *vp) {
+
+	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
+	JSB_NSObject *proxy = (JSB_NSObject*) JSB_get_proxy_for_jsobject(jsthis);
+
+	JSB_PRECONDITION2( proxy && [proxy realObj], cx, JS_FALSE, "Invalid Proxy object");
+	JSB_PRECONDITION2( argc == 1, cx, JS_FALSE, "Invalid number of arguments" );
+	jsval *argvp = JS_ARGV(cx,vp);
+	JSBool ok = JS_TRUE;
+	CGRect arg0; 
+
+	ok &= JSB_jsval_to_CGRect( cx, *argvp++, (CGRect*) &arg0 );
+	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
+
+	CCMenuItem *real = (CCMenuItem*) [proxy realObj];
+	[real setActiveArea:(CGRect)arg0  ];
 	JS_SET_RVAL(cx, vp, JSVAL_VOID);
 	return JS_TRUE;
 }
@@ -15512,13 +15534,14 @@ void JSB_CCMenuItem_createClass(JSContext *cx, JSObject* globalObj, const char* 
 	};
 	static JSFunctionSpec funcs[] = {
 		JS_FN("activate", JSB_CCMenuItem_activate, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
+		JS_FN("getActiveArea", JSB_CCMenuItem_activeArea, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
 		JS_FN("cleanup", JSB_CCMenuItem_cleanup, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
 		JS_FN("initWithBlock", JSB_CCMenuItem_initWithBlock_, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
 		JS_FN("isEnabled", JSB_CCMenuItem_isEnabled, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
 		JS_FN("getIsSelected", JSB_CCMenuItem_isSelected, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
-		JS_FN("rect", JSB_CCMenuItem_rect, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
 		JS_FN("getReleaseBlockAtCleanup", JSB_CCMenuItem_releaseBlockAtCleanup, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
 		JS_FN("selected", JSB_CCMenuItem_selected, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
+		JS_FN("setActiveArea", JSB_CCMenuItem_setActiveArea_, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
 		JS_FN("setCallback", JSB_CCMenuItem_setBlock_, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
 		JS_FN("setEnabled", JSB_CCMenuItem_setIsEnabled_, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
 		JS_FN("setReleaseBlockAtCleanup", JSB_CCMenuItem_setReleaseBlockAtCleanup_, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),

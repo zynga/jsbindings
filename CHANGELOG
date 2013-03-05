@@ -1,19 +1,22 @@
 version 0.6 - XX-Mar-2013
 - [NEW] Files: renamed js_bindigns_ to jsb_
-- [NEW] JSB Naming Convention:
+- [NEW] JSB code: New Naming Convention:
         XXX_to_jsval -> JSB_jsval_from_XXX
         jsval_to_XXX -> JSB_jsval_to_XXX
         All JSB functions start with "JSB_"
+- [NEW] JSB Generator: Added support for plugins. Very easy to customize parsing of 3rd party library
 - [NEW] SpiderMonkey 19 Compatibility
 		JS_PROP_SHAREABLE: it no longer used
 		Since JS_CompileUTF8File() is no longer available, the scripts are executed using the JS C++ API
 		Since JS_SetCStringsAreUTF8() is no longer available, the strings are converted using unichars
 		TypedArray Functions no longer uses a context as parameter
 - [NEW] WebGL / OpenGL ES 2.0: basic functionality added
-- [FIX] JSB: RGBAProtocol: color/opacity -> getColor/getOpacity
+- [FIX] JSB code: RGBAProtocol: color/opacity -> getColor/getOpacity
 			Chipmunk addCollitionHandler: space is used as hash key too, preventing possible crashes with the GC
-			jsval to NSArray converts innert objects too
+			jsval to NSArray converts inner objects too
+			Checks return error in callbacks (only bool for the moment)
 - [FIX] JSB Generator: Fixed error when class has callbacks but no manual methods
+			Simplified code. JSB_jsval_to is called directly. No need to add functions for that
 
 version 0.5 - 29-Jan-2013
 - [FIX] JSB: Errors inside require() are reported correctly

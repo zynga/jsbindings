@@ -13,6 +13,7 @@
 extern "C" {
 #endif
 JSBool JSB_ccCardinalSplineAt(JSContext *cx, uint32_t argc, jsval *vp);
+JSBool JSB_ccDrawArc(JSContext *cx, uint32_t argc, jsval *vp);
 JSBool JSB_ccDrawCardinalSpline(JSContext *cx, uint32_t argc, jsval *vp);
 JSBool JSB_ccDrawCatmullRom(JSContext *cx, uint32_t argc, jsval *vp);
 JSBool JSB_ccDrawCircle(JSContext *cx, uint32_t argc, jsval *vp);
@@ -25,6 +26,8 @@ JSBool JSB_ccDrawLine(JSContext *cx, uint32_t argc, jsval *vp);
 JSBool JSB_ccDrawPoint(JSContext *cx, uint32_t argc, jsval *vp);
 JSBool JSB_ccDrawQuadBezier(JSContext *cx, uint32_t argc, jsval *vp);
 JSBool JSB_ccDrawRect(JSContext *cx, uint32_t argc, jsval *vp);
+JSBool JSB_ccDrawSolidArc(JSContext *cx, uint32_t argc, jsval *vp);
+JSBool JSB_ccDrawSolidCircle(JSContext *cx, uint32_t argc, jsval *vp);
 JSBool JSB_ccDrawSolidRect(JSContext *cx, uint32_t argc, jsval *vp);
 JSBool JSB_ccGLBindTexture(JSContext *cx, uint32_t argc, jsval *vp);
 JSBool JSB_ccGLBindTexture2D(JSContext *cx, uint32_t argc, jsval *vp);
