@@ -1492,7 +1492,7 @@ extern JSClass *%s_class;
             for m in self.callback_methods[class_name]:
 
                 # ignore manual
-                if m in self.manual_methods[class_name]:
+                if class_name in self.manual_methods and m in self.manual_methods[class_name]:
                     continue
 
                 method = self.get_method(class_name, m)
