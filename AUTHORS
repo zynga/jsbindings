@@ -7,11 +7,13 @@ Lead Developer
 
 Contributors (alphabetically ordered):
 
-* Colesbury (https://github.com/colesbury):
-    Fixed error when class has callbacks but no manual methods
-
 * Rolando Abarca (https://github.com/funkaster):
     Author of remote debugging code
+
+* Sam Gross (https://github.com/colesbury):
+    Fixed error when class has callbacks but no manual methods
+	jsval to NSArray converts objects to the correct type
+	Added JSB_jsval_to_unknown()
 
 * Sergej Tatarincev (https://github.com/SevInf)
     Added conversion for NSNull

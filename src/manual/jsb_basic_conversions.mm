@@ -216,22 +216,31 @@ JSBool JSB_jsval_to_NSNumber( JSContext *cx, jsval vp, NSNumber** ret)
 
 JSBool JSB_jsval_to_unknown(JSContext *cx, jsval vp, id* ret)
 {
+
+	// Number
 	if (JSVAL_IS_NUMBER(vp)) {
 		*ret = [NSNumber numberWithDouble:JSVAL_TO_DOUBLE(vp)];
 		return JS_TRUE;
-	} else if (JSVAL_IS_BOOLEAN(vp)) {
+	}
+	// Boolean
+	else if (JSVAL_IS_BOOLEAN(vp)) {
 		*ret = [NSNumber numberWithBool:JSVAL_TO_BOOLEAN(vp)];
 		return JS_TRUE;
-	} else if (JSVAL_IS_STRING(vp)) {
+	}
+	// String
+	else if (JSVAL_IS_STRING(vp)) {
 		return JSB_jsval_to_NSString( cx, vp, ret );
 	}
 
+	// Is Native Object ?
 	if (JSB_jsval_is_NSObject( cx, vp, ret )) {
 		return JS_TRUE;
 	}
 
 	JSObject *jsobj;
 	if (JS_ValueToObject( cx, vp, &jsobj )) {
+
+		// Array ?
 		if (JS_IsArrayObject(cx, jsobj)) {
 			return JSB_jsval_to_NSArray(cx, vp, ret);
 		}

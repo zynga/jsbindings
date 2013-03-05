@@ -3186,7 +3186,7 @@ if __name__ == "__main__":
         print e
         opts, args = getopt.getopt(argv, "", [])
 
-    if args == None:
+    if args == None or configfile == None:
         help()
 
     JSBindings.parse_config_file(configfile)
