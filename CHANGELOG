@@ -12,6 +12,7 @@ version 0.6 - XX-Mar-2013
 - [NEW] WebGL / OpenGL ES 2.0: basic functionality added
 - [FIX] JSB: RGBAProtocol: color/opacity -> getColor/getOpacity
 			Chipmunk addCollitionHandler: space is used as hash key too, preventing possible crashes with the GC
+- [FIX] JSB Generator: Fixed error when class has callbacks but no manual methods
 
 version 0.5 - 29-Jan-2013
 - [FIX] JSB: Errors inside require() are reported correctly
