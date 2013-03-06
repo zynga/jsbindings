@@ -602,10 +602,10 @@ JSBool JSB_jsval_typedarray_to_dataptr( JSContext *cx, jsval vp, GLsizei *count,
 	} else if( JS_IsArrayObject(cx, jsobj)) {
 		// Slow... avoid it. Use TypedArray instead, but the spec says that it can receive
 		// Sequence<> as well.
-		uint32_t lenghthp;
-		JS_GetArrayLength(cx, jsobj, &lenghthp);
+		uint32_t length;
+		JS_GetArrayLength(cx, jsobj, &length);
 
-		for( uint32_t i=0; i<lenghthp;i++ ) {
+		for( uint32_t i=0; i<length;i++ ) {
 
 			jsval valarg;
 			JS_GetElement(cx, jsobj, i, &valarg);
