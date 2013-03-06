@@ -130,6 +130,11 @@ JSBool JSB_jsval_to_NSString( JSContext *cx, jsval vp, NSString **ret )
 	JSString *jsstr = JS_ValueToString( cx, vp );
 	JSB_PRECONDITION2( jsstr, cx, JS_FALSE, "invalid string" );
 
+	return JSB_JSString_to_NSString( cx, jsstr, ret );
+}
+
+JSBool JSB_JSString_to_NSString( JSContext *cx, JSString *jsstr, NSString **ret )
+{
 	const jschar *chars = JS_GetStringCharsZ(cx, jsstr);
 	size_t l = JS_GetStringLength(jsstr);
 
@@ -146,7 +151,43 @@ JSBool JSB_jsval_to_NSString( JSContext *cx, jsval vp, NSString **ret )
 
 JSBool JSB_jsval_to_NSDictionary( JSContext *cx, jsval vp, NSDictionary**ret )
 {
-	NSCAssert(NO, @"NOT IMPLEMENTED!");
+	JSObject *jsobj;
+	JSBool ok = JS_ValueToObject( cx, vp, &jsobj );
+	JSB_PRECONDITION2( ok, cx, JS_FALSE, "Error converting value to object");
+
+	JSIdArray *keys = JS_Enumerate(cx, jsobj);
+	int len = JS_IdArrayLength(cx, keys);
+
+	NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithCapacity:len];
+
+	for (int i = 0; i < len; i++) {
+		jsid keyid = JS_IdArrayGet(cx, keys, i);
+		jsval valarg;
+
+		ok = JS_GetPropertyById(cx, jsobj, keyid, &valarg);
+		JSB_PRECONDITION2( ok, cx, JS_FALSE, "Error getting property");
+
+		id real_obj;
+		ok = JSB_jsval_to_unknown( cx, valarg, &real_obj );
+		JSB_PRECONDITION2( ok, cx, JS_FALSE, "Error converting value to nsobject");
+
+		id key = nil;
+		if (JSID_IS_STRING(keyid)) {
+			ok = JSB_JSString_to_NSString(cx, JSID_TO_STRING(keyid), &key);
+			JSB_PRECONDITION2( ok, cx, JS_FALSE, "Error converting keyid");
+		} else if (JSID_IS_INT(keyid)) {
+			key = [NSNumber numberWithInt:JSID_TO_INT(keyid)];
+		} else {
+			JSB_PRECONDITION2( JS_FALSE, cx, JS_FALSE, "Error converting keyid");
+		}
+
+		// NSDictionary doesn't allow nil objects
+		if (real_obj) {
+			[dict setObject:real_obj forKey:key];
+		}
+	}
+
+	*ret = dict;
 	return JS_TRUE;
 }
 
@@ -230,6 +271,11 @@ JSBool JSB_jsval_to_unknown(JSContext *cx, jsval vp, id* ret)
 	// String
 	else if (JSVAL_IS_STRING(vp)) {
 		return JSB_jsval_to_NSString( cx, vp, ret );
+	}
+	// Null or undefined
+	else if (JSVAL_IS_NULL(vp) || JSVAL_IS_VOID(vp)) {
+		*ret = NULL;
+		return JS_TRUE;
 	}
 
 	// Is Native Object ?
