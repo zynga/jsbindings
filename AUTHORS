@@ -15,8 +15,10 @@ Contributors (alphabetically ordered):
 	jsval to NSArray converts objects to the correct type
 	Added JSB_jsval_to_unknown()
 	Added JSB_jsval_to_struct()
+	Added JSB_jsval_to_NSDictionary
 	Simplified generate_jsb code by calling JSB_jsval_to directly
 	Added error checking when callbacks returns a value
+
 
 * Sergej Tatarincev (https://github.com/SevInf)
     Added conversion for NSNull
