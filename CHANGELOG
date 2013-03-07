@@ -1,6 +1,9 @@
 version 0.6 - XX-Mar-2013
 - [NEW] Files: renamed js_bindigns_ to jsb_
-- [NEW] JSB code:
+- [NEW] JSB JS code:
+		Added cocos2d and OpenGL constants (automatically created)
+		Added cc.Loader. Compatible with cocos2d-html5
+- [NEW] JSB native code:
 		New Naming Convention:
         	XXX_to_jsval -> JSB_jsval_from_XXX
         	jsval_to_XXX -> JSB_jsval_to_XXX
@@ -13,7 +16,9 @@ version 0.6 - XX-Mar-2013
 		Since JS_SetCStringsAreUTF8() is no longer available, the strings are converted using unichars
 		TypedArray Functions no longer uses a context as parameter
 - [NEW] WebGL / OpenGL ES 2.0: basic functionality added
-- [FIX] JSB code: RGBAProtocol: color/opacity -> getColor/getOpacity
+- [FIX] JSB JS code:
+		cc.base no longer used. Not compatible with SpiderMonkey 19
+- [FIX] JSB native code: RGBAProtocol: color/opacity -> getColor/getOpacity
 			Chipmunk addCollitionHandler: space is used as hash key too, preventing possible crashes with the GC
 			jsval to NSArray converts inner objects too
 			Checks return error in callbacks (only bool for the moment)
