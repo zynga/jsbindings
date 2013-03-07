@@ -260,8 +260,13 @@ JSBool JSB_jsval_to_unknown(JSContext *cx, jsval vp, id* ret)
 
 	// Number
 	if (JSVAL_IS_NUMBER(vp)) {
-		*ret = [NSNumber numberWithDouble:JSVAL_TO_DOUBLE(vp)];
-		return JS_TRUE;
+		// JSVAL_TO_DOUBLE was crashing... why???
+		double number;
+		if( JS_ValueToNumber(cx, vp, &number) ) {
+			*ret = [NSNumber numberWithDouble:number];
+			return JS_TRUE;
+		}
+		return JS_FALSE;
 	}
 	// Boolean
 	else if (JSVAL_IS_BOOLEAN(vp)) {
@@ -290,6 +295,9 @@ JSBool JSB_jsval_to_unknown(JSContext *cx, jsval vp, id* ret)
 		if (JS_IsArrayObject(cx, jsobj)) {
 			return JSB_jsval_to_NSArray(cx, vp, ret);
 		}
+
+		// Default to dictionary
+		return JSB_jsval_to_NSDictionary(cx, vp, ret);
 	}
 
 	return JS_FALSE;
@@ -763,14 +771,12 @@ jsval JSB_jsval_from_NSArray( JSContext *cx, NSArray *array)
 
 jsval JSB_jsval_from_NSDictionary( JSContext *cx, NSDictionary *dict)
 {
-	__block JSObject *jsobj = JS_NewArrayObject(cx, 0, NULL);
-	__block int index=0;
+	__block JSObject *jsobj = JS_NewObject(cx, NULL, NULL, NULL);
 	
 	[dict enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
 		NSString *k = (NSString*)key;
 		jsval val = JSB_jsval_from_unknown(cx, obj);
-		JS_DefineProperty(cx, jsobj, [k UTF8String], val, NULL, NULL, JSPROP_ENUMERATE | JSPROP_PERMANENT) ||
-		JS_SetElement(cx, jsobj, index++, &val);
+		JS_DefineProperty(cx, jsobj, [k UTF8String], val, NULL, NULL, JSPROP_ENUMERATE | JSPROP_PERMANENT);
 		*stop = NO;
 	}];
 
