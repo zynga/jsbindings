@@ -19,6 +19,7 @@ version 0.6 - XX-Mar-2013
 - [FIX] JSB JS code:
 		cc.base no longer used. Not compatible with SpiderMonkey 19
 - [FIX] JSB native code: RGBAProtocol: color/opacity -> getColor/getOpacity
+			CCRotate(.*) XY is bound
 			Chipmunk addCollitionHandler: space is used as hash key too, preventing possible crashes with the GC
 			jsval to NSArray converts inner objects too
 			Checks return error in callbacks (only bool for the moment)
