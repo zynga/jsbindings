@@ -118,6 +118,22 @@ jsval JSB_jsval_from_opaque( JSContext *cx, void* opaque);
 jsval JSB_jsval_from_c_class( JSContext *cx, void* handle, JSObject* object, JSClass *klass, const char* optional_class_name);
 /* Converts a char ptr into a jsval (using JS string) */
 jsval JSB_jsval_from_charptr( JSContext *cx, const char *str);
+jsval JSB_jsval_from_unknown( JSContext *cx, id obj);
+
+/** Adds GC roots for funcval and jsthis tied to the lifetime of a block */
+@interface JSB_Callback : NSObject
+{
+}
+@property (nonatomic, readonly, assign) JSContext *cx;
+@property (nonatomic, readonly, assign) JSObject *jsthis;
+@property (nonatomic, readonly, assign) jsval funcval;
+
+- (id) initWithContext:(JSContext *)cx funcval:(jsval)funcval jsthis:(JSObject*)jsthis;
+
+@end
+
+JSB_Callback* JSB_prepare_callback( JSContext *cx, JSObject *jsthis, jsval funcval);
+JSBool JSB_execute_callback( JSB_Callback *cb, unsigned argc, jsval *argv, jsval *rval);
 
 
 #ifndef _UINT32
