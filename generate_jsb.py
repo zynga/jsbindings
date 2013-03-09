@@ -843,17 +843,18 @@ class JSBGenerateClasses(JSBGenerate):
                         return m
 
         # Not found... search in protocols
-        list_of_protocols = self.bs['signatures']['informal_protocol']
-        if 'protocols' in self.complement[class_name]:
-            protocols = self.complement[class_name]['protocols']
-            for protocol in protocols:
-                for ip in list_of_protocols:
-                    # protocol match ?
-                    if ip['name'] == protocol:
-                        # traverse method then
-                        for m in ip['method']:
-                            if m['selector'] == method_name:
-                                return m
+        if 'informal_protocol' in self.bs['signatures']:
+            list_of_protocols = self.bs['signatures']['informal_protocol']
+            if 'protocols' in self.complement[class_name]:
+                protocols = self.complement[class_name]['protocols']
+                for protocol in protocols:
+                    for ip in list_of_protocols:
+                        # protocol match ?
+                        if ip['name'] == protocol:
+                            # traverse method then
+                            for m in ip['method']:
+                                if m['selector'] == method_name:
+                                    return m
 
         raise MethodNotFoundException("Method not found for %s # %s" % (class_name, method_name))
 
@@ -1412,6 +1413,8 @@ extern JSClass *%s_class;
                     with_args += "\t\t\targv[%d] = %s\n" % (i, tmp)
                 elif dt == 'NSSet':
                     with_args += "\t\t\targv[%d] = JSB_jsval_from_NSSet( cx, %s );\n" % (i, arg['name'])
+                elif dt == 'NSDictionary':
+                    with_args += "\t\t\targv[%d] = JSB_jsval_from_NSDictionary( cx, %s );\n" % (i, arg['name'])
                 elif t == '@' and (dt in self.supported_classes or dt in self.class_manual):
                     with_args += "\t\t\targv[%d] = JSB_jsval_from_NSObject( cx, %s );\n" % (i, arg['name'])
                 else:
