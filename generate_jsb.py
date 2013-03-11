@@ -160,6 +160,7 @@ class JSBGenerate(object):
             'CCArray*': 'array',
             'NSSet*': 'set',
             'NSDictionary*': 'dict',
+            'NSMutableDictionary*': 'dict',
             'const char*': 'char*',
             'const unsigned char*': 'char*',
             'char*': 'char*',
