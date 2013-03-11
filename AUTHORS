@@ -20,6 +20,7 @@ Contributors (alphabetically ordered):
 	Added error checking when callbacks returns a value
 	Generator generates bindings from_Dictionary
 	Generator does not crash if informal_protocols are not present
+	"this" and "function" are rooted when calling an scheduled funciton, and unrooted when the block dies
 
 * Sean Lin (http://www.cocos2d-html5.org):
     Added cc.Loader compatibility with cocos2d-html5
