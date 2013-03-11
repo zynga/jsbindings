@@ -2,7 +2,7 @@
 // cocos2d constants
 //
 
-require('jsb_cocos2d_enums.js');
+require('jsb_cocos2d_constants.js');
 
 var cc = cc || {};
 
@@ -484,3 +484,25 @@ cc.LayerColor.extend = cc.Class.extend;
 cc.Sprite.extend = cc.Class.extend;
 cc.MenuItemFont.extend = cc.Class.extend;
 cc.Scene.extend = cc.Class.extend;
+cc.GLNode.extend = cc.Class.extend;
+
+// Cocos2d-html5 supports multi scene resources preloading.
+// This is a compatible function for JSB.
+cc.Loader = cc.Class.extend({
+    initWith:function (resources, selector, target) {
+        if (selector) {
+            this._selector = selector;
+            this._target = target;
+        }
+        this._selector.call(this._target);
+    }
+});
+
+cc.Loader.preload = function (resources, selector, target) {
+    if (!this._instance) {
+        this._instance = new cc.Loader();
+    }
+    this._instance.initWith(resources, selector, target);
+    return this._instance;
+};
+

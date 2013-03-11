@@ -33,7 +33,7 @@
 
 #pragma mark - helpers
 
-JSObject* create_jsobject_from_realobj( JSContext* context, Class klass, id realObj )
+JSObject* JSB_create_jsobject_from_realobj( JSContext* context, Class klass, id realObj )
 {
 	NSString *proxied_class = [NSString stringWithFormat:@"JSB_%@", klass];
 	Class newKlass = NSClassFromString(proxied_class);
@@ -41,10 +41,10 @@ JSObject* create_jsobject_from_realobj( JSContext* context, Class klass, id real
 		return [newKlass createJSObjectWithRealObject:realObj context:context];
 
 	CCLOGWARN(@"Proxied class not found: %@. Trying with parent class", proxied_class );
-	return create_jsobject_from_realobj( context, [klass superclass], realObj  );
+	return JSB_create_jsobject_from_realobj( context, [klass superclass], realObj  );
 }
 
-JSObject * get_or_create_jsobject_from_realobj( JSContext *cx, id realObj )
+JSObject * JSB_get_or_create_jsobject_from_realobj( JSContext *cx, id realObj )
 {
 	if( ! realObj )
 		return NULL;
@@ -53,12 +53,12 @@ JSObject * get_or_create_jsobject_from_realobj( JSContext *cx, id realObj )
 	if( proxy )
 		return [proxy jsObj];
 	
-	return create_jsobject_from_realobj( cx, [realObj class], realObj );
+	return JSB_create_jsobject_from_realobj( cx, [realObj class], realObj );
 }
 
 #pragma mark - jsval to native
 
-JSBool jsval_is_NSObject( JSContext *cx, jsval vp, NSObject **ret )
+JSBool JSB_jsval_is_NSObject( JSContext *cx, jsval vp, NSObject **ret )
 {
 	JSObject *jsobj;
 	JSBool ok = JS_ValueToObject( cx, vp, &jsobj );
@@ -68,7 +68,7 @@ JSBool jsval_is_NSObject( JSContext *cx, jsval vp, NSObject **ret )
 	// root it
 	vp = OBJECT_TO_JSVAL(jsobj);
 	
-	JSB_NSObject* proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsobj);
+	JSB_NSObject* proxy = (JSB_NSObject*) JSB_get_proxy_for_jsobject(jsobj);
 	if( ! proxy )
 		return  JS_FALSE;
 
@@ -79,7 +79,7 @@ JSBool jsval_is_NSObject( JSContext *cx, jsval vp, NSObject **ret )
 }
 
 // Convert function
-JSBool jsval_to_NSObject( JSContext *cx, jsval vp, NSObject **ret )
+JSBool JSB_jsval_to_NSObject( JSContext *cx, jsval vp, NSObject **ret )
 {
 	// special case: jsval is null
 	if( JSVAL_IS_NULL(vp) ) {
@@ -94,7 +94,7 @@ JSBool jsval_to_NSObject( JSContext *cx, jsval vp, NSObject **ret )
 	// root it
 	vp = OBJECT_TO_JSVAL(jsobj);
 	
-	JSB_NSObject* proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsobj);
+	JSB_NSObject* proxy = (JSB_NSObject*) JSB_get_proxy_for_jsobject(jsobj);
 	
 	JSB_PRECONDITION2( proxy, cx, JS_FALSE, "Error obtaining proxy");
 
@@ -103,64 +103,95 @@ JSBool jsval_to_NSObject( JSContext *cx, jsval vp, NSObject **ret )
 	return JS_TRUE;
 }
 
-JSBool jsval_is_NSString( JSContext *cx, jsval vp, NSString **ret )
+JSBool JSB_jsval_is_NSString( JSContext *cx, jsval vp, NSString **ret )
 {
+	// IMPORTANT: Do not use vp.isString() because numbers can also be converted to strings
 	JSString *jsstr = JS_ValueToString( cx, vp );
-	if( !jsstr )
+	if( ! jsstr )
 		return JS_FALSE;
-	
-	// root it
-	vp = STRING_TO_JSVAL(jsstr);
-	
-	char *ptr = JS_EncodeString(cx, jsstr);
-	
-	if( !ptr )
-		return JS_FALSE;
-	
-	NSString *tmp = [NSString stringWithUTF8String: ptr];
-	
-	if( !tmp ) {
-		JS_free( cx, ptr );
-		return JS_FALSE;
-	}
-	
-	if( ret )
-		*ret = tmp;
 
-	JS_free( cx, ptr );
-	
+	const jschar *chars = JS_GetStringCharsZ(cx, jsstr);
+	size_t l = JS_GetStringLength(jsstr);
+
+	JSB_PRECONDITION2(chars, cx, JS_FALSE, "Error getting characters from string");
+
+	NSString *tmp = [NSString stringWithCharacters:chars length:l];
+
+	JSB_PRECONDITION2( tmp, cx, JS_FALSE, "Error creating string from UTF8");
+
+	*ret = tmp;
+
 	return JS_TRUE;
 }
 
-JSBool jsval_to_NSString( JSContext *cx, jsval vp, NSString **ret )
+JSBool JSB_jsval_to_NSString( JSContext *cx, jsval vp, NSString **ret )
 {
+	// IMPORTANT: Do not use vp.isString() because numbers can also be converted to strings
 	JSString *jsstr = JS_ValueToString( cx, vp );
 	JSB_PRECONDITION2( jsstr, cx, JS_FALSE, "invalid string" );
+
+	return JSB_JSString_to_NSString( cx, jsstr, ret );
+}
+
+JSBool JSB_JSString_to_NSString( JSContext *cx, JSString *jsstr, NSString **ret )
+{
+	const jschar *chars = JS_GetStringCharsZ(cx, jsstr);
+	size_t l = JS_GetStringLength(jsstr);
+
+	JSB_PRECONDITION2(chars, cx, JS_FALSE, "Error getting characters from string");
 	
-	// root it
-	vp = STRING_TO_JSVAL(jsstr);
-	
-	char *ptr = JS_EncodeString(cx, jsstr);
-	
-	JSB_PRECONDITION2(ptr, cx, JS_FALSE, "Error encoding string");
-	
-	NSString *tmp = [NSString stringWithCString:ptr encoding:NSUTF8StringEncoding];
+	NSString *tmp = [NSString stringWithCharacters:chars length:l];
 	
 	JSB_PRECONDITION2( tmp, cx, JS_FALSE, "Error creating string from UTF8");
 	
 	*ret = tmp;
-	JS_free( cx, ptr );
-	
+
 	return JS_TRUE;
 }
 
-JSBool jsval_to_NSDictionary( JSContext *cx, jsval vp, NSDictionary**ret )
+JSBool JSB_jsval_to_NSDictionary( JSContext *cx, jsval vp, NSDictionary**ret )
 {
-	NSCAssert(NO, @"NOT IMPLEMENTED!");
+	JSObject *jsobj;
+	JSBool ok = JS_ValueToObject( cx, vp, &jsobj );
+	JSB_PRECONDITION2( ok, cx, JS_FALSE, "Error converting value to object");
+
+	JSIdArray *keys = JS_Enumerate(cx, jsobj);
+	int len = JS_IdArrayLength(cx, keys);
+
+	NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithCapacity:len];
+
+	for (int i = 0; i < len; i++) {
+		jsid keyid = JS_IdArrayGet(cx, keys, i);
+		jsval valarg;
+
+		ok = JS_GetPropertyById(cx, jsobj, keyid, &valarg);
+		JSB_PRECONDITION2( ok, cx, JS_FALSE, "Error getting property");
+
+		id real_obj;
+		ok = JSB_jsval_to_unknown( cx, valarg, &real_obj );
+		JSB_PRECONDITION2( ok, cx, JS_FALSE, "Error converting value to nsobject");
+
+		id key = nil;
+		if (JSID_IS_STRING(keyid)) {
+			ok = JSB_JSString_to_NSString(cx, JSID_TO_STRING(keyid), &key);
+			JSB_PRECONDITION2( ok, cx, JS_FALSE, "Error converting keyid");
+		} else if (JSID_IS_INT(keyid)) {
+			key = [NSNumber numberWithInt:JSID_TO_INT(keyid)];
+		} else {
+			JSB_PRECONDITION2( JS_FALSE, cx, JS_FALSE, "Error converting keyid");
+		}
+
+		// NSDictionary doesn't allow nil objects
+		if (real_obj) {
+			[dict setObject:real_obj forKey:key];
+		}
+	}
+
+	*ret = dict;
 	return JS_TRUE;
 }
 
-JSBool jsval_to_NSArray( JSContext *cx, jsval vp, NSArray**ret )
+JSBool JSB_jsval_to_NSArray( JSContext *cx, jsval vp, NSArray**ret )
 {
 	// Parsing sequence
 	JSObject *jsobj;
@@ -177,9 +208,8 @@ JSBool jsval_to_NSArray( JSContext *cx, jsval vp, NSArray**ret )
 		jsval valarg;
 		JS_GetElement(cx, jsobj, i, &valarg);
 		
-		// XXX: forcing them to be objects, but they could also be NSString, NSDictionary or NSArray
 		id real_obj;
-		ok = jsval_is_NSObject( cx, valarg, &real_obj );
+		ok = JSB_jsval_to_unknown( cx, valarg, &real_obj );
 		JSB_PRECONDITION2( ok, cx, JS_FALSE, "Error converting value to nsobject");
 		
 		[array addObject:real_obj];
@@ -189,7 +219,7 @@ JSBool jsval_to_NSArray( JSContext *cx, jsval vp, NSArray**ret )
 	return JS_TRUE;
 }
 
-JSBool jsval_to_NSSet( JSContext *cx, jsval vp, NSSet** ret)
+JSBool JSB_jsval_to_NSSet( JSContext *cx, jsval vp, NSSet** ret)
 {
 	// Parsing sequence
 	JSObject *jsobj;
@@ -207,7 +237,7 @@ JSBool jsval_to_NSSet( JSContext *cx, jsval vp, NSSet** ret)
 		
 		// XXX: forcing them to be objects, but they could also be NSString, NSDictionary or NSArray
 		id real_obj;
-		ok = jsval_is_NSObject( cx, valarg, &real_obj );
+		ok = JSB_jsval_is_NSObject( cx, valarg, &real_obj );
 		JSB_PRECONDITION2( ok, cx, JS_FALSE, "Error converting value to nsobject");
 		
 		[set addObject:real_obj];
@@ -216,35 +246,72 @@ JSBool jsval_to_NSSet( JSContext *cx, jsval vp, NSSet** ret)
 	return JS_TRUE;
 }
 
-JSBool jsvals_variadic_to_NSArray( JSContext *cx, jsval *vp, int argc, NSArray**ret )
+JSBool JSB_jsval_to_NSNumber( JSContext *cx, jsval vp, NSNumber** ret)
+{
+	JSBool ok = JSVAL_IS_NUMBER(vp);
+	JSB_PRECONDITION2( ok, cx, JS_FALSE, "Object must be a number");
+
+	*ret = [NSNumber numberWithDouble:JSVAL_TO_DOUBLE(vp)];
+	return JS_TRUE;
+}
+
+JSBool JSB_jsval_to_unknown(JSContext *cx, jsval vp, id* ret)
+{
+
+	// Number
+	if (JSVAL_IS_NUMBER(vp)) {
+		// JSVAL_TO_DOUBLE was crashing... why???
+		double number;
+		if( JS_ValueToNumber(cx, vp, &number) ) {
+			*ret = [NSNumber numberWithDouble:number];
+			return JS_TRUE;
+		}
+		return JS_FALSE;
+	}
+	// Boolean
+	else if (JSVAL_IS_BOOLEAN(vp)) {
+		*ret = [NSNumber numberWithBool:JSVAL_TO_BOOLEAN(vp)];
+		return JS_TRUE;
+	}
+	// String
+	else if (JSVAL_IS_STRING(vp)) {
+		return JSB_jsval_to_NSString( cx, vp, ret );
+	}
+	// Null or undefined
+	else if (JSVAL_IS_NULL(vp) || JSVAL_IS_VOID(vp)) {
+		*ret = NULL;
+		return JS_TRUE;
+	}
+
+	// Is Native Object ?
+	if (JSB_jsval_is_NSObject( cx, vp, ret )) {
+		return JS_TRUE;
+	}
+
+	JSObject *jsobj;
+	if (JS_ValueToObject( cx, vp, &jsobj )) {
+
+		// Array ?
+		if (JS_IsArrayObject(cx, jsobj)) {
+			return JSB_jsval_to_NSArray(cx, vp, ret);
+		}
+
+		// Default to dictionary
+		return JSB_jsval_to_NSDictionary(cx, vp, ret);
+	}
+
+	return JS_FALSE;
+}
+
+JSBool JSB_jsvals_variadic_to_NSArray( JSContext *cx, jsval *vp, int argc, NSArray**ret )
 {
 	NSMutableArray *array = [NSMutableArray arrayWithCapacity:argc];
 	
 	for( int i=0; i < argc; i++ )
 	{
 		id obj = NULL;
-		JSBool ok = JS_FALSE;
-		
-		// Native Object ?
-		ok = jsval_is_NSObject( cx, *vp, &obj );
+		JSBool ok = JSB_jsval_to_unknown(cx, *vp, &obj);
 
-		// Number ?
-		if( ! ok ) {
-			double num;
-			
-			// optimization: JS_ValueToNumber is expensive. And can convert an string like "12" to a number
-			if( JSVAL_IS_NUMBER(*vp))
-			   ok = JS_ValueToNumber(cx, *vp, &num );
-			
-			if( ok ) {
-				obj = [NSNumber numberWithDouble:num];
-			}
-		}
-		
-		// String ?
-		if( ! ok )
-			ok = jsval_is_NSString(cx, *vp, (NSString**)&obj );
-		
 		JSB_PRECONDITION2( ok && obj, cx, JS_FALSE, "Error converting variadic arguments");
 
 		// next
@@ -256,17 +323,24 @@ JSBool jsvals_variadic_to_NSArray( JSContext *cx, jsval *vp, int argc, NSArray**
 	return JS_TRUE;
 }
 
-JSBool jsval_to_block_1( JSContext *cx, jsval vp, JSObject *jsthis, js_block *ret)
+JSBool JSB_jsval_to_block_1( JSContext *cx, jsval vp, JSObject *jsthis, js_block *ret)
 {
+	// special case: jsval is null
+	if( JSVAL_IS_NULL(vp) ) {
+		*ret = NULL;
+		return JS_TRUE;
+	}
+
 	JSFunction *func = JS_ValueToFunction(cx, vp );
 	JSB_PRECONDITION2( func, cx, JS_FALSE, "Error converting value to function");
-	
+
+	JSB_Callback *cb = JSB_prepare_callback(cx, jsthis, vp);
 	js_block block = ^(id sender) {
-
 		jsval rval;
-		jsval val = NSObject_to_jsval(cx, sender);
+		jsval val = JSB_jsval_from_unknown(cx, sender);
 
-		JSBool ok = JS_CallFunctionValue(cx, jsthis, vp, 1, &val, &rval);
+		JSB_ENSURE_AUTOCOMPARTMENT(cx, jsthis);
+		JSBool ok = JSB_execute_callback(cb, 1, &val, &rval);
 		JSB_PRECONDITION2(ok, cx, , "Error calling callback (1)");
 	};
 	
@@ -274,7 +348,7 @@ JSBool jsval_to_block_1( JSContext *cx, jsval vp, JSObject *jsthis, js_block *re
 	return JS_TRUE;
 }
 
-JSBool jsval_to_block_2( JSContext *cx, jsval vp, JSObject *jsthis, jsval arg, js_block *ret)
+JSBool JSB_jsval_to_block_2( JSContext *cx, jsval vp, JSObject *jsthis, jsval arg, js_block *ret)
 {
 	JSFunction *func = JS_ValueToFunction(cx, vp );
 	JSB_PRECONDITION2( func, cx, JS_FALSE, "Error converting value to function");
@@ -284,11 +358,12 @@ JSBool jsval_to_block_2( JSContext *cx, jsval vp, JSObject *jsthis, jsval arg, j
 		jsval rval;
 		jsval vals[2];
 		
-		vals[0] = NSObject_to_jsval(cx, sender);
+		vals[0] = JSB_jsval_from_NSObject(cx, sender);
 		
 		// arg NEEDS TO BE ROOTED! Potential crash
 		vals[1] = arg;
 		
+		JSB_ENSURE_AUTOCOMPARTMENT(cx, jsthis);
 		JSBool ok = JS_CallFunctionValue(cx, jsthis, vp, 2, vals, &rval);
 		JSB_PRECONDITION2(ok, cx, , "Error calling callback (2)");
 	};
@@ -297,7 +372,7 @@ JSBool jsval_to_block_2( JSContext *cx, jsval vp, JSObject *jsthis, jsval arg, j
 	return JS_TRUE;
 }
 
-JSBool jsval_to_CGPoint( JSContext *cx, jsval vp, CGPoint *ret )
+JSBool JSB_jsval_to_CGPoint( JSContext *cx, jsval vp, CGPoint *ret )
 {
 	JSObject *jsobj;
 	JSBool ok = JS_ValueToObject( cx, vp, &jsobj );
@@ -321,7 +396,7 @@ JSBool jsval_to_CGPoint( JSContext *cx, jsval vp, CGPoint *ret )
 	return JS_TRUE;
 }
 
-JSBool jsval_to_CGSize( JSContext *cx, jsval vp, CGSize *ret )
+JSBool JSB_jsval_to_CGSize( JSContext *cx, jsval vp, CGSize *ret )
 {
 	JSObject *jsobj;
 	JSBool ok = JS_ValueToObject( cx, vp, &jsobj );
@@ -345,7 +420,7 @@ JSBool jsval_to_CGSize( JSContext *cx, jsval vp, CGSize *ret )
 	return JS_TRUE;	
 }
 
-JSBool jsval_to_CGRect( JSContext *cx, jsval vp, CGRect *ret )
+JSBool JSB_jsval_to_CGRect( JSContext *cx, jsval vp, CGRect *ret )
 {	
 	JSObject *jsobj;
 	JSBool ok = JS_ValueToObject( cx, vp, &jsobj );
@@ -375,16 +450,16 @@ JSBool jsval_to_CGRect( JSContext *cx, jsval vp, CGRect *ret )
 	return JS_TRUE;	
 }
 
-JSBool jsval_to_opaque( JSContext *cx, jsval vp, void **r)
+JSBool JSB_jsval_to_opaque( JSContext *cx, jsval vp, void **r)
 {
 #ifdef __LP64__
 	JSObject *tmp_arg;
 	JSBool ok = JS_ValueToObject( cx, vp, &tmp_arg );
 	JSB_PRECONDITION2( ok, cx, JS_FALSE, "Error converting value to object");
-	JSB_PRECONDITION2( tmp_arg && JS_IsTypedArrayObject( tmp_arg, cx ), cx, JS_FALSE, "Not a TypedArray object");
-	JSB_PRECONDITION2( JS_GetTypedArrayByteLength( tmp_arg, cx ) == sizeof(void*), cx, JS_FALSE, "Invalid Typed Array length");
+	JSB_PRECONDITION2( tmp_arg && JS_IsTypedArrayObject( tmp_arg ), cx, JS_FALSE, "Not a TypedArray object");
+	JSB_PRECONDITION2( JS_GetTypedArrayByteLength( tmp_arg ) == sizeof(void*), cx, JS_FALSE, "Invalid Typed Array length");
 	
-	uint32_t* arg_array = (uint32_t*)JS_GetArrayBufferViewData( tmp_arg, cx );
+	uint32_t* arg_array = (uint32_t*)JS_GetArrayBufferViewData( tmp_arg );
 	uint64 ret =  arg_array[0];
 	ret = ret << 32;
 	ret |= arg_array[1];
@@ -399,20 +474,33 @@ JSBool jsval_to_opaque( JSContext *cx, jsval vp, void **r)
 	return JS_TRUE;
 }
 
-JSBool jsval_to_c_class( JSContext *cx, jsval vp, void **out_native, struct jsb_c_proxy_s **out_proxy)
+JSBool JSB_jsval_to_struct( JSContext *cx, jsval vp, void *r, size_t size)
+{
+	JSObject *tmp_arg;
+	JSBool ok = JS_ValueToObject( cx, vp, &tmp_arg );
+	JSB_PRECONDITION2( ok, cx, JS_FALSE, "Error converting value to object");
+	JSB_PRECONDITION2( tmp_arg && JS_IsTypedArrayObject( tmp_arg ), cx, JS_FALSE, "Not a TypedArray object");
+	JSB_PRECONDITION2( JS_GetTypedArrayByteLength( tmp_arg ) == size, cx, JS_FALSE, "Invalid Typed Array length");
+
+	void *data = JS_GetArrayBufferViewData( tmp_arg );
+	memcpy(r, data, size);
+	return JS_TRUE;
+}
+
+JSBool JSB_jsval_to_c_class( JSContext *cx, jsval vp, void **out_native, struct jsb_c_proxy_s **out_proxy)
 {
 	JSObject *jsobj;
 	JSBool ok = JS_ValueToObject(cx, vp, &jsobj);
 	JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error converting jsval to object");
 	
-	struct jsb_c_proxy_s *proxy = jsb_get_c_proxy_for_jsobject(jsobj);
+	struct jsb_c_proxy_s *proxy = JSB_get_c_proxy_for_jsobject(jsobj);
 	*out_native = proxy->handle;
 	if( out_proxy )
 		*out_proxy = proxy;
 	return JS_TRUE;
 }
 
-JSBool jsval_to_int32( JSContext *cx, jsval vp, int32_t *outval )
+JSBool JSB_jsval_to_int32( JSContext *cx, jsval vp, int32_t *outval )
 {
 	JSBool ret = JS_FALSE;
 	double dp;
@@ -424,7 +512,7 @@ JSBool jsval_to_int32( JSContext *cx, jsval vp, int32_t *outval )
 	return ret;
 }
 
-JSBool jsval_to_uint32( JSContext *cx, jsval vp, uint32_t *outval )
+JSBool JSB_jsval_to_uint32( JSContext *cx, jsval vp, uint32_t *outval )
 {
 	JSBool ret = JS_FALSE;
 	double dp;
@@ -436,7 +524,7 @@ JSBool jsval_to_uint32( JSContext *cx, jsval vp, uint32_t *outval )
 	return ret;
 }
 
-JSBool jsval_to_uint16( JSContext *cx, jsval vp, uint16_t *outval )
+JSBool JSB_jsval_to_uint16( JSContext *cx, jsval vp, uint16_t *outval )
 {
 	JSBool ret = JS_FALSE;
 	double dp;
@@ -450,7 +538,7 @@ JSBool jsval_to_uint16( JSContext *cx, jsval vp, uint16_t *outval )
 
 
 // XXX: sizeof(long) == 8 in 64 bits on OS X... apparently on Windows it is 32 bits (???)
-JSBool jsval_to_long( JSContext *cx, jsval vp, long *r )
+JSBool JSB_jsval_to_long( JSContext *cx, jsval vp, long *r )
 {
 #ifdef __LP64__
 	// compatibility check
@@ -476,7 +564,7 @@ JSBool jsval_to_long( JSContext *cx, jsval vp, long *r )
 	return JS_TRUE;
 }
 
-JSBool jsval_to_longlong( JSContext *cx, jsval vp, long long *r )
+JSBool JSB_jsval_to_longlong( JSContext *cx, jsval vp, long long *r )
 {
 #if JSB_REPRESENT_LONGLONG_AS_STR
 	JSString *jsstr = JS_ValueToString(cx, vp);
@@ -509,7 +597,7 @@ JSBool jsval_to_longlong( JSContext *cx, jsval vp, long long *r )
 #endif // JSB_REPRESENT_LONGLONG_AS_STR
 }
 
-JSBool jsval_to_charptr( JSContext *cx, jsval vp, const char **ret )
+JSBool JSB_jsval_to_charptr( JSContext *cx, jsval vp, const char **ret )
 {
 	JSString *jsstr = JS_ValueToString( cx, vp );
 	JSB_PRECONDITION2( jsstr, cx, JS_FALSE, "invalid string" );
@@ -532,72 +620,122 @@ JSBool jsval_to_charptr( JSContext *cx, jsval vp, const char **ret )
 	return JS_TRUE;
 }
 
-JSBool jsval_typedarray_to_dataptr( JSContext *cx, jsval vp, GLsizei *count, void **data, JSArrayBufferViewType t)
+JSBool JSB_jsval_typedarray_to_dataptr( JSContext *cx, jsval vp, GLsizei *count, void **data, JSArrayBufferViewType t)
 {
-	// Not implemented
 	JSObject *jsobj;
 	JSBool ok = JS_ValueToObject( cx, vp, &jsobj );
-	JSB_PRECONDITION2( ok, cx, JS_FALSE, "Error converting value to object");
-	JSB_PRECONDITION2( JS_IsTypedArrayObject( jsobj, cx ), cx, JS_FALSE, "Not a TypedArray object");
+	JSB_PRECONDITION2( ok && jsobj, cx, JS_FALSE, "Error converting value to object");
 
-	*count = JS_GetTypedArrayLength(jsobj, cx);
-	JSArrayBufferViewType type = JS_GetTypedArrayType(jsobj, cx);
-	JSB_PRECONDITION2(t==type, cx, JS_FALSE, "TypedArray type different than expected type");
+	// WebGL supports TypedArray and sequences for some of its APIs. So when converting a TypedArray, we should
+	// also check for a possible non-Typed Array JS object, like a JS Array.
 
-	switch (type) {
-		case js::ArrayBufferView::TYPE_INT8:
-		case js::ArrayBufferView::TYPE_UINT8:
-			*data = JS_GetUint8ArrayData(jsobj, cx);
-			break;
+	if( JS_IsTypedArrayObject( jsobj ) ) {
 
-		case js::ArrayBufferView::TYPE_INT16:
-		case js::ArrayBufferView::TYPE_UINT16:
-			*data = JS_GetUint16ArrayData(jsobj, cx);
-			break;
+		*count = JS_GetTypedArrayLength(jsobj);
+		JSArrayBufferViewType type = JS_GetArrayBufferViewType(jsobj);
+		JSB_PRECONDITION2(t==type, cx, JS_FALSE, "TypedArray type different than expected type");
 
-		case js::ArrayBufferView::TYPE_INT32:
-		case js::ArrayBufferView::TYPE_UINT32:
-			*data = JS_GetUint32ArrayData(jsobj, cx);
-			break;
+		switch (t) {
+			case js::ArrayBufferView::TYPE_INT8:
+			case js::ArrayBufferView::TYPE_UINT8:
+				*data = JS_GetUint8ArrayData(jsobj);
+				break;
 
-		case js::ArrayBufferView::TYPE_FLOAT32:
-			*data = JS_GetFloat32ArrayData(jsobj, cx);
-			break;
+			case js::ArrayBufferView::TYPE_INT16:
+			case js::ArrayBufferView::TYPE_UINT16:
+				*data = JS_GetUint16ArrayData(jsobj);
+				break;
 
-		default:
-			JSB_PRECONDITION2(JS_FALSE, cx, JS_FALSE, "Unsupported typedarray type");
-			break;
-	}
+			case js::ArrayBufferView::TYPE_INT32:
+			case js::ArrayBufferView::TYPE_UINT32:
+				*data = JS_GetUint32ArrayData(jsobj);
+				break;
 
-	return JS_FALSE;
+			case js::ArrayBufferView::TYPE_FLOAT32:
+				*data = JS_GetFloat32ArrayData(jsobj);
+				break;
+
+			default:
+				JSB_PRECONDITION2(NO, cx, JS_FALSE, "Unsupported typedarray type");
+				break;
+		}
+	} else if( JS_IsArrayObject(cx, jsobj)) {
+		// Slow... avoid it. Use TypedArray instead, but the spec says that it can receive
+		// Sequence<> as well.
+		uint32_t length;
+		JS_GetArrayLength(cx, jsobj, &length);
+
+		for( uint32_t i=0; i<length;i++ ) {
+
+			jsval valarg;
+			JS_GetElement(cx, jsobj, i, &valarg);
+
+			switch(t) {
+				case js::ArrayBufferView::TYPE_INT32:
+				case js::ArrayBufferView::TYPE_UINT32:
+				{
+					uint32_t e = JSVAL_TO_INT(valarg);
+					((uint32_t*)data)[i] = e;
+					break;
+				}
+				case js::ArrayBufferView::TYPE_FLOAT32:
+				{
+					double e = JSVAL_TO_DOUBLE(valarg);
+					((GLfloat*)data)[i] = (GLfloat)e;
+					break;
+				}
+				default:
+					JSB_PRECONDITION2(NO, cx, JS_FALSE, "Unsupported typedarray type");
+					break;
+			}
+		}
+
+	} else
+		JSB_PRECONDITION2(NO, cx, JS_FALSE, "Object shall be a TypedArray or Sequence");
+
+	return JS_TRUE;
 }
+
+JSBool JSB_get_arraybufferview_dataptr( JSContext *cx, jsval vp, GLsizei *count, GLvoid **data )
+{
+	JSObject *jsobj;
+	JSBool ok = JS_ValueToObject( cx, vp, &jsobj );
+	JSB_PRECONDITION2( ok && jsobj, cx, JS_FALSE, "Error converting value to object");
+	JSB_PRECONDITION2( JS_IsArrayBufferViewObject(jsobj), cx, JS_FALSE, "Not an ArrayBufferView object");
+
+	*data = JS_GetArrayBufferViewData(jsobj);
+	*count = JS_GetArrayBufferViewByteLength(jsobj);
+
+	return JS_TRUE;
+}
+
 
 #pragma mark - native to jsval
 
-jsval unknown_to_jsval( JSContext *cx, id obj)
+jsval JSB_jsval_from_unknown( JSContext *cx, id obj)
 {
 	if( [obj isKindOfClass:[NSString class]] )
-		return NSString_to_jsval(cx, obj);
+		return JSB_jsval_from_NSString(cx, obj);
 
 	if( [obj isKindOfClass:[NSNumber class]] )
-		return NSNumber_to_jsval(cx, obj);
+		return JSB_jsval_from_NSNumber(cx, obj);
 
 	if( [obj isKindOfClass:[NSArray class]] )
-		return NSArray_to_jsval(cx, obj);
+		return JSB_jsval_from_NSArray(cx, obj);
 
 	if( [obj isKindOfClass:[NSDictionary class]] )
-		return NSDictionary_to_jsval(cx, obj);
+		return JSB_jsval_from_NSDictionary(cx, obj);
 
 	if( [obj isKindOfClass:[NSSet class]] )
-		return NSSet_to_jsval(cx, obj);
+		return JSB_jsval_from_NSSet(cx, obj);
 
     if ( [obj isKindOfClass:[NSNull class]] )
         return JSVAL_NULL;
 
-	return NSObject_to_jsval(cx, obj);
+	return JSB_jsval_from_NSObject(cx, obj);
 }
 
-jsval NSObject_to_jsval( JSContext *cx, id obj )
+jsval JSB_jsval_from_NSObject( JSContext *cx, id obj )
 {
 	jsval ret;
 	if( ! obj )
@@ -608,45 +746,47 @@ jsval NSObject_to_jsval( JSContext *cx, id obj )
 		ret = OBJECT_TO_JSVAL([proxy jsObj]);
 	
 	else
-		ret = OBJECT_TO_JSVAL( create_jsobject_from_realobj( cx, [obj class], obj ) );
+		ret = OBJECT_TO_JSVAL( JSB_create_jsobject_from_realobj( cx, [obj class], obj ) );
 	
 	return ret;
 }
 
-jsval NSNumber_to_jsval( JSContext *cx, NSNumber *number)
+jsval JSB_jsval_from_NSNumber( JSContext *cx, NSNumber *number)
 {
 	double ret_obj = [number floatValue];
 	return DOUBLE_TO_JSVAL(ret_obj);
 }
 
-jsval NSString_to_jsval( JSContext *cx, NSString *str)
+jsval JSB_jsval_from_NSString( JSContext *cx, NSString *str)
 {
 	JSString *ret_obj = JS_NewStringCopyZ(cx, [str UTF8String]);
 	return STRING_TO_JSVAL(ret_obj);
 }
 
-jsval NSArray_to_jsval( JSContext *cx, NSArray *array)
+jsval JSB_jsval_from_NSArray( JSContext *cx, NSArray *array)
 {
 	JSObject *jsobj = JS_NewArrayObject(cx, 0, NULL);
 	uint32_t index = 0;
 	for( id obj in array ) {
-        jsval val = unknown_to_jsval(cx, obj);
+        jsval val = JSB_jsval_from_unknown(cx, obj);
 		JS_SetElement(cx, jsobj, index++, &val);
 	}
 	
 	return OBJECT_TO_JSVAL(jsobj);
 }
 
-jsval NSDictionary_to_jsval( JSContext *cx, NSDictionary *dict)
+jsval JSB_jsval_from_NSDictionary( JSContext *cx, NSDictionary *dict)
 {
-	__block JSObject *jsobj = JS_NewArrayObject(cx, 0, NULL);
-	__block int index=0;
+	if (!dict) {
+		return JSVAL_NULL;
+	}
+
+	__block JSObject *jsobj = JS_NewObject(cx, NULL, NULL, NULL);
 	
 	[dict enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
 		NSString *k = (NSString*)key;
-		jsval val = unknown_to_jsval(cx, obj);
-		JS_DefineProperty(cx, jsobj, [k UTF8String], val, NULL, NULL, JSPROP_ENUMERATE | JSPROP_PERMANENT) ||
-		JS_SetElement(cx, jsobj, index++, &val);
+		jsval val = JSB_jsval_from_unknown(cx, obj);
+		JS_DefineProperty(cx, jsobj, [k UTF8String], val, NULL, NULL, JSPROP_ENUMERATE | JSPROP_PERMANENT);
 		*stop = NO;
 	}];
 
@@ -654,19 +794,19 @@ jsval NSDictionary_to_jsval( JSContext *cx, NSDictionary *dict)
 }
 
 
-jsval NSSet_to_jsval( JSContext *cx, NSSet *set)
+jsval JSB_jsval_from_NSSet( JSContext *cx, NSSet *set)
 {
 	JSObject *jsobj = JS_NewArrayObject(cx, 0, NULL);
 	uint32_t index = 0;
 	for( id obj in set ) {
-        jsval val = unknown_to_jsval(cx, obj);
+        jsval val = JSB_jsval_from_unknown(cx, obj);
 		JS_SetElement(cx, jsobj, index++, &val);
 	}
 
 	return OBJECT_TO_JSVAL(jsobj);
 }
 
-jsval CGPoint_to_jsval( JSContext *cx, CGPoint p)
+jsval JSB_jsval_from_CGPoint( JSContext *cx, CGPoint p)
 {
 	JSObject *object = JS_NewObject(cx, NULL, NULL, NULL );
 	if (!object)
@@ -679,7 +819,7 @@ jsval CGPoint_to_jsval( JSContext *cx, CGPoint p)
 	return OBJECT_TO_JSVAL(object);
 }
 
-jsval CGSize_to_jsval( JSContext *cx, CGSize s)
+jsval JSB_jsval_from_CGSize( JSContext *cx, CGSize s)
 {
 	JSObject *object = JS_NewObject(cx, NULL, NULL, NULL );
 	if (!object)
@@ -692,7 +832,7 @@ jsval CGSize_to_jsval( JSContext *cx, CGSize s)
 	return OBJECT_TO_JSVAL(object);	
 }
 
-jsval CGRect_to_jsval( JSContext *cx, CGRect rect)
+jsval JSB_jsval_from_CGRect( JSContext *cx, CGRect rect)
 {
 	JSObject *object = JS_NewObject(cx, NULL, NULL, NULL );
 	if (!object)
@@ -707,12 +847,12 @@ jsval CGRect_to_jsval( JSContext *cx, CGRect rect)
 	return OBJECT_TO_JSVAL(object);	
 }
 
-jsval opaque_to_jsval( JSContext *cx, void *opaque )
+jsval JSB_jsval_from_opaque( JSContext *cx, void *opaque )
 {
 #ifdef __LP64__
 	uint64_t number = (uint64_t)opaque;
 	JSObject *typedArray = JS_NewUint32Array( cx, 2 );
-	uint32_t *buffer = (uint32_t*)JS_GetArrayBufferViewData(typedArray, cx);
+	uint32_t *buffer = (uint32_t*)JS_GetArrayBufferViewData(typedArray);
 	buffer[0] = number >> 32;
 	buffer[1] = number & 0xffffffff;
 	return OBJECT_TO_JSVAL(typedArray);		
@@ -723,32 +863,32 @@ jsval opaque_to_jsval( JSContext *cx, void *opaque )
 #endif
 }
 
-jsval c_class_to_jsval( JSContext *cx, void* handle, JSObject* object, JSClass *klass, const char* class_name)
+jsval JSB_jsval_from_c_class( JSContext *cx, void* handle, JSObject* object, JSClass *klass, const char* class_name)
 {
 	JSObject *jsobj;
 
-	jsobj = jsb_get_jsobject_for_proxy(handle);
+	jsobj = JSB_get_jsobject_for_proxy(handle);
 	if( !jsobj ) {
 		jsobj = JS_NewObject(cx, klass, object, NULL);
 		NSCAssert(jsobj, @"Invalid object");
-		jsb_set_c_proxy_for_jsobject(jsobj, handle, JSB_C_FLAG_DO_NOT_CALL_FREE);
-		jsb_set_jsobject_for_proxy(jsobj, handle);
+		JSB_set_c_proxy_for_jsobject(jsobj, handle, JSB_C_FLAG_DO_NOT_CALL_FREE);
+		JSB_set_jsobject_for_proxy(jsobj, handle);
 	}
 
 	return OBJECT_TO_JSVAL(jsobj);
 }
 
-jsval int32_to_jsval( JSContext *cx, int32_t number )
+jsval JSB_jsval_from_int32( JSContext *cx, int32_t number )
 {
 	return INT_TO_JSVAL(number);
 }
 
-jsval uint32_to_jsval( JSContext *cx, uint32_t number )
+jsval JSB_jsval_from_uint32( JSContext *cx, uint32_t number )
 {
 	return UINT_TO_JSVAL(number);
 }
 
-jsval long_to_jsval( JSContext *cx, long number )
+jsval JSB_jsval_from_long( JSContext *cx, long number )
 {
 #ifdef __LP64__
 	NSCAssert( sizeof(long)==8, @"Error!");
@@ -763,7 +903,7 @@ jsval long_to_jsval( JSContext *cx, long number )
 #endif
 }
 
-jsval longlong_to_jsval( JSContext *cx, long long number )
+jsval JSB_jsval_from_longlong( JSContext *cx, long long number )
 {
 #if JSB_REPRESENT_LONGLONG_AS_STR
 	char chr[128];
@@ -781,9 +921,46 @@ jsval longlong_to_jsval( JSContext *cx, long long number )
 #endif
 }
 
-jsval charptr_to_jsval( JSContext *cx, const char *str)
+jsval JSB_jsval_from_charptr( JSContext *cx, const char *str)
 {
 	JSString *ret_obj = JS_NewStringCopyZ(cx, str);
 	return STRING_TO_JSVAL(ret_obj);
 }
 
+JSB_Callback* JSB_prepare_callback( JSContext *cx, JSObject *jsthis, jsval funcval)
+{
+	return [[[JSB_Callback alloc] initWithContext:cx funcval:funcval jsthis:jsthis] autorelease];
+}
+
+JSBool JSB_execute_callback( JSB_Callback *cb, unsigned argc, jsval *argv, jsval *rval)
+{
+	JSContext *cx = cb.cx;
+	JSObject *jsthis = cb.jsthis;
+	jsval funcval = cb.funcval;
+
+	return JS_CallFunctionValue(cx, jsthis, funcval, argc, argv, rval);
+}
+
+@implementation JSB_Callback
+
+- (id) initWithContext:(JSContext *)cx funcval:(jsval)funcval jsthis:(JSObject*)jsthis
+{
+	if (self = [super init]) {
+		_cx = cx;
+		_funcval = funcval;
+		_jsthis = jsthis;
+
+		JS_AddValueRoot(cx, &_funcval);
+		JS_AddObjectRoot(cx, &_jsthis);
+	}
+	return self;
+}
+
+- (void) dealloc
+{
+	JS_RemoveValueRoot(_cx, &_funcval);
+	JS_RemoveObjectRoot(_cx, &_jsthis);
+	[super dealloc];
+}
+
+@end

@@ -118,7 +118,7 @@ class ObjC(object):
                         else:
                             protocols = []
 
-                        self.entries[classname] = {'subclass': subclass, 'protocols': protocols}
+                        self.entries[classname] = {'protocols': protocols}
                     current_class = classname
 
                 # Found @property

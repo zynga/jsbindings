@@ -25,6 +25,7 @@
 #import "jsb_config.h"
 #import "jsb_core.h"
 
+#import "jsb_cocos2d_registration.h"
 
 // cocos2d
 #import "jsb_cocos2d_classes.h"
@@ -43,11 +44,15 @@
 // CocosBuilder reader
 #import "jsb_CocosBuilderReader_classes.h"
 
-void jsb_register_cocos2d_config( JSContext *_cx, JSObject *cocos2d);
+// forward declarations
+void JSB_GLNode_createClass(JSContext *cx, JSObject* globalObj, const char* name );
+void JSB_register_cocos2d_config( JSContext *_cx, JSObject *cocos2d);
 
-void jsb_register_cocos2d_config( JSContext *_cx, JSObject *cocos2d)
+//
+
+void JSB_register_cocos2d_config( JSContext *_cx, JSObject *cocos2d)
 {
-	JS_DefineFunction(_cx, cocos2d, "log", JSBCore_log, 0, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
+	JS_DefineFunction(_cx, cocos2d, "log", JSB_core_log, 0, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 	
 	JSB_NSObject_createClass(_cx, cocos2d, "Object");
 #ifdef __CC_PLATFORM_MAC
@@ -58,7 +63,7 @@ void jsb_register_cocos2d_config( JSContext *_cx, JSObject *cocos2d)
 #endif	
 }
 
-void jsb_register_cocos2d( JSContext *_cx, JSObject *object)
+void JSB_register_cocos2d( JSContext *_cx, JSObject *object)
 {
 	//
 	// cocos2d
@@ -69,12 +74,15 @@ void jsb_register_cocos2d( JSContext *_cx, JSObject *object)
 	
 
 	// register "config" object
-	jsb_register_cocos2d_config(_cx, cocos2d);
+	JSB_register_cocos2d_config(_cx, cocos2d);
 
 	
 	// Register classes: base classes should be registered first
 
 #import "jsb_cocos2d_classes_registration.h"
+	// Manual GLNode registration
+	JSB_GLNode_createClass(_cx, cocos2d, "GLNode");
+
 #import "jsb_cocos2d_functions_registration.h"
 
 #ifdef __CC_PLATFORM_IOS
@@ -86,7 +94,8 @@ void jsb_register_cocos2d( JSContext *_cx, JSObject *object)
 #import "jsb_cocos2d_mac_classes_registration.h"
 #import "jsb_cocos2d_mac_functions_registration.h"
 #endif
-	
+
+
 	//
 	// CocosDenshion
 	//

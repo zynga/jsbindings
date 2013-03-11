@@ -35,7 +35,7 @@
 JSBool JSB_CCBAnimationManager_setCompletedAnimationCallbackBlock_(JSContext *cx, uint32_t argc, jsval *vp) {
     
 	JSObject* jsthis = (JSObject *)JS_THIS_OBJECT(cx, vp);
-	JSB_NSObject *proxy = (JSB_NSObject*) jsb_get_proxy_for_jsobject(jsthis);
+	JSB_NSObject *proxy = (JSB_NSObject*) JSB_get_proxy_for_jsobject(jsthis);
 	
 	JSB_PRECONDITION( proxy && [proxy realObj], "Invalid Proxy object");
 	JSB_PRECONDITION( argc == 2, "Invalid number of arguments. Expecting 2 args" );
@@ -45,10 +45,10 @@ JSBool JSB_CCBAnimationManager_setCompletedAnimationCallbackBlock_(JSContext *cx
 	JSBool ok = JS_TRUE;
     
 	ok &= JS_ValueToObject(cx, *argvp, &js_this);
-	ok &= jsb_set_reserved_slot(jsthis, 0, *argvp++ );
+	ok &= JSB_set_reserved_slot(jsthis, 0, *argvp++ );
     
-	ok &= jsval_to_block_1( cx, *argvp, js_this, &js_func );
-	ok &= jsb_set_reserved_slot(jsthis, 1, *argvp++ );
+	ok &= JSB_jsval_to_block_1( cx, *argvp, js_this, &js_func );
+	ok &= JSB_set_reserved_slot(jsthis, 1, *argvp++ );
 	
 	if( ! ok )
 		return JS_FALSE;

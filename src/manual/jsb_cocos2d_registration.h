@@ -26,6 +26,6 @@
 #ifndef __JSB_COCOS2D_REGISTRATION
 #define __JSB_COCOS2D_REGISTRATION
 
-void jsb_register_cocos2d( JSContext *globalC, JSObject *globalO);
+void JSB_register_cocos2d( JSContext *globalC, JSObject *globalO);
 
 #endif // __JSB_COCOS2D_REGISTRATION

@@ -32,7 +32,7 @@
 #import "jsb_chipmunk_manual.h"
 
 
-void jsb_register_chipmunk( JSContext *_cx, JSObject *object)
+void JSB_register_chipmunk( JSContext *_cx, JSObject *object)
 {
 	//
 	// Chipmunk

@@ -26,10 +26,11 @@
 #ifndef __jsb_opengl_manual
 #define __jsb_opengl_manual
 
-#import "jsb_config.h"
+#include "jsb_config.h"
 #if JSB_INCLUDE_OPENGL
 
-#import <Availability.h>
+#include <Availability.h>
+#include "jsapi.h"
 
 #ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
 #elif defined(__MAC_OS_X_VERSION_MAX_ALLOWED)
@@ -39,7 +40,10 @@
 #define glDepthRangef glDepthRange
 #define glReleaseShaderCompiler()
 
-#endif
+#endif // __MAC_OS_X_VERSION_MAX_ALLOWED
+
+// forward declaration of new functions
+JSBool JSB_glGetSupportedExtensions(JSContext *cx, uint32_t argc, jsval *vp);
 
 
 #endif // JSB_INCLUDE_OPENGL

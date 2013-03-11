@@ -26,6 +26,6 @@
 #ifndef __JSB_OPENGL_REGISTRATION
 #define __JSB_OPENGL_REGISTRATION
 
-void jsb_register_opengl( JSContext *globalC, JSObject *globalO);
+void JSB_register_opengl( JSContext *globalC, JSObject *globalO);
 
 #endif // __JSB_OPENGL_REGISTRATION

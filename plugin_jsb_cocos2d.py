@@ -18,18 +18,17 @@ __docformat__ = 'restructuredtext'
 import re
 
 # plugin modules
-from generate_jsb import JSBGenerateEnums
+from generate_jsb import JSBGenerateConstants, JSBGenerateFunctions, JSBGenerateClasses
 
 
 #
 #
-# Plugin to generate better enums for cocos2d
+# Plugin to generate better constants for cocos2d
 #
 #
-class JSBGenerateEnums_CC(JSBGenerateEnums):
-    pass
+class JSBGenerateConstants_CC(JSBGenerateConstants):
 
-    def get_name_for_enum(self, name):
+    def get_name_for_constant(self, name):
         ok = False
         if name.startswith('kCC'):
             name = name[3:]
@@ -44,16 +43,55 @@ class JSBGenerateEnums_CC(JSBGenerateEnums):
             array = re.findall('[A-Z][^A-Z]*', name)
             if array and len(array) > 0:
                 prev = ''
+                prev_e_len = 0
                 for e in array:
                     e = e.upper()
-                    if re.match('[A-Z][_0-9]?$', e) and len(n) >= 1:
+                    # Append all single letters together
+                    if re.match('[A-Z][_0-9]?$', e) and len(n) >= 1 and prev_e_len == 1:
                         prev = prev + e
                         n[-1] = prev
                     else:
                         n.append(e)
                         prev = e
+                    prev_e_len = len(e)
             name = '_'.join(n)
+            name = name.replace('__', '_')
         else:
             name = None
 
         return name
+
+
+#
+#
+# OpenGL ES 2.0 / WebGL function plugin
+#
+#
+class JSBGenerateFunctions_CC(JSBGenerateFunctions):
+
+    def convert_function_name_to_js(self, function_name):
+
+        if function_name.startswith('ccGL'):
+            return 'gl' + function_name[4:]
+        return super(JSBGenerateFunctions_CC, self).convert_function_name_to_js(function_name)
+
+
+#
+#
+# OpenGL ES 2.0 / WebGL function plugin
+#
+#
+class JSBGenerateClasses_CC(JSBGenerateClasses):
+
+    def __init__(self, config):
+        super(JSBGenerateClasses_CC, self).__init__(config)
+
+    #
+    # Overriden methods
+    #
+    def validate_argument(self, arg):
+        # Treat GLchar* as null-terminated char*
+        if arg['declared_type'] == 'GLchar*' or arg['declared_type'] == 'char*' or arg['declared_type'] == 'char*':
+            return ('char*', 'char*')
+
+        return super(JSBGenerateClasses_CC, self).validate_argument(arg)
