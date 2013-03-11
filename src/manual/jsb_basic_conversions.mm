@@ -325,16 +325,22 @@ JSBool JSB_jsvals_variadic_to_NSArray( JSContext *cx, jsval *vp, int argc, NSArr
 
 JSBool JSB_jsval_to_block_1( JSContext *cx, jsval vp, JSObject *jsthis, js_block *ret)
 {
+	// special case: jsval is null
+	if( JSVAL_IS_NULL(vp) ) {
+		*ret = NULL;
+		return JS_TRUE;
+	}
+
 	JSFunction *func = JS_ValueToFunction(cx, vp );
 	JSB_PRECONDITION2( func, cx, JS_FALSE, "Error converting value to function");
-	
-	js_block block = ^(id sender) {
 
+	JSB_Callback *cb = JSB_prepare_callback(cx, jsthis, vp);
+	js_block block = ^(id sender) {
 		jsval rval;
-		jsval val = JSB_jsval_from_NSObject(cx, sender);
+		jsval val = JSB_jsval_from_unknown(cx, sender);
 
 		JSB_ENSURE_AUTOCOMPARTMENT(cx, jsthis);
-		JSBool ok = JS_CallFunctionValue(cx, jsthis, vp, 1, &val, &rval);
+		JSBool ok = JSB_execute_callback(cb, 1, &val, &rval);
 		JSB_PRECONDITION2(ok, cx, , "Error calling callback (1)");
 	};
 	
@@ -771,6 +777,10 @@ jsval JSB_jsval_from_NSArray( JSContext *cx, NSArray *array)
 
 jsval JSB_jsval_from_NSDictionary( JSContext *cx, NSDictionary *dict)
 {
+	if (!dict) {
+		return JSVAL_NULL;
+	}
+
 	__block JSObject *jsobj = JS_NewObject(cx, NULL, NULL, NULL);
 	
 	[dict enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
@@ -917,3 +927,40 @@ jsval JSB_jsval_from_charptr( JSContext *cx, const char *str)
 	return STRING_TO_JSVAL(ret_obj);
 }
 
+JSB_Callback* JSB_prepare_callback( JSContext *cx, JSObject *jsthis, jsval funcval)
+{
+	return [[[JSB_Callback alloc] initWithContext:cx funcval:funcval jsthis:jsthis] autorelease];
+}
+
+JSBool JSB_execute_callback( JSB_Callback *cb, unsigned argc, jsval *argv, jsval *rval)
+{
+	JSContext *cx = cb.cx;
+	JSObject *jsthis = cb.jsthis;
+	jsval funcval = cb.funcval;
+
+	return JS_CallFunctionValue(cx, jsthis, funcval, argc, argv, rval);
+}
+
+@implementation JSB_Callback
+
+- (id) initWithContext:(JSContext *)cx funcval:(jsval)funcval jsthis:(JSObject*)jsthis
+{
+	if (self = [super init]) {
+		_cx = cx;
+		_funcval = funcval;
+		_jsthis = jsthis;
+
+		JS_AddValueRoot(cx, &_funcval);
+		JS_AddObjectRoot(cx, &_jsthis);
+	}
+	return self;
+}
+
+- (void) dealloc
+{
+	JS_RemoveValueRoot(_cx, &_funcval);
+	JS_RemoveObjectRoot(_cx, &_jsthis);
+	[super dealloc];
+}
+
+@end
