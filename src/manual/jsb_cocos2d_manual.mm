@@ -1311,13 +1311,14 @@ JSBool JSB_CCScheduler_scheduleBlockForKey_target_interval_repeat_delay_paused_b
 		key = [NSString stringWithFormat:@"anonfunc at %p", func];
 	}
 
+	JSB_Callback *cb = JSB_prepare_callback(cx, jstarget, funcval);
 	void (^block)(ccTime dt) = ^(ccTime dt) {
 
 		jsval rval;
 		jsval jsdt = DOUBLE_TO_JSVAL(dt);
 
 		JSB_ENSURE_AUTOCOMPARTMENT(cx, jstarget);
-		JSBool ok = JS_CallFunctionValue(cx, jstarget, funcval, 1, &jsdt, &rval);
+		JSBool ok = JSB_execute_callback(cb, 1, &jsdt, &rval);
 		JSB_PRECONDITION2(ok, cx, ,"Error calling collision callback: schedule_interval_repeat_delay");
 	};
 
