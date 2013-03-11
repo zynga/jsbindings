@@ -26,6 +26,9 @@ version 0.6 - XX-Mar-2013
 			jsval_from_NSDictionary works as expected
 - [FIX] JSB Generator: Fixed error when class has callbacks but no manual methods
 			Simplified code. JSB_jsval_to is called directly. No need to add functions for that
+			Generator generates bindings for jsval_from_nsdictionary
+			Generator does not crash if informal_protocols are not present
+
 
 version 0.5 - 29-Jan-2013
 - [FIX] JSB: Errors inside require() are reported correctly

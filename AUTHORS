@@ -18,6 +18,8 @@ Contributors (alphabetically ordered):
 	Added JSB_jsval_to_NSDictionary
 	Simplified generate_jsb code by calling JSB_jsval_to directly
 	Added error checking when callbacks returns a value
+	Generator generates bindings from_Dictionary
+	Generator does not crash if informal_protocols are not present
 
 * Sean Lin (http://www.cocos2d-html5.org):
     Added cc.Loader compatibility with cocos2d-html5
