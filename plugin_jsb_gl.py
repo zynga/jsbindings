@@ -118,11 +118,11 @@ class JSBGenerateFunctions_GL(JSBGenerateFunctions):
         if self._current_typedarray:
 
             # Special case: JS UniformMatrix receives 3 args, while C receives 4. C 'count' should be replaced with '1'
-            if re.match('glUniformMatrix[2-4][fi]v$', self._current_funcname) and arg['name'] == 'count':
+            if re.match('glUniformMatrix[2-4][fi]v$', self._current_funcname) and 'name' in arg and arg['name'] == 'count':
                 return (None, None)
 
             # Skip count, size: ivars for glUniformXXX, glBufferData, etc...
-            if self._with_count and arg['name'] in self.args_to_ignore_in_js:
+            if self._with_count and 'name' in arg and arg['name'] in self.args_to_ignore_in_js:
                 return (None, None)
 
             # Vector thing

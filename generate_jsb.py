@@ -184,22 +184,22 @@ class JSBGenerate(object):
         }
 
         self.objc_to_js_conversions = {
-            'i': 'INT_TO_JSVAL((int32_t)%(retval)s)',
-            'u': 'UINT_TO_JSVAL((uint32_t)%(retval)s)',
-            'b': 'BOOLEAN_TO_JSVAL(%(retval)s)',
-            's': 'STRING_TO_JSVAL(%(retval)s)',
-            'd': 'DOUBLE_TO_JSVAL(%(retval)s)',
-            'c': 'INT_TO_JSVAL((int32_t)%(retval)s)',
-            'long': 'JSB_jsval_from_long(cx, %(retval)s)',                # long: not supported on JS 64-bit
-            'longlong': 'JSB_jsval_from_longlong(cx, %(retval)s)',        # long long: not supported on JS
+            'i': 'INT_TO_JSVAL((int32_t)%(objc_val)s)',
+            'u': 'UINT_TO_JSVAL((uint32_t)%(objc_val)s)',
+            'b': 'BOOLEAN_TO_JSVAL(%(objc_val)s)',
+            's': 'STRING_TO_JSVAL(%(objc_val)s)',
+            'd': 'DOUBLE_TO_JSVAL(%(objc_val)s)',
+            'c': 'INT_TO_JSVAL((int32_t)%(objc_val)s)',
+            'long': 'JSB_jsval_from_long(cx, %(objc_val)s)',                # long: not supported on JS 64-bit
+            'longlong': 'JSB_jsval_from_longlong(cx, %(objc_val)s)',        # long long: not supported on JS
             'void': 'JSVAL_VOID',
             None: 'JSVAL_VOID',
-            'o': 'JSB_jsval_from_NSObject(cx, %(retval)s)',
-            'S': 'JSB_jsval_from_NSString( cx, (NSString*) %(retval)s )',
-            'char*': 'JSB_jsval_from_charptr( cx, %(retval)s )',
-            'array': 'JSB_jsval_from_NSArray( cx, (NSArray*) %(retval)s )',
-            'set': 'JSB_jsval_from_NSSet( cx, (NSSet*) %(retval)s )',
-            'dict': 'JSB_jsval_from_NSDictionary( cx, (NSDictionary*) %(retval)s )',
+            'o': 'JSB_jsval_from_NSObject(cx, %(objc_val)s)',
+            'S': 'JSB_jsval_from_NSString( cx, (NSString*) %(objc_val)s )',
+            'char*': 'JSB_jsval_from_charptr( cx, %(objc_val)s )',
+            'array': 'JSB_jsval_from_NSArray( cx, (NSArray*) %(objc_val)s )',
+            'set': 'JSB_jsval_from_NSSet( cx, (NSSet*) %(objc_val)s )',
+            'dict': 'JSB_jsval_from_NSDictionary( cx, (NSDictionary*) %(objc_val)s )',
         }
 
         # Arguments only
@@ -423,78 +423,30 @@ class JSBGenerate(object):
             return '\tJS_SET_RVAL(cx, vp, JSVAL_TRUE);'
 
         conversion = self.convert_objc_to_js(declared_type, js_type)
-        conversion = conversion % ({ 'retval': 'ret_val' })
+        conversion = conversion % ({ 'objc_val': 'ret_val' })
 
         template = '''
 \tJS_SET_RVAL(cx, vp, %s);
 '''
         return template % (conversion)
 
+
     def validate_retval(self, method, class_name=None):
-
-#        s = method['selector']
-
-        ret_js_type = None
-        ret_declared_type = None
-
         # parse ret value
         if 'retval' in method:
-            retval = method['retval']
-            t = retval[0]['type']
-            dt = retval[0]['declared_type']
-            # const ?
-            if 'const' in retval[0]:
-                dt = 'const ' + dt
-            dt_class_name = dt.replace('*', '')
-
             # Special case for initializer methods
             if self.is_method_initializer(method):
-                ret_js_type = None
-                ret_declared_type = None
+                return (None, None)
 
             # Special case for class constructors
             elif self.is_class_constructor(method):
-                ret_js_type = 'o'
-                ret_declared_type = class_name + '*'
+                return ('o', class_name + '*')
 
-            # Part of supported declared types ?
-            elif dt in self.supported_declared_types:
-                ret_js_type = self.supported_declared_types[dt]
-                ret_declared_type = dt
+            retval = method['retval'][0]
+            return self.validate_argument(retval)
 
-            # Part of supported types ?
-            elif t in self.supported_types:
-                if self.supported_types[t] == None:  # void type
-                    ret_js_type = None
-                    ret_declared_type = 'void'
-                else:
-                    ret_js_type = self.supported_types[t]
-                    ret_declared_type = retval[0]['declared_type']
 
-            # special case for Objects
-            elif t == '@' and dt_class_name in self.supported_classes:
-                ret_js_type = 'o'
-                ret_declared_type = dt
-
-            # valid automatic struct ?
-            elif self.is_valid_structure(t):
-                ret_js_type = t
-                ret_declared_type = dt
-
-            # valid opaque struct ?
-            elif dt in self.struct_opaque:
-                ret_js_type = 'N/A'
-                ret_declared_type = dt
-
-            # valid manual struct ?
-            elif dt in self.struct_manual:
-                ret_js_type = 'N/A'
-                ret_declared_type = dt
-
-            else:
-                raise ParseException('Unsupported return value %s' % dt)
-
-        return (ret_js_type, ret_declared_type)
+        return (None, None)
 
     def validate_argument(self, arg):
 
@@ -580,17 +532,17 @@ class JSBGenerate(object):
         if objc_type in self.function_classes and self.generating_OOF:
             # remove '*' from class name
             klass = objc_type[:-1]
-            template = 'JSB_jsval_from_c_class( cx, %%(retval)s, %s, %s, "%s" )'
+            template = 'JSB_jsval_from_c_class( cx, %%(objc_val)s, %s, %s, "%s" )'
             return template % ('JSB_%s_object' % klass, 'JSB_%s_class' % klass, klass)
         elif objc_type in self.struct_opaque:
-            return 'JSB_jsval_from_opaque( cx, %(retval)s )'
+            return 'JSB_jsval_from_opaque( cx, %(objc_val)s )'
         elif objc_type in self.struct_manual:
             new_name = self.get_name_for_manual_struct(objc_type)
-            template = 'JSB_jsval_from_%s( cx, (%s)%%(retval)s )'
+            template = 'JSB_jsval_from_%s( cx, (%s)%%(objc_val)s )'
             return template % (new_name, objc_type)
         elif self.is_valid_structure(js_type):
             t, l = self.get_struct_type_and_num_of_elements(js_type)
-            template = 'JSB_jsval_from_struct( cx, %d, &%%(retval)s, %s )'
+            template = 'JSB_jsval_from_struct( cx, %d, &%%(objc_val)s, %s )'
             return template % (l, t)
         elif js_type in self.objc_to_js_conversions:
             return self.objc_to_js_conversions[js_type]
@@ -1306,39 +1258,16 @@ extern JSClass *%s_class;
 \t\t\tjsval argv[%d];
 '''
 
-        convert = {
-            'i': 'INT_TO_JSVAL(%s);',
-            'c': 'INT_TO_JSVAL(%s);',
-            'b': 'BOOLEAN_TO_JSVAL(%s);',
-            'f': 'DOUBLE_TO_JSVAL(%s);',
-            'd': 'DOUBLE_TO_JSVAL(%s);',
-        }
-
-        #
-        # XXX Only supports a limited amount of parameters
-        # XXX generate_retval should be reused
-        #
+        # Convert arguments to callback method (objc to js)
         if 'arg' in method:
             args_len = self.get_number_of_arguments(method)
             for i, arg in enumerate(method['arg']):
-                t = arg['type'].lower()
-                dt = arg['declared_type']
+                t, dt = self.validate_argument(arg)
 
-                if dt[-1] == '*':
-                    dt = dt[:-1]
+                conversion = self.convert_objc_to_js(dt, t)
+                conversion = conversion % ({'objc_val': arg['name']})
 
-                if t in convert:
-                    tmp = convert[t] % arg['name']
-                    with_args += "\t\t\targv[%d] = %s\n" % (i, tmp)
-                elif dt == 'NSSet':
-                    with_args += "\t\t\targv[%d] = JSB_jsval_from_NSSet( cx, %s );\n" % (i, arg['name'])
-                elif dt == 'NSDictionary':
-                    with_args += "\t\t\targv[%d] = JSB_jsval_from_NSDictionary( cx, %s );\n" % (i, arg['name'])
-                elif t == '@' and (dt in self.supported_classes or dt in self.class_manual):
-                    with_args += "\t\t\targv[%d] = JSB_jsval_from_NSObject( cx, %s );\n" % (i, arg['name'])
-                else:
-                    with_args += '\t\t\targv[%d] = JSVAL_VOID; // XXX TODO Value not supported (%s) \n' % (i, dt)
-
+                with_args += "\t\t\targv[%d] = %s;\n" % (i, conversion)
             return with_args % (args_len, args_len)
         return no_args
 
@@ -1838,7 +1767,10 @@ JSBool %s%s(JSContext *cx, uint32_t argc, jsval *vp) {
             self.generate_arguments(args_declared_type, args_js_type)
 
         if ret_js_type:
-            self.fd_mm.write('\t%s ret_val;\n' % ret_declared_type)
+            ret_type = ret_declared_type
+            if 'const' in function['retval'][0]:
+                ret_type = 'const ' + ret_type
+            self.fd_mm.write('\t%s ret_val;\n' % ret_type)
 
         call_real = self.generate_function_c_call(func_name, num_of_args, ret_js_type, args_declared_type)
         self.fd_mm.write('\n%s\n' % call_real)
