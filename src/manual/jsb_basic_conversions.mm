@@ -927,6 +927,43 @@ jsval JSB_jsval_from_charptr( JSContext *cx, const char *str)
 	return STRING_TO_JSVAL(ret_obj);
 }
 
+jsval JSB_jsval_from_struct( JSContext *cx, GLsizei count, void *data, JSArrayBufferViewType t)
+{
+	JSObject *typedArray;
+	switch (t) {
+		case js::ArrayBufferView::TYPE_INT8:
+			typedArray = JS_NewInt8Array(cx, count);
+			break;
+		case js::ArrayBufferView::TYPE_UINT8:
+			typedArray = JS_NewUint8Array(cx, count);
+			break;
+		case js::ArrayBufferView::TYPE_INT16:
+			typedArray = JS_NewInt16Array(cx, count);
+			break;
+		case js::ArrayBufferView::TYPE_UINT16:
+			typedArray = JS_NewUint16Array(cx, count);
+			break;
+		case js::ArrayBufferView::TYPE_INT32:
+			typedArray = JS_NewInt32Array(cx, count);
+			break;
+		case js::ArrayBufferView::TYPE_UINT32:
+			typedArray = JS_NewUint32Array(cx, count);
+			break;
+		case js::ArrayBufferView::TYPE_FLOAT32:
+			typedArray = JS_NewFloat32Array(cx, count);
+			break;
+		case js::ArrayBufferView::TYPE_FLOAT64:
+			typedArray = JS_NewFloat64Array(cx, count);
+			break;
+		default:
+			JSB_PRECONDITION2(NO, cx, JSVAL_NULL, "Unsupported typedarray type");
+			break;
+	}
+	
+	memcpy(JS_GetArrayBufferViewData(typedArray), data, JS_GetArrayBufferViewByteLength(typedArray));
+	return OBJECT_TO_JSVAL(typedArray);
+}
+
 JSB_Callback* JSB_prepare_callback( JSContext *cx, JSObject *jsthis, jsval funcval)
 {
 	return [[[JSB_Callback alloc] initWithContext:cx funcval:funcval jsthis:jsthis] autorelease];
