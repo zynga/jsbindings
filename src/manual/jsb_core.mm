@@ -316,12 +316,6 @@ JSBool JSB_core_restartVM(JSContext *cx, uint32_t argc, jsval *vp)
 	return self;
 }
 
-#if defined(DEBUG)
-#define MAX_STACK_QUOTA 5000000
-#else
-#define MAX_STACK_QUOTA 500000
-#endif
-
 JSPrincipals shellTrustedPrincipals = { 1 };
 
 JSBool
@@ -345,7 +339,7 @@ JSSecurityCallbacks securityCallbacks = {
 	
     JS_SetTrustedPrincipals(_rt, &shellTrustedPrincipals);
     JS_SetSecurityCallbacks(_rt, &securityCallbacks);
-	JS_SetNativeStackQuota(_rt, MAX_STACK_QUOTA);
+	JS_SetNativeStackQuota(_rt, JSB_MAX_STACK_QUOTA);
 	_cx = JS_NewContext( _rt, 8192);
 	JS_SetVersion(_cx, JSVERSION_LATEST);
 	JS_SetOptions(_cx, JSOPTION_VAROBJFIX | JSOPTION_TYPE_INFERENCE);

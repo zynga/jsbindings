@@ -157,6 +157,14 @@
 #define JSB_ENABLE_DEBUGGER 0
 #endif // JSB_ENABLE_DEBUGGER
 
+#ifndef JSB_MAX_STACK_QUOTA
+#ifdef DEBUG
+#define JSB_MAX_STACK_QUOTA 5000000
+#else
+#define JSB_MAX_STACK_QUOTA 500000
+#endif
+#endif // JSB_MAX_STACK_QUOTA
+
 #if JSB_ENABLE_DEBUGGER
 #define JSB_ENSURE_AUTOCOMPARTMENT(cx, obj) \
 JSAutoCompartment ac(cx, obj)

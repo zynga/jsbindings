@@ -499,8 +499,6 @@ JSBool JSB_CCNode_node_static(JSContext *cx, uint32_t argc, jsval *vp) {
 	return JS_TRUE;
 }
 
-#include "jsfriendapi.h"
-
 // Arguments: 
 // Ret value: CGAffineTransform ({CGAffineTransform=ffffff})
 JSBool JSB_CCNode_nodeToParentTransform(JSContext *cx, uint32_t argc, jsval *vp) {
