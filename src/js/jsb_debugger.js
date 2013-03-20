@@ -1,4 +1,6 @@
 dbg = {};
+cc = {};
+cc.log = log;
 
 var breakpointHandler = {
 	hit: function (frame) {
@@ -21,6 +23,32 @@ var stepFunction = function (frame, script) {
 		cc.log("invalid state onStep");
 	}
 };
+
+var debugObject = function (r, isNormal) {
+	_bufferWrite("* " + (typeof r) + "\n");
+	if (typeof r != "object") {
+		_bufferWrite("~> " + r + "\n");
+	} else {
+		var props;
+		if (isNormal) {
+			props = Object.keys(r);
+		} else {
+			props = r.getOwnPropertyNames();
+		}
+		for (k in props) {
+			var desc = r.getOwnPropertyDescriptor(props[k]);
+			_bufferWrite("~> " + props[k] + " = ");
+			if (desc.value) {
+				_bufferWrite("" + desc.value);
+			} else if (desc.get) {
+				_bufferWrite("" + desc.get());
+			} else {
+				_bufferWrite("undefined (no value or getter)");
+			}
+			_bufferWrite("\n");
+		}
+	}
+}
 
 dbg.breakLine = 0;
 
@@ -83,30 +111,24 @@ this.processInput = function (str, frame, script) {
 		_unlockVM();
 		return;
 	}
+	md = str.match(/^deval\s+(.+)/);
+	if (md) {
+		try {
+			var tmp = eval(md[1]);
+			if (tmp) {
+				debugObject(tmp, true);
+			}
+		} catch (e) {
+			_bufferWrite("!! got exception: " + e.message);
+		}
+		return;
+	}
 	md = str.match(/^eval\s+(.+)/);
 	if (md && frame) {
 		var res = frame['eval'](md[1]),
 			k;
 		if (res && res['return']) {
-			var r = res['return'];
-			_bufferWrite("* " + (typeof r) + "\n");
-			if (typeof r != "object") {
-				_bufferWrite("~> " + r + "\n");
-			} else {
-				var props = r.getOwnPropertyNames();
-				for (k in props) {
-					var desc = r.getOwnPropertyDescriptor(props[k]);
-					_bufferWrite("~> " + props[k] + " = ");
-					if (desc.value) {
-						_bufferWrite("" + desc.value);
-					} else if (desc.get) {
-						_bufferWrite("" + desc.get());
-					} else {
-						_bufferWrite("undefined (no value or getter)");
-					}
-					_bufferWrite("\n");
-				}
-			}
+			debugObject(res['return']);
 		} else if (res && res['throw']) {
 			_bufferWrite("!! got exception: " + res['throw'].message + "\n");
 		} else {
