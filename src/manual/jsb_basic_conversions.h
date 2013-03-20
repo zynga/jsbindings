@@ -119,6 +119,7 @@ jsval JSB_jsval_from_c_class( JSContext *cx, void* handle, JSObject* object, JSC
 /* Converts a char ptr into a jsval (using JS string) */
 jsval JSB_jsval_from_charptr( JSContext *cx, const char *str);
 jsval JSB_jsval_from_unknown( JSContext *cx, id obj);
+jsval JSB_jsval_from_struct( JSContext *cx, GLsizei count, void *data, JSArrayBufferViewType t);
 
 /** Adds GC roots for funcval and jsthis tied to the lifetime of a block */
 @interface JSB_Callback : NSObject

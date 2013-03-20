@@ -30,7 +30,8 @@ version 0.6 - XX-Mar-2013
 		Simplified code. JSB_jsval_to is called directly. No need to add functions for that
 		Generator generates bindings for jsval_from_nsdictionary
 		Generator does not crash if informal_protocols are not present
-
+		Unified conversions between callbacks retvals and retvals
+		Simplified code when parsing structs
 
 version 0.5 - 29-Jan-2013
 - [FIX] JSB: Errors inside require() are reported correctly
