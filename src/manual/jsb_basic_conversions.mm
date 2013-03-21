@@ -277,8 +277,13 @@ JSBool JSB_jsval_to_unknown(JSContext *cx, jsval vp, id* ret)
 	else if (JSVAL_IS_STRING(vp)) {
 		return JSB_jsval_to_NSString( cx, vp, ret );
 	}
-	// Null or undefined
-	else if (JSVAL_IS_NULL(vp) || JSVAL_IS_VOID(vp)) {
+	// Null
+	else if (JSVAL_IS_NULL(vp)) {
+		*ret = [NSNull class];
+		return JS_TRUE;
+	}
+	// undefined
+	else if (JSVAL_IS_VOID(vp)) {
 		*ret = NULL;
 		return JS_TRUE;
 	}
