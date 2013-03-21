@@ -157,6 +157,13 @@
 #define JSB_ENABLE_DEBUGGER 0
 #endif // JSB_ENABLE_DEBUGGER
 
+/** @def JSB_DEBUGGER_OUTPUT_STDOUT
+ Set this to 1 to send the debugger output to the stdout *and* to the socket
+ */
+#ifndef JSB_DEBUGGER_OUTPUT_STDOUT
+#define JSB_DEBUGGER_OUTPUT_STDOUT 0
+#endif // JSB_DEBUGGER_OUTPUT_STDOUT
+
 #ifndef JSB_MAX_STACK_QUOTA
 #ifdef DEBUG
 #define JSB_MAX_STACK_QUOTA 5000000

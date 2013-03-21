@@ -5,6 +5,7 @@
 #include <string>
 #include <sstream>
 #include <vector>
+#include <stdio.h>
 #include <pthread.h>
 #include <sched.h>
 #include "jsb_dbg.h"
@@ -27,7 +28,7 @@ int clientSocket;
 #define DEBUGGER_PORT 1337
 bool serverAlive = true;
 
-void processInput(string data) {
+void debugProcessInput(string data) {
 	NSString* str = [NSString stringWithUTF8String:data.c_str()];
 	if (vmLock) {
 		pthread_mutex_lock(&g_qMutex);
@@ -35,7 +36,7 @@ void processInput(string data) {
 		pthread_mutex_unlock(&g_qMutex);
 	} else {
 		[[JSBCore sharedInstance] performSelector:@selector(debugProcessInput:) onThread:[NSThread mainThread] withObject:str waitUntilDone:YES];
-	}
+	}	
 }
 
 void clearBuffers() {
@@ -43,10 +44,13 @@ void clearBuffers() {
 	{
 		// only process input if there's something and we're not locked
 		if (inData.length() > 0) {
-			processInput(inData);
+			debugProcessInput(inData);
 			inData.clear();
 		}
 		if (outData.length() > 0) {
+#if JSB_DEBUGGER_OUTPUT_STDOUT
+			write(STDOUT_FILENO, outData.c_str(), outData.length());
+#endif
 			write(clientSocket, outData.c_str(), outData.length());
 			outData.clear();
 		}
