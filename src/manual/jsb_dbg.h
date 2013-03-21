@@ -35,11 +35,12 @@
 @end
 
 extern std::map<std::string, js::RootedScript*> __scripts;
-extern std::map<int, int> __sockets;
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+void debugProcessInput(std::string data);
 
 JSBool JSBDebug_StartDebugger(JSContext* cx, unsigned argc, jsval* vp);
 JSBool JSBDebug_BufferRead(JSContext* cx, unsigned argc, jsval* vp);
