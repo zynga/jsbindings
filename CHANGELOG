@@ -1,4 +1,6 @@
-version 0.6 - XX-Mar-2013
+version 0.7 - XX-Apr-2013
+
+version 0.6 - 20-Mar-2013
 - [NEW] Files: renamed js_bindigns_ to jsb_
 - [NEW] JSB JS code:
 		Added cocos2d and OpenGL constants (automatically created)
