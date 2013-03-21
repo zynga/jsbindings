@@ -9,6 +9,7 @@
 #include <pthread.h>
 #include <sched.h>
 #include "jsb_dbg.h"
+#include "jsb_config.h"
 #include "jsdbgapi.h"
 
 using namespace std;
