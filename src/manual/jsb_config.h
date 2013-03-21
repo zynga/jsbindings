@@ -48,6 +48,8 @@
 		if( ! JS_IsExceptionPending( globalContext ) ) {						\
 			printf("jsb: ERROR in %s: %s\n", __FUNCTION__, error_msg);			\
 			JS_ReportError( globalContext, error_msg );							\
+		} else {																\
+			JS_ReportPendingException(globalContext);							\
 		}																		\
 		return JS_FALSE;														\
 	}																			\
@@ -57,7 +59,8 @@
 		printf("jsb: ERROR in %s: %s\n", __FUNCTION__, error_msg);				\
 		if( ! JS_IsExceptionPending( context ) ) {								\
 			printf("jsb: ERROR in %s: %s\n", __FUNCTION__, error_msg);			\
-			JS_ReportError( context, error_msg );								\
+		} else {																\
+			JS_ReportPendingException(context);									\
 		}																		\
 		return ret_value;														\
 	}																			\
@@ -153,6 +156,14 @@
 #ifndef JSB_ENABLE_DEBUGGER
 #define JSB_ENABLE_DEBUGGER 0
 #endif // JSB_ENABLE_DEBUGGER
+
+#ifndef JSB_MAX_STACK_QUOTA
+#ifdef DEBUG
+#define JSB_MAX_STACK_QUOTA 5000000
+#else
+#define JSB_MAX_STACK_QUOTA 500000
+#endif
+#endif // JSB_MAX_STACK_QUOTA
 
 #if JSB_ENABLE_DEBUGGER
 #define JSB_ENSURE_AUTOCOMPARTMENT(cx, obj) \
