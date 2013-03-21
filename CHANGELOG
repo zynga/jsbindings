@@ -1,14 +1,23 @@
-version 0.6 - XX-Mar-2013
+version 0.7 - XX-Apr-2013
+- [FIX] JSB native code:
+		Fixed rounding error in JSB_jsval_from_NSNumber
+		JSB_jsval_to_NSSet uses a real NSSet
+		In JSB_jsval_to_NSDictionary the key can be a number or a string
+		JSB_jsval_to_unknown: if a jsvalue is null, it returns [NSNull null]
+		Debugger works with SpiderMonkey v19
+
+
+version 0.6 - 20-Mar-2013
 - [NEW] Files: renamed js_bindigns_ to jsb_
 - [NEW] JSB JS code:
 		Added cocos2d and OpenGL constants (automatically created)
 		Added cc.Loader. Compatible with cocos2d-html5
 - [NEW] JSB native code:
 		common: New Naming Convention:
-        	XXX_to_jsval -> JSB_jsval_from_XXX
-        	jsval_to_XXX -> JSB_jsval_to_XXX
-        	All JSB functions start with "JSB_"
-        common: jsval_to_NSDictionary is supported
+			XXX_to_jsval -> JSB_jsval_from_XXX
+			jsval_to_XXX -> JSB_jsval_to_XXX
+			All JSB functions start with "JSB_"
+		common: jsval_to_NSDictionary is supported
 - [NEW] JSB Generator: Added support for plugins. Very easy to customize parsing of 3rd party library
 - [NEW] SpiderMonkey 19 Compatibility
 		JS_PROP_SHAREABLE: it no longer used
@@ -39,7 +48,7 @@ version 0.5 - 29-Jan-2013
 		Removed JSB_PRECONDITION3(). Merged in JSB_PRECONDITION2()
 		ParticleBatchNode is bound with the official API, like SpriteBatchNode
 		cc.DrawNode.drawPoly works.
-       JSB_jsval_to_NSObject returns NSNull if jsval is null
+	   JSB_jsval_to_NSObject returns NSNull if jsval is null
 
 version 0.4 - 4-Dec-2012
 - [FIX] JSB Chipmunk: Added missing properties
@@ -71,8 +80,8 @@ version 0.2 - XX-Sept-2012
 version 0.1 - 21-Ago-2012
  - [NEW] Initial public release
  - [NEW] bindings:
- 	- Added bindings for cocos2d-iphone v2.1
- 	- Added bindings for Chipmunk v6.1.1
- 	- Added bindings for CocosBuilder Reader
- 	- Added bindings for CocosDenshion
+	- Added bindings for cocos2d-iphone v2.1
+	- Added bindings for Chipmunk v6.1.1
+	- Added bindings for CocosBuilder Reader
+	- Added bindings for CocosDenshion
 

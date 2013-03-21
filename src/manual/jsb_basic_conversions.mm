@@ -230,7 +230,7 @@ JSBool JSB_jsval_to_NSSet( JSContext *cx, jsval vp, NSSet** ret)
 
 	uint32_t len;
 	JS_GetArrayLength(cx, jsobj,&len);
-	NSMutableSet *set = [NSMutableArray arrayWithCapacity:len];
+	NSMutableArray *array = [NSMutableArray arrayWithCapacity:len];
 	for( uint32_t i=0; i< len;i++ ) {		
 		jsval valarg;
 		JS_GetElement(cx, jsobj, i, &valarg);
@@ -240,9 +240,9 @@ JSBool JSB_jsval_to_NSSet( JSContext *cx, jsval vp, NSSet** ret)
 		ok = JSB_jsval_is_NSObject( cx, valarg, &real_obj );
 		JSB_PRECONDITION2( ok, cx, JS_FALSE, "Error converting value to nsobject");
 		
-		[set addObject:real_obj];
+		[array addObject:real_obj];
 	}
-	*ret = set;
+	*ret = [NSSet setWithArray:array];;
 	return JS_TRUE;
 }
 
@@ -277,8 +277,13 @@ JSBool JSB_jsval_to_unknown(JSContext *cx, jsval vp, id* ret)
 	else if (JSVAL_IS_STRING(vp)) {
 		return JSB_jsval_to_NSString( cx, vp, ret );
 	}
-	// Null or undefined
-	else if (JSVAL_IS_NULL(vp) || JSVAL_IS_VOID(vp)) {
+	// Null
+	else if (JSVAL_IS_NULL(vp)) {
+		*ret = [NSNull class];
+		return JS_TRUE;
+	}
+	// undefined
+	else if (JSVAL_IS_VOID(vp)) {
 		*ret = NULL;
 		return JS_TRUE;
 	}
@@ -753,7 +758,7 @@ jsval JSB_jsval_from_NSObject( JSContext *cx, id obj )
 
 jsval JSB_jsval_from_NSNumber( JSContext *cx, NSNumber *number)
 {
-	double ret_obj = [number floatValue];
+	double ret_obj = [number doubleValue];
 	return DOUBLE_TO_JSVAL(ret_obj);
 }
 
@@ -784,9 +789,16 @@ jsval JSB_jsval_from_NSDictionary( JSContext *cx, NSDictionary *dict)
 	__block JSObject *jsobj = JS_NewObject(cx, NULL, NULL, NULL);
 	
 	[dict enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
-		NSString *k = (NSString*)key;
-		jsval val = JSB_jsval_from_unknown(cx, obj);
-		JS_DefineProperty(cx, jsobj, [k UTF8String], val, NULL, NULL, JSPROP_ENUMERATE | JSPROP_PERMANENT);
+		const char *k = NULL;
+        	if([key isKindOfClass:[NSString class]]) {
+           		k = [(NSString*)key UTF8String];
+        	} else if([key isKindOfClass:[NSNumber class]]) {
+            		k = [[(NSNumber*)key stringValue] UTF8String];
+        	} 
+        	if(k) {
+			jsval val = JSB_jsval_from_unknown(cx, obj);
+			JS_DefineProperty(cx, jsobj, k, val, NULL, NULL, JSPROP_ENUMERATE | JSPROP_PERMANENT);
+        	}
 		*stop = NO;
 	}];
 

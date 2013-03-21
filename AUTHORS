@@ -7,6 +7,12 @@ Lead Developer
 
 Contributors (alphabetically ordered):
 
+* Mario Adrian (http://ma-source.de/):
+    Fixed rounding error in JSB_jsval_from_NSNumber
+    JSB_jsval_to_NSSet uses a real NSSet
+    In JSB_jsval_to_NSDictionary the key can be a number or a string
+    JSB_jsval_to_unknown: if a jsvalue is null, it returns [NSNull null]
+
 * Rolando Abarca (https://github.com/funkaster):
     Author of remote debugging code
 

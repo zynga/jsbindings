@@ -93,6 +93,10 @@ class JSBGenerate(object):
         # Generating Object Oriented Functions ?
         self.generating_OOF = False
 
+        # list of JS functions names that have a C / C++ implementation
+        # Used to generate 'externs' definitions for Google Closure
+        self.bound_js_functions = []
+
         #
         # UGLY CODE XXX
         # This should be accessed using self.config, not the following ugly code
@@ -619,6 +623,25 @@ class JSBGenerate(object):
 
         self.fd_mm.write('\tJSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");\n')
 
+    #
+    # Externs related
+    #
+    def externs_create_file(self):
+        self.externs_fd = open('%s_externs.js' % (self.namespace), 'w')
+
+    def externs_close_file(self):
+        self.externs_fd.close()
+
+    def externs_write_function(self, func_name):
+        js_body = 'function %s(){};\n'
+        self.externs_fd.write(js_body % func_name)
+
+    def generate_externs(self):
+        if len(self.bound_js_functions) > 0:
+            self.externs_create_file()
+            for function_name in self.bound_js_functions:
+                self.externs_write_function(function_name)
+            self.externs_close_file()
 
 #
 #
@@ -710,18 +733,17 @@ class JSBGenerateClasses(JSBGenerate):
                         return m
 
         # Not found... search in protocols
-        if 'informal_protocol' in self.bs['signatures']:
+        if 'informal_protocol' in self.bs['signatures'] and 'protocols' in self.complement[class_name]:
             list_of_protocols = self.bs['signatures']['informal_protocol']
-            if 'protocols' in self.complement[class_name]:
-                protocols = self.complement[class_name]['protocols']
-                for protocol in protocols:
-                    for ip in list_of_protocols:
-                        # protocol match ?
-                        if ip['name'] == protocol:
-                            # traverse method then
-                            for m in ip['method']:
-                                if m['selector'] == method_name:
-                                    return m
+            protocols = self.complement[class_name]['protocols']
+            for protocol in protocols:
+                for ip in list_of_protocols:
+                    # protocol match ?
+                    if ip['name'] == protocol:
+                        # traverse method then
+                        for m in ip['method']:
+                            if m['selector'] == method_name:
+                                return m
 
         raise MethodNotFoundException("Method not found for %s # %s" % (class_name, method_name))
 
@@ -1789,13 +1811,17 @@ JSBool %s%s(JSContext *cx, uint32_t argc, jsval *vp) {
                 break
 
         num_args = self.get_number_of_arguments(function)
+        js_func_name = self.convert_function_name_to_js(func_name)
         template = 'JS_DefineFunction(_cx, %s, "%s", %s, %d, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );\n' % \
                   (self.namespace,
-                   self.convert_function_name_to_js(func_name),
+                   js_func_name,
                    PROXY_PREFIX + func_name,
                    num_args)
 
         self.function_registration_file.write(template)
+
+        # Add bound function to list of JS bound functions
+        self.bound_js_functions.append('%s.%s' % (self.config.js_namespace, js_func_name))
 
     def generate_functions_registration(self):
         self.function_registration_file = open('%s%s_functions_registration.h' % (BINDINGS_PREFIX, self.namespace), 'w')
@@ -2956,6 +2982,7 @@ class JSBindings(object):
             else:
                 functions = JSBGenerateFunctions(self)
             functions.generate_bindings()
+            functions.generate_externs()
 
         #
         # Object Oriented C code
@@ -2981,7 +3008,7 @@ class JSBindings(object):
 
 
 def help():
-    print "%s %s - Script that generates glue code between Objective-C and JavaScript" % (sys.argv[0], JSB_VERSION)
+    print "%s %s - Script that generates glue code between C / Objective-C and JavaScript" % (sys.argv[0], JSB_VERSION)
     print "Usage:"
     print "\t-c --config-file\tConfiguration file needed to generate the glue code."
     print "\nExample:"
