@@ -72,9 +72,12 @@ static JSClass global_class = {
 #pragma mark JSBCore - Helper free functions
 static void reportError(JSContext *cx, const char *message, JSErrorReport *report)
 {
-	fprintf(stderr, "%s:%u:%s\n",
-			report->filename ? report->filename : "<no filename=\"filename\">",
-			(unsigned int) report->lineno,
+	js_DumpBacktrace(cx);
+	js_DumpStackFrame(cx);
+	fprintf(stderr, "%s:%u:%u %s\n",
+			report->filename ? report->filename : "(no filename)",
+			(unsigned int)report->lineno,
+			(unsigned int)report->column,
 			message);
 };
 
@@ -313,16 +316,39 @@ JSBool JSB_core_restartVM(JSContext *cx, uint32_t argc, jsval *vp)
 	return self;
 }
 
+JSPrincipals shellTrustedPrincipals = { 1 };
+
+JSBool
+CheckObjectAccess(JSContext *cx, js::HandleObject obj, js::HandleId id, JSAccessMode mode,
+                  js::MutableHandleValue vp)
+{
+    return true;
+}
+
+JSSecurityCallbacks securityCallbacks = {
+    CheckObjectAccess,
+    NULL
+};
+
 -(void) createRuntime
 {
 	NSAssert(_rt == NULL && _cx==NULL, @"runtime already created. Reset it first");
 
-	_rt = JS_NewRuntime(8 * 1024 * 1024, JS_NO_HELPER_THREADS);
+	_rt = JS_NewRuntime(32L * 1024L * 1024L, JS_USE_HELPER_THREADS);
+    JS_SetGCParameter(_rt, JSGC_MAX_BYTES, 0xffffffff);
+	
+    JS_SetTrustedPrincipals(_rt, &shellTrustedPrincipals);
+    JS_SetSecurityCallbacks(_rt, &securityCallbacks);
+	JS_SetNativeStackQuota(_rt, JSB_MAX_STACK_QUOTA);
 	_cx = JS_NewContext( _rt, 8192);
 	JS_SetVersion(_cx, JSVERSION_LATEST);
 	JS_SetOptions(_cx, JSOPTION_VAROBJFIX | JSOPTION_TYPE_INFERENCE);
 	JS_SetErrorReporter(_cx, reportError);
-	_object = JSB_NewGlobalObject(_cx, false);
+	_object = new js::RootedObject(_cx, JSB_NewGlobalObject(_cx, false));
+#if JSB_ENABLE_DEBUGGER
+	JS_SetDebugMode(_cx, JS_TRUE);
+	[self enableDebugger];
+#endif
 }
 
 +(void) reportErrorWithContext:(JSContext*)cx message:(NSString*)message report:(JSErrorReport*)report
@@ -399,7 +425,7 @@ JSBool JSB_core_restartVM(JSContext *cx, uint32_t argc, jsval *vp)
 		outVal = &rval;
 	}
 	const char *cstr = [string UTF8String];
-	ok = JS_EvaluateScript( _cx, _object, cstr, (unsigned)strlen(cstr), filename, lineno, outVal);
+	ok = JS_EvaluateScript( _cx, _object->get(), cstr, (unsigned)strlen(cstr), filename, lineno, outVal);
 	if (ok == JS_FALSE) {
 		CCLOGWARN(@"error evaluating script:%@", string);
 	}
@@ -421,7 +447,7 @@ JSBool JSB_core_restartVM(JSContext *cx, uint32_t argc, jsval *vp)
 	size_t contentSize = ccLoadFileIntoMemory([fullpath UTF8String], &content);
 	if (content && contentSize) {
 		jsval rval;
-		ok = JS_EvaluateScript( _cx, _object, (char *)content, (unsigned)contentSize, [filename UTF8String], 1, &rval);
+		ok = JS_EvaluateScript( _cx, _object->get(), (char *)content, (unsigned)contentSize, [filename UTF8String], 1, &rval);
 		free(content);
 
 		if (ok == JS_FALSE)
@@ -436,10 +462,10 @@ JSBool JSB_core_restartVM(JSContext *cx, uint32_t argc, jsval *vp)
  */
 -(JSBool) runScript:(NSString*)filename
 {
-	return [self runScript:filename withContainer:_object];
+	return [self runScript:filename withContainer:_object->get()];
 }
 
--(JSBool) runScript:(NSString*)filename withContainer:(JSObject *)global
+- (JSBool)runScript:(NSString*)filename withContainer:(JSObject *)global
 {
 	JSBool ok = JS_FALSE;
 
@@ -465,6 +491,11 @@ JSBool JSB_core_restartVM(JSContext *cx, uint32_t argc, jsval *vp)
 		jsval result;
 		ok = JS_ExecuteScript(_cx, obj, script, &result);
 	}
+	if (!ok) {
+		char tmp[256];
+		snprintf(tmp, sizeof(tmp)-1, "Error executing script: %s", [filename UTF8String]);
+		JSB_PRECONDITION(ok, tmp);
+	}
 
 	// add script to the global map
 	const char* key = [filename UTF8String];
@@ -476,14 +507,19 @@ JSBool JSB_core_restartVM(JSContext *cx, uint32_t argc, jsval *vp)
 	js::RootedScript* rootedScript = new js::RootedScript(_cx, script);
 	__scripts[key] = rootedScript;
 
-	JSB_PRECONDITION(ok, "Error executing script");
-
     return ok;
 }
 
 -(void) dealloc
 {
 	[super dealloc];
+	
+	if (_object) {
+		delete _object;
+	}
+	if (_debugObject) {
+		delete _debugObject;
+	}
 
 	JS_DestroyContext(_cx);
 	JS_DestroyRuntime(_rt);
@@ -620,62 +656,67 @@ void JSB_set_c_proxy_for_jsobject( JSObject *jsobj, void *handle, unsigned long 
 JSObject* JSB_NewGlobalObject(JSContext* cx, bool empty)
 {
 	JSObject* glob = JS_NewGlobalObject(cx, &global_class, NULL);
-	if (!glob) {
-		return NULL;
-	}
-	JSB_ENSURE_AUTOCOMPARTMENT(cx, glob);
-	JSBool ok = JS_TRUE;
-	ok = JS_InitStandardClasses(cx, glob);
-	if (ok)
-		JS_InitReflect(cx, glob);
-	if (ok)
-		ok = JS_DefineDebuggerObject(cx, glob);
-	if (!ok)
+	if (!glob)
 		return NULL;
 
-	if (empty)
-		return glob;
-
-	//
-	// globals
-	//
-	JS_DefineFunction(cx, glob, "require", JSB_core_executeScript, 1, JSPROP_READONLY | JSPROP_PERMANENT);
-	JS_DefineFunction(cx, glob, "__associateObjWithNative", JSB_core_associateObjectWithNative, 2, JSPROP_READONLY | JSPROP_PERMANENT);
-	JS_DefineFunction(cx, glob, "__getAssociatedNative", JSB_core_getAssociatedNative, 2, JSPROP_READONLY | JSPROP_PERMANENT);
-	JS_DefineFunction(cx, glob, "__getPlatform", JSB_core_platform, 0, JSPROP_READONLY | JSPROP_PERMANENT);
-	JS_DefineFunction(cx, glob, "__getOS", JSB_core_os, 0, JSPROP_READONLY | JSPROP_PERMANENT);
-	JS_DefineFunction(cx, glob, "__getVersion", JSB_core_version, 0, JSPROP_READONLY | JSPROP_PERMANENT);
-
-	JS_DefineFunction(cx, glob, "__garbageCollect", JSB_core_forceGC, 0, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
-	JS_DefineFunction(cx, glob, "__dumpRoot", JSB_core_dumpRoot, 0, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
-	JS_DefineFunction(cx, glob, "__executeScript", JSB_core_executeScript, 1, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
-	JS_DefineFunction(cx, glob, "__restartVM", JSB_core_restartVM, 0, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
-
-	//
-	// 3rd party developer ?
-	// Add here your own classes registration
-	//
-
-	// registers cocos2d, cocosdenshion and cocosbuilder reader bindings
+	{
+		JSB_ENSURE_AUTOCOMPARTMENT(cx, glob);
+		JSBool ok = JS_TRUE;
+		ok = JS_InitStandardClasses(cx, glob);
+		if (ok)
+			JS_InitReflect(cx, glob);
+		if (ok)
+			ok = JS_DefineDebuggerObject(cx, glob);
+		if (!ok)
+			return NULL;
+		
+		if (empty) {
+			JS_WrapObject(cx, &glob);
+			return glob;
+		}
+		
+		//
+		// globals
+		//
+		JS_DefineFunction(cx, glob, "require", JSB_core_executeScript, 1, JSPROP_READONLY | JSPROP_PERMANENT);
+		JS_DefineFunction(cx, glob, "__associateObjWithNative", JSB_core_associateObjectWithNative, 2, JSPROP_READONLY | JSPROP_PERMANENT);
+		JS_DefineFunction(cx, glob, "__getAssociatedNative", JSB_core_getAssociatedNative, 2, JSPROP_READONLY | JSPROP_PERMANENT);
+		JS_DefineFunction(cx, glob, "__getPlatform", JSB_core_platform, 0, JSPROP_READONLY | JSPROP_PERMANENT);
+		JS_DefineFunction(cx, glob, "__getOS", JSB_core_os, 0, JSPROP_READONLY | JSPROP_PERMANENT);
+		JS_DefineFunction(cx, glob, "__getVersion", JSB_core_version, 0, JSPROP_READONLY | JSPROP_PERMANENT);
+		
+		JS_DefineFunction(cx, glob, "__garbageCollect", JSB_core_forceGC, 0, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
+		JS_DefineFunction(cx, glob, "__dumpRoot", JSB_core_dumpRoot, 0, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
+		JS_DefineFunction(cx, glob, "__executeScript", JSB_core_executeScript, 1, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
+		JS_DefineFunction(cx, glob, "__restartVM", JSB_core_restartVM, 0, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
+		
+		//
+		// 3rd party developer ?
+		// Add here your own classes registration
+		//
+		
+		// registers cocos2d, cocosdenshion and cocosbuilder reader bindings
 #if JSB_INCLUDE_COCOS2D
-	JSB_register_cocos2d(cx, glob);
+		JSB_register_cocos2d(cx, glob);
 #endif // JSB_INCLUDE_COCOS2D
-
-	// registers chipmunk bindings
+		
+		// registers chipmunk bindings
 #if JSB_INCLUDE_CHIPMUNK
-	JSB_register_chipmunk(cx, glob);
+		JSB_register_chipmunk(cx, glob);
 #endif // JSB_INCLUDE_CHIPMUNK
-
-	// registers sys bindings
+		
+		// registers sys bindings
 #if JSB_INCLUDE_SYSTEM
-	JSB_register_system(cx, glob);
+		JSB_register_system(cx, glob);
 #endif // JSB_INCLUDE_SYSTEM
-
-	// registers opengl bindings
+		
+		// registers opengl bindings
 #if JSB_INCLUDE_OPENGL
-	JSB_register_opengl(cx, glob);
+		JSB_register_opengl(cx, glob);
 #endif // JSB_INCLUDE_OPENGL
-
+		
+	}
+	JS_WrapObject(cx, &glob);
     return glob;
 }
 

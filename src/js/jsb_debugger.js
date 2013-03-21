@@ -1,6 +1,4 @@
 dbg = {};
-
-// fallback for no cc
 cc = {};
 cc.log = log;
 
@@ -26,9 +24,35 @@ var stepFunction = function (frame, script) {
 	}
 };
 
+var debugObject = function (r, isNormal) {
+	_bufferWrite("* " + (typeof r) + "\n");
+	if (typeof r != "object") {
+		_bufferWrite("~> " + r + "\n");
+	} else {
+		var props;
+		if (isNormal) {
+			props = Object.keys(r);
+		} else {
+			props = r.getOwnPropertyNames();
+		}
+		for (k in props) {
+			var desc = r.getOwnPropertyDescriptor(props[k]);
+			_bufferWrite("~> " + props[k] + " = ");
+			if (desc.value) {
+				_bufferWrite("" + desc.value);
+			} else if (desc.get) {
+				_bufferWrite("" + desc.get());
+			} else {
+				_bufferWrite("undefined (no value or getter)");
+			}
+			_bufferWrite("\n");
+		}
+	}
+}
+
 dbg.breakLine = 0;
 
-var processInput = function (str, frame, script) {
+this.processInput = function (str, frame, script) {
 	str = str.replace(/\n$/, "");
 	if (str.length === 0) {
 		return;
@@ -87,32 +111,28 @@ var processInput = function (str, frame, script) {
 		_unlockVM();
 		return;
 	}
+	md = str.match(/^deval\s+(.+)/);
+	if (md) {
+		try {
+			var tmp = eval(md[1]);
+			if (tmp) {
+				debugObject(tmp, true);
+			}
+		} catch (e) {
+			_bufferWrite("!! got exception: " + e.message);
+		}
+		return;
+	}
 	md = str.match(/^eval\s+(.+)/);
 	if (md && frame) {
 		var res = frame['eval'](md[1]),
 			k;
-		if (res['return']) {
-			var r = res['return'];
-			_bufferWrite("* " + (typeof r) + "\n");
-			if (typeof r != "object") {
-				_bufferWrite("~> " + r + "\n");
-			} else {
-				var props = r.getOwnPropertyNames();
-				for (k in props) {
-					var desc = r.getOwnPropertyDescriptor(props[k]);
-					_bufferWrite("~> " + props[k] + " = ");
-					if (desc.value) {
-						_bufferWrite("" + desc.value);
-					} else if (desc.get) {
-						_bufferWrite("" + desc.get());
-					} else {
-						_bufferWrite("undefined (no value or getter)");
-					}
-					_bufferWrite("\n");
-				}
-			}
-		} else if (res['throw']) {
+		if (res && res['return']) {
+			debugObject(res['return']);
+		} else if (res && res['throw']) {
 			_bufferWrite("!! got exception: " + res['throw'].message + "\n");
+		} else {
+			_bufferWrite("!! invalid return from eval\n");
 		}
 		return;
 	} else if (md) {
@@ -171,20 +191,26 @@ dbg.onError = function (frame, report) {
 	cc.log("!! exception");
 };
 
-function _prepareDebugger(global) {
+this._prepareDebugger = function (global) {
 	var tmp = new Debugger(global);
 	tmp.onNewScript = dbg.onNewScript;
 	tmp.onDebuggerStatement = dbg.onDebuggerStatement;
 	tmp.onError = dbg.onError;
 	dbg.dbg = tmp;
-}
+};
 
-function _startDebugger(global, files, startFunc) {
-	cc.log("starting with debugger enabled");
+this._startDebugger = function (global, files, startFunc) {
+	cc.log("[DBG] starting debug session");
 	for (var i in files) {
-		global['eval']("require('" + files[i] + "');");
+		try {
+			global['eval']("require('" + files[i] + "');");
+		} catch (e) {
+			cc.log("[DBG] error evaluating file: " + files[i]);
+		}
 	}
+	cc.log("[DBG] all files required");
 	if (startFunc) {
+		cc.log("executing start func: " + startFunc);
 		global['eval'](startFunc);
 	}
 	// beginDebug();
