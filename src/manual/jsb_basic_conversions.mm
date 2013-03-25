@@ -279,7 +279,7 @@ JSBool JSB_jsval_to_unknown(JSContext *cx, jsval vp, id* ret)
 	}
 	// Null
 	else if (JSVAL_IS_NULL(vp)) {
-		*ret = [NSNull class];
+		*ret = [NSNull null];
 		return JS_TRUE;
 	}
 	// undefined
