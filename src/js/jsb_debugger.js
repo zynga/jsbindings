@@ -57,6 +57,7 @@ this.processInput = function (str, frame, script) {
 	if (str.length === 0) {
 		return;
 	}
+	// break
 	var md = str.match(/^b(reak)?\s+([^:]+):(\d+)/);
 	if (md) {
 		var scripts = dbg.scripts[md[2]],
@@ -83,12 +84,16 @@ this.processInput = function (str, frame, script) {
 		}
 		return;
 	}
+
+	// scripts
 	md = str.match(/^scripts/);
 	if (md) {
 		cc.log("sending list of available scripts");
 		_bufferWrite("scripts:\n" + Object.keys(dbg.scripts).join("\n") + "\n");
 		return;
 	}
+
+	// step
 	md = str.match(/^s(tep)?/);
 	if (md && frame) {
 		cc.log("will step");
@@ -101,6 +106,8 @@ this.processInput = function (str, frame, script) {
 		_unlockVM();
 		return;
 	}
+
+	// continue
 	md = str.match(/^c(ontinue)?/);
 	if (md) {
 		if (frame) {
@@ -111,6 +118,8 @@ this.processInput = function (str, frame, script) {
 		_unlockVM();
 		return;
 	}
+
+	// debugger eval
 	md = str.match(/^deval\s+(.+)/);
 	if (md) {
 		try {
@@ -123,6 +132,8 @@ this.processInput = function (str, frame, script) {
 		}
 		return;
 	}
+
+	// eval
 	md = str.match(/^eval\s+(.+)/);
 	if (md && frame) {
 		var res = frame['eval'](md[1]),
@@ -139,6 +150,8 @@ this.processInput = function (str, frame, script) {
 		_bufferWrite("!! no frame to eval in\n");
 		return;
 	}
+
+	// current line
 	md = str.match(/^line/);
 	if (md && frame) {
 		_bufferWrite("current line: " + script.getOffsetLine(frame.offset) + "\n");
@@ -147,6 +160,8 @@ this.processInput = function (str, frame, script) {
 		_bufferWrite("no line, probably entering script\n");
 		return;
 	}
+
+	// backtrace
 	md = str.match(/^bt/);
 	if (md && frame) {
 		var cur = frame,
@@ -160,7 +175,28 @@ this.processInput = function (str, frame, script) {
 		_bufferWrite("no valid frame\n");
 		return;
 	}
+
+	// help
+	md = str.match(/^h(tep)?/);
+	if (md) {
+		_printHelp();
+		return;
+	}
+
 	_bufferWrite("! invalid command: \"" + str + "\"\n");
+};
+
+
+_printHelp = function() {
+	var help = "break filename:numer\tAdds a breakpoint at a given filename and line number\n" +
+				"c / continue\tContinues the execution\n" +
+				"s / step\tStep\n" +
+				"bt\tBacktrace\n" +
+				"scripts\tShow the scripts\n" +
+				"line\tShows current line\n" +
+				"eval js_command\tEvaluates JS code\n" +
+				"deval js_command\tEvaluates JS Debugger command\n";
+	_bufferWrite(help);
 };
 
 dbg.scripts = [];

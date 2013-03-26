@@ -304,7 +304,11 @@ JSBool JSB_core_restartVM(JSContext *cx, uint32_t argc, jsval *vp)
 
 #if DEBUG
 		printf("JavaScript Bindings - %s\n", JSB_version);
-#endif
+
+#if JSB_ENABLE_DEBUGGER
+		printf("Debugger enabled. Listening on port: %d\n", JSB_DEBUGGER_PORT);
+#endif //JSB_ENABLE_DEBUGGER
+#endif // DEBUG
 
 		// Must be called only once, and before creating a new runtime
 		// XXX: Removed in SpiderMonkey 19.0

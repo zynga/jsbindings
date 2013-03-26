@@ -26,7 +26,6 @@ bool vmLock = false;
 jsval frame = JSVAL_NULL, script = JSVAL_NULL;
 int clientSocket;
 
-#define DEBUGGER_PORT 1337
 bool serverAlive = true;
 
 void debugProcessInput(string data) {
@@ -78,7 +77,7 @@ void* serverEntryPoint(void*)
 
 	int err;
 	stringstream portstr;
-	portstr << DEBUGGER_PORT;
+	portstr << JSB_DEBUGGER_PORT;
 	const char* tmp = portstr.str().c_str();
 	if ((err = getaddrinfo(NULL, tmp, &hints, &result)) != 0) {
 		printf("error: %s\n", gai_strerror(err));

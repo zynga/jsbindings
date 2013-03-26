@@ -164,6 +164,13 @@
 #define JSB_DEBUGGER_OUTPUT_STDOUT 0
 #endif // JSB_DEBUGGER_OUTPUT_STDOUT
 
+/** @def JSB_DEBUGGER_PORT
+ TCP port used to connect to the debugger
+ */
+#ifndef JSB_DEBUGGER_PORT
+#define JSB_DEBUGGER_PORT 1337
+#endif // JSB_DEBUGGER_PORT
+
 #ifndef JSB_MAX_STACK_QUOTA
 #ifdef DEBUG
 #define JSB_MAX_STACK_QUOTA 5000000
