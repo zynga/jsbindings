@@ -10332,7 +10332,7 @@ void JSB_CCLabelTTF_createClass(JSContext *cx, JSObject* globalObj, const char* 
 		JS_FN("setVerticalAlignment", JSB_CCLabelTTF_setVerticalAlignment_, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
 		JS_FN("getVerticalAlignment", JSB_CCLabelTTF_verticalAlignment, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
 		JS_FN("setCString", JSB_CCLabelTTF_setCString_, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
-		JS_FN("string", JSB_CCLabelTTF_string, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
+		JS_FN("getString", JSB_CCLabelTTF_string, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
 		JS_FN("ctor", JSB_CCLabelTTF_ctor, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
 		JS_FS_END
 	};
@@ -27015,7 +27015,7 @@ void JSB_CCLabelAtlas_createClass(JSContext *cx, JSObject* globalObj, const char
 		JS_FN("initWithStringTextureItemWidthItemHeightStartCharMap", JSB_CCLabelAtlas_initWithString_texture_itemWidth_itemHeight_startCharMap_, 5, JSPROP_PERMANENT | JSPROP_ENUMERATE),
 		JS_FN("setCString", JSB_CCLabelAtlas_setCString_, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
 		JS_FN("setString", JSB_CCLabelAtlas_setString_, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
-		JS_FN("string", JSB_CCLabelAtlas_string, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
+		JS_FN("getString", JSB_CCLabelAtlas_string, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
 		JS_FN("ctor", JSB_CCLabelAtlas_ctor, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
 		JS_FS_END
 	};
@@ -28797,7 +28797,7 @@ void JSB_CCLabelBMFont_createClass(JSContext *cx, JSObject* globalObj, const cha
 		JS_FN("setWidth", JSB_CCLabelBMFont_setWidth_, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
 		JS_FN("setCString", JSB_CCLabelBMFont_setCString_, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
 		JS_FN("setString", JSB_CCLabelBMFont_setString_, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
-		JS_FN("string", JSB_CCLabelBMFont_string, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
+		JS_FN("getString", JSB_CCLabelBMFont_string, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
 		JS_FN("getDisplayedColor", JSB_CCLabelBMFont_displayedColor, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
 		JS_FN("getDisplayedOpacity", JSB_CCLabelBMFont_displayedOpacity, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
 		JS_FN("doesOpacityModifyRGB", JSB_CCLabelBMFont_doesOpacityModifyRGB, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),

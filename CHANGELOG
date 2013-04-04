@@ -1,11 +1,12 @@
 version 0.7 - XX-Apr-2013
 - [NEW] JSB Generator: generates "ctor" methods for Obj-C classes.
 - [FIX] JSB native code:
-		Fixed rounding error in JSB_jsval_from_NSNumber
-		JSB_jsval_to_NSSet uses a real NSSet
-		In JSB_jsval_to_NSDictionary the key can be a number or a string
-		JSB_jsval_to_unknown: if a jsvalue is null, it returns [NSNull null]
-		Debugger works with SpiderMonkey v19
+		cocos2d: CCLabel#string -> CCLabel#getString
+		common: Fixed rounding error in JSB_jsval_from_NSNumber
+		common: JSB_jsval_to_NSSet uses a real NSSet
+		common: In JSB_jsval_to_NSDictionary the key can be a number or a string
+		common: JSB_jsval_to_unknown: if a jsvalue is null, it returns [NSNull null]
+		dbg: Debugger works with SpiderMonkey v19
 
 
 version 0.6 - 20-Mar-2013
