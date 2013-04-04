@@ -881,6 +881,24 @@ void %s_finalize(JSFreeOp *fop, JSObject *obj)
         self.fd_mm.write(destructor_template % (proxy_class_name,
                                                     class_name))
 
+    def generate_ctor_method(self, klass_name):
+        template = '''
+// 'ctor' method. Needed for subclassing native objects in JS
+JSBool JSB_%s_ctor(JSContext *cx, uint32_t argc, jsval *vp) {
+
+\tJSObject* obj = (JSObject *)JS_THIS_OBJECT(cx, vp);
+\tJSB_PRECONDITION2( !JSB_get_proxy_for_jsobject(obj), cx, JS_FALSE, "Object already initialzied. error" );
+
+\tJSB_%s *proxy = [[JSB_%s alloc] initWithJSObject:obj class:[%s class]];
+\t[[proxy class] swizzleMethods];
+
+\tJS_SET_RVAL(cx, vp, JSVAL_TRUE);
+
+\treturn JS_TRUE;
+}
+'''
+        self.fd_mm.write(template % (klass_name, klass_name, klass_name, klass_name))
+
     #
     # Method generator functions
     #
@@ -1528,6 +1546,10 @@ void %s_createClass(JSContext *cx, JSObject* globalObj, const char* name )
                 js_name = k
                 instance_method_buffer += js_fn % (js_name, PROXY_PREFIX + class_name + '_' + k, m[k], '| JSPROP_ENUMERATE')
 
+        # 4)
+        # Add "ctor", to allow subclassing native classes from JS
+        instance_method_buffer += js_fn % ("ctor", "%s%s_ctor" % (PROXY_PREFIX, class_name), 0, '| JSPROP_ENUMERATE')
+
         # instance methods entry point
         self.fd_mm.write(functions_template_start)
         self.fd_mm.write(instance_method_buffer)
@@ -1561,6 +1583,7 @@ void %s_createClass(JSContext *cx, JSObject* globalObj, const char* name )
         self.generate_pragma_mark(class_name, self.fd_mm)
         self.generate_constructor(class_name)
         self.generate_destructor(class_name)
+        self.generate_ctor_method(class_name)
 
         ok_methods = self.generate_methods(class_name, klass)
 
@@ -1644,7 +1667,7 @@ void %s_createClass(JSContext *cx, JSObject* globalObj, const char* name )
 
 #
 #
-# Generates Object Oriented Code from C functions
+# Generator for for C functions
 #
 #
 class JSBGenerateFunctions(JSBGenerate):
@@ -2225,6 +2248,7 @@ void %s_createClass(JSContext *cx, JSObject* globalObj, const char* name )
                     js_fn_name, native_fn_name, args = self.get_name_for_oof(klass_name, f)
                     self.fd_mm.write(template_funcs_body % (js_fn_name, native_fn_name, args))
 
+        # post template
         self.fd_mm.write(template_funcs_post)
 
         template_st_funcs = '''

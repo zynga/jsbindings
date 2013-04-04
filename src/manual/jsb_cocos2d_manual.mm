@@ -115,6 +115,20 @@ void JSB_GLNode_finalize(JSFreeOp *fop, JSObject *obj)
 	JSB_del_proxy_for_jsobject( obj );
 }
 
+// 'ctor' method. Needed for subclassing native objects in JS
+JSBool JSB_GLNode_ctor(JSContext *cx, uint32_t argc, jsval *vp) {
+
+	JSObject* obj = (JSObject *)JS_THIS_OBJECT(cx, vp);
+	JSB_PRECONDITION2( !JSB_get_proxy_for_jsobject(obj), cx, JS_FALSE, "Object already initialzied. error" );
+
+	JSB_GLNode *proxy = [[JSB_GLNode alloc] initWithJSObject:obj class:[GLNode class]];
+	[[proxy class] swizzleMethods];
+
+	JS_SET_RVAL(cx, vp, JSVAL_TRUE);
+
+	return JS_TRUE;
+}
+
 // Arguments:
 // Ret value: GLNode* (o)
 JSBool JSB_GLNode_node_static(JSContext *cx, uint32_t argc, jsval *vp) {
@@ -143,6 +157,7 @@ void JSB_GLNode_createClass(JSContext *cx, JSObject* globalObj, const char* name
 		{0, 0, 0, 0, 0}
 	};
 	static JSFunctionSpec funcs[] = {
+		JS_FN("ctor", JSB_GLNode_ctor, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
 		JS_FS_END
 	};
 	static JSFunctionSpec st_funcs[] = {

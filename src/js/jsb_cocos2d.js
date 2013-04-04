@@ -476,7 +476,7 @@ cc.Class.extend = function (prop) {
     return Class;
 };
 
-cc.Node.prototype.ctor = function() {};
+// cc.Node.prototype.ctor = function() {};
 cc.Node.extend = cc.Class.extend;
 cc.Layer.extend = cc.Class.extend;
 cc.LayerGradient.extend = cc.Class.extend;

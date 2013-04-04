@@ -1,4 +1,5 @@
 version 0.7 - XX-Apr-2013
+- [NEW] JSB Generator: generates "ctor" methods for Obj-C classes.
 - [FIX] JSB native code:
 		Fixed rounding error in JSB_jsval_from_NSNumber
 		JSB_jsval_to_NSSet uses a real NSSet

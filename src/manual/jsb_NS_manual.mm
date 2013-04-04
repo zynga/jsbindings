@@ -64,6 +64,19 @@ void JSB_NSObject_finalize(JSFreeOp *fop, JSObject *obj)
 }
 
 // Methods
+JSBool JSB_NSObject_ctor(JSContext *cx, uint32_t argc, jsval *vp) {
+
+	JSObject* obj = (JSObject *)JS_THIS_OBJECT(cx, vp);
+	JSB_PRECONDITION2( !JSB_get_proxy_for_jsobject(obj), cx, JS_FALSE, "Object already initialzied. error" );
+
+	JSB_NSObject *proxy = [[JSB_NSObject alloc] initWithJSObject:obj class:[NSObject class]];
+	[[proxy class] swizzleMethods];
+
+	JS_SET_RVAL(cx, vp, JSVAL_TRUE);
+
+	return JS_TRUE;
+}
+
 JSBool JSB_NSObject_init(JSContext *cx, uint32_t argc, jsval *vp) {
 	
 	JSObject* obj = (JSObject *)JS_THIS_OBJECT(cx, vp);
@@ -158,6 +171,7 @@ void JSB_NSObject_createClass(JSContext* cx, JSObject* globalObj, const char *na
 
 	
 	static JSFunctionSpec funcs[] = {
+		JS_FN("ctor", JSB_NSObject_ctor, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
 		JS_FN("init", JSB_NSObject_init, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
 		JS_FN("copy", JSB_NSObject_copy, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
 		JS_FN("retain", JSB_NSObject_retain, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
