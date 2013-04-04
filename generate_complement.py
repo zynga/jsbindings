@@ -95,6 +95,12 @@ class ObjC(object):
                 # Found @interface bis
                 elif interface_ext:
                     classname = interface_ext.group(1)
+
+                    if classname in self.entries:
+                        self.log('Key already on dictionary %s\n' % classname)
+                    else:
+                        self.entries[classname] = {}
+
                     current_class = classname
                     self.log('--> %s' % current_class)
 
