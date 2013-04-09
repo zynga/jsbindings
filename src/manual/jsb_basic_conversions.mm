@@ -344,9 +344,14 @@ JSBool JSB_jsval_to_block_1( JSContext *cx, jsval vp, JSObject *jsthis, js_block
 		jsval rval;
 		jsval val = JSB_jsval_from_unknown(cx, sender);
 
-		JSB_ENSURE_AUTOCOMPARTMENT(cx, jsthis);
-		JSBool ok = JSB_execute_callback(cb, 1, &val, &rval);
-		JSB_PRECONDITION2(ok, cx, , "Error calling callback (1)");
+        if (jsthis) {
+            JSB_ENSURE_AUTOCOMPARTMENT(cx, jsthis);
+            JSBool ok = JSB_execute_callback(cb, 1, &val, &rval);
+            JSB_PRECONDITION2(ok, cx, , "Error calling callback (1)");
+        } else {
+            JSBool ok = JSB_execute_callback(cb, 1, &val, &rval);
+            JSB_PRECONDITION2(ok, cx, , "Error calling callback (1)");
+        }
 	};
 	
 	*ret = [[block copy] autorelease];
