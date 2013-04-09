@@ -456,7 +456,8 @@ JSBool JSB_CCMenuItem_setBlock_( JSContext *cx, uint32_t argc, jsval *vp ) {
 	JSB_PRECONDITION( argc==1 || argc==2, "Invalid number of arguments. Expecting 1 or 2 args" );
 	jsval *argvp = JS_ARGV(cx,vp);
 	js_block js_func;
-	JSObject *js_this = NULL;
+	// default value for js_this. Can't use NULL.
+	JSObject *js_this = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSBool ok = JS_TRUE;
 
 	if(argc==2) {
@@ -488,8 +489,9 @@ JSBool JSB_CCMenuItemFont_itemWithString_block__static(JSContext *cx, uint32_t a
 	JSBool ok = JS_TRUE;
 	NSString *normal;
 	js_block js_func;
-	JSObject *js_this = NULL;
-	
+	// default value for js_this. Can't use NULL.
+	JSObject *js_this = (JSObject *)JS_THIS_OBJECT(cx, vp);
+
 	ok &= JSB_jsval_to_NSString( cx, argvp[0], &normal );
 		
 	if( argc >= 2 ) {
@@ -541,8 +543,9 @@ JSBool JSB_CCMenuItemFont_initWithString_block_(JSContext *cx, uint32_t argc, js
 	JSBool ok = JS_TRUE;
 	NSString *normal;
 	js_block js_func;
-	JSObject *js_this = NULL;
-	
+	// default value for js_this. Can't use NULL.
+	JSObject *js_this = (JSObject *)JS_THIS_OBJECT(cx, vp);
+
 	ok &= JSB_jsval_to_NSString( cx, argvp[0], &normal );
 	
 	if( argc >= 2 ) {
@@ -584,8 +587,9 @@ JSBool JSB_CCMenuItemLabel_itemWithLabel_block__static(JSContext *cx, uint32_t a
 	JSBool ok = JS_TRUE;
 	CCNode<CCLabelProtocol, CCRGBAProtocol> *label;
 	js_block js_func;
-	JSObject *js_this = NULL;
-	
+	// default value for js_this. Can't use NULL.
+	JSObject *js_this = (JSObject *)JS_THIS_OBJECT(cx, vp);
+
 	ok &= JSB_jsval_to_NSObject( cx, argvp[0], &label );
 	
 	if( argc >= 2 ) {
@@ -633,8 +637,9 @@ JSBool JSB_CCMenuItemLabel_initWithLabel_block_(JSContext *cx, uint32_t argc, js
 	JSBool ok = JS_TRUE;
 	CCNode<CCLabelProtocol, CCRGBAProtocol> *label;
 	js_block js_func;
-	JSObject *js_this = NULL;
-	
+	// default value for js_this. Can't use NULL.
+	JSObject *js_this = (JSObject *)JS_THIS_OBJECT(cx, vp);
+
 	ok &= JSB_jsval_to_NSObject( cx, argvp[0], &label );
 	
 	if( argc >= 2 ) {
@@ -674,7 +679,8 @@ JSBool JSB_CCMenuItemImage_itemWithNormalImage_selectedImage_disabledImage_block
 	NSString *normal, *selected, *disabled;
 	js_block js_func;
 	jsval valthis, valfn;
-	JSObject *js_this = NULL;
+	// default value for js_this. Can't use NULL.
+	JSObject *js_this = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSBool lastArgIsCallback = JS_FALSE;
 	
 	// 1st: Check if "this" is present
@@ -746,7 +752,8 @@ JSBool JSB_CCMenuItemImage_initWithNormalImage_selectedImage_disabledImage_block
 	NSString *normal, *selected, *disabled;
 	jsval valthis, valfn;
 	js_block js_func;
-	JSObject *js_this = NULL;
+	// default value for js_this. Can't use NULL.
+	JSObject *js_this = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSBool lastArgIsCallback = JS_FALSE;
 
 	
@@ -815,7 +822,8 @@ JSBool JSB_CCMenuItemSprite_itemWithNormalSprite_selectedSprite_disabledSprite_b
 	CCSprite *normal, *selected, *disabled;
 	js_block js_func;
 	jsval valthis, valfn;
-	JSObject *js_this = NULL;
+	// default value for js_this. Can't use NULL.
+	JSObject *js_this = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSBool lastArgIsCallback = JS_FALSE;
 	
 	// 1st: Check if "this" is present
@@ -885,7 +893,8 @@ JSBool JSB_CCMenuItemSprite_initWithNormalSprite_selectedSprite_disabledSprite_b
 	CCSprite *normal, *selected, *disabled;
 	js_block js_func;
 	jsval valthis, valfn;
-	JSObject *js_this = NULL;
+	// default value for js_this. Can't use NULL.
+	JSObject *js_this = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	JSBool lastArgIsCallback = JS_FALSE;
 	
 	// 1st: Check if "this" is present
@@ -947,7 +956,8 @@ JSBool JSB_CCCallBlockN_actionWithBlock__static(JSContext *cx, uint32_t argc, js
 	jsval *argvp = JS_ARGV(cx,vp);
 	JSBool ok = JS_TRUE;
 	js_block js_func;
-	JSObject *js_this = NULL;
+	// default value for js_this. Can't use NULL.
+	JSObject *js_this = (JSObject *)JS_THIS_OBJECT(cx, vp);
 	jsval valthis, valfn;
 	
 	NSObject *ret_val;
