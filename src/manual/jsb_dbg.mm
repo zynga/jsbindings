@@ -12,6 +12,12 @@
 #include "jsb_config.h"
 #include "jsdbgapi.h"
 
+#if DEBUG
+#define TRACE_DEBUGGER_SERVER(...) CCLOG(__VA_ARGS__)
+#else
+#define TRACE_DEBUGGER_SERVER(...)
+#endif // #if DEBUG
+
 using namespace std;
 
 map<string, js::RootedScript*> __scripts;
@@ -25,8 +31,6 @@ pthread_mutex_t g_rwMutex;
 bool vmLock = false;
 jsval frame = JSVAL_NULL, script = JSVAL_NULL;
 int clientSocket;
-
-bool serverAlive = true;
 
 void debugProcessInput(string data) {
 	NSString* str = [NSString stringWithUTF8String:data.c_str()];
@@ -90,7 +94,7 @@ void* serverEntryPoint(void*)
 		int optval = 1;
 		if ((setsockopt(s, SOL_SOCKET, SO_REUSEADDR, (char*)&optval, sizeof(optval))) < 0) {
 			close(s);
-			CCLOG(@"error setting socket options");
+			TRACE_DEBUGGER_SERVER(@"debug server : error setting socket options");
 			return NULL;
 		}
 		if ((bind(s, rp->ai_addr, rp->ai_addrlen)) == 0) {
@@ -100,28 +104,35 @@ void* serverEntryPoint(void*)
 		s = -1;
 	}
 	if (s < 0 || rp == NULL) {
-		CCLOG(@"error creating/binding socket");
+		TRACE_DEBUGGER_SERVER(@"debug server : error creating/binding socket");
 		return NULL;
 	}
 	
 	freeaddrinfo(result);
-	
+
 	listen(s, 1);
-	while (serverAlive && (clientSocket = accept(s, NULL, NULL)) > 0) {
-		// read/write data
-		CCLOG(@"debug client connected");
-		while (serverAlive) {
-			char buf[256];
-			int readBytes;
-			while ((readBytes = read(clientSocket, buf, 256)) > 0) {
-				buf[readBytes] = '\0';
-				// no other thread is using this
-				inData.append(buf);
-				// process any input, send any output
-				clearBuffers();
-			} // while(read)
-		} // while(serverAlive)
-	}
+	while (true) {
+        clientSocket = accept(s, NULL, NULL);
+        if (clientSocket < 0)
+        {
+            TRACE_DEBUGGER_SERVER(@"debug server : error on accept");
+            return NULL;
+        } else {
+            // read/write data
+            TRACE_DEBUGGER_SERVER(@"debug server : client connected");
+            char buf[256];
+            int readBytes;
+            while ((readBytes = read(clientSocket, buf, 256)) > 0) {
+                buf[readBytes] = '\0';
+                TRACE_DEBUGGER_SERVER(@"debug server : received command >%s", buf);
+                // no other thread is using this
+                inData.append(buf);
+                // process any input, send any output
+                clearBuffers();
+            } // while(read)
+            close(clientSocket);
+        }
+	} // while(true)
 	// we're done, destroy the mutex
 	pthread_mutex_destroy(&g_rwMutex);
 	pthread_mutex_destroy(&g_qMutex);
