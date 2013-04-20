@@ -85,6 +85,23 @@ this.processInput = function (str, frame, script) {
 		return;
 	}
 
+	// info
+    md = str.match(/^info\s+(\S+)/);
+	if (md) {
+        cc.log("info - NYI");
+        cc.log("md[0] = " + md[0]);
+        cc.log("md[1] = " + md[1]);
+		return;
+	}
+
+	// clear
+    // md = str.match(/^clear/);
+    md = str.match(/^clear?\s+([^:]+):(\d+)/);
+	if (md) {
+        cc.log("clearing all breakpoints - NYI");
+		return;
+	}
+
 	// scripts
 	md = str.match(/^scripts/);
 	if (md) {
