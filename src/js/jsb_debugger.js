@@ -2,6 +2,74 @@ dbg = {};
 cc = {};
 cc.log = log;
 
+var commandProcessor = {};
+
+commandProcessor.break = function (regexp_match_array, frame, script) {
+
+    return ({processed : true,
+             stringResult : ""});
+}
+
+commandProcessor.info = function (regexp_match_array, frame, script) {
+
+    return ({processed : true,
+             stringResult : ""});
+}
+
+commandProcessor.clear = function (regexp_match_array, frame, script) {
+
+    return ({processed : true,
+             stringResult : ""});
+}
+
+commandProcessor.scripts = function (regexp_match_array, frame, script) {
+
+    return ({processed : true,
+             stringResult : ""});
+}
+
+commandProcessor.step = function (regexp_match_array, frame, script) {
+
+    return ({processed : true,
+             stringResult : ""});
+}
+
+commandProcessor.continue = function (regexp_match_array, frame, script) {
+
+    return ({processed : true,
+             stringResult : ""});
+}
+
+commandProcessor.deval = function (regexp_match_array, frame, script) {
+
+    return ({processed : true,
+             stringResult : ""});
+}
+
+commandProcessor.eval = function (regexp_match_array, frame, script) {
+
+    return ({processed : true,
+             stringResult : ""});
+}
+
+commandProcessor.line = function (regexp_match_array, frame, script) {
+
+    return ({processed : true,
+             stringResult : ""});
+}
+
+commandProcessor.backtrace = function (regexp_match_array, frame, script) {
+
+    return ({processed : true,
+             stringResult : ""});
+}
+
+commandProcessor.help = function (regexp_match_array, frame, script) {
+
+    return ({processed : true,
+             stringResult : ""});
+}
+
 var breakpointHandler = {
 	hit: function (frame) {
 		var script = frame.script;
@@ -52,11 +120,60 @@ var debugObject = function (r, isNormal) {
 
 dbg.breakLine = 0;
 
+this.getCommandProcessor = function (str) {
+	str = str.replace(/\n$/, "");
+	if (str.length === 0) {
+		return null;
+	}
+    
+	// break
+	var md = str.match(/[a-z]*/);
+    if (!md) {
+        return null;
+    }
+    cc.log("md[0] = " + md[0]);
+    switch (md[0]) {
+    case "b" :
+    case "break" :
+        return commandProcessor.break;
+    case "info" :
+        return commandProcessor.info;
+    case "clear" :
+        return commandProcessor.clear;
+    case "scripts" :
+        return commandProcessor.scripts;
+    case "s" :
+    case "step" :
+        return commandProcessor.step;
+    case "c" :
+    case "continue" :
+        return commandProcessor.continue;
+    case "deval" :
+        return commandProcessor.deval;
+    case "eval" :
+        return commandProcessor.eval;
+    case "line" :
+        return commandProcessor.line;
+    case "bt" :
+        return commandProcessor.backtrace;
+    case "help" :
+        return commandProcessor.help;
+    default :
+        return null;
+    }
+}
+
 this.processInput = function (str, frame, script) {
+    commandprocessor = this.getCommandProcessor(str);
+    if (!commandprocessor) {
+        cc.log("did not find a command processor!");
+    }
+
 	str = str.replace(/\n$/, "");
 	if (str.length === 0) {
 		return;
 	}
+
 	// break
 	var md = str.match(/^b(reak)?\s+([^:]+):(\d+)/);
 	if (md) {
