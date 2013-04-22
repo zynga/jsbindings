@@ -164,160 +164,26 @@ this.getCommandProcessor = function (str) {
 }
 
 this.processInput = function (str, frame, script) {
-    commandprocessor = this.getCommandProcessor(str);
-    if (!commandprocessor) {
+    var command_func = this.getCommandProcessor(str);
+    var command_return;
+
+    if (!command_func) {
         cc.log("did not find a command processor!");
+    } else {
+        if (command_func.hasOwnProperty("name")) {
+            cc.log("calling ... " + command_func.name);
+        }
+        try {
+            command_return = command_func();
+            if (true === command_return.processed) {
+                cc.log("command succeeded. return value = " + command_return.stringResult);
+            } else {
+                cc.log("command failed. return value = " + command_return.stringResult);
+            }
+        } catch (e) {
+            cc.log("Exception in command processing. e =\n" + e);
+        }
     }
-
-	str = str.replace(/\n$/, "");
-	if (str.length === 0) {
-		return;
-	}
-
-	// break
-	var md = str.match(/^b(reak)?\s+([^:]+):(\d+)/);
-	if (md) {
-		var scripts = dbg.scripts[md[2]],
-			tmpScript = null;
-		if (scripts) {
-			var breakLine = parseInt(md[3], 10),
-				off = -1;
-			for (var n=0; n < scripts.length; n++) {
-				offsets = scripts[n].getLineOffsets(breakLine);
-				if (offsets.length > 0) {
-					off = offsets[0];
-					tmpScript = scripts[n];
-					break;
-				}
-			}
-			if (off >= 0) {
-				tmpScript.setBreakpoint(off, breakpointHandler);
-				_bufferWrite("breakpoint set for line " + breakLine + " of script " + md[2] + "\n");
-			} else {
-				_bufferWrite("no valid offsets at that line\n");
-			}
-		} else {
-			_bufferWrite("no script named: " + md[2] + "\n");
-		}
-		return;
-	}
-
-	// info
-    md = str.match(/^info\s+(\S+)/);
-	if (md) {
-        cc.log("info - NYI");
-        cc.log("md[0] = " + md[0]);
-        cc.log("md[1] = " + md[1]);
-		return;
-	}
-
-	// clear
-    // md = str.match(/^clear/);
-    md = str.match(/^clear?\s+([^:]+):(\d+)/);
-	if (md) {
-        cc.log("clearing all breakpoints - NYI");
-		return;
-	}
-
-	// scripts
-	md = str.match(/^scripts/);
-	if (md) {
-		cc.log("sending list of available scripts");
-		_bufferWrite("scripts:\n" + Object.keys(dbg.scripts).join("\n") + "\n");
-		return;
-	}
-
-	// step
-	md = str.match(/^s(tep)?/);
-	if (md && frame) {
-		cc.log("will step");
-		dbg.breakLine = script.getOffsetLine(frame.offset) + 1;
-		frame.onStep = function () {
-			stepFunction(frame, frame.script);
-			return undefined;
-		};
-		stop = true;
-		_unlockVM();
-		return;
-	}
-
-	// continue
-	md = str.match(/^c(ontinue)?/);
-	if (md) {
-		if (frame) {
-			frame.onStep = undefined;
-			dbg.breakLine = 0;
-		}
-		stop = true;
-		_unlockVM();
-		return;
-	}
-
-	// debugger eval
-	md = str.match(/^deval\s+(.+)/);
-	if (md) {
-		try {
-			var tmp = eval(md[1]);
-			if (tmp) {
-				debugObject(tmp, true);
-			}
-		} catch (e) {
-			_bufferWrite("!! got exception: " + e.message);
-		}
-		return;
-	}
-
-	// eval
-	md = str.match(/^eval\s+(.+)/);
-	if (md && frame) {
-		var res = frame['eval'](md[1]),
-			k;
-		if (res && res['return']) {
-			debugObject(res['return']);
-		} else if (res && res['throw']) {
-			_bufferWrite("!! got exception: " + res['throw'].message + "\n");
-		} else {
-			_bufferWrite("!! invalid return from eval\n");
-		}
-		return;
-	} else if (md) {
-		_bufferWrite("!! no frame to eval in\n");
-		return;
-	}
-
-	// current line
-	md = str.match(/^line/);
-	if (md && frame) {
-		_bufferWrite("current line: " + script.getOffsetLine(frame.offset) + "\n");
-		return;
-	} else if (md) {
-		_bufferWrite("no line, probably entering script\n");
-		return;
-	}
-
-	// backtrace
-	md = str.match(/^bt/);
-	if (md && frame) {
-		var cur = frame,
-			stack = [cur.script.url + ":" + cur.script.getOffsetLine(cur.offset)];
-		while ((cur = cur.older)) {
-			stack.push(cur.script.url + ":" + cur.script.getOffsetLine(cur.offset));
-		}
-		_bufferWrite(stack.join("\n") + "\n");
-		return;
-	} else if (md) {
-		_bufferWrite("no valid frame\n");
-		return;
-	}
-
-	// help
-	md = str.match(/^h(tep)?/);
-	if (md) {
-		_printHelp();
-		return;
-	}
-
-	_bufferWrite("! invalid command: \"" + str + "\"\n");
 };
 
 
