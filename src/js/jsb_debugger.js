@@ -4,10 +4,40 @@ cc.log = log;
 
 var commandProcessor = {};
 
-commandProcessor.break = function (regexp_match_array, frame, script) {
+commandProcessor.break = function (str) {
+	str = str.replace(/\n$/, "");
+    var md = str.match(/^b(reak)?\s+([^:]+):(\d+)/);
 
-    return ({processed : true,
-             stringResult : ""});
+    if (!md) {
+        return ({success : false,
+                 stringResult : "command could not be parsed"});
+    }
+
+	var scripts = dbg.scripts[md[2]],
+	tmpScript = null;
+	if (scripts) {
+		var breakLine = parseInt(md[3], 10),
+		off = -1;
+		for (var n=0; n < scripts.length; n++) {
+			offsets = scripts[n].getLineOffsets(breakLine);
+			if (offsets.length > 0) {
+				off = offsets[0];
+				tmpScript = scripts[n];
+				break;
+			}
+		}
+		if (off >= 0) {
+			tmpScript.setBreakpoint(off, breakpointHandler);
+            return ({success : true,
+                     stringResult : "breakpoint set for line " + breakLine + " of script " + md[2]});
+		} else {
+            return ({success : false,
+                     stringResult : "no valid offsets at that line"});
+		}
+	} else {
+        return ({success : false,
+                 stringResult : "no script named: " + md[2]});
+	}
 }
 
 commandProcessor.info = function (regexp_match_array, frame, script) {
@@ -174,8 +204,8 @@ this.processInput = function (str, frame, script) {
             cc.log("calling ... " + command_func.name);
         }
         try {
-            command_return = command_func();
-            if (true === command_return.processed) {
+            command_return = command_func(str);
+            if (true === command_return.success) {
                 cc.log("command succeeded. return value = " + command_return.stringResult);
             } else {
                 cc.log("command failed. return value = " + command_return.stringResult);
