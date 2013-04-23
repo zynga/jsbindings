@@ -5,7 +5,6 @@ cc.log = log;
 var commandProcessor = {};
 
 commandProcessor.break = function (str) {
-	str = str.replace(/\n$/, "");
     var md = str.match(/^b(reak)?\s+([^:]+):(\d+)/);
 
     if (!md) {
@@ -40,63 +39,161 @@ commandProcessor.break = function (str) {
 	}
 }
 
-commandProcessor.info = function (regexp_match_array, frame, script) {
+commandProcessor.info = function (str) {
+    var report = "";
 
-    return ({processed : true,
+    var md = str.match(/^info\s+(\S+)/);
+	if (md) {
+        report += "info - NYI";
+        report += "\nmd[0] = " + md[0];
+        report += "\nmd[1] = " + md[1];
+
+        return ({success : true,
+                 stringResult : report});
+	} else {
+        return ({success : false,
+                 stringResult : report});
+    }
+}
+
+commandProcessor.clear = function (str) {
+    var report = "";
+
+    // var md = str.match(/^clear/);
+    var md = str.match(/^clear?\s+([^:]+):(\d+)/);
+	if (md) {
+        result += "clearing all breakpoints - NYI";
+        return ({success : true,
+                 stringResult : report});
+	} else {
+        return ({success : false,
+                 stringResult : report});
+    }
+}
+
+commandProcessor.scripts = function (str) {
+	var report = "List of available scripts\n";
+	report += Object.keys(dbg.scripts).join("\n");
+
+    return ({success : true,
+             stringResult : report});
+}
+
+commandProcessor.step = function (str, frame, script) {
+	if (frame) {
+		dbg.breakLine = script.getOffsetLine(frame.offset) + 1;
+		frame.onStep = function () {
+			stepFunction(frame, frame.script);
+			return undefined;
+		};
+		stop = true;
+		_unlockVM();
+
+        return ({success : true,
+                 stringResult : ""});
+	} else {
+        return ({success : false,
+                 stringResult : ""});
+    }
+}
+
+commandProcessor.continue = function (str, frame, script) {
+	if (frame) {
+		frame.onStep = undefined;
+		dbg.breakLine = 0;
+	}
+	stop = true;
+	_unlockVM();
+
+    return ({success : true,
              stringResult : ""});
 }
 
-commandProcessor.clear = function (regexp_match_array, frame, script) {
+commandProcessor.deval = function (str, frame, script) {
+	// debugger eval
+	var md = str.match(/^deval\s+(.+)/);
+	if (md[1]) {
+		try {
+			var tmp = eval(md[1]);
+			if (tmp) {
+				debugObject(tmp, true);
+			}
+		} catch (e) {
+            return ({success : false,
+                     stringResult : "exception:\n" + e.message});
+		}
+        return ({success : true,
+                 stringResult : ""});
+	} else {
+        return ({success : false,
+                 stringResult : "could not parse script to evaluate"});
+    }
 
-    return ({processed : true,
-             stringResult : ""});
 }
 
-commandProcessor.scripts = function (regexp_match_array, frame, script) {
+commandProcessor.eval = function (str, frame, script) {
+    if (!frame) {
+        return ({success : false,
+                 stringResult : "no frame to eval in"});
+    }
 
-    return ({processed : true,
-             stringResult : ""});
+	var md = str.match(/^eval\s+(.+)/);
+
+	if (md) {
+		var res = frame['eval'](md[1]),
+			k;
+		if (res && res['return']) {
+			debugObject(res['return']);
+		} else if (res && res['throw']) {
+            return ({success : false,
+                     stringResult : "got exception: " + res['throw'].message});
+		} else {
+            return ({success : false,
+                     stringResult : "invalid return from eval"});
+		}
+
+        return ({success : true,
+                 stringResult : ""});
+	}
 }
 
-commandProcessor.step = function (regexp_match_array, frame, script) {
+commandProcessor.line = function (str, frame, script) {
+	if (frame) {
+        try {
+            return ({success : true,
+                     stringResult : "current line: " + script.getOffsetLine(frame.offset)});
+        } catch (e) {
+            return ({success : false,
+                     stringResult : "exception " + e});
+        }
+	}
 
-    return ({processed : true,
-             stringResult : ""});
+    return ({success : false,
+             stringResult : "no line, probably entering script"});
 }
 
-commandProcessor.continue = function (regexp_match_array, frame, script) {
+commandProcessor.backtrace = function (str, frame, script) {
+	if (!frame) {
+        return ({success : false,
+                 stringResult : "no valid frame"});
+    }
 
-    return ({processed : true,
-             stringResult : ""});
-}
+    var result = "";
+	var cur = frame,
+	stack = [cur.script.url + ":" + cur.script.getOffsetLine(cur.offset)];
+	while ((cur = cur.older)) {
+		stack.push(cur.script.url + ":" + cur.script.getOffsetLine(cur.offset));
+	}
+	result += stack.join("\n");
 
-commandProcessor.deval = function (regexp_match_array, frame, script) {
-
-    return ({processed : true,
-             stringResult : ""});
-}
-
-commandProcessor.eval = function (regexp_match_array, frame, script) {
-
-    return ({processed : true,
-             stringResult : ""});
-}
-
-commandProcessor.line = function (regexp_match_array, frame, script) {
-
-    return ({processed : true,
-             stringResult : ""});
-}
-
-commandProcessor.backtrace = function (regexp_match_array, frame, script) {
-
-    return ({processed : true,
-             stringResult : ""});
+    return ({success : true,
+             stringResult : result});
 }
 
 commandProcessor.help = function (regexp_match_array, frame, script) {
+    _printHelp();
 
-    return ({processed : true,
+    return ({success : true,
              stringResult : ""});
 }
 
@@ -151,11 +248,6 @@ var debugObject = function (r, isNormal) {
 dbg.breakLine = 0;
 
 this.getCommandProcessor = function (str) {
-	str = str.replace(/\n$/, "");
-	if (str.length === 0) {
-		return null;
-	}
-    
 	// break
 	var md = str.match(/[a-z]*/);
     if (!md) {
@@ -194,24 +286,37 @@ this.getCommandProcessor = function (str) {
 }
 
 this.processInput = function (str, frame, script) {
-    var command_func = this.getCommandProcessor(str);
+    var command_func;
     var command_return;
+
+    if (!str) {
+        return;
+    }
+
+	str = str.replace(/\n+/, "");
+	str = str.replace(/\r+/, "");
+
+	if (str === "") {
+        cc.log("Empty input. Ignoring.");
+		return;
+	}
+    
+    command_func = this.getCommandProcessor(str);
 
     if (!command_func) {
         cc.log("did not find a command processor!");
     } else {
-        if (command_func.hasOwnProperty("name")) {
-            cc.log("calling ... " + command_func.name);
-        }
         try {
-            command_return = command_func(str);
+            command_return = command_func(str, frame, script);
             if (true === command_return.success) {
                 cc.log("command succeeded. return value = " + command_return.stringResult);
+                _bufferWrite(command_return.stringResult + "\n");
             } else {
                 cc.log("command failed. return value = " + command_return.stringResult);
+                _bufferWrite("ERROR " + command_return.stringResult + "\n");
             }
         } catch (e) {
-            cc.log("Exception in command processing. e =\n" + e);
+            cc.log("Exception in command processing. e =\n" + e  + "\n");
         }
     }
 };
