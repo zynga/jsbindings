@@ -8,7 +8,8 @@ textCommandProcessor.break = function (str) {
     var md = str.match(/^b(reak)?\s+([^:]+):(\d+)/);
 
     if (!md) {
-        return ({success : false,
+        return ({commandname : "break",
+                 success : false,
                  stringResult : "command could not be parsed"});
     }
 
@@ -27,14 +28,17 @@ textCommandProcessor.break = function (str) {
 		}
 		if (off >= 0) {
 			tmpScript.setBreakpoint(off, breakpointHandler);
-            return ({success : true,
+            return ({commandname : "break",
+                     success : true,
                      stringResult : "breakpoint set for line " + breakLine + " of script " + md[2]});
 		} else {
-            return ({success : false,
+            return ({commandname : "break",
+                     success : false,
                      stringResult : "no valid offsets at that line"});
 		}
 	} else {
-        return ({success : false,
+        return ({commandname : "break",
+                 success : false,
                  stringResult : "no script named: " + md[2]});
 	}
 }
@@ -48,10 +52,12 @@ textCommandProcessor.info = function (str) {
         report += "\nmd[0] = " + md[0];
         report += "\nmd[1] = " + md[1];
 
-        return ({success : true,
+        return ({commandname : "info",
+                 success : true,
                  stringResult : report});
 	} else {
-        return ({success : false,
+        return ({commandname : "info",
+                 success : false,
                  stringResult : report});
     }
 }
@@ -62,7 +68,8 @@ textCommandProcessor.clear = function (str) {
     report += "clearing all breakpoints";
 
     dbg.dbg.clearAllBreakpoints();
-    return ({success : true,
+    return ({commandname : "clear",
+             success : true,
              stringResult : report});
 }
 
@@ -70,7 +77,8 @@ textCommandProcessor.scripts = function (str) {
 	var report = "List of available scripts\n";
 	report += Object.keys(dbg.scripts).join("\n");
 
-    return ({success : true,
+    return ({commandname : "scripts",
+             success : true,
              stringResult : report});
 }
 
@@ -84,10 +92,12 @@ textCommandProcessor.step = function (str, frame, script) {
 		stop = true;
 		_unlockVM();
 
-        return ({success : true,
+        return ({commandname : "step",
+                 success : true,
                  stringResult : ""});
 	} else {
-        return ({success : false,
+        return ({commandname : "step",
+                 success : false,
                  stringResult : ""});
     }
 }
@@ -100,7 +110,8 @@ textCommandProcessor.continue = function (str, frame, script) {
 	stop = true;
 	_unlockVM();
 
-    return ({success : true,
+    return ({commandname : "continue",
+             success : true,
              stringResult : ""});
 }
 
@@ -114,13 +125,16 @@ textCommandProcessor.deval = function (str, frame, script) {
 				debugObject(tmp, true);
 			}
 		} catch (e) {
-            return ({success : false,
+            return ({commandname : "deval",
+                     success : false,
                      stringResult : "exception:\n" + e.message});
 		}
-        return ({success : true,
+        return ({commandname : "deval",
+                 success : true,
                  stringResult : ""});
 	} else {
-        return ({success : false,
+        return ({commandname : "deval",
+                 success : false,
                  stringResult : "could not parse script to evaluate"});
     }
 
@@ -128,7 +142,8 @@ textCommandProcessor.deval = function (str, frame, script) {
 
 textCommandProcessor.eval = function (str, frame, script) {
     if (!frame) {
-        return ({success : false,
+        return ({commandname : "eval",
+                 success : false,
                  stringResult : "no frame to eval in"});
     }
 
@@ -140,14 +155,17 @@ textCommandProcessor.eval = function (str, frame, script) {
 		if (res && res['return']) {
 			debugObject(res['return']);
 		} else if (res && res['throw']) {
-            return ({success : false,
+            return ({commandname : "eval",
+                     success : false,
                      stringResult : "got exception: " + res['throw'].message});
 		} else {
-            return ({success : false,
+            return ({commandname : "eval",
+                     success : false,
                      stringResult : "invalid return from eval"});
 		}
 
-        return ({success : true,
+        return ({commandname : "eval",
+                 success : true,
                  stringResult : ""});
 	}
 }
@@ -155,21 +173,26 @@ textCommandProcessor.eval = function (str, frame, script) {
 textCommandProcessor.line = function (str, frame, script) {
 	if (frame) {
         try {
-            return ({success : true,
-                     stringResult : "current line: " + script.getOffsetLine(frame.offset)});
+            return ({commandname : "line",
+                     success : true,
+                     stringResult : script.getOffsetLine(frame.offset)});
         } catch (e) {
-            return ({success : false,
+            return ({commandname : "line",
+                     success : false,
                      stringResult : "exception " + e});
         }
 	}
 
-    return ({success : false,
-             stringResult : "no line, probably entering script"});
+    return ({commandname : "line",
+             success : false,
+             // probably entering script
+             stringResult : "NOLINE"});
 }
 
 textCommandProcessor.backtrace = function (str, frame, script) {
 	if (!frame) {
-        return ({success : false,
+        return ({commandname : "backtrace",
+                 success : false,
                  stringResult : "no valid frame"});
     }
 
@@ -181,14 +204,16 @@ textCommandProcessor.backtrace = function (str, frame, script) {
 	}
 	result += stack.join("\n");
 
-    return ({success : true,
+    return ({commandname : "backtrace",
+             success : true,
              stringResult : result});
 }
 
 textCommandProcessor.help = function (regexp_match_array, frame, script) {
     _printHelp();
 
-    return ({success : true,
+    return ({commandname : "help",
+             success : true,
              stringResult : ""});
 }
 
@@ -239,6 +264,15 @@ jsonResponder.breakpointHit = function (filename, linenumber) {
                     "why" : "breakpointhit",
                     "data" : {"jsfilename" : filename,
                               "linenumber" : linenumber}};
+
+    cc.log(JSON.stringify(response));
+    this.write(JSON.stringify(response));
+}
+
+jsonResponder.commandResponse = function (commandresult) {
+    var response = {"from" : "server",
+                    "why" : "commandresponse",
+                    "data" : commandresult};
 
     cc.log(JSON.stringify(response));
     this.write(JSON.stringify(response));
@@ -322,16 +356,24 @@ this.processInput = function (str, frame, script) {
         cc.log("did not find a command processor!");
     } else {
         try {
+            cc.log("command_func.name = " + command_func.name);
+
             command_return = command_func(str, frame, script);
             if (true === command_return.success) {
                 cc.log("command succeeded. return value = " + command_return.stringResult);
-                _bufferWrite(command_return.stringResult + "\n");
+                dbg.responder.commandResponse(command_return);
+                // _bufferWrite(command_return.stringResult + "\n");
             } else {
                 cc.log("command failed. return value = " + command_return.stringResult);
-                _bufferWrite("ERROR " + command_return.stringResult + "\n");
+                dbg.responder.commandResponse(command_return);
+                // _bufferWrite("ERROR " + command_return.stringResult + "\n");
             }
         } catch (e) {
             cc.log("Exception in command processing. e =\n" + e  + "\n");
+            var _output = {success : false,
+                           commandname : command_func.name,
+                           stringResult : e};
+            dbg.responder.commandResponse(_output);
         }
     }
 };
