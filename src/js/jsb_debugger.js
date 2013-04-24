@@ -230,8 +230,28 @@ textCommandProcessor.getCommandProcessor = function (str) {
     }
 }
 
+var jsonResponder = {};
+
+jsonResponder.write = _bufferWrite;
+
+jsonResponder.breakpointHit = function (filename, linenumber) {
+    var response = {"from" : "server",
+                    "why" : "breakpointhit",
+                    "data" : {"jsfilename" : filename,
+                              "linenumber" : linenumber}};
+
+    cc.log(JSON.stringify(response));
+    this.write(JSON.stringify(response));
+}
+
 var breakpointHandler = {
 	hit: function (frame) {
+        try {
+            dbg.responder.breakpointHit(frame.script.url, frame.script.getOffsetLine(frame.offset));
+        } catch (e) {
+            cc.log("exception " + e);
+        }
+
 		var script = frame.script;
 		_lockVM(frame, frame.script);
 	}
@@ -367,6 +387,7 @@ this._prepareDebugger = function (global) {
 
     // use the text command processor at startup
     dbg.getCommandProcessor = textCommandProcessor.getCommandProcessor;
+    dbg.responder = jsonResponder;
 };
 
 this._startDebugger = function (global, files, startFunc) {
