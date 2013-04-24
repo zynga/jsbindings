@@ -2,9 +2,9 @@ dbg = {};
 cc = {};
 cc.log = log;
 
-var commandProcessor = {};
+var textCommandProcessor = {};
 
-commandProcessor.break = function (str) {
+textCommandProcessor.break = function (str) {
     var md = str.match(/^b(reak)?\s+([^:]+):(\d+)/);
 
     if (!md) {
@@ -39,7 +39,7 @@ commandProcessor.break = function (str) {
 	}
 }
 
-commandProcessor.info = function (str) {
+textCommandProcessor.info = function (str) {
     var report = "";
 
     var md = str.match(/^info\s+(\S+)/);
@@ -56,7 +56,7 @@ commandProcessor.info = function (str) {
     }
 }
 
-commandProcessor.clear = function (str) {
+textCommandProcessor.clear = function (str) {
     var report = "";
 
     report += "clearing all breakpoints";
@@ -66,7 +66,7 @@ commandProcessor.clear = function (str) {
              stringResult : report});
 }
 
-commandProcessor.scripts = function (str) {
+textCommandProcessor.scripts = function (str) {
 	var report = "List of available scripts\n";
 	report += Object.keys(dbg.scripts).join("\n");
 
@@ -74,7 +74,7 @@ commandProcessor.scripts = function (str) {
              stringResult : report});
 }
 
-commandProcessor.step = function (str, frame, script) {
+textCommandProcessor.step = function (str, frame, script) {
 	if (frame) {
 		dbg.breakLine = script.getOffsetLine(frame.offset) + 1;
 		frame.onStep = function () {
@@ -92,7 +92,7 @@ commandProcessor.step = function (str, frame, script) {
     }
 }
 
-commandProcessor.continue = function (str, frame, script) {
+textCommandProcessor.continue = function (str, frame, script) {
 	if (frame) {
 		frame.onStep = undefined;
 		dbg.breakLine = 0;
@@ -104,7 +104,7 @@ commandProcessor.continue = function (str, frame, script) {
              stringResult : ""});
 }
 
-commandProcessor.deval = function (str, frame, script) {
+textCommandProcessor.deval = function (str, frame, script) {
 	// debugger eval
 	var md = str.match(/^deval\s+(.+)/);
 	if (md[1]) {
@@ -126,7 +126,7 @@ commandProcessor.deval = function (str, frame, script) {
 
 }
 
-commandProcessor.eval = function (str, frame, script) {
+textCommandProcessor.eval = function (str, frame, script) {
     if (!frame) {
         return ({success : false,
                  stringResult : "no frame to eval in"});
@@ -152,7 +152,7 @@ commandProcessor.eval = function (str, frame, script) {
 	}
 }
 
-commandProcessor.line = function (str, frame, script) {
+textCommandProcessor.line = function (str, frame, script) {
 	if (frame) {
         try {
             return ({success : true,
@@ -167,7 +167,7 @@ commandProcessor.line = function (str, frame, script) {
              stringResult : "no line, probably entering script"});
 }
 
-commandProcessor.backtrace = function (str, frame, script) {
+textCommandProcessor.backtrace = function (str, frame, script) {
 	if (!frame) {
         return ({success : false,
                  stringResult : "no valid frame"});
@@ -185,7 +185,7 @@ commandProcessor.backtrace = function (str, frame, script) {
              stringResult : result});
 }
 
-commandProcessor.help = function (regexp_match_array, frame, script) {
+textCommandProcessor.help = function (regexp_match_array, frame, script) {
     _printHelp();
 
     return ({success : true,
@@ -242,7 +242,7 @@ var debugObject = function (r, isNormal) {
 
 dbg.breakLine = 0;
 
-this.getCommandProcessor = function (str) {
+textCommandProcessor.getCommandProcessor = function (str) {
 	// break
 	var md = str.match(/[a-z]*/);
     if (!md) {
@@ -252,33 +252,34 @@ this.getCommandProcessor = function (str) {
     switch (md[0]) {
     case "b" :
     case "break" :
-        return commandProcessor.break;
+        return textCommandProcessor.break;
     case "info" :
-        return commandProcessor.info;
+        return textCommandProcessor.info;
     case "clear" :
-        return commandProcessor.clear;
+        return textCommandProcessor.clear;
     case "scripts" :
-        return commandProcessor.scripts;
+        return textCommandProcessor.scripts;
     case "s" :
     case "step" :
-        return commandProcessor.step;
+        return textCommandProcessor.step;
     case "c" :
     case "continue" :
-        return commandProcessor.continue;
+        return textCommandProcessor.continue;
     case "deval" :
-        return commandProcessor.deval;
+        return textCommandProcessor.deval;
     case "eval" :
-        return commandProcessor.eval;
+        return textCommandProcessor.eval;
     case "line" :
-        return commandProcessor.line;
+        return textCommandProcessor.line;
     case "bt" :
-        return commandProcessor.backtrace;
+        return textCommandProcessor.backtrace;
     case "help" :
-        return commandProcessor.help;
+        return textCommandProcessor.help;
     default :
         return null;
     }
 }
+
 
 this.processInput = function (str, frame, script) {
     var command_func;
@@ -296,7 +297,7 @@ this.processInput = function (str, frame, script) {
 		return;
 	}
     
-    command_func = this.getCommandProcessor(str);
+    command_func = dbg.getCommandProcessor(str);
 
     if (!command_func) {
         cc.log("did not find a command processor!");
@@ -364,6 +365,9 @@ this._prepareDebugger = function (global) {
 	tmp.onDebuggerStatement = dbg.onDebuggerStatement;
 	tmp.onError = dbg.onError;
 	dbg.dbg = tmp;
+
+    // use the text command processor at startup
+    dbg.getCommandProcessor = textCommandProcessor.getCommandProcessor;
 };
 
 this._startDebugger = function (global, files, startFunc) {
