@@ -59,16 +59,11 @@ commandProcessor.info = function (str) {
 commandProcessor.clear = function (str) {
     var report = "";
 
-    // var md = str.match(/^clear/);
-    var md = str.match(/^clear?\s+([^:]+):(\d+)/);
-	if (md) {
-        result += "clearing all breakpoints - NYI";
-        return ({success : true,
-                 stringResult : report});
-	} else {
-        return ({success : false,
-                 stringResult : report});
-    }
+    report += "clearing all breakpoints";
+
+    dbg.dbg.clearAllBreakpoints();
+    return ({success : true,
+             stringResult : report});
 }
 
 commandProcessor.scripts = function (str) {
@@ -324,6 +319,7 @@ this.processInput = function (str, frame, script) {
 
 _printHelp = function() {
 	var help = "break filename:numer\tAdds a breakpoint at a given filename and line number\n" +
+				"clear\tClear all breakpoints\n" +
 				"c / continue\tContinues the execution\n" +
 				"s / step\tStep\n" +
 				"bt\tBacktrace\n" +
