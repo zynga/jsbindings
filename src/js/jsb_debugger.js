@@ -192,6 +192,44 @@ textCommandProcessor.help = function (regexp_match_array, frame, script) {
              stringResult : ""});
 }
 
+textCommandProcessor.getCommandProcessor = function (str) {
+	// break
+	var md = str.match(/[a-z]*/);
+    if (!md) {
+        return null;
+    }
+    cc.log("md[0] = " + md[0]);
+    switch (md[0]) {
+    case "b" :
+    case "break" :
+        return textCommandProcessor.break;
+    case "info" :
+        return textCommandProcessor.info;
+    case "clear" :
+        return textCommandProcessor.clear;
+    case "scripts" :
+        return textCommandProcessor.scripts;
+    case "s" :
+    case "step" :
+        return textCommandProcessor.step;
+    case "c" :
+    case "continue" :
+        return textCommandProcessor.continue;
+    case "deval" :
+        return textCommandProcessor.deval;
+    case "eval" :
+        return textCommandProcessor.eval;
+    case "line" :
+        return textCommandProcessor.line;
+    case "bt" :
+        return textCommandProcessor.backtrace;
+    case "help" :
+        return textCommandProcessor.help;
+    default :
+        return null;
+    }
+}
+
 var breakpointHandler = {
 	hit: function (frame) {
 		var script = frame.script;
@@ -241,45 +279,6 @@ var debugObject = function (r, isNormal) {
 }
 
 dbg.breakLine = 0;
-
-textCommandProcessor.getCommandProcessor = function (str) {
-	// break
-	var md = str.match(/[a-z]*/);
-    if (!md) {
-        return null;
-    }
-    cc.log("md[0] = " + md[0]);
-    switch (md[0]) {
-    case "b" :
-    case "break" :
-        return textCommandProcessor.break;
-    case "info" :
-        return textCommandProcessor.info;
-    case "clear" :
-        return textCommandProcessor.clear;
-    case "scripts" :
-        return textCommandProcessor.scripts;
-    case "s" :
-    case "step" :
-        return textCommandProcessor.step;
-    case "c" :
-    case "continue" :
-        return textCommandProcessor.continue;
-    case "deval" :
-        return textCommandProcessor.deval;
-    case "eval" :
-        return textCommandProcessor.eval;
-    case "line" :
-        return textCommandProcessor.line;
-    case "bt" :
-        return textCommandProcessor.backtrace;
-    case "help" :
-        return textCommandProcessor.help;
-    default :
-        return null;
-    }
-}
-
 
 this.processInput = function (str, frame, script) {
     var command_func;
