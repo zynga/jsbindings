@@ -30,7 +30,8 @@ textCommandProcessor.break = function (str) {
 			tmpScript.setBreakpoint(off, breakpointHandler);
             return ({commandname : "break",
                      success : true,
-                     stringResult : "breakpoint set for line " + breakLine + " of script " + md[2]});
+                     jsfilename : md[2],
+                     breakpointlinenumber : breakLine});
 		} else {
             return ({commandname : "break",
                      success : false,
@@ -39,7 +40,8 @@ textCommandProcessor.break = function (str) {
 	} else {
         return ({commandname : "break",
                  success : false,
-                 stringResult : "no script named: " + md[2]});
+                 jsfilename : md[2],
+                 stringResult : "Invalid script name"});
 	}
 }
 
