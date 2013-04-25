@@ -30,7 +30,8 @@ textCommandProcessor.break = function (str) {
 			tmpScript.setBreakpoint(off, breakpointHandler);
             return ({commandname : "break",
                      success : true,
-                     stringResult : "breakpoint set for line " + breakLine + " of script " + md[2]});
+                     jsfilename : md[2],
+                     breakpointlinenumber : breakLine});
 		} else {
             return ({commandname : "break",
                      success : false,
@@ -39,7 +40,8 @@ textCommandProcessor.break = function (str) {
 	} else {
         return ({commandname : "break",
                  success : false,
-                 stringResult : "no script named: " + md[2]});
+                 jsfilename : md[2],
+                 stringResult : "Invalid script name"});
 	}
 }
 
@@ -259,9 +261,19 @@ var jsonResponder = {};
 
 jsonResponder.write = _bufferWrite;
 
-jsonResponder.breakpointHit = function (filename, linenumber) {
+jsonResponder.onBreakpoint = function (filename, linenumber) {
     var response = {"from" : "server",
-                    "why" : "breakpointhit",
+                    "why" : "onBreakpoint",
+                    "data" : {"jsfilename" : filename,
+                              "linenumber" : linenumber}};
+
+    cc.log(JSON.stringify(response));
+    this.write(JSON.stringify(response));
+}
+
+jsonResponder.onStep = function (filename, linenumber) {
+    var response = {"from" : "server",
+                    "why" : "onStep",
                     "data" : {"jsfilename" : filename,
                               "linenumber" : linenumber}};
 
@@ -281,7 +293,7 @@ jsonResponder.commandResponse = function (commandresult) {
 var breakpointHandler = {
 	hit: function (frame) {
         try {
-            dbg.responder.breakpointHit(frame.script.url, frame.script.getOffsetLine(frame.offset));
+            dbg.responder.onBreakpoint(frame.script.url, frame.script.getOffsetLine(frame.offset));
         } catch (e) {
             cc.log("exception " + e);
         }
@@ -297,6 +309,12 @@ var stepFunction = function (frame, script) {
 		if (curLine < dbg.breakLine) {
 			return;
 		} else {
+            try {
+                dbg.responder.onStep(frame.script.url, frame.script.getOffsetLine(frame.offset));
+            } catch (e) {
+                cc.log("exception " + e);
+            }
+
 			_lockVM(frame, script);
 			// dbg.breakLine = 0;
 			// frame.onStep = undefined;
