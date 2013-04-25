@@ -259,7 +259,11 @@ textCommandProcessor.getCommandProcessor = function (str) {
 
 var jsonResponder = {};
 
-jsonResponder.write = _bufferWrite;
+jsonResponder.write = function (str) {
+    _bufferWrite(str);
+    _bufferWrite("\n");
+    _bufferWrite(String.fromCharCode(23));
+}
 
 jsonResponder.onBreakpoint = function (filename, linenumber) {
     var response = {"from" : "server",
