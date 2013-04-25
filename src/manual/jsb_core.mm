@@ -74,7 +74,7 @@ static void reportError(JSContext *cx, const char *message, JSErrorReport *repor
 {
 	js_DumpBacktrace(cx);
 #if DEBUG
-	js_DumpStackFrame(cx);
+//	js_DumpStackFrame(cx);
 #endif
 	fprintf(stderr, "%s:%u:%u %s\n",
 			report->filename ? report->filename : "(no filename)",
