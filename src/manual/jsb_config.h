@@ -168,7 +168,7 @@
  TCP port used to connect to the debugger
  */
 #ifndef JSB_DEBUGGER_PORT
-#define JSB_DEBUGGER_PORT 1337
+#define JSB_DEBUGGER_PORT 5086
 #endif // JSB_DEBUGGER_PORT
 
 #ifndef JSB_MAX_STACK_QUOTA
