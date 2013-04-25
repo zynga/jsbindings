@@ -43,6 +43,14 @@ void debugProcessInput(string data) {
 	}	
 }
 
+static void _clientSocketWriteAndClearString(string& s) {
+#if JSB_DEBUGGER_OUTPUT_STDOUT
+    write(STDOUT_FILENO, s.c_str(), s.length());
+#endif
+    write(clientSocket, s.c_str(), s.length());
+    s.clear();
+}
+
 void clearBuffers() {
 	pthread_mutex_lock(&g_rwMutex);
 	{
@@ -52,11 +60,7 @@ void clearBuffers() {
 			inData.clear();
 		}
 		if (outData.length() > 0) {
-#if JSB_DEBUGGER_OUTPUT_STDOUT
-			write(STDOUT_FILENO, outData.c_str(), outData.length());
-#endif
-			write(clientSocket, outData.c_str(), outData.length());
-			outData.clear();
+            _clientSocketWriteAndClearString(outData);
 		}
 	}
 	pthread_mutex_unlock(&g_rwMutex);
@@ -252,6 +256,7 @@ JSBool JSBDebug_BufferWrite(JSContext* cx, unsigned argc, jsval* vp)
 
 		// this is safe because we're already inside a lock (from clearBuffers)
 		outData.append(str);
+        _clientSocketWriteAndClearString(outData);
 
         JS_free(cx, (void*)str);
     }
