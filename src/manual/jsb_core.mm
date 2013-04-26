@@ -474,22 +474,64 @@ JSSecurityCallbacks securityCallbacks = {
 - (JSBool)runScript:(NSString*)filename withContainer:(JSObject *)global
 {
 	JSBool ok = JS_FALSE;
+	NSString *fullpathJSC = nil, *fullpathJS = nil;
+	NSString *filenameJSC = nil;
+	JSScript *script = NULL;
 
 	CCFileUtils *fileUtils = [CCFileUtils sharedFileUtils];
-	NSString *fullpath = [fileUtils fullPathForFilenameIgnoringResolutions:filename];
-	if( !fullpath) {
+
+	// a) check for .js on specified directory, and get .jsc filename
+	fullpathJS = [fileUtils fullPathForFilenameIgnoringResolutions:filename];
+	filenameJSC = [[filename stringByDeletingPathExtension] stringByAppendingPathExtension:@"jsc"];
+
+	// b) No .js ? Check for .jsc on specified directory ?
+	if( ! fullpathJS)
+		fullpathJSC = [fileUtils fullPathForFilenameIgnoringResolutions:filenameJSC];
+
+	// c) No .js and no .jsc ? -> error
+	if( !fullpathJS && ! fullpathJSC) {
 		char tmp[256];
-		snprintf(tmp, sizeof(tmp)-1, "File not found: %s", [filename UTF8String]);
-		JSB_PRECONDITION(fullpath, tmp);
+		snprintf(tmp, sizeof(tmp)-1, "File not found: %s", [fullpathJS UTF8String]);
+		JSB_PRECONDITION(fullpathJS || fullpathJSC, tmp);
 	}
 
-	// Removed in SpiderMonkey 19.0
-	//	JSScript* script = JS_CompileUTF8File(_cx, global, [fullpath UTF8String] );
+	// d) if .jsc on specified directory, get its script
+	if( fullpathJSC)
+		script = [self decodeScript:fullpathJSC];
+
+	else {
+		// e) if not .jsc on specified directory, check for .jsc on cache directory
+		NSString *cachedFullpathJSC = [self cachedFullpathForJSC:filenameJSC];
+
+		// f) if .jsc on cache is newer than .js, execute cached file
+		if( cachedFullpathJSC ) {
+			NSFileManager *fileManager = [NSFileManager defaultManager];
+			NSDictionary* attrs = [fileManager attributesOfItemAtPath:cachedFullpathJSC error:nil];
+			NSDate *jscDate = [attrs fileCreationDate];
+
+			// .js date
+			NSDictionary* jsAttrs = [fileManager attributesOfItemAtPath:fullpathJS error:nil];
+			NSDate *jsDate = [jsAttrs fileCreationDate];
+
+			if( [jscDate compare:jsDate] == NSOrderedDescending) {
+
+				script = [self decodeScript:cachedFullpathJSC];
+			}
+		}
+	}
+
 
 	js::RootedObject obj(_cx, global);
-	JS::CompileOptions options(_cx);
-	options.setUTF8(true).setFileAndLine([fullpath UTF8String], 1);
-	JSScript *script = JS::Compile(_cx, obj, options, [fullpath UTF8String]);
+
+	// g) Failed to get encoded scripts ? Then execute .js file and create .jsc on cache
+	if( ! script ) {
+		JS::CompileOptions options(_cx);
+		options.setUTF8(true)
+				.setFileAndLine([fullpathJS UTF8String], 1);
+		script = JS::Compile(_cx, obj, options, [fullpathJS UTF8String]);
+
+		[self encodeScript:script filename:filenameJSC];
+	}
 
 	JSB_PRECONDITION(script, "Error compiling script");
 	{
@@ -503,6 +545,8 @@ JSSecurityCallbacks securityCallbacks = {
 		JSB_PRECONDITION(ok, tmp);
 	}
 
+
+	// XXX: is this needed ?
 	// add script to the global map
 	const char* key = [filename UTF8String];
 	if (__scripts[key]) {
@@ -516,10 +560,51 @@ JSSecurityCallbacks securityCallbacks = {
     return ok;
 }
 
+- (NSString*) cachedFullpathForJSC:(NSString*)filename
+{
+	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+	NSString *documentsDirectory = [paths objectAtIndex:0];
+
+	NSString *fullpath = [NSString stringWithFormat:@"%@/%@", documentsDirectory, filename];
+	if( [[NSFileManager defaultManager] fileExistsAtPath:fullpath] )
+		return fullpath;
+	return nil;
+}
+
+- (JSScript*)decodeScript:(NSString*)filename
+{
+	NSData *data = [NSData dataWithContentsOfFile:filename];
+	JSB_PRECONDITION(data, "Error running encoded script");
+
+	return JS_DecodeScript(_cx, [data bytes], [data length], NULL, NULL);
+}
+
+-(void) encodeScript:(JSScript *)script filename:(NSString*)filename
+{
+	uint32_t len;
+	void *bytes = JS_EncodeScript(_cx, script, &len);
+
+	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+	NSString *documentsDirectory = [paths objectAtIndex:0];
+
+	NSString *fullpath = [NSString stringWithFormat:@"%@/%@", documentsDirectory, filename];
+
+	// create directory
+	NSError *error = nil;
+	NSString *p = [fullpath stringByDeletingLastPathComponent];
+	[[NSFileManager defaultManager] createDirectoryAtPath:p
+							  withIntermediateDirectories:YES
+											   attributes:nil
+													error:&error];
+
+	NSData *data = [NSData dataWithBytes:bytes length:len];
+	[data writeToFile:fullpath atomically:NO];
+}
+
 -(void) dealloc
 {
 	[super dealloc];
-	
+
 	if (_object) {
 		delete _object;
 	}

@@ -136,6 +136,12 @@ extern char * JSB_association_proxy_key;
  */
 -(JSBool) runScript:(NSString*)filename withContainer:(JSObject *)global;
 
+-(JSScript*) decodeScript:(NSString*)filename;
+
+-(void) encodeScript:(JSScript *)script filename:(NSString*)filename;
+
+-(NSString*) cachedFullpathForJSCn:(NSString*)path;
+
 @end
 
 #ifdef __cplusplus
