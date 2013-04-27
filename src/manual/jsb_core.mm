@@ -440,30 +440,6 @@ JSSecurityCallbacks securityCallbacks = {
 }
 
 /*
- * Evaluates an script
- */
--(JSBool) runScript_do_not_use:(NSString*)filename
-{
-	JSBool ok = JS_FALSE;
-
-	CCFileUtils *fileUtils = [CCFileUtils sharedFileUtils];
-	NSString *fullpath = [fileUtils fullPathForFilenameIgnoringResolutions:filename];
-
-	unsigned char *content = NULL;
-	size_t contentSize = ccLoadFileIntoMemory([fullpath UTF8String], &content);
-	if (content && contentSize) {
-		jsval rval;
-		ok = JS_EvaluateScript( _cx, _object->get(), (char *)content, (unsigned)contentSize, [filename UTF8String], 1, &rval);
-		free(content);
-
-		if (ok == JS_FALSE)
-			CCLOGWARN(@"error evaluating script: %@", filename);
-	}
-
-	return ok;
-}
-
-/*
  * This function works OK if it JS_SetCStringsAreUTF8() is called.
  */
 -(JSBool) runScript:(NSString*)filename

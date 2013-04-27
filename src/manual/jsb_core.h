@@ -140,7 +140,7 @@ extern char * JSB_association_proxy_key;
 
 -(void) encodeScript:(JSScript *)script filename:(NSString*)filename;
 
--(NSString*) cachedFullpathForJSCn:(NSString*)path;
+-(NSString*) cachedFullpathForJSC:(NSString*)path;
 
 @end
 
