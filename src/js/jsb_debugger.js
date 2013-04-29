@@ -122,18 +122,18 @@ textCommandProcessor.deval = function (str, frame, script) {
 	var md = str.match(/^deval\s+(.+)/);
 	if (md[1]) {
 		try {
-			var tmp = eval(md[1]);
-			if (tmp) {
-				debugObject(tmp, true);
+			var devalReturn = eval(md[1]);
+			if (devalReturn) {
+                var stringreport = debugObject(devalReturn, true);
+                return ({commandname : "deval",
+                         success : true,
+                         stringResult : stringreport});
 			}
 		} catch (e) {
             return ({commandname : "deval",
                      success : false,
                      stringResult : "exception:\n" + e.message});
 		}
-        return ({commandname : "deval",
-                 success : true,
-                 stringResult : ""});
 	} else {
         return ({commandname : "deval",
                  success : false,
@@ -149,26 +149,31 @@ textCommandProcessor.eval = function (str, frame, script) {
                  stringResult : "no frame to eval in"});
     }
 
-	var md = str.match(/^eval\s+(.+)/);
+    var stringToEval = str.substring(4);
 
-	if (md) {
-		var res = frame['eval'](md[1]),
-			k;
-		if (res && res['return']) {
-			debugObject(res['return']);
-		} else if (res && res['throw']) {
+	if (stringToEval) {
+        try {
+		    var evalResult = frame['eval'](stringToEval);
+		    if (evalResult && evalResult['return']) {
+                var stringreport = debugObject(evalResult['return']);
+                return ({commandname : "eval",
+                         success : true,
+                         stringResult : stringreport});
+            } else if (evalResult && evalResult['throw']) {
+                return ({commandname : "eval",
+                         success : false,
+                         stringResult : "got exception: " + evalResult['throw'].message});
+		    } else {
+                return ({commandname : "eval",
+                         success : false,
+                         stringResult : "invalid return from eval"});
+		    }
+        } catch (e) {
+            cc.log("exception = " + e);
             return ({commandname : "eval",
                      success : false,
-                     stringResult : "got exception: " + res['throw'].message});
-		} else {
-            return ({commandname : "eval",
-                     success : false,
-                     stringResult : "invalid return from eval"});
-		}
-
-        return ({commandname : "eval",
-                 success : true,
-                 stringResult : ""});
+                     stringResult : "Exception : " + e});
+        }
 	}
 }
 
@@ -329,29 +334,36 @@ var stepFunction = function (frame, script) {
 };
 
 var debugObject = function (r, isNormal) {
-	_bufferWrite("* " + (typeof r) + "\n");
-	if (typeof r != "object") {
-		_bufferWrite("~> " + r + "\n");
-	} else {
-		var props;
-		if (isNormal) {
-			props = Object.keys(r);
-		} else {
-			props = r.getOwnPropertyNames();
-		}
-		for (k in props) {
-			var desc = r.getOwnPropertyDescriptor(props[k]);
-			_bufferWrite("~> " + props[k] + " = ");
-			if (desc.value) {
-				_bufferWrite("" + desc.value);
-			} else if (desc.get) {
-				_bufferWrite("" + desc.get());
-			} else {
-				_bufferWrite("undefined (no value or getter)");
-			}
-			_bufferWrite("\n");
-		}
-	}
+    var stringres = "";
+    try {
+	    stringres += "* " + (typeof r) + "\n";
+	    if (typeof r != "object") {
+		    stringres += "~> " + r + "\n";
+	    } else {
+		    var props;
+		    if (isNormal) {
+			    props = Object.keys(r);
+		    } else {
+			    props = r.getOwnPropertyNames();
+		    }
+		    for (k in props) {
+			    var desc = r.getOwnPropertyDescriptor(props[k]);
+			    stringres += "~> " + props[k] + " = ";
+			    if (desc.value) {
+				    stringres += "" + desc.value;
+			    } else if (desc.get) {
+				    stringres += "" + desc.get();
+			    } else {
+				    stringres += "undefined (no value or getter)";
+			    }
+			    stringres += "\n";
+		    }
+        }
+
+        return stringres;
+	} catch (e) {
+        return ("Exception when accessing object properties = " + e);
+    }
 }
 
 dbg.breakLine = 0;
@@ -403,14 +415,14 @@ this.processInput = function (str, frame, script) {
 
 _printHelp = function() {
 	var help = "break filename:numer\tAdds a breakpoint at a given filename and line number\n" +
-				"clear\tClear all breakpoints\n" +
-				"c / continue\tContinues the execution\n" +
-				"s / step\tStep\n" +
-				"bt\tBacktrace\n" +
-				"scripts\tShow the scripts\n" +
-				"line\tShows current line\n" +
-				"eval js_command\tEvaluates JS code\n" +
-				"deval js_command\tEvaluates JS Debugger command\n";
+		"clear\tClear all breakpoints\n" +
+		"c / continue\tContinues the execution\n" +
+		"s / step\tStep\n" +
+		"bt\tBacktrace\n" +
+		"scripts\tShow the scripts\n" +
+		"line\tShows current line\n" +
+		"eval js_command\tEvaluates JS code\n" +
+		"deval js_command\tEvaluates JS Debugger command\n";
 	_bufferWrite(help);
 };
 
@@ -421,17 +433,17 @@ dbg.onNewScript = function (script) {
 	var last = script.url.split("/").pop();
 
 	var children = script.getChildScripts(),
-		arr = [script].concat(children);
+	arr = [script].concat(children);
 	/**
 	 * just dumping all the offsets from the scripts
-	for (var i in arr) {
-		cc.log("script: " + arr[i].url);
-		for (var start=arr[i].startLine, j=start; j < start+arr[i].lineCount; j++) {
-			var offsets = arr[i].getLineOffsets(j);
-			cc.log("  off: " + offsets.join(",") + "; line: " + j);
-		}
-	}
-	 */
+	 for (var i in arr) {
+	 cc.log("script: " + arr[i].url);
+	 for (var start=arr[i].startLine, j=start; j < start+arr[i].lineCount; j++) {
+	 var offsets = arr[i].getLineOffsets(j);
+	 cc.log("  off: " + offsets.join(",") + "; line: " + j);
+	 }
+	 }
+	*/
 	dbg.scripts[last] = arr;
 };
 
