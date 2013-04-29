@@ -76,7 +76,7 @@ static void reportError(JSContext *cx, const char *message, JSErrorReport *repor
 #if DEBUG
 //	js_DumpStackFrame(cx);
 #endif
-	fprintf(stderr, "%s:%u:%u %s\n",
+	fprintf(stdout, "%s:%u:%u %s\n",
 			report->filename ? report->filename : "(no filename)",
 			(unsigned int)report->lineno,
 			(unsigned int)report->column,
@@ -92,7 +92,7 @@ JSBool JSB_core_log(JSContext *cx, uint32_t argc, jsval *vp)
 		JS_ConvertArguments(cx, argc, JS_ARGV(cx, vp), "S", &string);
 		if (string) {
 			char *cstr = JS_EncodeString(cx, string);
-			fprintf(stderr, "%s\n", cstr);
+			fprintf(stdout, "%s\n", cstr);
 		}
 
 		return JS_TRUE;
