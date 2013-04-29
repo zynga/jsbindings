@@ -230,7 +230,6 @@ textCommandProcessor.getCommandProcessor = function (str) {
     if (!md) {
         return null;
     }
-    cc.log("md[0] = " + md[0]);
     switch (md[0]) {
     case "b" :
     case "break" :
@@ -276,7 +275,6 @@ jsonResponder.onBreakpoint = function (filename, linenumber) {
                     "data" : {"jsfilename" : filename,
                               "linenumber" : linenumber}};
 
-    cc.log(JSON.stringify(response));
     this.write(JSON.stringify(response));
 }
 
@@ -286,7 +284,6 @@ jsonResponder.onStep = function (filename, linenumber) {
                     "data" : {"jsfilename" : filename,
                               "linenumber" : linenumber}};
 
-    cc.log(JSON.stringify(response));
     this.write(JSON.stringify(response));
 }
 
@@ -295,7 +292,6 @@ jsonResponder.commandResponse = function (commandresult) {
                     "why" : "commandresponse",
                     "data" : commandresult};
 
-    cc.log(JSON.stringify(response));
     this.write(JSON.stringify(response));
 }
 
@@ -390,17 +386,12 @@ this.processInput = function (str, frame, script) {
         cc.log("did not find a command processor!");
     } else {
         try {
-            cc.log("command_func.name = " + command_func.name);
-
             command_return = command_func(str, frame, script);
             if (true === command_return.success) {
-                cc.log("command succeeded. return value = " + command_return.stringResult);
                 dbg.responder.commandResponse(command_return);
-                // _bufferWrite(command_return.stringResult + "\n");
             } else {
                 cc.log("command failed. return value = " + command_return.stringResult);
                 dbg.responder.commandResponse(command_return);
-                // _bufferWrite("ERROR " + command_return.stringResult + "\n");
             }
         } catch (e) {
             cc.log("Exception in command processing. e =\n" + e  + "\n");
