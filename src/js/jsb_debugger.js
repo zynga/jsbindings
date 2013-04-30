@@ -261,6 +261,7 @@ textCommandProcessor.getCommandProcessor = function (str) {
     }
 }
 
+// JSON output
 var jsonResponder = {};
 
 jsonResponder.write = function (str) {
@@ -293,6 +294,97 @@ jsonResponder.commandResponse = function (commandresult) {
                     "data" : commandresult};
 
     this.write(JSON.stringify(response));
+}
+
+// Plain Old Text output
+var textResponder = {};
+
+textResponder.write = function (str) {
+    _bufferWrite(str);
+    _bufferWrite("\n");
+    _bufferWrite(String.fromCharCode(23));
+}
+
+textResponder.onBreakpoint = function (filename, linenumber) {
+    var shortFilename = filename.substring(filename.lastIndexOf("/") + 1);
+    var response = "Breakpoint hit at " + shortFilename + " line number : " + linenumber;
+    this.write(response);
+}
+
+textResponder.onStep = function (filename, linenumber) {
+    var shortFilename = filename.substring(filename.lastIndexOf("/") + 1);
+    var response = "Stopped at " + shortFilename + " line number : " + linenumber;
+    this.write(response);
+}
+
+textResponder.commandResponse = function (commandresult) {
+    var response = "";
+
+    try {
+        switch (commandresult.commandname) {
+        case "break" :
+            if (!commandresult.success) {
+                response += "ERROR : " + commandresult.stringResult;
+            }
+            break;
+        case "info" :
+            if (!commandresult.success) {
+                response += "ERROR : " + commandresult.stringResult;
+            }
+            break;
+        case "clear" :
+            break;
+        case "scripts" :
+            if (true === commandresult.success) {
+                response += commandresult.stringResult;
+            }
+            break;
+        case "step" :
+            if (!commandresult.success) {
+                response += "ERROR : step failed " + commandresult.stringResult;
+            }
+            break;
+        case "continue" :
+            if (!commandresult.success) {
+                response += "ERROR : continue failed " + commandresult.stringResult;
+            }
+            break;
+        case "deval" :
+            if (true === commandresult.success) {
+                response += commandresult.stringResult;
+            } else {
+                response += "ERROR : deval failed " + commandresult.stringResult;
+            } 
+            break;
+        case "eval" :
+            if (true === commandresult.success) {
+                response += commandresult.stringResult;
+            } else {
+                response += "ERROR : deval failed " + commandresult.stringResult;
+            } 
+            break;
+        case "line" :
+            if (true === commandresult.success) {
+                response += commandresult.stringResult;
+            } else {
+                response += "ERROR : " + commandresult.stringResult;
+            } 
+            break;
+        case "backtrace" :
+            if (true === commandresult.success) {
+                response += commandresult.stringResult;
+            } else {
+                response += "ERROR : " + commandresult.stringResult;
+            } 
+            break;
+        case "help" :
+            break;
+        }
+    } catch (e) {
+        response += "\nException logging response " + e;
+    }
+
+    this.write(response);
 }
 
 var breakpointHandler = {
@@ -454,7 +546,8 @@ this._prepareDebugger = function (global) {
 
     // use the text command processor at startup
     dbg.getCommandProcessor = textCommandProcessor.getCommandProcessor;
-    dbg.responder = jsonResponder;
+    // dbg.responder = jsonResponder;
+    dbg.responder = textResponder;
 };
 
 this._startDebugger = function (global, files, startFunc) {
