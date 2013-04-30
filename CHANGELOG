@@ -1,4 +1,4 @@
-version 0.7 - XX-Apr-2013
+version 0.7 - 1-May-2013
 - [NEW] Added support for 'compiled' JS:
 		You can bundle .jsc files (instead of .js) in your application in order to project your IP.
 - [NEW] JSB Generator: generates "ctor" methods for Obj-C classes.
@@ -9,6 +9,7 @@ version 0.7 - XX-Apr-2013
 		common: In JSB_jsval_to_NSDictionary the key can be a number or a string
 		common: JSB_jsval_to_unknown: if a jsvalue is null, it returns [NSNull null]
 		dbg: Debugger works with SpiderMonkey v20
+		dbg: Debugger supports JSON responses
 - [FIX] JSB cocos2d:
 		CCReuseGrid and CCStopGrid are bound
 

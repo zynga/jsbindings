@@ -14,7 +14,7 @@ Contributors (alphabetically ordered):
     JSB_jsval_to_unknown: if a jsvalue is null, it returns [NSNull null]
 
 * Rolando Abarca (https://github.com/funkaster):
-    Author of remote debugging code
+    Original author of remote debugging code
 
 * Sam Gross (https://github.com/colesbury):
     Fixed error when class has callbacks but no manual methods
@@ -35,6 +35,11 @@ Contributors (alphabetically ordered):
 
 * Sergej Tatarincev (https://github.com/SevInf)
     Added conversion for NSNull
+
+* Surith Thekkiam (https://github.com/folecr)
+	Added JSON responses to debugger
+	Fixed crashes on the debugger
+	Added 'clean' command on the debugger
 
 * Wu-Hao (https://github.com/Wu-Hao)
     Added missing properties for the Chipmunk JS Bindings
