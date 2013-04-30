@@ -319,6 +319,10 @@ jsonResponder.commandResponse = function (commandresult) {
     this.write(JSON.stringify(response));
 }
 
+jsonResponder.commandNotFound = function () {
+    // do nothing
+}
+
 // Plain Old Text output
 var textResponder = {};
 
@@ -410,6 +414,10 @@ textResponder.commandResponse = function (commandresult) {
     this.write(response);
 }
 
+textResponder.commandNotFound = function () {
+    _printCommandNotFound();
+}
+
 var breakpointHandler = {
 	hit: function (frame) {
         try {
@@ -499,6 +507,7 @@ this.processInput = function (str, frame, script) {
 
     if (!command_func) {
         cc.log("did not find a command processor!");
+        dbg.responder.commandNotFound();
     } else {
         try {
             command_return = command_func(str, frame, script);
@@ -518,6 +527,10 @@ this.processInput = function (str, frame, script) {
     }
 };
 
+_printCommandNotFound = function() {
+	var str = "ERROR : command not found!\n";
+	_bufferWrite(str);
+};
 
 _printHelp = function() {
 	var help = "break filename:numer\tAdds a breakpoint at a given filename and line number\n" +
