@@ -216,7 +216,28 @@ textCommandProcessor.backtrace = function (str, frame, script) {
              stringResult : result});
 }
 
-textCommandProcessor.help = function (regexp_match_array, frame, script) {
+textCommandProcessor.uiresponse = function (str) {
+    var subcommandstring = (str.substring("uiresponse".length)).replace(/\s+/g, '');
+    var response = "";
+    switch (subcommandstring) {
+    case "json":
+        dbg.responder = jsonResponder;
+        response += "DEBUGGER UI : responding with json messages";
+        break;
+    case "plaintext":
+        dbg.responder = textResponder;
+        response += "DEBUGGER UI : responding with plaintext messages";
+        break;
+    }
+
+    // note : we return an empty string
+    cc.log(response);
+    return ({commandname : "uiresponse",
+             success : true,
+             stringResult : ""});
+}
+
+textCommandProcessor.help = function () {
     _printHelp();
 
     return ({commandname : "help",
@@ -254,6 +275,8 @@ textCommandProcessor.getCommandProcessor = function (str) {
         return textCommandProcessor.line;
     case "bt" :
         return textCommandProcessor.backtrace;
+    case "uiresponse" :
+        return textCommandProcessor.uiresponse;
     case "help" :
         return textCommandProcessor.help;
     default :
@@ -261,6 +284,7 @@ textCommandProcessor.getCommandProcessor = function (str) {
     }
 }
 
+// JSON output
 var jsonResponder = {};
 
 jsonResponder.write = function (str) {
@@ -293,6 +317,97 @@ jsonResponder.commandResponse = function (commandresult) {
                     "data" : commandresult};
 
     this.write(JSON.stringify(response));
+}
+
+// Plain Old Text output
+var textResponder = {};
+
+textResponder.write = function (str) {
+    _bufferWrite(str);
+    _bufferWrite("\n");
+    _bufferWrite(String.fromCharCode(23));
+}
+
+textResponder.onBreakpoint = function (filename, linenumber) {
+    var shortFilename = filename.substring(filename.lastIndexOf("/") + 1);
+    var response = "Breakpoint hit at " + shortFilename + " line number : " + linenumber;
+    this.write(response);
+}
+
+textResponder.onStep = function (filename, linenumber) {
+    var shortFilename = filename.substring(filename.lastIndexOf("/") + 1);
+    var response = "Stopped at " + shortFilename + " line number : " + linenumber;
+    this.write(response);
+}
+
+textResponder.commandResponse = function (commandresult) {
+    var response = "";
+
+    try {
+        switch (commandresult.commandname) {
+        case "break" :
+            if (!commandresult.success) {
+                response += "ERROR : " + commandresult.stringResult;
+            }
+            break;
+        case "info" :
+            if (!commandresult.success) {
+                response += "ERROR : " + commandresult.stringResult;
+            }
+            break;
+        case "clear" :
+            break;
+        case "scripts" :
+            if (true === commandresult.success) {
+                response += commandresult.stringResult;
+            }
+            break;
+        case "step" :
+            if (!commandresult.success) {
+                response += "ERROR : step failed " + commandresult.stringResult;
+            }
+            break;
+        case "continue" :
+            if (!commandresult.success) {
+                response += "ERROR : continue failed " + commandresult.stringResult;
+            }
+            break;
+        case "deval" :
+            if (true === commandresult.success) {
+                response += commandresult.stringResult;
+            } else {
+                response += "ERROR : deval failed " + commandresult.stringResult;
+            } 
+            break;
+        case "eval" :
+            if (true === commandresult.success) {
+                response += commandresult.stringResult;
+            } else {
+                response += "ERROR : deval failed " + commandresult.stringResult;
+            } 
+            break;
+        case "line" :
+            if (true === commandresult.success) {
+                response += commandresult.stringResult;
+            } else {
+                response += "ERROR : " + commandresult.stringResult;
+            } 
+            break;
+        case "backtrace" :
+            if (true === commandresult.success) {
+                response += commandresult.stringResult;
+            } else {
+                response += "ERROR : " + commandresult.stringResult;
+            } 
+            break;
+        case "help" :
+            break;
+        }
+    } catch (e) {
+        response += "\nException logging response " + e;
+    }
+
+    this.write(response);
 }
 
 var breakpointHandler = {
@@ -413,7 +528,8 @@ _printHelp = function() {
 		"scripts\tShow the scripts\n" +
 		"line\tShows current line\n" +
 		"eval js_command\tEvaluates JS code\n" +
-		"deval js_command\tEvaluates JS Debugger command\n";
+		"deval js_command\tEvaluates JS Debugger command\n" +
+		"uiresponse [json|plaintext] Switch between JSON and plaintext output from the debugger\n";
 	_bufferWrite(help);
 };
 
@@ -454,7 +570,9 @@ this._prepareDebugger = function (global) {
 
     // use the text command processor at startup
     dbg.getCommandProcessor = textCommandProcessor.getCommandProcessor;
-    dbg.responder = jsonResponder;
+
+    // use the text responder at startup
+    dbg.responder = textResponder;
 };
 
 this._startDebugger = function (global, files, startFunc) {
