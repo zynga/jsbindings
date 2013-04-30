@@ -216,7 +216,28 @@ textCommandProcessor.backtrace = function (str, frame, script) {
              stringResult : result});
 }
 
-textCommandProcessor.help = function (regexp_match_array, frame, script) {
+textCommandProcessor.uiresponse = function (str) {
+    var subcommandstring = (str.substring("uiresponse".length)).replace(/\s+/g, '');
+    var response = "";
+    switch (subcommandstring) {
+    case "json":
+        dbg.responder = jsonResponder;
+        response += "DEBUGGER UI : responding with json messages";
+        break;
+    case "plaintext":
+        dbg.responder = textResponder;
+        response += "DEBUGGER UI : responding with plaintext messages";
+        break;
+    }
+
+    // note : we return an empty string
+    cc.log(response);
+    return ({commandname : "uiresponse",
+             success : true,
+             stringResult : ""});
+}
+
+textCommandProcessor.help = function () {
     _printHelp();
 
     return ({commandname : "help",
@@ -254,6 +275,8 @@ textCommandProcessor.getCommandProcessor = function (str) {
         return textCommandProcessor.line;
     case "bt" :
         return textCommandProcessor.backtrace;
+    case "uiresponse" :
+        return textCommandProcessor.uiresponse;
     case "help" :
         return textCommandProcessor.help;
     default :
@@ -505,7 +528,8 @@ _printHelp = function() {
 		"scripts\tShow the scripts\n" +
 		"line\tShows current line\n" +
 		"eval js_command\tEvaluates JS code\n" +
-		"deval js_command\tEvaluates JS Debugger command\n";
+		"deval js_command\tEvaluates JS Debugger command\n" +
+		"uiresponse [json|plaintext] Switch between JSON and plaintext output from the debugger\n";
 	_bufferWrite(help);
 };
 
@@ -546,7 +570,8 @@ this._prepareDebugger = function (global) {
 
     // use the text command processor at startup
     dbg.getCommandProcessor = textCommandProcessor.getCommandProcessor;
-    // dbg.responder = jsonResponder;
+
+    // use the text responder at startup
     dbg.responder = textResponder;
 };
 
