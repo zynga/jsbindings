@@ -150,6 +150,16 @@
 #define JSB_INCLUDE_OPENGL 1
 #endif // JSB_INCLUDE_OPENGL
 
+/** @def JSB_ENABLE_JSC_AUTOGENERATION
+ Set this to 1 to enable auto "JS Encoded" (.jsc) files from JS (.js) files.
+ - .jsc files load 15% faster than .js files.
+ - Generating the .jsc files increases the "parsing" time in about %60 (it is done only once).
+ - .jsc files could be used to protect the source code your JavaScript code.
+ */
+#ifndef JSB_ENABLE_JSC_AUTOGENERATION
+#define JSB_ENABLE_JSC_AUTOGENERATION 0
+#endif // JSB_ENABLE_JSC_AUTOGENERATION
+
 /** @def JSB_ENABLE_DEBUGGER
  Set this to 1 to enable the debugger
  */

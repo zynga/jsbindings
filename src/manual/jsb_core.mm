@@ -475,6 +475,7 @@ JSSecurityCallbacks securityCallbacks = {
 	if( fullpathJSC)
 		script = [self decodeScript:fullpathJSC];
 
+#if	JSB_ENABLE_JSC_AUTOGENERATION
 	else {
 		// e) if not .jsc on specified directory, check for .jsc on cache directory
 		NSString *cachedFullpathJSC = [self cachedFullpathForJSC:filenameJSC];
@@ -495,6 +496,7 @@ JSSecurityCallbacks securityCallbacks = {
 			}
 		}
 	}
+#endif // JSB_ENABLE_JSC_AUTOGENERATION
 
 
 	js::RootedObject obj(_cx, global);
@@ -506,7 +508,9 @@ JSSecurityCallbacks securityCallbacks = {
 				.setFileAndLine([fullpathJS UTF8String], 1);
 		script = JS::Compile(_cx, obj, options, [fullpathJS UTF8String]);
 
+#if JSB_ENABLE_JSC_AUTOGENERATION
 		[self encodeScript:script filename:filenameJSC];
+#endif // JSB_ENABLE_JSC_AUTOGENERATION
 	}
 
 	JSB_PRECONDITION(script, "Error compiling script");

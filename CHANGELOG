@@ -1,6 +1,7 @@
 version 0.7 - 1-May-2013
-- [NEW] Added support for 'compiled' JS:
+- [NEW] Added support for encoded JS files (.jsc):
 		You can bundle .jsc files (instead of .js) in your application in order to project your IP.
+		Added option to autogenerate .jsc files on the fly (disabled by default)
 - [NEW] JSB Generator: generates "ctor" methods for Obj-C classes.
 - [FIX] JSB native code:
 		cocos2d: CCLabel#string -> CCLabel#getString
