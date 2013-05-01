@@ -504,13 +504,14 @@ this.processInput = function (inputstr, frame, script) {
     // split into an array using Line Feed as the delimiter
     commands_array = inputstr.split("\n");
 
-    cc.log("received " + commands_array.length + " commands:");
-    for (i = 0; i < commands_array.length; i++) {
-        if (i in commands_array) {
-            cc.log("~~~ commandstring =" + commands_array[i]);
-            cc.log("    commandstring.length = " + commands_array[i].length);
-        }
-    }
+    // trace the commands received
+    // cc.log("received " + commands_array.length + " commands:");
+    // for (i = 0; i < commands_array.length; i++) {
+    //     if (i in commands_array) {
+    //         cc.log("~~~ commandstring =" + commands_array[i]);
+    //         cc.log("    commandstring.length = " + commands_array[i].length);
+    //     }
+    // }
 
     for (i = 0; i < commands_array.length; i++) {
         if (i in commands_array) {
