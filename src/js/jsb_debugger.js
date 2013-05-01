@@ -231,7 +231,7 @@ textCommandProcessor.uiresponse = function (str) {
     }
 
     // note : we return an empty string
-    cc.log(response);
+    // cc.log(response);
     return ({commandname : "uiresponse",
              success : true,
              stringResult : ""});
@@ -518,9 +518,9 @@ this.processInput = function (inputstr, frame, script) {
             _command = commands_array[i];
 
 	        if (_command === "") {
-                cc.log("Empty input. Ignoring.");
+                // cc.log("Empty input. Ignoring.");
 	        } else {
-                cc.log(_command);
+                // cc.log(_command);
 
                 command_func = dbg.getCommandProcessor(_command);
 
@@ -611,7 +611,7 @@ this._prepareDebugger = function (global) {
 };
 
 this._startDebugger = function (global, files, startFunc) {
-	cc.log("[DBG] starting debug session");
+	// cc.log("[DBG] starting debug session");
 	for (var i in files) {
 		try {
 			global['eval']("require('" + files[i] + "');");
@@ -619,9 +619,9 @@ this._startDebugger = function (global, files, startFunc) {
 			cc.log("[DBG] error evaluating file: " + files[i]);
 		}
 	}
-	cc.log("[DBG] all files required");
+	// cc.log("[DBG] all files required");
 	if (startFunc) {
-		cc.log("executing start func: " + startFunc);
+		// cc.log("executing start func: " + startFunc);
 		global['eval'](startFunc);
 	}
 	// beginDebug();
