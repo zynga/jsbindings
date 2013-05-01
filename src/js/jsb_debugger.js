@@ -487,42 +487,64 @@ var debugObject = function (r, isNormal) {
 
 dbg.breakLine = 0;
 
-this.processInput = function (str, frame, script) {
+this.processInput = function (inputstr, frame, script) {
     var command_func;
     var command_return;
+	var commands_array = [];
+    var _command;
+    var i;
 
-    if (!str) {
+    if (!inputstr) {
         return;
     }
 
-	str = str.replace(/\n+/, "");
-	str = str.replace(/\r+/, "");
+    // remove Carriage Return's
+	inputstr = inputstr.replace(/\r+/, "");
 
-	if (str === "") {
-        cc.log("Empty input. Ignoring.");
-		return;
-	}
-    
-    command_func = dbg.getCommandProcessor(str);
+    // split into an array using Line Feed as the delimiter
+    commands_array = inputstr.split("\n");
 
-    if (!command_func) {
-        cc.log("did not find a command processor!");
-        dbg.responder.commandNotFound();
-    } else {
-        try {
-            command_return = command_func(str, frame, script);
-            if (true === command_return.success) {
-                dbg.responder.commandResponse(command_return);
-            } else {
-                cc.log("command failed. return value = " + command_return.stringResult);
-                dbg.responder.commandResponse(command_return);
+    // trace the commands received
+    // cc.log("received " + commands_array.length + " commands:");
+    // for (i = 0; i < commands_array.length; i++) {
+    //     if (i in commands_array) {
+    //         cc.log("~~~ commandstring =" + commands_array[i]);
+    //         cc.log("    commandstring.length = " + commands_array[i].length);
+    //     }
+    // }
+
+    for (i = 0; i < commands_array.length; i++) {
+        if (i in commands_array) {
+            _command = commands_array[i];
+
+	        if (_command === "") {
+                cc.log("Empty input. Ignoring.");
+	        } else {
+                cc.log(_command);
+
+                command_func = dbg.getCommandProcessor(_command);
+
+                if (!command_func) {
+                    cc.log("did not find a command processor!");
+                    dbg.responder.commandNotFound();
+                } else {
+                    try {
+                        command_return = command_func(_command, frame, script);
+                        if (true === command_return.success) {
+                            dbg.responder.commandResponse(command_return);
+                        } else {
+                            cc.log("command failed. return value = " + command_return.stringResult);
+                            dbg.responder.commandResponse(command_return);
+                        }
+                    } catch (e) {
+                        cc.log("Exception in command processing. e =\n" + e  + "\n");
+                        var _output = {success : false,
+                                       commandname : command_func.name,
+                                       stringResult : e};
+                        dbg.responder.commandResponse(_output);
+                    }
+                }
             }
-        } catch (e) {
-            cc.log("Exception in command processing. e =\n" + e  + "\n");
-            var _output = {success : false,
-                           commandname : command_func.name,
-                           stringResult : e};
-            dbg.responder.commandResponse(_output);
         }
     }
 };
