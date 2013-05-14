@@ -244,10 +244,10 @@ JSBool JSB_core_removeRootJS(JSContext *cx, uint32_t argc, jsval *vp)
 /*
  * Dumps GC
  */
-static void dumpNamedRoot(const char *name, void *addr,  JSGCRootType type, void *data)
-{
-    printf("There is a root named '%s' at %p\n", name, addr);
-}
+//static void dumpNamedRoot(const char *name, void *addr,  JSGCRootType type, void *data)
+//{
+//    printf("There is a root named '%s' at %p\n", name, addr);
+//}
 
 JSBool JSB_core_dumpRoot(JSContext *cx, uint32_t argc, jsval *vp)
 {
