@@ -764,7 +764,16 @@ jsval JSB_jsval_from_NSNumber( JSContext *cx, NSNumber *number)
 
 jsval JSB_jsval_from_NSString( JSContext *cx, NSString *str)
 {
-	JSString *ret_obj = JS_NewStringCopyZ(cx, [str UTF8String]);
+	if( ! str )
+		return JSVAL_NULL;
+	
+	size_t len = str.length;
+	
+	jschar *chars = (jschar *)malloc((len + 1) * sizeof(jschar));
+	chars[len] = 0;
+	[str getCharacters:chars range:NSMakeRange(0, len)];
+	
+	JSString *ret_obj = JS_NewUCString(cx, chars, len);
 	return STRING_TO_JSVAL(ret_obj);
 }
 
