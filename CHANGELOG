@@ -1,3 +1,7 @@
+version 0.8 - 12-Jun-2013
+- [FIX] JSB native code:
+		common: JSB_jsval_from_NSString expects Latin chars, not UTF8 chars
+
 version 0.7 - 1-May-2013
 - [NEW] Added support for encoded JS files (.jsc):
 		You can bundle .jsc files (instead of .js) in your application in order to project your IP.

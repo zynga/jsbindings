@@ -52,7 +52,7 @@ static tHashJSObject *reverse_hash = NULL;
 // Globals
 char * JSB_association_proxy_key = NULL;
 
-const char * JSB_version = "JSB v0.6";
+const char * JSB_version = "JSB v0.8";
 
 
 static void its_finalize(JSFreeOp *fop, JSObject *obj)
@@ -255,7 +255,7 @@ JSBool JSB_core_dumpRoot(JSContext *cx, uint32_t argc, jsval *vp)
 	// Mac and Simulator versions were compiled with DEBUG.
 #if DEBUG && (defined(__CC_PLATFORM_MAC) || TARGET_IPHONE_SIMULATOR )
 //	JSRuntime *rt = [[JSBCore sharedInstance] runtime];
-//	JS_DumpNamedRoots(rt, dumpNamedRoot, NULL);
+//	JS_DumpNamedRoots(rt, dumpNamedRoot, NULL);eff
 
 //	JSRuntime *rt = [[JSBCore sharedInstance] runtime];
 //	JS_DumpHeap(rt, stdout, NULL, JSTRACE_OBJECT, NULL, 2, NULL);

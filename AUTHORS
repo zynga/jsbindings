@@ -29,6 +29,7 @@ Contributors (alphabetically ordered):
 	"this" and "function" are rooted when calling an scheduled funciton, and unrooted when the block dies
     Unified conversions between callbacks retvals and retvals
     Simplified code when parsing structs
+    Fixed JSB_jsval_from_NSString: works with Latin chars, not UTF8 chars
 
 * Sean Lin (http://www.cocos2d-html5.org):
     Added cc.Loader compatibility with cocos2d-html5
