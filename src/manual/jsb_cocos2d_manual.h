@@ -46,4 +46,7 @@ JSBool JSB_CCLayerColor_setBlendFunc_(JSContext *cx, uint32_t argc, jsval *vp);
 JSBool JSB_CCCardinalSplineBy_actionWithDuration_points_tension__static(JSContext *cx, uint32_t argc, jsval *vp);
 JSBool JSB_CCBezierTo_actionWithDuration_bezier__static(JSContext *cx, uint32_t argc, jsval *vp);
 
+
+JSBool JSB_jsval_to_ccFontDefinition( JSContext *cx, jsval vp, ccFontDefinition *ret );
+
 #endif // JSB_INCLUDE_COCOS2D
