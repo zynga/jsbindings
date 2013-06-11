@@ -42,7 +42,6 @@ JSBool JSB_jsval_to_array_of_CGPoint( JSContext *cx, jsval vp, CGPoint**verts, i
 // XXX argh
 // Apparently this function has a c++ definition... why???
 
-JSBool JSB_CCLayerColor_setBlendFunc_(JSContext *cx, uint32_t argc, jsval *vp);
 JSBool JSB_CCCardinalSplineBy_actionWithDuration_points_tension__static(JSContext *cx, uint32_t argc, jsval *vp);
 JSBool JSB_CCBezierTo_actionWithDuration_bezier__static(JSContext *cx, uint32_t argc, jsval *vp);
 
