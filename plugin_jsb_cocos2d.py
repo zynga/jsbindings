@@ -86,6 +86,10 @@ class JSBGenerateClasses_CC(JSBGenerateClasses):
     def __init__(self, config):
         super(JSBGenerateClasses_CC, self).__init__(config)
 
+        # Extend supported types
+        self.args_js_special_type_conversions['cc_fontdef'] = ['JSB_jsval_to_CCFontDefinition', 'CCFontDefinition*']
+        self.supported_declared_types['CCFontDefinition*'] = 'cc_fontdef'
+
     #
     # Overriden methods
     #
@@ -93,5 +97,13 @@ class JSBGenerateClasses_CC(JSBGenerateClasses):
         # Treat GLchar* as null-terminated char*
         if arg['declared_type'] == 'GLchar*' or arg['declared_type'] == 'char*' or arg['declared_type'] == 'char*':
             return ('char*', 'char*')
+        # if arg['declared_type'] == 'CCFontDefinition*':
+        #     return ('cc_fontdef','CCFontDefinition')
 
         return super(JSBGenerateClasses_CC, self).validate_argument(arg)
+
+    def convert_js_to_objc(self, js_type, objc_type):
+        # print js_type, objc_type
+        return super(JSBGenerateClasses_CC, self).convert_js_to_objc(js_type, objc_type)
+
+
