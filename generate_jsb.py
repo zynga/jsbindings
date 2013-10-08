@@ -458,6 +458,10 @@ class JSBGenerate(object):
         if dt == 'id':
             dt = 'NSObject*'
 
+        # Treat 'int64_t' as long long
+        if dt == 'int64_t':
+            t='Q';
+
         dt_class_name = dt.replace('*', '')
 
         # IMPORTANT: 1st search on declared types.
