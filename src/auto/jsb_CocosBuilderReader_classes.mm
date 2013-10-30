@@ -737,7 +737,7 @@ void JSB_CCBAnimationManager_createClass(JSContext *cx, JSObject* globalObj, con
 	JSB_CCBAnimationManager_class = (JSClass *)calloc(1, sizeof(JSClass));
 	JSB_CCBAnimationManager_class->name = name;
 	JSB_CCBAnimationManager_class->addProperty = JS_PropertyStub;
-	JSB_CCBAnimationManager_class->delProperty = JS_PropertyStub;
+	JSB_CCBAnimationManager_class->delProperty = JS_DeletePropertyStub;
 	JSB_CCBAnimationManager_class->getProperty = JS_PropertyStub;
 	JSB_CCBAnimationManager_class->setProperty = JS_StrictPropertyStub;
 	JSB_CCBAnimationManager_class->enumerate = JS_EnumerateStub;
@@ -1194,7 +1194,7 @@ void JSB_CCBReader_createClass(JSContext *cx, JSObject* globalObj, const char* n
 	JSB_CCBReader_class = (JSClass *)calloc(1, sizeof(JSClass));
 	JSB_CCBReader_class->name = name;
 	JSB_CCBReader_class->addProperty = JS_PropertyStub;
-	JSB_CCBReader_class->delProperty = JS_PropertyStub;
+	JSB_CCBReader_class->delProperty = JS_DeletePropertyStub;
 	JSB_CCBReader_class->getProperty = JS_PropertyStub;
 	JSB_CCBReader_class->setProperty = JS_StrictPropertyStub;
 	JSB_CCBReader_class->enumerate = JS_EnumerateStub;

@@ -546,7 +546,7 @@ void JSB_SimpleAudioEngine_createClass(JSContext *cx, JSObject* globalObj, const
 	JSB_SimpleAudioEngine_class = (JSClass *)calloc(1, sizeof(JSClass));
 	JSB_SimpleAudioEngine_class->name = name;
 	JSB_SimpleAudioEngine_class->addProperty = JS_PropertyStub;
-	JSB_SimpleAudioEngine_class->delProperty = JS_PropertyStub;
+	JSB_SimpleAudioEngine_class->delProperty = JS_DeletePropertyStub;
 	JSB_SimpleAudioEngine_class->getProperty = JS_PropertyStub;
 	JSB_SimpleAudioEngine_class->setProperty = JS_StrictPropertyStub;
 	JSB_SimpleAudioEngine_class->enumerate = JS_EnumerateStub;

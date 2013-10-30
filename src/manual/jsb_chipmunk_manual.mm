@@ -47,7 +47,7 @@ JSBool JSB_jsval_to_cpBB( JSContext *cx, jsval vp, cpBB *ret )
 	JSB_PRECONDITION( ok, "Error converting value to object");
 	JSB_PRECONDITION( jsobj, "Not a valid JS object");
 	
-	jsval vall, valb, valr, valt;
+	JS::RootedValue vall(cx), valb(cx), valr(cx), valt(cx);
 	ok = JS_TRUE;
 	ok &= JS_GetProperty(cx, jsobj, "l", &vall);
 	ok &= JS_GetProperty(cx, jsobj, "b", &valb);
@@ -970,7 +970,7 @@ void JSB_cpBase_createClass(JSContext *cx, JSObject* globalObj, const char* name
 	JSB_cpBase_class = (JSClass *)calloc(1, sizeof(JSClass));
 	JSB_cpBase_class->name = name;
 	JSB_cpBase_class->addProperty = JS_PropertyStub;
-	JSB_cpBase_class->delProperty = JS_PropertyStub;
+	JSB_cpBase_class->delProperty = JS_DeletePropertyStub;
 	JSB_cpBase_class->getProperty = JS_PropertyStub;
 	JSB_cpBase_class->setProperty = JS_StrictPropertyStub;
 	JSB_cpBase_class->enumerate = JS_EnumerateStub;

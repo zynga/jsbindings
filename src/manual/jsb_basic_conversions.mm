@@ -162,7 +162,7 @@ JSBool JSB_jsval_to_NSDictionary( JSContext *cx, jsval vp, NSDictionary**ret )
 
 	for (int i = 0; i < len; i++) {
 		jsid keyid = JS_IdArrayGet(cx, keys, i);
-		jsval valarg;
+        JS::RootedValue valarg(cx);
 
 		ok = JS_GetPropertyById(cx, jsobj, keyid, &valarg);
 		JSB_PRECONDITION2( ok, cx, JS_FALSE, "Error getting property");
@@ -384,7 +384,7 @@ JSBool JSB_jsval_to_CGPoint( JSContext *cx, jsval vp, CGPoint *ret )
 	JSB_PRECONDITION2( ok, cx, JS_FALSE, "Error converting value to object");
 	JSB_PRECONDITION2( jsobj, cx, JS_FALSE, "Not a valid JS object");
 
-	jsval valx, valy;
+    JS::RootedValue valx(cx), valy(cx);
 	ok = JS_TRUE;
 	ok &= JS_GetProperty(cx, jsobj, "x", &valx);
 	ok &= JS_GetProperty(cx, jsobj, "y", &valy);
@@ -408,7 +408,7 @@ JSBool JSB_jsval_to_CGSize( JSContext *cx, jsval vp, CGSize *ret )
 	JSB_PRECONDITION2( ok, cx, JS_FALSE, "Error converting value to object");
 	JSB_PRECONDITION2( jsobj, cx, JS_FALSE, "Not a valid JS object");
 	
-	jsval valw, valh;
+	JS::RootedValue valw(cx), valh(cx);
 	ok = JS_TRUE;
 	ok &= JS_GetProperty(cx, jsobj, "width", &valw);
 	ok &= JS_GetProperty(cx, jsobj, "height", &valh);	
@@ -432,7 +432,7 @@ JSBool JSB_jsval_to_CGRect( JSContext *cx, jsval vp, CGRect *ret )
 	JSB_PRECONDITION2( ok, cx, JS_FALSE, "Error converting value to object");
 	JSB_PRECONDITION2( jsobj, cx, JS_FALSE, "Not a valid JS object");
 	
-	jsval valx, valy, valw, valh;
+	JS::RootedValue valx(cx), valy(cx), valw(cx), valh(cx);
 	ok = JS_TRUE;
 	ok &= JS_GetProperty(cx, jsobj, "x", &valx);
 	ok &= JS_GetProperty(cx, jsobj, "y", &valy);

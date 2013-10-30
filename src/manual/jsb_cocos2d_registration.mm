@@ -69,8 +69,9 @@ void JSB_register_cocos2d( JSContext *_cx, JSObject *object)
 	// cocos2d
 	//
 	JSObject *cocos2d = JS_NewObject(_cx, NULL, NULL, NULL);
-	jsval cocosVal = OBJECT_TO_JSVAL(cocos2d);
-	JS_SetProperty(_cx, object, "cc", &cocosVal);
+    JS::RootedValue cocosVal(_cx);
+    cocosVal = OBJECT_TO_JSVAL(cocos2d);
+	JS_SetProperty(_cx, object, "cc", cocosVal);
 	
 
 	// register "config" object

@@ -60,7 +60,8 @@
 			JSB_ENSURE_AUTOCOMPARTMENT(cx, jsObj);
 			JS_HasProperty(cx, jsObj, "draw", &found);
 			if (found == JS_TRUE) {
-				jsval rval, fval;
+				jsval rval;
+                JS::RootedValue fval(cx);
 				jsval *argv = NULL; unsigned argc=0;
 
 				JS_GetProperty(cx, jsObj, "draw", &fval);
@@ -144,7 +145,7 @@ void JSB_GLNode_createClass(JSContext *cx, JSObject* globalObj, const char* name
 	JSB_GLNode_class = (JSClass *)calloc(1, sizeof(JSClass));
 	JSB_GLNode_class->name = name;
 	JSB_GLNode_class->addProperty = JS_PropertyStub;
-	JSB_GLNode_class->delProperty = JS_PropertyStub;
+	JSB_GLNode_class->delProperty = JS_DeletePropertyStub;
 	JSB_GLNode_class->getProperty = JS_PropertyStub;
 	JSB_GLNode_class->setProperty = JS_StrictPropertyStub;
 	JSB_GLNode_class->enumerate = JS_EnumerateStub;
@@ -181,7 +182,7 @@ JSBool JSB_jsval_to_ccColor3B( JSContext *cx, jsval vp, ccColor3B *ret )
 	JSB_PRECONDITION( ok, "Error converting value to object");
 	JSB_PRECONDITION( jsobj, "Not a valid JS object");
 
-	jsval valr, valg, valb;
+    JS::RootedValue valr(cx), valg(cx), valb(cx);
 	ok = JS_TRUE;
 	ok &= JS_GetProperty(cx, jsobj, "r", &valr);
 	ok &= JS_GetProperty(cx, jsobj, "g", &valg);
@@ -208,7 +209,7 @@ JSBool JSB_jsval_to_ccColor4B( JSContext *cx, jsval vp, ccColor4B *ret )
 	JSB_PRECONDITION( ok, "Error converting value to object");
 	JSB_PRECONDITION( jsobj, "Not a valid JS object");
 
-	jsval valr, valg, valb, vala;
+	JS::RootedValue valr(cx), valg(cx), valb(cx), vala(cx);
 	ok = JS_TRUE;
 	ok &= JS_GetProperty(cx, jsobj, "r", &valr);
 	ok &= JS_GetProperty(cx, jsobj, "g", &valg);
@@ -238,7 +239,7 @@ JSBool JSB_jsval_to_ccColor4F( JSContext *cx, jsval vp, ccColor4F *ret )
 	JSB_PRECONDITION( ok, "Error converting value to object");
 	JSB_PRECONDITION( jsobj, "Not a valid JS object");
 
-	jsval valr, valg, valb, vala;
+	JS::RootedValue valr(cx), valg(cx), valb(cx), vala(cx);
 	ok = JS_TRUE;
 	ok &= JS_GetProperty(cx, jsobj, "r", &valr);
 	ok &= JS_GetProperty(cx, jsobj, "g", &valg);
@@ -334,7 +335,7 @@ JSBool JSB_jsval_to_array_of_CGPoint( JSContext *cx, jsval vp, CGPoint**points, 
 
 ccColor3B getColorFromJSObject(JSContext *cx, JSObject *colorObject)
 {
-    jsval jsr;
+    JS::RootedValue jsr(cx);
     ccColor3B out;
     JS_GetProperty(cx, colorObject, "r", &jsr);
     double fontR = 0.0;
@@ -358,7 +359,7 @@ ccColor3B getColorFromJSObject(JSContext *cx, JSObject *colorObject)
 
 CGSize getSizeFromJSObject(JSContext *cx, JSObject *sizeObject)
 {
-    jsval jsr;
+    JS::RootedValue jsr(cx);
     CGSize out;
     JS_GetProperty(cx, sizeObject, "width", &jsr);
     double width = 0.0;
@@ -401,7 +402,7 @@ JSBool JSB_jsval_to_CCFontDefinition( JSContext *cx, jsval vp, CCFontDefinition 
     ret.fontFillColor = ccWHITE;
     
     // font name
-    jsval jsr;
+    JS::RootedValue jsr(cx);
     const jschar *chars = 0;
     size_t l            = 0;
     
@@ -670,7 +671,8 @@ JSBool JSB_jsval_to_CCFontDefinition( JSContext *cx, jsval vp, CCFontDefinition 
 		JSB_ENSURE_AUTOCOMPARTMENT(cx, _jsObj);
 		JS_HasProperty(cx, _jsObj, "onAccelerometer", &found);
 		if (found == JS_TRUE) {
-			jsval rval, fval;
+			JS::RootedValue fval(cx);
+            jsval rval;
 
 			NSTimeInterval time = acceleration.timestamp;
 			UIAccelerationValue x = acceleration.x;

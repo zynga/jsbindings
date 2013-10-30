@@ -155,7 +155,7 @@ void JSB_NSObject_createClass(JSContext* cx, JSObject* globalObj, const char *na
 	JSB_NSObject_class = (JSClass *)calloc(1, sizeof(JSClass));
 	JSB_NSObject_class->name = name;
 	JSB_NSObject_class->addProperty = JS_PropertyStub;
-	JSB_NSObject_class->delProperty = JS_PropertyStub;
+	JSB_NSObject_class->delProperty = JS_DeletePropertyStub;
 	JSB_NSObject_class->getProperty = JS_PropertyStub;
 	JSB_NSObject_class->setProperty = JS_StrictPropertyStub;
 	JSB_NSObject_class->enumerate = JS_EnumerateStub;
@@ -501,7 +501,7 @@ void JSB_UITouch_createClass(JSContext* cx, JSObject* globalObj, const char *nam
 	JSB_UITouch_class = (JSClass *)calloc(1, sizeof(JSClass));
 	JSB_UITouch_class->name = name;
 	JSB_UITouch_class->addProperty = JS_PropertyStub;
-	JSB_UITouch_class->delProperty = JS_PropertyStub;
+	JSB_UITouch_class->delProperty = JS_DeletePropertyStub;
 	JSB_UITouch_class->getProperty = JS_PropertyStub;
 	JSB_UITouch_class->setProperty = JS_StrictPropertyStub;
 	JSB_UITouch_class->enumerate = JS_EnumerateStub;
@@ -724,7 +724,7 @@ void JSB_UIAccelerometer_createClass(JSContext* cx, JSObject* globalObj, const c
 	JSB_UIAccelerometer_class = (JSClass *)calloc(1, sizeof(JSClass));
 	JSB_UIAccelerometer_class->name = name;
 	JSB_UIAccelerometer_class->addProperty = JS_PropertyStub;
-	JSB_UIAccelerometer_class->delProperty = JS_PropertyStub;
+	JSB_UIAccelerometer_class->delProperty = JS_DeletePropertyStub;
 	JSB_UIAccelerometer_class->getProperty = JS_PropertyStub;
 	JSB_UIAccelerometer_class->setProperty = JS_StrictPropertyStub;
 	JSB_UIAccelerometer_class->enumerate = JS_EnumerateStub;

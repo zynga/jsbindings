@@ -36,8 +36,9 @@ void JSB_register_opengl( JSContext *_cx, JSObject *object)
 	// gl
 	//
 	JSObject *opengl = JS_NewObject(_cx, NULL, NULL, NULL);
-	jsval openglVal = OBJECT_TO_JSVAL(opengl);
-	JS_SetProperty(_cx, object, "gl", &openglVal);
+	JS::RootedValue openglVal(_cx);
+    openglVal = OBJECT_TO_JSVAL(opengl);
+	JS_SetProperty(_cx, object, "gl", openglVal);
 
 
 	// New WebGL functions, not present on OpenGL ES 2.0
