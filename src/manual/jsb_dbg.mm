@@ -108,7 +108,7 @@ void* serverEntryPoint(void*)
 			return NULL;
 		}
 
-		if ((bind(s, rp->ai_addr, rp->ai_addrlen)) == 0) {
+		if ((::bind(s, rp->ai_addr, rp->ai_addrlen)) == 0) {
 			break;
 		}
 		close(s);

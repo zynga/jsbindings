@@ -62,7 +62,7 @@ static void its_finalize(JSFreeOp *fop, JSObject *obj)
 
 static JSClass global_class = {
 	"__global", JSCLASS_GLOBAL_FLAGS,
-	JS_PropertyStub, JS_PropertyStub,
+	JS_PropertyStub, JS_DeletePropertyStub,
 	JS_PropertyStub, JS_StrictPropertyStub,
 	JS_EnumerateStub, JS_ResolveStub,
 	JS_ConvertStub, its_finalize,
@@ -340,6 +340,8 @@ JSSecurityCallbacks securityCallbacks = {
 {
 	NSAssert(_rt == NULL && _cx==NULL, @"runtime already created. Reset it first");
 
+    JS_Init();
+
 	_rt = JS_NewRuntime(32L * 1024L * 1024L, JS_USE_HELPER_THREADS);
     JS_SetGCParameter(_rt, JSGC_MAX_BYTES, 0xffffffff);
 	
@@ -347,7 +349,7 @@ JSSecurityCallbacks securityCallbacks = {
     JS_SetSecurityCallbacks(_rt, &securityCallbacks);
 	JS_SetNativeStackQuota(_rt, JSB_MAX_STACK_QUOTA);
 	_cx = JS_NewContext( _rt, 8192);
-	JS_SetVersion(_cx, JSVERSION_LATEST);
+//	JS_SetVersionForCompartment(js::GetContextCompartment(_cx), JSVERSION_LATEST);
 	JS_SetOptions(_cx, JSOPTION_VAROBJFIX | JSOPTION_TYPE_INFERENCE);
 	JS_SetErrorReporter(_cx, reportError);
 	_object = new js::RootedObject(_cx, JSB_NewGlobalObject(_cx, false));
@@ -449,6 +451,7 @@ JSSecurityCallbacks securityCallbacks = {
 
 - (JSBool)runScript:(NSString*)filename withContainer:(JSObject *)global
 {
+    NSLog(@"filename: %@", filename);
 	JSBool ok = JS_FALSE;
 	NSString *fullpathJSC = nil, *fullpathJS = nil;
 	NSString *filenameJSC = nil;
@@ -499,6 +502,7 @@ JSSecurityCallbacks securityCallbacks = {
 #endif // JSB_ENABLE_JSC_AUTOGENERATION
 
 
+    JSB_ENSURE_AUTOCOMPARTMENT(_cx, global);
 	js::RootedObject obj(_cx, global);
 
 	// g) Failed to get encoded scripts ? Then execute .js file and create .jsc on cache
@@ -724,28 +728,28 @@ void JSB_set_c_proxy_for_jsobject( JSObject *jsobj, void *handle, unsigned long 
 	JS_SetPrivate(jsobj, proxy);
 }
 
-JSObject* JSB_NewGlobalObject(JSContext* cx, bool empty)
+JSObject* JSB_NewGlobalObject(JSContext* cx, bool debug)
 {
-	JSObject* glob = JS_NewGlobalObject(cx, &global_class, NULL);
-	if (!glob)
-		return NULL;
+    JS::CompartmentOptions options;
+    options.setVersion(JSVERSION_LATEST);
 
-	{
-		JSB_ENSURE_AUTOCOMPARTMENT(cx, glob);
-		JSBool ok = JS_TRUE;
-		ok = JS_InitStandardClasses(cx, glob);
-		if (ok)
-			JS_InitReflect(cx, glob);
-		if (ok)
-			ok = JS_DefineDebuggerObject(cx, glob);
-		if (!ok)
-			return NULL;
-		
-		if (empty) {
-			JS_WrapObject(cx, &glob);
-			return glob;
-		}
-		
+    JS::RootedObject glob(cx, JS_NewGlobalObject(cx, &global_class, NULL, JS::DontFireOnNewGlobalHook, options));
+    if (!glob) {
+        return NULL;
+    }
+
+    JSB_ENSURE_AUTOCOMPARTMENT(cx, glob);
+    JSBool ok = JS_TRUE;
+    ok = JS_InitStandardClasses(cx, glob);
+    if (ok)
+        JS_InitReflect(cx, glob);
+    if (ok && debug)
+        ok = JS_DefineDebuggerObject(cx, glob);
+    if (!ok)
+        return NULL;
+
+
+    {
 		//
 		// globals
 		//
@@ -787,7 +791,9 @@ JSObject* JSB_NewGlobalObject(JSContext* cx, bool empty)
 #endif // JSB_INCLUDE_OPENGL
 		
 	}
-	JS_WrapObject(cx, &glob);
+
+    JS_FireOnNewGlobalObject(cx, glob);
+
     return glob;
 }
 

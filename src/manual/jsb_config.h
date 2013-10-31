@@ -189,7 +189,7 @@
 #endif
 #endif // JSB_MAX_STACK_QUOTA
 
-#if JSB_ENABLE_DEBUGGER
+#if 1
 #define JSB_ENSURE_AUTOCOMPARTMENT(cx, obj) \
 JSAutoCompartment ac(cx, obj)
 #else

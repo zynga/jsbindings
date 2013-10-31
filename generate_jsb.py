@@ -1322,7 +1322,8 @@ extern JSClass *%s_class;
 \t\tJSB_ENSURE_AUTOCOMPARTMENT(cx, _jsObj);
 \t\tJS_HasProperty(cx, _jsObj, "%s", &found);
 \t\tif (found == JS_TRUE) {
-\t\t\tjsval rval, fval;
+\t\t\tjsval rval;
+\t\t\tJS::RootedValue fval(cx);
 \t\t\t%s
 \t\t\tJS_GetProperty(cx, _jsObj, "%s", &fval);
 \t\t\tJS_CallFunctionValue(cx, _jsObj, fval, argc, argv, &rval);
@@ -1457,7 +1458,7 @@ void %s_createClass(JSContext *cx, JSObject* globalObj, const char* name )
 \t%s_class = (JSClass *)calloc(1, sizeof(JSClass));
 \t%s_class->name = name;
 \t%s_class->addProperty = JS_PropertyStub;
-\t%s_class->delProperty = JS_PropertyStub;
+\t%s_class->delProperty = JS_DeletePropertyStub;
 \t%s_class->getProperty = JS_PropertyStub;
 \t%s_class->setProperty = JS_StrictPropertyStub;
 \t%s_class->enumerate = JS_EnumerateStub;
@@ -2200,7 +2201,7 @@ void %s_createClass(JSContext *cx, JSObject* globalObj, const char* name )
 \t%s_class = (JSClass *)calloc(1, sizeof(JSClass));
 \t%s_class->name = name;
 \t%s_class->addProperty = JS_PropertyStub;
-\t%s_class->delProperty = JS_PropertyStub;
+\t%s_class->delProperty = JS_DeletePropertyStub;
 \t%s_class->getProperty = JS_PropertyStub;
 \t%s_class->setProperty = JS_StrictPropertyStub;
 \t%s_class->enumerate = JS_EnumerateStub;
