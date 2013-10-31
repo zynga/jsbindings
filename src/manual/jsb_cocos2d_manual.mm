@@ -603,7 +603,8 @@ JSBool JSB_jsval_to_CCFontDefinition( JSContext *cx, jsval vp, CCFontDefinition 
 		JSBool found;
 		JS_HasProperty(cx, _jsObj, "onKeyFlagsChanged", &found);
 		if (found == JS_TRUE) {
-			jsval rval, fval;
+			jsval rval;
+			JS::RootedValue fval(cx);
 			jsval argv;
 			NSUInteger flags = [event modifierFlags];
 			argv = UINT_TO_JSVAL((uint32_t)flags);
@@ -625,7 +626,8 @@ JSBool JSB_jsval_to_CCFontDefinition( JSContext *cx, jsval vp, CCFontDefinition 
 		JSBool found;
 		JS_HasProperty(cx, _jsObj, "onKeyUp", &found);
 		if (found == JS_TRUE) {
-			jsval rval, fval;
+			jsval rval;
+            JS::RootedValue fval(cx);
 			jsval argv;
 			unichar uchar = [[event characters] characterAtIndex:0];
 			argv = UINT_TO_JSVAL(uchar);
@@ -647,7 +649,8 @@ JSBool JSB_jsval_to_CCFontDefinition( JSContext *cx, jsval vp, CCFontDefinition 
 		JSBool found;
 		JS_HasProperty(cx, _jsObj, "onKeyDown", &found);
 		if (found == JS_TRUE) {
-			jsval rval, fval;
+			jsval rval;
+            JS::RootedValue fval(cx);
 			jsval argv;
 			unichar uchar = [[event characters] characterAtIndex:0];
 			argv = UINT_TO_JSVAL(uchar);

@@ -352,7 +352,7 @@ void JSB_NSEvent_createClass(JSContext* cx, JSObject* globalObj, const char *nam
 	JSB_NSEvent_class = (JSClass *)calloc(1, sizeof(JSClass));
 	JSB_NSEvent_class->name = name;
 	JSB_NSEvent_class->addProperty = JS_PropertyStub;
-	JSB_NSEvent_class->delProperty = JS_PropertyStub;
+	JSB_NSEvent_class->delProperty = JS_DeletePropertyStub;
 	JSB_NSEvent_class->getProperty = JS_PropertyStub;
 	JSB_NSEvent_class->setProperty = JS_StrictPropertyStub;
 	JSB_NSEvent_class->enumerate = JS_EnumerateStub;
