@@ -42,8 +42,8 @@ extern char * JSB_association_proxy_key;
 {
 	JSRuntime	*_rt;
 	JSContext	*_cx;
-	js::RootedObject* _object;
-	js::RootedObject* _debugObject;
+	JSObject    *_object;
+    JSObject    *_debugObject;
 }
 
 /** return the global context */
@@ -53,10 +53,10 @@ extern char * JSB_association_proxy_key;
 @property (nonatomic, readonly) JSContext* globalContext;
 
 /** return the global container */
-@property (nonatomic, readonly) js::RootedObject* globalObject;
+@property (nonatomic, readonly) JSObject* globalObject;
 
 /** return the debug container */
-@property (nonatomic, readonly) js::RootedObject* debugObject;
+@property (nonatomic, readonly) JSObject* debugObject;
 
 /** returns the shared instance */
 +(JSBCore*) sharedInstance;

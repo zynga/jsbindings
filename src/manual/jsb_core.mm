@@ -340,19 +340,27 @@ JSSecurityCallbacks securityCallbacks = {
 {
 	NSAssert(_rt == NULL && _cx==NULL, @"runtime already created. Reset it first");
 
-    JS_Init();
+    if(! JS_Init())
+        return;
 
-	_rt = JS_NewRuntime(32L * 1024L * 1024L, JS_USE_HELPER_THREADS);
+	_rt = JS_NewRuntime(8L * 1024L * 1024L, JS_USE_HELPER_THREADS);
     JS_SetGCParameter(_rt, JSGC_MAX_BYTES, 0xffffffff);
 	
     JS_SetTrustedPrincipals(_rt, &shellTrustedPrincipals);
     JS_SetSecurityCallbacks(_rt, &securityCallbacks);
 	JS_SetNativeStackQuota(_rt, JSB_MAX_STACK_QUOTA);
+
 	_cx = JS_NewContext( _rt, 8192);
-//	JS_SetVersionForCompartment(js::GetContextCompartment(_cx), JSVERSION_LATEST);
-	JS_SetOptions(_cx, JSOPTION_VAROBJFIX | JSOPTION_TYPE_INFERENCE);
+
+//	JS_SetOptions(_cx, JSOPTION_VAROBJFIX | JSOPTION_TYPE_INFERENCE);
+
 	JS_SetErrorReporter(_cx, reportError);
-	_object = new js::RootedObject(_cx, JSB_NewGlobalObject(_cx, false));
+
+	_object = JSB_NewGlobalObject(_cx, false);
+
+    JSB_ENSURE_AUTOCOMPARTMENT(_cx, _object);
+    js::SetDefaultObjectForContext(_cx, _object);
+
 #if JSB_ENABLE_DEBUGGER
 	JS_SetDebugMode(_cx, JS_TRUE);
 	[self enableDebugger];
@@ -433,7 +441,7 @@ JSSecurityCallbacks securityCallbacks = {
 		outVal = &rval;
 	}
 	const char *cstr = [string UTF8String];
-	ok = JS_EvaluateScript( _cx, _object->get(), cstr, (unsigned)strlen(cstr), filename, lineno, outVal);
+	ok = JS_EvaluateScript( _cx, _object, cstr, (unsigned)strlen(cstr), filename, lineno, outVal);
 	if (ok == JS_FALSE) {
 		CCLOGWARN(@"error evaluating script:%@", string);
 	}
@@ -446,7 +454,7 @@ JSSecurityCallbacks securityCallbacks = {
  */
 -(JSBool) runScript:(NSString*)filename
 {
-	return [self runScript:filename withContainer:_object->get()];
+	return [self runScript:filename withContainer:_object];
 }
 
 - (JSBool)runScript:(NSString*)filename withContainer:(JSObject *)global
@@ -455,7 +463,9 @@ JSSecurityCallbacks securityCallbacks = {
 	JSBool ok = JS_FALSE;
 	NSString *fullpathJSC = nil, *fullpathJS = nil;
 	NSString *filenameJSC = nil;
-	JSScript *script = NULL;
+
+    JSB_ENSURE_AUTOCOMPARTMENT(_cx, global);
+    js::RootedScript script(_cx);
 
 	CCFileUtils *fileUtils = [CCFileUtils sharedFileUtils];
 
@@ -502,11 +512,10 @@ JSSecurityCallbacks securityCallbacks = {
 #endif // JSB_ENABLE_JSC_AUTOGENERATION
 
 
-    JSB_ENSURE_AUTOCOMPARTMENT(_cx, global);
 	js::RootedObject obj(_cx, global);
 
 	// g) Failed to get encoded scripts ? Then execute .js file and create .jsc on cache
-	if( ! script ) {
+	if( ! script.get() ) {
 		JS::CompileOptions options(_cx);
 		options.setUTF8(true)
 				.setFileAndLine([fullpathJS UTF8String], 1);
@@ -517,7 +526,7 @@ JSSecurityCallbacks securityCallbacks = {
 #endif // JSB_ENABLE_JSC_AUTOGENERATION
 	}
 
-	JSB_PRECONDITION(script, "Error compiling script");
+	JSB_PRECONDITION(script.get(), "Error compiling script");
 	{
 		JSB_ENSURE_AUTOCOMPARTMENT(_cx, obj);
 		jsval result;
@@ -528,18 +537,6 @@ JSSecurityCallbacks securityCallbacks = {
 		snprintf(tmp, sizeof(tmp)-1, "Error executing script: %s", [filename UTF8String]);
 		JSB_PRECONDITION(ok, tmp);
 	}
-
-
-	// XXX: is this needed ?
-	// add script to the global map
-	const char* key = [filename UTF8String];
-	if (__scripts[key]) {
-		js::RootedScript* tmp = __scripts[key];
-		__scripts.erase(key);
-		delete tmp;
-	}
-	js::RootedScript* rootedScript = new js::RootedScript(_cx, script);
-	__scripts[key] = rootedScript;
 
     return ok;
 }
@@ -588,13 +585,6 @@ JSSecurityCallbacks securityCallbacks = {
 -(void) dealloc
 {
 	[super dealloc];
-
-	if (_object) {
-		delete _object;
-	}
-	if (_debugObject) {
-		delete _debugObject;
-	}
 
 	JS_DestroyContext(_cx);
 	JS_DestroyRuntime(_rt);

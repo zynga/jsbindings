@@ -20,8 +20,6 @@
 
 using namespace std;
 
-map<string, js::RootedScript*> __scripts;
-
 pthread_t debugThread;
 string inData;
 string outData;
@@ -166,12 +164,12 @@ void* serverEntryPoint(void*)
 		script
 	};
 	{
-		JSAutoCompartment ac(_cx, _debugObject->get());
+		JSAutoCompartment ac(_cx, _debugObject);
 		JS_WrapValue(_cx, &argv[0]);
 		JS_WrapValue(_cx, &argv[1]);
 		JS_WrapValue(_cx, &argv[2]);
 		jsval outval;
-		JSBool ok = JS_CallFunctionName(_cx, _debugObject->get(), "processInput", 3, argv, &outval);
+		JSBool ok = JS_CallFunctionName(_cx, _debugObject, "processInput", 3, argv, &outval);
 		if (!ok) {
 			JS_ReportPendingException(_cx);
 		}
@@ -181,30 +179,30 @@ void* serverEntryPoint(void*)
 - (void)enableDebugger
 {
 	if (_debugObject == NULL) {
-		_debugObject = new js::RootedObject(_cx, JSB_NewGlobalObject(_cx, true));
+		_debugObject = JSB_NewGlobalObject(_cx, true);
 		{
-			JSAutoCompartment ac(_cx, *_debugObject);
+			JSAutoCompartment ac(_cx, _debugObject);
 			// these are used in the debug program
-			JS_DefineFunction(_cx, *_debugObject, "_bufferWrite", JSBDebug_BufferWrite, 1, JSPROP_READONLY | JSPROP_PERMANENT);
-			JS_DefineFunction(_cx, *_debugObject, "_bufferRead", JSBDebug_BufferRead, 0, JSPROP_READONLY | JSPROP_PERMANENT);
-			JS_DefineFunction(_cx, *_debugObject, "_lockVM", JSBDebug_LockExecution, 2, JSPROP_READONLY | JSPROP_PERMANENT);
-			JS_DefineFunction(_cx, *_debugObject, "_unlockVM", JSBDebug_UnlockExecution, 0, JSPROP_READONLY | JSPROP_PERMANENT);
-			JS_DefineFunction(_cx, *_debugObject, "log", JSB_core_log, 0, JSPROP_READONLY | JSPROP_PERMANENT);
-			[self runScript:@"jsb_debugger.js" withContainer:*_debugObject];
+			JS_DefineFunction(_cx, _debugObject, "_bufferWrite", JSBDebug_BufferWrite, 1, JSPROP_READONLY | JSPROP_PERMANENT);
+			JS_DefineFunction(_cx, _debugObject, "_bufferRead", JSBDebug_BufferRead, 0, JSPROP_READONLY | JSPROP_PERMANENT);
+			JS_DefineFunction(_cx, _debugObject, "_lockVM", JSBDebug_LockExecution, 2, JSPROP_READONLY | JSPROP_PERMANENT);
+			JS_DefineFunction(_cx, _debugObject, "_unlockVM", JSBDebug_UnlockExecution, 0, JSPROP_READONLY | JSPROP_PERMANENT);
+			JS_DefineFunction(_cx, _debugObject, "log", JSB_core_log, 0, JSPROP_READONLY | JSPROP_PERMANENT);
+			[self runScript:@"jsb_debugger.js" withContainer:_debugObject];
 
 			jsval outval;
 			// prepare the debugger
-			jsval oldGlobal = OBJECT_TO_JSVAL(*_object);
+			jsval oldGlobal = OBJECT_TO_JSVAL(_object);
 			JS_WrapValue(_cx, &oldGlobal);
-			JSBool ok = JS_CallFunctionName(_cx, *_debugObject, "_prepareDebugger", 1, &oldGlobal, &outval);
+			JSBool ok = JS_CallFunctionName(_cx, _debugObject, "_prepareDebugger", 1, &oldGlobal, &outval);
 			if (!ok) {
 				JS_ReportPendingException(_cx);
 			}
 		}
 		{
 			// define the start debugger function
-			JSAutoCompartment ae(_cx, *_object);
-			JS_DefineFunction(_cx, *_object, "startDebugger", JSBDebug_StartDebugger, 3, JSPROP_READONLY | JSPROP_PERMANENT);
+			JSAutoCompartment ae(_cx, _object);
+			JS_DefineFunction(_cx, _object, "startDebugger", JSBDebug_StartDebugger, 3, JSPROP_READONLY | JSPROP_PERMANENT);
 		}
 		// start bg thread
 		pthread_create(&debugThread, NULL, serverEntryPoint, NULL);
@@ -215,13 +213,13 @@ void* serverEntryPoint(void*)
 
 JSBool JSBDebug_StartDebugger(JSContext* cx, unsigned argc, jsval* vp)
 {
-	js::RootedObject* debugGlobal = [[JSBCore sharedInstance] debugObject];
+    JSObject *debugGlobal = [[JSBCore sharedInstance] debugObject];
 	if (argc >= 2) {
 		jsval* argv = JS_ARGV(cx, vp);
 		jsval outval;
-		JS_WrapObject(cx, debugGlobal->address());
-		JSAutoCompartment ac(cx, debugGlobal->get());
-		JSBool ok = JS_CallFunctionName(cx, debugGlobal->get(), "_startDebugger", argc, argv, &outval);
+//		JS_WrapObject(cx, debugGlobal->address());
+		JSAutoCompartment ac(cx, debugGlobal);
+		JSBool ok = JS_CallFunctionName(cx, debugGlobal, "_startDebugger", argc, argv, &outval);
 		if (!ok) {
 			JS_ReportPendingException(cx);
 		}
