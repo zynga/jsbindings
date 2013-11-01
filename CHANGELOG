@@ -1,3 +1,10 @@
+version 0.9 - 31-Oct-2013
+- [FIX] JSB native code:
+		all: Supports SpiderMonkey v25 API
+- [NEW] JSB Generator:
+		generates SpiderMoneky v25 compatible code
+		Supports int64_t types
+
 version 0.8 - 17-Jun-2013
 - [FIX] JSB native code:
 		common: JSB_jsval_from_NSString expects Latin chars, not UTF8 chars

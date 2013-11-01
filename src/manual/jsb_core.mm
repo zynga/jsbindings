@@ -52,7 +52,7 @@ static tHashJSObject *reverse_hash = NULL;
 // Globals
 char * JSB_association_proxy_key = NULL;
 
-const char * JSB_version = "JSB v0.8";
+const char * JSB_version = "JSB v0.9";
 
 
 static void its_finalize(JSFreeOp *fop, JSObject *obj)

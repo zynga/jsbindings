@@ -7,6 +7,9 @@ Lead Developer
 
 Contributors (alphabetically ordered):
 
+* Marcantonio m (https://plus.google.com/u/0/101339590535528286353/)
+    Generators supports int64_t types
+
 * Mario Adrian (http://ma-source.de/):
     Fixed rounding error in JSB_jsval_from_NSNumber
     JSB_jsval_to_NSSet uses a real NSSet
