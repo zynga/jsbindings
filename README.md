@@ -1,3 +1,7 @@
+**Please note:** This project is deprecated at Zynga and is no longer maintained.
+
+---
+
 # JavaScript Bindings for C and Objective-C
 
 ## Introduction
